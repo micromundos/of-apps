@@ -1,5 +1,5 @@
 # plab #
 
-place this files in myofdir/apps/plab/**
-TODO split h/cpp
+estos archivos van en miofdir/apps/plab/**
+TODO dividit h/cpp
 
