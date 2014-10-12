@@ -31,6 +31,7 @@ class ParticleSystem : public artemis::EntityProcessingSystem
     {
       Bloq* bloq = bloq_m.get(e)->bloq;
       emitter_m.get(e)->loc.set( bloq->center );
+      ofLog() << "particle system process entity on bloq " << ofToString(bloq->id) << " at loc " << bloq->center;
     };
 
 };

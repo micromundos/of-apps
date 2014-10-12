@@ -12,6 +12,14 @@ class Bloq
   public:
     Bloq( aruco::Marker& m )
     {
+      update( m );
+    };
+    ~Bloq(){};
+
+    bool update( aruco::Marker& m )
+    {
+      if (!diff_loc( m ))
+        return false;
       id = m.idMarker; 
       center = get_center( m );
       p0 = ofVec2f( m[0].x, m[0].y );
@@ -20,8 +28,8 @@ class Bloq
       p3 = ofVec2f( m[3].x, m[3].y );
       //TODO testear y mejorar esto
       angle = p0.angle( p1 );
+      return true;
     };
-    ~Bloq(){};
 
     bool diff_loc( aruco::Marker& m )
     {
@@ -86,7 +94,7 @@ class Bloqs
           ofNotifyEvent( added, _bloq, this );
         }
 
-        else if ( bloq->diff_loc( m ) )
+        else if ( bloq->update( m ) )
         {
           ofNotifyEvent( updated, *bloq, this );
         }
