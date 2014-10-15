@@ -2,26 +2,23 @@
 
 #include "ofMain.h"
 #include "ofxAruco.h"
+#include "bloqs/Bloq.h"
 
-/*
- * un bloq
- */
-
-class Bloq
+class BloqAruco : public Bloq
 {
   public:
-    Bloq( aruco::Marker& m )
+    BloqAruco( aruco::Marker& m )
     {
       update( m );
     };
-    ~Bloq(){};
+    ~BloqAruco(){};
 
     bool update( aruco::Marker& m )
     {
       if (!diff_loc( m ))
         return false;
       id = m.idMarker; 
-      center = get_center( m );
+      loc = get_center( m );
       p0 = ofVec2f( m[0].x, m[0].y );
       p1 = ofVec2f( m[1].x, m[1].y );
       p2 = ofVec2f( m[2].x, m[2].y );
@@ -33,13 +30,10 @@ class Bloq
 
     bool diff_loc( aruco::Marker& m )
     {
-      return center != get_center(m);
+      return loc != get_center(m);
     };
 
-    int id;
-    ofVec2f center;
     ofVec2f p0,p1,p2,p3;
-    float angle;
 
   private:
 
@@ -61,12 +55,12 @@ class Bloq
  * bloqs manager
  */
 
-class Bloqs
+class BloqsAruco
 {
   public:
 
-    Bloqs(){};
-    ~Bloqs(){};
+    BloqsAruco(){};
+    ~BloqsAruco(){};
 
     void init( int w, int h )
     {
@@ -85,13 +79,13 @@ class Bloqs
       {
 
         aruco::Marker& m = markers[i];
-        Bloq* bloq = get_bloq( m.idMarker );
+        BloqAruco* bloq = get_bloq( m.idMarker );
 
         if ( bloq == NULL )
         {
-          Bloq _bloq( m ); 
+          shared_ptr<BloqAruco> _bloq( new BloqAruco( m ) );
           bloqs.push_back( _bloq );
-          ofNotifyEvent( added, _bloq, this );
+          ofNotifyEvent( added, *_bloq, this );
         }
 
         else if ( bloq->update( m ) )
@@ -111,19 +105,19 @@ class Bloqs
     };
 
     ofEvent<Bloq> added;
-    ofEvent<Bloq> removed;
     ofEvent<Bloq> updated;
+    ofEvent<int> removed;
 
   private:
 
     ofxAruco aruco;
-    vector<Bloq> bloqs;
+    vector< shared_ptr<BloqAruco> > bloqs;
 
-    Bloq* get_bloq( int id )
+    BloqAruco* get_bloq( int id )
     {
       for( size_t i = 0; i < bloqs.size(); i++ )
-        if ( bloqs[i].id == id )
-          return &bloqs[i];
+        if ( bloqs[i]->id == id )
+          return bloqs[i].get();
       return NULL;
     };
 
@@ -137,13 +131,16 @@ class Bloqs
 
     void remove_bloqs_missing( vector<aruco::Marker>& markers )
     {
-      vector<vector<Bloq>::iterator> to_remove;
+      vector< vector< shared_ptr<BloqAruco> >::iterator> to_remove;
+
       for ( int i = 0; i < bloqs.size(); i++ )
       {
-        aruco::Marker* m = get_marker( bloqs[i].id, markers );
+        int bloq_id = bloqs[i]->id;
+        aruco::Marker* m = get_marker( bloq_id, markers );
         if ( m != NULL ) continue;
         to_remove.push_back( bloqs.begin() + i );
-        ofNotifyEvent( removed, bloqs[i], this );
+
+        ofNotifyEvent( removed, bloq_id, this );
       }
 
       for (size_t i = 0; i < to_remove.size(); i++)

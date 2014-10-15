@@ -5,7 +5,7 @@
 
 #include "ECS.h"
 #include "ECSbloqs.h"
-#include "Bloqs.h"
+#include "bloqs/BloqsAruco.h"
 #include "systems/RenderSystem.h"
 #include "systems/ParticleSystem.h"
 
@@ -30,13 +30,13 @@ class ofApp : public ofBaseApp
 
     ECS ecs;
     ECSbloqs ecsbloqs;
-    Bloqs bloqs;
+    BloqsAruco bloqs;
 
     ofxKinect kinect;
 
     void bloq_added( Bloq& bloq );
-    void bloq_removed( Bloq& bloq );
     void bloq_updated( Bloq& bloq );
+    void bloq_removed( int& bloq_id );
 
 };
 

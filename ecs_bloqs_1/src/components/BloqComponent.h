@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
-#include "Bloqs.h"
+#include "bloqs/Bloq.h"
 
 class BloqComponent : public artemis::Component 
 {
@@ -15,9 +15,9 @@ class BloqComponent : public artemis::Component
       this->name = name;
     };
 
-    void update( Bloq& bloq )
+    void update( Bloq* bloq )
     {
-      this->bloq = &bloq;
+      this->bloq = bloq;
     };
 
 };

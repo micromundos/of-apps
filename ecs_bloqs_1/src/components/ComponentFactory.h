@@ -13,7 +13,7 @@ class ComponentFactory
     ~ComponentFactory(){};
 
     //TODO FIXME esto no está bien, pasar parámetros dinámicamente!
-    artemis::Component* make( string name, Bloq& bloq )
+    artemis::Component* make( string name, Bloq* bloq )
     {
       ofLog() << "\t component factory make " << name;
 

@@ -22,8 +22,8 @@ void ofApp::setup()
   ecsbloqs.init( &ecs );
 
   ofAddListener( bloqs.added, this, &ofApp::bloq_added );
-  ofAddListener( bloqs.removed, this, &ofApp::bloq_removed );
   ofAddListener( bloqs.updated, this, &ofApp::bloq_updated );
+  ofAddListener( bloqs.removed, this, &ofApp::bloq_removed );
 
 }
 
@@ -61,16 +61,15 @@ void ofApp::bloq_added( Bloq& bloq )
   artemis::Entity* e = ecsbloqs.make_entity( bloq );
 }
 
-void ofApp::bloq_removed( Bloq& bloq )
-{
-  ecsbloqs.remove_entity( bloq );
-}
-
 void ofApp::bloq_updated( Bloq& bloq )
 {
   ecsbloqs.update_entity( bloq );
 }
 
+void ofApp::bloq_removed( int& bloq_int )
+{
+  ecsbloqs.remove_entity( bloq_int );
+}
 
 
 void ofApp::keyPressed(int key)

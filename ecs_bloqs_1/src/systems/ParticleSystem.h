@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
-#include "Bloqs.h"
+#include "bloqs/Bloq.h"
 #include "components/BloqComponent.h"
 #include "components/ParticleEmitterComponent.h"
 
@@ -30,8 +30,8 @@ class ParticleSystem : public artemis::EntityProcessingSystem
     virtual void processEntity(artemis::Entity &e) 
     {
       Bloq* bloq = bloq_m.get(e)->bloq;
-      emitter_m.get(e)->loc.set( bloq->center );
-      ofLog() << "particle system process entity on bloq " << ofToString(bloq->id) << " at loc " << bloq->center;
+      emitter_m.get(e)->loc.set( bloq->loc );
+      ofLogNotice("ParticleSystem") << "process entity on bloq " << ofToString(bloq->id) << " at loc " << bloq->loc;
     };
 
 };

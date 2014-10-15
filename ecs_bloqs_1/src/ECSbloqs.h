@@ -2,6 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ECS.h"
+#include "bloqs/Bloq.h"
 #include "components/ComponentFactory.h"
 
 class ECSbloqs
@@ -22,33 +23,35 @@ class ECSbloqs
 
     artemis::Entity* make_entity( Bloq& bloq )
     {
-      ofLog() << "ECSbloqs::make_entity by bloq id " << ofToString(bloq.id); 
+      int bloq_id = bloq.id;
 
-      if ( has_entity( bloq.id ) )
+      ofLogNotice("ECSbloqs") << "make_entity by bloq id " << ofToString(bloq_id); 
+
+      if ( has_entity( bloq_id ) )
       {
-        ofLogWarning() << "ECSbloqs::make_entity by bloq id " << ofToString(bloq.id) << ": entity already exists"; 
-        return &(ecs->entities()->getEntity( entities_by_bloq_id[ bloq.id ] ));
+        ofLogNotice("ECSbloqs") << "\t entity already exists"; 
+        return &(ecs->entities()->getEntity( entities_by_bloq_id[ bloq_id ] ));
       }
 
-      vector<string> components_cfg = config[ bloq.id ];
+      vector<string> components_cfg = config[ bloq_id ];
 
       if ( ! components_cfg.size() )
       {
-        ofLogWarning() << "ECSbloqs::make_entity by bloq id " << ofToString(bloq.id) << ": components config not found"; 
+        ofLogNotice("ECSbloqs") << "\t components config not found"; 
         return NULL;
       }
 
       vector<artemis::Component*> components;
       for ( int i = 0; i < components_cfg.size(); i++ )
       {
-        artemis::Component* comp = component_factory.make( components_cfg[i], bloq );
+        artemis::Component* comp = component_factory.make( components_cfg[i], &bloq );
         if (comp != NULL) 
           components.push_back(comp);
       }
 
       if ( ! components.size() )
       {
-        ofLogWarning() << "ECSbloqs::make_entity by bloq id " << ofToString(bloq.id) << ": components ids not found"; 
+        ofLogNotice("ECSbloqs") << "\t components ids not found"; 
         return NULL;
       }
 
@@ -57,38 +60,40 @@ class ECSbloqs
         e.addComponent( components[i] );
       e.refresh();
 
-      entities_by_bloq_id[ bloq.id ] = e.getId();
+      entities_by_bloq_id[ bloq_id ] = e.getId();
       return &e;
-    };
-
-    void remove_entity( Bloq& bloq )
-    {
-      ofLog() << "ECSbloqs::remove_entity by bloq id " << ofToString(bloq.id); 
-
-      if ( ! has_entity( bloq.id ) )
-      {
-        ofLogWarning() << "ECSbloqs::remove_entity by bloq id " << ofToString(bloq.id) << ": entity not found"; 
-        return;
-      }
-
-      ecs->entities()->remove( ecs->entities()->getEntity( entities_by_bloq_id[ bloq.id ] ) );
-      entities_by_bloq_id.erase(bloq.id);
-    };
+    }; 
 
     void update_entity( Bloq& bloq )
     {
-      ofLog() << "ECSbloqs::update_entity bloq id " << ofToString(bloq.id); 
+      int bloq_id = bloq.id;
 
-      if ( ! has_entity( bloq.id ) )
+      ofLogNotice("ECSbloqs") << "update_entity bloq id " << ofToString(bloq_id); 
+
+      if ( ! has_entity( bloq_id ) )
       {
-        ofLogWarning() << "ECSbloqs::update_entity by bloq id " << ofToString(bloq.id) << ": entity not found"; 
+        ofLogNotice("ECSbloqs") << "\t entity not found"; 
         return;
       }
 
-      artemis::Entity& e = ecs->entities()->getEntity( entities_by_bloq_id[ bloq.id ] );
+      artemis::Entity& e = ecs->entities()->getEntity( entities_by_bloq_id[ bloq_id ] );
       BloqComponent* bloq_comp = (BloqComponent*)e.getComponent<BloqComponent>();
 
-      bloq_comp->update( bloq );
+      bloq_comp->update( &bloq );
+    };
+
+    void remove_entity( int bloq_id )
+    {
+      ofLogNotice("ECSbloqs") << "remove_entity by bloq id " << ofToString(bloq_id); 
+
+      if ( ! has_entity( bloq_id ) )
+      {
+        ofLogNotice("ECSbloqs") << "\t entity not found"; 
+        return;
+      }
+
+      ecs->entities()->remove( ecs->entities()->getEntity( entities_by_bloq_id[ bloq_id ] ) );
+      entities_by_bloq_id.erase(bloq_id);
     };
 
   private:
@@ -110,14 +115,14 @@ class ECSbloqs
 
     map< int,vector<string> > load( string filename )
     {
-      ofLog() << "\nECSbloqs::load " << filename; 
+      ofLogNotice("ECSbloqs") << "load " << filename; 
 
       map< int,vector<string> > config;
 
       ofFile file(filename);
       if ( !file.exists() )
       {
-        ofLogWarning() << "ECSbloqs::load file " + filename + " is missing";
+        ofLogNotice("ECSbloqs") << "\t file is missing";
         return;
       }
 
@@ -127,16 +132,16 @@ class ECSbloqs
         string line = it.asString();
         if ( line.empty() ) continue;
 
-        ofLog() << "\t line " << line; 
+        ofLogNotice("ECSbloqs") << "\t line " << line; 
         vector<string> cfg = ofSplitString( line, "=" );
         if ( cfg.size() != 2 ) 
         {
-          ofLogWarning() << "ECSbloqs::load " << filename << ", config line " << line << " lenght != 2 "; 
+          ofLogNotice("ECSbloqs") << "\t config line " << line << " lenght != 2 "; 
           continue;
         }
         int bloq_id = ofToInt( cfg[0] );
         vector<string> components = ofSplitString( cfg[1], "," );
-        ofLog() << "\t bloq id " << ofToString(bloq_id) << " components: " << ofToString(components); 
+        ofLogNotice("ECSbloqs") << "\t bloq id " << ofToString(bloq_id) << " components: " << ofToString(components); 
 
         config[ bloq_id ] = components;
       }
