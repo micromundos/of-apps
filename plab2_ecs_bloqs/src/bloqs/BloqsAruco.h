@@ -7,6 +7,7 @@
 class BloqAruco : public Bloq
 {
   public:
+
     BloqAruco( aruco::Marker& m )
     {
       update( m );
@@ -17,14 +18,18 @@ class BloqAruco : public Bloq
     {
       if (!diff_loc( m ))
         return false;
+
       id = m.idMarker; 
       loc = get_center( m );
+
       p0 = ofVec2f( m[0].x, m[0].y );
       p1 = ofVec2f( m[1].x, m[1].y );
       p2 = ofVec2f( m[2].x, m[2].y );
       p3 = ofVec2f( m[3].x, m[3].y );
+
       //TODO testear y mejorar esto
       angle = p0.angle( p1 );
+
       return true;
     };
 

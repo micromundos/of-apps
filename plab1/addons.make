@@ -1,0 +1,8 @@
+ofxOpenCv
+ofxOsc
+ofxXmlSettings
+ofxCamaraLucida
+ofxFX
+ofxKinect
+ofxLibwebsockets
+ofxTraerPhysics

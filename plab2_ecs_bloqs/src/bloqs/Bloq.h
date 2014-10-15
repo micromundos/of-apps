@@ -5,6 +5,7 @@
 class Bloq
 {
   public:
+
     Bloq(){};
     ~Bloq(){};
 
