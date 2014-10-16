@@ -3,14 +3,15 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 
-class ParticleEmitterComponent : public artemis::Component 
+class ParticleSystemComponent : public artemis::Component 
 {
   public:
     string name;
 
-    ParticleEmitterComponent(string name)
+    ParticleSystemComponent( string name )
     {
       this->name = name;
     };
+
 };
 

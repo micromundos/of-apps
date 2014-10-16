@@ -4,10 +4,11 @@
 #include "ofxKinect.h"
 
 #include "ECS.h"
-#include "ECSbloqs.h"
+#include "managers/BloqsManager.h"
 #include "bloqs/BloqsAruco.h"
 #include "systems/RenderSystem.h"
 #include "systems/ParticleSystem.h"
+#include "systems/ParticleEmitterSystem.h"
 
 class ofApp : public ofBaseApp
 {
@@ -29,7 +30,7 @@ class ofApp : public ofBaseApp
 
 
     ECS ecs;
-    ECSbloqs ecsbloqs;
+    BloqsManager bloqs_man;
     BloqsAruco bloqs;
 
     ofxKinect kinect;

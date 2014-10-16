@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "ecs_bloqs_1.app"
+               BuildableName = "plab2_ecs_bloq.app"
                BlueprintName = "plab2_ecs_bloq"
                ReferencedContainer = "container:plab2_ecs_bloq.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ecs_bloqs_1.app"
+            BuildableName = "plab2_ecs_bloq.app"
             BlueprintName = "plab2_ecs_bloq"
             ReferencedContainer = "container:plab2_ecs_bloq.xcodeproj">
          </BuildableReference>
@@ -52,7 +52,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ecs_bloqs_1.app"
+            BuildableName = "plab2_ecs_bloq.app"
             BlueprintName = "plab2_ecs_bloq"
             ReferencedContainer = "container:plab2_ecs_bloq.xcodeproj">
          </BuildableReference>
@@ -70,7 +70,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "ecs_bloqs_1.app"
+            BuildableName = "plab2_ecs_bloq.app"
             BlueprintName = "plab2_ecs_bloq"
             ReferencedContainer = "container:plab2_ecs_bloq.xcodeproj">
          </BuildableReference>

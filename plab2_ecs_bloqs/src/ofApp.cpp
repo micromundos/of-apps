@@ -1,12 +1,12 @@
 #include "ofApp.h"
 
-
 void ofApp::setup()
 {
   ofSetLogLevel(OF_LOG_NOTICE);
-  //ofSetLogLevel("ECSbloqs", OF_LOG_NOTICE);
+  //ofSetLogLevel("BloqsManager", OF_LOG_NOTICE);
 
-  ofSetFrameRate(60); 
+  ECS::FPS = 60.;
+  ofSetFrameRate( ECS::FPS ); 
   ofSetVerticalSync(true);
 
   kinect.setRegistration(false);
@@ -17,9 +17,10 @@ void ofApp::setup()
   bloqs.init(kinect.width,kinect.height);
   ecs.init();
   ecs.add_system( new ParticleSystem() );
+  ecs.add_system( new ParticleEmitterSystem() );
   ecs.add_system( new RenderSystem() );
   ecs.init_systems();
-  ecsbloqs.init( &ecs );
+  bloqs_man.init( &ecs );
 
   ofAddListener( bloqs.added, this, &ofApp::bloq_added );
   ofAddListener( bloqs.updated, this, &ofApp::bloq_updated );
@@ -58,17 +59,17 @@ void ofApp::draw()
 
 void ofApp::bloq_added( Bloq& bloq )
 {
-  artemis::Entity* e = ecsbloqs.make_entity( bloq );
+  artemis::Entity* e = bloqs_man.make_entity( bloq );
 }
 
 void ofApp::bloq_updated( Bloq& bloq )
 {
-  ecsbloqs.update_entity( bloq );
+  bloqs_man.update_entity( bloq );
 }
 
 void ofApp::bloq_removed( int& bloq_int )
 {
-  ecsbloqs.remove_entity( bloq_int );
+  bloqs_man.remove_entity( bloq_int );
 }
 
 

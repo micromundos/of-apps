@@ -1,10 +1,13 @@
+
+
+// NOT USED FTTB
+
+
 #pragma once
 
 #include <Artemis/Artemis.h>
 #include "Bloqs.h"
 #include "components/BloqComponent.h"
-
-//not used
 
 class BloqSystem : public artemis::EntityProcessingSystem 
 {

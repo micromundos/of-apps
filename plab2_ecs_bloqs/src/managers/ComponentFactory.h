@@ -3,6 +3,7 @@
 #include <Artemis/Artemis.h>
 #include "components/BloqComponent.h"
 #include "components/MeshComponent.h"
+#include "components/ParticleSystemComponent.h"
 #include "components/ParticleEmitterComponent.h"
 
 class ComponentFactory
@@ -12,24 +13,26 @@ class ComponentFactory
     ComponentFactory(){};
     ~ComponentFactory(){};
 
-    //TODO FIXME esto no está bien, pasar parámetros dinámicamente!
-    artemis::Component* make( string name, Bloq* bloq )
+    artemis::Component* make(string name)
     {
-      ofLog() << "\t component factory make " << name;
+      ofLogNotice("ComponentFactory") << "\t make " << name;
 
-      if ( name == "bloq" )
+      if (name == "bloq")
       {
-        BloqComponent* bloq_comp = new BloqComponent(name);
-        bloq_comp->update( bloq );
-        return bloq_comp;
+        return new BloqComponent(name);
       }
 
-      else if ( name == "mesh" )
+      else if (name == "mesh")
       {
         return new MeshComponent(name);
       }
 
-      else if ( name == "particle_emitter" )
+      else if (name == "particle_system")
+      {
+        return new ParticleSystemComponent(name);
+      }
+
+      else if (name == "particle_emitter")
       {
         return new ParticleEmitterComponent(name);
       }

@@ -13,6 +13,7 @@
 		109B799A08029E0E78AA8FB0 /* b2Rope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F39FC388F7A908D23B2FE216 /* b2Rope.cpp */; };
 		10B69DE456AED1288FC9316B /* Tracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A810DF70319A10353588F5DB /* Tracker.cpp */; };
 		11F49FA86DE701A8703B4AC4 /* EntityProcessingSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FA4B8DCAC28C1EED3E7E6AE /* EntityProcessingSystem.cpp */; };
+		1209B83019EF010F00A344D5 /* ECS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1209B82919EF010F00A344D5 /* ECS.cpp */; };
 		126F12C38BF359E97877D207 /* ofxAruco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C42F260C1D187B145FA6B49B /* ofxAruco.cpp */; };
 		14FFB7ACFF020F370244526D /* cvdrawingutils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F98B9D454A3B637ECE9D9B4A /* cvdrawingutils.cpp */; };
 		1529EA60921FDF7B07077187 /* b2ParticleAssembly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3C10C48B1E9A15223A02411C /* b2ParticleAssembly.cpp */; };
@@ -192,13 +193,27 @@
 		093C9EBFCAB5D2649ACF4D0C /* loader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = loader.h; path = ../../../addons/ofxKinect/libs/libfreenect/src/loader.h; sourceTree = SOURCE_ROOT; };
 		096CB33CAD6C5A446E7026E9 /* dynamic_bitset.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = dynamic_bitset.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/dynamic_bitset.h; sourceTree = SOURCE_ROOT; };
 		09916D27B51D9990C7CAB748 /* GroupManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = GroupManager.cpp; path = ../../../addons/ofxArtemis/libs/Artemis/GroupManager.cpp; sourceTree = SOURCE_ROOT; };
-		0BD76EE5383274F733470E9D /* Simulacion.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Simulacion.h; path = src/Simulacion.h; sourceTree = SOURCE_ROOT; };
 		0BE97B413EDF87CBEBF60578 /* b2Settings.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = b2Settings.h; path = ../../../addons/ofxLiquidFun/libs/Box2D/Common/b2Settings.h; sourceTree = SOURCE_ROOT; };
 		0CF0AA3895D28E97D8A1E4A9 /* ground_truth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ground_truth.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/ground_truth.h; sourceTree = SOURCE_ROOT; };
 		0E52E6BAAF72BF7CDFDF5F9C /* b2ChainShape.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2ChainShape.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Collision/Shapes/b2ChainShape.cpp; sourceTree = SOURCE_ROOT; };
 		114B872696817CC33990FC83 /* imgproc.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imgproc.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/imgproc/imgproc.hpp; sourceTree = SOURCE_ROOT; };
 		1185BC900175438AC80FC7F5 /* b2Particle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2Particle.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Particle/b2Particle.cpp; sourceTree = SOURCE_ROOT; };
 		11AB92BA5A01947BD5C8AFD2 /* triangle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = triangle.h; path = ../../../addons/ofxLiquidFun/libs/triangle/triangle.h; sourceTree = SOURCE_ROOT; };
+		1209B81E19EF010F00A344D5 /* Bloq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bloq.h; sourceTree = "<group>"; };
+		1209B81F19EF010F00A344D5 /* BloqsAruco.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloqsAruco.h; sourceTree = "<group>"; };
+		1209B82219EF010F00A344D5 /* BloqComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloqComponent.h; sourceTree = "<group>"; };
+		1209B82319EF010F00A344D5 /* ComponentFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComponentFactory.h; sourceTree = "<group>"; };
+		1209B82419EF010F00A344D5 /* MeshComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeshComponent.h; sourceTree = "<group>"; };
+		1209B82519EF010F00A344D5 /* ParticleEmitterComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleEmitterComponent.h; sourceTree = "<group>"; };
+		1209B82619EF010F00A344D5 /* ParticlePhysicsComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticlePhysicsComponent.h; sourceTree = "<group>"; };
+		1209B82719EF010F00A344D5 /* ParticleSystemComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystemComponent.h; sourceTree = "<group>"; };
+		1209B82819EF010F00A344D5 /* TemplateComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateComponent.h; sourceTree = "<group>"; };
+		1209B82919EF010F00A344D5 /* ECS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ECS.cpp; sourceTree = "<group>"; };
+		1209B82A19EF010F00A344D5 /* ECSbloqs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ECSbloqs.h; sourceTree = "<group>"; };
+		1209B82C19EF010F00A344D5 /* BloqSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BloqSystem.h; sourceTree = "<group>"; };
+		1209B82D19EF010F00A344D5 /* ParticleSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ParticleSystem.h; sourceTree = "<group>"; };
+		1209B82E19EF010F00A344D5 /* RenderSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderSystem.h; sourceTree = "<group>"; };
+		1209B82F19EF010F00A344D5 /* TemplateSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateSystem.h; sourceTree = "<group>"; };
 		125EF4F14C786198D0174B4B /* ComponentType.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ComponentType.cpp; path = ../../../addons/ofxArtemis/libs/Artemis/ComponentType.cpp; sourceTree = SOURCE_ROOT; };
 		178547E33CE398C7B59F08AB /* ContourFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ContourFinder.h; path = ../../../addons/ofxCv/libs/ofxCv/include/ofxCv/ContourFinder.h; sourceTree = SOURCE_ROOT; };
 		19572082584CC5A6F350437C /* b2DynamicTree.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2DynamicTree.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Collision/b2DynamicTree.cpp; sourceTree = SOURCE_ROOT; };
@@ -245,7 +260,6 @@
 		40389FEBF165732F45463608 /* b2Contact.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = b2Contact.h; path = ../../../addons/ofxLiquidFun/libs/Box2D/Dynamics/Contacts/b2Contact.h; sourceTree = SOURCE_ROOT; };
 		41082793FCB224FA0A1786C2 /* arucofidmarkers.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = arucofidmarkers.h; path = "../../../addons/ofxAruco/libs/aruco-1.2.4/src/arucofidmarkers.h"; sourceTree = SOURCE_ROOT; };
 		413D610C698B244B80F30B41 /* b2StackQueue.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = b2StackQueue.h; path = ../../../addons/ofxLiquidFun/libs/Box2D/Particle/b2StackQueue.h; sourceTree = SOURCE_ROOT; };
-		43B78DC0E4A973D2EB2864DF /* Bloques.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Bloques.h; path = src/Bloques.h; sourceTree = SOURCE_ROOT; };
 		43BFEF0DECE8CE4E90624E1D /* ofxBox2dParticleSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxBox2dParticleSystem.cpp; path = ../../../addons/ofxLiquidFun/src/ofxBox2dParticleSystem.cpp; sourceTree = SOURCE_ROOT; };
 		44EF97BDD915E758777A9A8C /* ofxKinect.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxKinect.h; path = ../../../addons/ofxKinect/src/ofxKinect.h; sourceTree = SOURCE_ROOT; };
 		452417865E4BFB10C9CBF8A2 /* internal.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = internal.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core/internal.hpp; sourceTree = SOURCE_ROOT; };
@@ -610,6 +624,40 @@
 				59626D03C690200AD4E8B3A6 /* ml.hpp */,
 			);
 			name = ml;
+			sourceTree = "<group>";
+		};
+		1209B81D19EF010F00A344D5 /* bloqs */ = {
+			isa = PBXGroup;
+			children = (
+				1209B81E19EF010F00A344D5 /* Bloq.h */,
+				1209B81F19EF010F00A344D5 /* BloqsAruco.h */,
+			);
+			path = bloqs;
+			sourceTree = "<group>";
+		};
+		1209B82019EF010F00A344D5 /* components */ = {
+			isa = PBXGroup;
+			children = (
+				1209B82219EF010F00A344D5 /* BloqComponent.h */,
+				1209B82319EF010F00A344D5 /* ComponentFactory.h */,
+				1209B82419EF010F00A344D5 /* MeshComponent.h */,
+				1209B82519EF010F00A344D5 /* ParticleEmitterComponent.h */,
+				1209B82619EF010F00A344D5 /* ParticlePhysicsComponent.h */,
+				1209B82719EF010F00A344D5 /* ParticleSystemComponent.h */,
+				1209B82819EF010F00A344D5 /* TemplateComponent.h */,
+			);
+			path = components;
+			sourceTree = "<group>";
+		};
+		1209B82B19EF010F00A344D5 /* systems */ = {
+			isa = PBXGroup;
+			children = (
+				1209B82C19EF010F00A344D5 /* BloqSystem.h */,
+				1209B82D19EF010F00A344D5 /* ParticleSystem.h */,
+				1209B82E19EF010F00A344D5 /* RenderSystem.h */,
+				1209B82F19EF010F00A344D5 /* TemplateSystem.h */,
+			);
+			path = systems;
 			sourceTree = "<group>";
 		};
 		13C72B31738CA9F68523CB1C /* include */ = {
@@ -1387,12 +1435,15 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				1209B81D19EF010F00A344D5 /* bloqs */,
+				1209B82019EF010F00A344D5 /* components */,
+				1209B82919EF010F00A344D5 /* ECS.cpp */,
+				1209B82A19EF010F00A344D5 /* ECSbloqs.h */,
+				1209B82B19EF010F00A344D5 /* systems */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
-				43B78DC0E4A973D2EB2864DF /* Bloques.h */,
 				8785D156E5447F04524E730D /* ECS.h */,
-				0BD76EE5383274F733470E9D /* Simulacion.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -1609,6 +1660,7 @@
 				686B0DF6249B52E1A85B39EC /* ofxKinect.cpp in Sources */,
 				0F8F016776681D468C0D0949 /* audio.c in Sources */,
 				ACE7DC9A3223ED5EE1B80074 /* cameras.c in Sources */,
+				1209B83019EF010F00A344D5 /* ECS.cpp in Sources */,
 				F4135EEFC911E9ED211FB6F9 /* core.c in Sources */,
 				E55DEEF784A10419E444669E /* flags.c in Sources */,
 				21A059755481CC0BF969FD2D /* keep_alive.c in Sources */,

@@ -1,38 +1,50 @@
 #pragma once
 
+#include "ofxLiquidFun.h"
 #include <Artemis/Artemis.h>
 #include "bloqs/Bloq.h"
-#include "components/BloqComponent.h"
-#include "components/ParticleEmitterComponent.h"
+#include "components/ParticleSystemComponent.h"
 
-class ParticleSystem : public artemis::EntityProcessingSystem 
+using namespace artemis;
+
+class ParticleSystem : public EntityProcessingSystem 
 {
 
   private:
 
-    artemis::ComponentMapper<BloqComponent> bloq_m;
-    artemis::ComponentMapper<ParticleEmitterComponent> emitter_m;
+    ofxBox2d box2d; 
+
+    ComponentMapper<ParticleSystemComponent> ps_m;
 
   public:
 
+    ofxBox2dParticleSystem particles;
+
     ParticleSystem() 
     {
-      addComponentType<BloqComponent>();
-      addComponentType<ParticleEmitterComponent>();
+      addComponentType<ParticleSystemComponent>();
     };
 
     virtual void initialize() 
     {
-      bloq_m.init( *world );
-      emitter_m.init( *world );
+      ps_m.init( *world );
+
+      box2d.init();
+      box2d.setGravity(0,0);
+      box2d.setFPS( 30 );
+
+      particles.setup( box2d.getWorld() );
+    }; 
+
+    virtual void begin() 
+    {
+      box2d.update();
     };
 
-    virtual void processEntity(artemis::Entity &e) 
+    virtual void processEntity(Entity &e) 
     {
-      Bloq* bloq = bloq_m.get(e)->bloq;
-      emitter_m.get(e)->loc.set( bloq->loc );
-      ofLogNotice("ParticleSystem") << "process entity on bloq " << ofToString(bloq->id) << " at loc " << bloq->loc;
-    };
+      ofLogNotice("ParticleSystem") << "process entity " << e.getId();
+    }; 
 
 };
 

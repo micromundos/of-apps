@@ -15,6 +15,11 @@ class BloqComponent : public artemis::Component
       this->name = name;
     };
 
+    ~BloqComponent()
+    {
+      this->bloq = NULL;
+    };
+
     void update( Bloq* bloq )
     {
       this->bloq = bloq;

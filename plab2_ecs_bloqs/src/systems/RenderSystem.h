@@ -4,12 +4,14 @@
 #include <Artemis/Artemis.h>
 #include "components/MeshComponent.h"
 
-class RenderSystem : public artemis::EntityProcessingSystem 
+using namespace artemis;
+
+class RenderSystem : public EntityProcessingSystem 
 {
 
   private:
 
-    artemis::ComponentMapper<MeshComponent> mesh_m;
+    ComponentMapper<MeshComponent> mesh_m;
 
   public:
 
@@ -23,10 +25,12 @@ class RenderSystem : public artemis::EntityProcessingSystem
       mesh_m.init( *world );
     };
 
-    virtual void processEntity(artemis::Entity &e) 
+    virtual void processEntity(Entity &e) 
     {
       ofMesh& mesh = mesh_m.get(e)->mesh;
       mesh.draw();
+
+      ofLogNotice("RenderSystem") << "process entity " << e.getId() << "; mesh verts size " << ofToString(mesh.getVertices().size());
     };
 
 };

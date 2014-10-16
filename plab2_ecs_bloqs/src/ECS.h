@@ -12,6 +12,8 @@ class ECS
     ECS(){};
     ~ECS(){};
 
+    static float FPS;
+
     void init()
     {
       sm = world.getSystemManager();
@@ -20,9 +22,13 @@ class ECS
 
     void update()
     {
+      ofLogNotice("ECS") << "-----update";
       //TODO game/sim loop accum
       world.loopStart();
-      world.setDelta( 0.0016f );
+      //deciseconds ???
+      //https://github.com/vinova/Artemis-Cpp
+      //world.setDelta( 0.0016f ); 
+      world.setDelta( 1000/FPS*0.0001f ); 
       int len = _systems.size();
       for (int i = 0; i < len; i++)
         _systems[i]->process();

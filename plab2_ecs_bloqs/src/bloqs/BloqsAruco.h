@@ -57,7 +57,7 @@ class BloqAruco : public Bloq
 };
 
 /*
- * bloqs manager
+ * bloqs input
  */
 
 class BloqsAruco

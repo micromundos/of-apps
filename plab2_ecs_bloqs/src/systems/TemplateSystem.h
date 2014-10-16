@@ -3,12 +3,14 @@
 #include <Artemis/Artemis.h>
 #include "components/TemplateComponent.h"
 
-class TemplateSystem : public artemis::EntityProcessingSystem 
+using namespace artemis;
+
+class TemplateSystem : public EntityProcessingSystem 
 {
 
   private:
 
-    artemis::ComponentMapper<TemplateComponent> template_m;
+    ComponentMapper<TemplateComponent> template_m;
 
   public:
 
@@ -22,9 +24,17 @@ class TemplateSystem : public artemis::EntityProcessingSystem
       template_m.init( *world );
     };
 
-    virtual void processEntity(artemis::Entity &e) 
+    virtual void processEntity(Entity &e) 
     {
       template_m.get(e)->data += world->getDelta();
+    };
+
+    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
+    {
+      for ( int i = 0; i < bag.getCount(); i++ )
+      {
+        processEntity( *bag.get(i) );
+      }
     };
 
 };
