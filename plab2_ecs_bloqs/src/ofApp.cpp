@@ -47,7 +47,7 @@ void ofApp::update()
 
 void ofApp::draw()
 {
-	ofBackground(100,100,100);
+  ofBackground(100,100,100);
 
   ofSetColor(255);
   int w = kinect.width;
