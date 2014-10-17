@@ -42,6 +42,9 @@ class ParticleEmitterSystem : public EntityProcessingSystem
       ParticleSystem* ps = ((ParticleSystem*)world->getSystemManager()->getSystem<ParticleSystem>());
       ofxBox2dParticleSystem& particles = ps->particles;
 
+      //b2ParticleDef pd;
+      //pd.flags = flags;
+      //particles->CreateParticle(pd);
       ofVec2f vel = ofVec2f(0,0);
       ofVec2f loc = bloq->loc;
       particles.createParticle(loc, vel);

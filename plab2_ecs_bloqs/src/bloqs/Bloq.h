@@ -9,8 +9,7 @@ class Bloq
     Bloq(){};
     ~Bloq(){};
 
-    //TODO usar string para id
-    int id;
+    string id;
     ofVec2f loc;
     float angle;
 };

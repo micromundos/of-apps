@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxJSON.h"
 #include "ofxKinect.h"
 
 #include "ECS.h"
@@ -28,6 +29,7 @@ class ofApp : public ofBaseApp
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
+    ofxJSONElement config;
 
     ECS ecs;
     BloqsManager bloqs_man;
@@ -37,7 +39,7 @@ class ofApp : public ofBaseApp
 
     void bloq_added( Bloq& bloq );
     void bloq_updated( Bloq& bloq );
-    void bloq_removed( int& bloq_id );
+    void bloq_removed( string& bloq_id );
 
 };
 

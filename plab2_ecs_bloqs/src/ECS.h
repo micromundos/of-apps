@@ -22,7 +22,7 @@ class ECS
 
     void update()
     {
-      ofLogNotice("ECS") << "-----update";
+      //ofLogNotice("ECS") << "---update";
       //TODO game/sim loop accum
       world.loopStart();
       //deciseconds ???

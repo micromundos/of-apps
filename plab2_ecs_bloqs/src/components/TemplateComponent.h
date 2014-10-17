@@ -6,12 +6,12 @@
 class TemplateComponent : public artemis::Component 
 {
   public:
-    string name;
+    string id;
     float data;
 
-    TemplateComponent( string name )
+    TemplateComponent( string id )
     {
-      this->name = name;
+      this->id = id;
     };
 
     void update( float data )

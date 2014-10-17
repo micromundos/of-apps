@@ -7,12 +7,12 @@
 class BloqComponent : public artemis::Component 
 {
   public:
-    string name;
+    string id;
     Bloq* bloq;
 
-    BloqComponent(string name)
+    BloqComponent(string id)
     {
-      this->name = name;
+      this->id = id;
     };
 
     ~BloqComponent()

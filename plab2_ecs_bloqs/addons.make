@@ -1,3 +1,4 @@
+ofxJSON
 ofxArtemis
 ofxKinect
 ofxOpenCv

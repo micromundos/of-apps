@@ -38,6 +38,7 @@ class ParticleSystem : public EntityProcessingSystem
 
     virtual void begin() 
     {
+      ofLogNotice("ParticleSystem") << "update";
       box2d.update();
     };
 
@@ -45,6 +46,11 @@ class ParticleSystem : public EntityProcessingSystem
     {
       ofLogNotice("ParticleSystem") << "process entity " << e.getId();
     }; 
+
+    virtual void end() 
+    {
+      particles.draw();
+    };
 
 };
 

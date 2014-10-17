@@ -9,6 +9,12 @@ void ofApp::setup()
   ofSetFrameRate( ECS::FPS ); 
   ofSetVerticalSync(true);
 
+  if ( ! config.open("config.json") )
+  {
+    ofLogError() << "error opening config.json";
+    return;
+  }
+
   kinect.setRegistration(false);
   // ir, rgb, texture
   kinect.init(false, true, true);
@@ -18,9 +24,9 @@ void ofApp::setup()
   ecs.init();
   ecs.add_system( new ParticleSystem() );
   ecs.add_system( new ParticleEmitterSystem() );
-  ecs.add_system( new RenderSystem() );
+  //ecs.add_system( new RenderSystem() );
   ecs.init_systems();
-  bloqs_man.init( &ecs );
+  bloqs_man.init( &ecs, &config );
 
   ofAddListener( bloqs.added, this, &ofApp::bloq_added );
   ofAddListener( bloqs.updated, this, &ofApp::bloq_updated );
@@ -67,9 +73,9 @@ void ofApp::bloq_updated( Bloq& bloq )
   bloqs_man.update_entity( bloq );
 }
 
-void ofApp::bloq_removed( int& bloq_int )
+void ofApp::bloq_removed( string& bloq_id )
 {
-  bloqs_man.remove_entity( bloq_int );
+  bloqs_man.remove_entity( bloq_id );
 }
 
 

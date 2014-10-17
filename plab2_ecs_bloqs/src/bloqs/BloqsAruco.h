@@ -19,7 +19,7 @@ class BloqAruco : public Bloq
       if (!diff_loc( m ))
         return false;
 
-      id = m.idMarker; 
+      id = ofToString( m.idMarker ); 
       loc = get_center( m );
 
       p0 = ofVec2f( m[0].x, m[0].y );
@@ -84,7 +84,8 @@ class BloqsAruco
       {
 
         aruco::Marker& m = markers[i];
-        BloqAruco* bloq = get_bloq( m.idMarker );
+        string bloq_id = ofToString( m.idMarker );
+        BloqAruco* bloq = get_bloq( bloq_id );
 
         if ( bloq == NULL )
         {
@@ -111,14 +112,14 @@ class BloqsAruco
 
     ofEvent<Bloq> added;
     ofEvent<Bloq> updated;
-    ofEvent<int> removed;
+    ofEvent<string> removed;
 
   private:
 
     ofxAruco aruco;
     vector< shared_ptr<BloqAruco> > bloqs;
 
-    BloqAruco* get_bloq( int id )
+    BloqAruco* get_bloq( string id )
     {
       for( size_t i = 0; i < bloqs.size(); i++ )
         if ( bloqs[i]->id == id )
@@ -140,8 +141,9 @@ class BloqsAruco
 
       for ( int i = 0; i < bloqs.size(); i++ )
       {
-        int bloq_id = bloqs[i]->id;
-        aruco::Marker* m = get_marker( bloq_id, markers );
+        string bloq_id = bloqs[i]->id;
+        int marker_id = ofToInt( bloq_id );
+        aruco::Marker* m = get_marker( marker_id, markers );
         if ( m != NULL ) continue;
         to_remove.push_back( bloqs.begin() + i );
 

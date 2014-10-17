@@ -6,12 +6,12 @@
 class MeshComponent : public artemis::Component 
 {
   public:
-    string name;
+    string id;
     ofMesh mesh;
 
-    MeshComponent( string name )
+    MeshComponent( string id )
     {
-      this->name = name;
+      this->id = id;
       mesh.setMode(OF_PRIMITIVE_TRIANGLES);
     };
 };

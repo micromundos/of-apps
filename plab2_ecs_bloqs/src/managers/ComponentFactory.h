@@ -13,28 +13,28 @@ class ComponentFactory
     ComponentFactory(){};
     ~ComponentFactory(){};
 
-    artemis::Component* make(string name)
+    artemis::Component* make(string id)
     {
-      ofLogNotice("ComponentFactory") << "\t make " << name;
+      ofLogNotice("ComponentFactory") << "\t make " << id;
 
-      if (name == "bloq")
+      if (id == "bloq")
       {
-        return new BloqComponent(name);
+        return new BloqComponent(id);
       }
 
-      else if (name == "mesh")
+      else if (id == "mesh")
       {
-        return new MeshComponent(name);
+        return new MeshComponent(id);
       }
 
-      else if (name == "particle_system")
+      else if (id == "particle_system")
       {
-        return new ParticleSystemComponent(name);
+        return new ParticleSystemComponent(id);
       }
 
-      else if (name == "particle_emitter")
+      else if (id == "particle_emitter")
       {
-        return new ParticleEmitterComponent(name);
+        return new ParticleEmitterComponent(id);
       }
 
       return NULL;

@@ -6,11 +6,11 @@
 class ParticleSystemComponent : public artemis::Component 
 {
   public:
-    string name;
+    string id;
 
-    ParticleSystemComponent( string name )
+    ParticleSystemComponent( string id )
     {
-      this->name = name;
+      this->id = id;
     };
 
 };
