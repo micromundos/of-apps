@@ -15,24 +15,36 @@ void ofApp::setup()
     return;
   }
 
+
   kinect.setRegistration(false);
   // ir, rgb, texture
   kinect.init(false, true, true);
   kinect.open();
 
-  bloqs.init(kinect.width,kinect.height);
+
+  bloqs_input.init( kinect.width,kinect.height );
+
   ecs.init();
+  add_systems();
+  ecs.init_systems();
+
+  sim_man.init( &ecs, &config );
+  sim_man.make_entity(); //LA simulazione
+
+  bloqs_man.init( &ecs, &config );
+
+  ofAddListener( bloqs_input.added, this, &ofApp::bloq_added );
+  ofAddListener( bloqs_input.updated, this, &ofApp::bloq_updated );
+  ofAddListener( bloqs_input.removed, this, &ofApp::bloq_removed );
+
+}
+
+void ofApp::add_systems()
+{
   ecs.add_system( new ParticleSystem() );
   ecs.add_system( new ParticleEmitterSystem() );
   //ecs.add_system( new RenderSystem() );
-  ecs.init_systems();
-  bloqs_man.init( &ecs, &config );
-
-  ofAddListener( bloqs.added, this, &ofApp::bloq_added );
-  ofAddListener( bloqs.updated, this, &ofApp::bloq_updated );
-  ofAddListener( bloqs.removed, this, &ofApp::bloq_removed );
-
-}
+};
 
 void ofApp::update()
 {
@@ -42,7 +54,7 @@ void ofApp::update()
   if ( ! kinect.isFrameNew() )
     return;
 
-  bloqs.update( kinect.getPixelsRef() );
+  bloqs_input.update( kinect.getPixelsRef() );
 }
 
 void ofApp::draw()
@@ -58,7 +70,7 @@ void ofApp::draw()
   ecs.update();
 
   //debug
-  bloqs.render();
+  bloqs_input.render();
 }
 
 

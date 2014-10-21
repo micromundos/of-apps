@@ -4,7 +4,8 @@
 #include "ofxJSON.h"
 #include "ofxKinect.h"
 
-#include "ECS.h"
+#include "ecs/ECS.h"
+#include "managers/SimManager.h"
 #include "managers/BloqsManager.h"
 #include "bloqs/BloqsAruco.h"
 #include "systems/RenderSystem.h"
@@ -32,14 +33,17 @@ class ofApp : public ofBaseApp
     ofxJSONElement config;
 
     ECS ecs;
+    SimManager sim_man;
     BloqsManager bloqs_man;
-    BloqsAruco bloqs;
+    BloqsAruco bloqs_input;
 
     ofxKinect kinect;
 
     void bloq_added( Bloq& bloq );
     void bloq_updated( Bloq& bloq );
     void bloq_removed( string& bloq_id );
+
+    void add_systems();
 
 };
 

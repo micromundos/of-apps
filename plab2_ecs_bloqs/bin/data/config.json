@@ -1,10 +1,22 @@
 {
-    "bloqs": [
-    {
-        "id": "428",
-        "components": [ "bloq", "particle_system", "particle_emitter" ]
-    }
-    ],
+  //[components] of sim entity
+  "sim": [
+    "particle_system"
+    //"flow_field"
+  ],
 
-    "particle_system": {}
+  //[entities:components]
+  //las entidades 'bloq' definidas aca reciben un componente 'bloq' por default
+  "bloqs": [
+
+    {
+      "id": "717",
+      "components": [ 
+        "particle_emitter"
+        //"particle_flow_field_climb" 
+      ]
+    }
+
+  ]
+
 }

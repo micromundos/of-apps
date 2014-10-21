@@ -1,7 +1,7 @@
-ofxJSON
-ofxArtemis
 ofxKinect
 ofxOpenCv
-ofxCv
+ofxArtemis
 ofxAruco
+ofxCv
+ofxJSON
 ofxLiquidFun

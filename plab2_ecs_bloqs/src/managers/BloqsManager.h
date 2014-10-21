@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
-#include "ECS.h"
+#include "ecs/ECS.h"
 #include "bloqs/Bloq.h"
 #include "managers/ComponentFactory.h"
 
@@ -41,15 +41,18 @@ class BloqsManager
       }
 
       vector<artemis::Component*> components;
+
+      //siempre agregar por default un componente bloque, ya que estamos en el Bloqs Manager
+      artemis::Component* bloq_comp = component_factory.make( "bloq" );
+      components.push_back( bloq_comp );
+      ((BloqComponent*)bloq_comp)->update( &bloq );
+
       for ( int i = 0; i < comp_ids.size(); i++ )
       {
         string comp_id = comp_ids[i];
         artemis::Component* comp = component_factory.make( comp_id );
-        if ( comp == NULL ) 
-          continue;
-        components.push_back( comp );
-        if ( comp_id == "bloq" )
-          ((BloqComponent*)comp)->update( &bloq );
+        if ( comp != NULL ) 
+          components.push_back( comp );
       }
 
       if ( ! components.size() )

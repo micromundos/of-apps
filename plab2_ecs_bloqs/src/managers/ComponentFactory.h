@@ -37,6 +37,16 @@ class ComponentFactory
         return new ParticleEmitterComponent(id);
       }
 
+      //else if (id == "flow_fied")
+      //{
+        //return new FlowFieldComponent(id);
+      //}
+
+      //else if (id == "particle_flow_field_climb")
+      //{
+        //return new ParticleFlowFieldClimbComponent(id);
+      //}
+
       return NULL;
     };
 

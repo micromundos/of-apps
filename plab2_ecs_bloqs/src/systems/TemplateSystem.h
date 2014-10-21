@@ -1,16 +1,13 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
+#include "ecs/ECSsystem.h"
 #include "components/TemplateComponent.h"
 
 using namespace artemis;
 
-class TemplateSystem : public EntityProcessingSystem 
-{
-
-  private:
-
-    ComponentMapper<TemplateComponent> template_m;
+class TemplateSystem : public ECSsystem 
+{ 
 
   public:
 
@@ -36,6 +33,10 @@ class TemplateSystem : public EntityProcessingSystem
         processEntity( *bag.get(i) );
       }
     };
+
+  private:
+
+    ComponentMapper<TemplateComponent> template_m;
 
 };
 

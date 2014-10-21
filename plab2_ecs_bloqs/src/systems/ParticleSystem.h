@@ -1,13 +1,14 @@
 #pragma once
 
-#include "ofxLiquidFun.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECSsystem.h"
 #include "bloqs/Bloq.h"
 #include "components/ParticleSystemComponent.h"
+#include "ofxLiquidFun.h"
 
 using namespace artemis;
 
-class ParticleSystem : public EntityProcessingSystem 
+class ParticleSystem : public ECSsystem 
 {
 
   private:
@@ -36,21 +37,13 @@ class ParticleSystem : public EntityProcessingSystem
       particles.setup( box2d.getWorld() );
     }; 
 
-    virtual void begin() 
-    {
-      ofLogNotice("ParticleSystem") << "update";
-      box2d.update();
-    };
-
+    // entity: sim
     virtual void processEntity(Entity &e) 
     {
-      ofLogNotice("ParticleSystem") << "process entity " << e.getId();
-    }; 
-
-    virtual void end() 
-    {
+      //ofLogNotice("ParticleSystem") << "process entity " << e.getId();
+      box2d.update();
       particles.draw();
-    };
+    }; 
 
 };
 

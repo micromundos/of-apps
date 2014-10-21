@@ -3,18 +3,15 @@
 
 #pragma once
 
-#include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECSsystem.h"
 #include "components/MeshComponent.h"
+#include "ofMain.h"
 
 using namespace artemis;
 
-class RenderSystem : public EntityProcessingSystem 
-{
-
-  private:
-
-    ComponentMapper<MeshComponent> mesh_m;
+class RenderSystem : public ECSsystem 
+{ 
 
   public:
 
@@ -35,6 +32,10 @@ class RenderSystem : public EntityProcessingSystem
 
       ofLogNotice("RenderSystem") << "process entity " << e.getId() << "; mesh verts size " << ofToString(mesh.getVertices().size());
     };
+
+  private:
+
+    ComponentMapper<MeshComponent> mesh_m;
 
 };
 

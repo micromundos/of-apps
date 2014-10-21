@@ -27,8 +27,7 @@ class BloqAruco : public Bloq
       p2 = ofVec2f( m[2].x, m[2].y );
       p3 = ofVec2f( m[3].x, m[3].y );
 
-      //TODO testear y mejorar esto
-      angle = p0.angle( p1 );
+      angle = p0.angleRad( p1 );
 
       return true;
     };
