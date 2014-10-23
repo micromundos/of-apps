@@ -1,8 +1,17 @@
 {
-  //[components] of sim entity
-  "sim": [
-    "particle_system"
-    //"flow_field"
+  //[components] of (unique) game entity
+  //~= environment
+  "game": [
+    //core
+    "bloq_events",
+    //input
+    "rgb",
+    "aruco",
+    "depth",
+    //behaviors
+    "particle_system",
+    "flow_field",
+    "particle_flow_field" 
   ],
 
   //[entities:components]
@@ -10,10 +19,9 @@
   "bloqs": [
 
     {
-      "id": "717",
+      "id": "477",
       "components": [ 
         "particle_emitter"
-        //"particle_flow_field_climb" 
       ]
     }
 

@@ -15,6 +15,9 @@ class FlowFieldComponent : public artemis::Component
     };
 
     void update()
-    {};
+    {
+
+    };
+
 };
 

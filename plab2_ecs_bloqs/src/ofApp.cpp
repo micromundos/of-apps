@@ -15,79 +15,59 @@ void ofApp::setup()
     return;
   }
 
-
-  kinect.setRegistration(false);
-  // ir, rgb, texture
-  kinect.init(false, true, true);
-  kinect.open();
-
-
-  bloqs_input.init( kinect.width,kinect.height );
-
   ecs.init();
   add_systems();
   ecs.init_systems();
 
-  sim_man.init( &ecs, &config );
-  sim_man.make_entity(); //LA simulazione
+  game.init( &ecs, &config, "game" );
+  bloqs.init( &ecs, &config );
 
-  bloqs_man.init( &ecs, &config );
+  BloqEventsComponent* bloq_events = ecs.component<BloqEventsComponent>("game");
 
-  ofAddListener( bloqs_input.added, this, &ofApp::bloq_added );
-  ofAddListener( bloqs_input.updated, this, &ofApp::bloq_updated );
-  ofAddListener( bloqs_input.removed, this, &ofApp::bloq_removed );
+  ofAddListener( bloq_events->added, this, &ofApp::bloq_added );
+  ofAddListener( bloq_events->updated, this, &ofApp::bloq_updated );
+  ofAddListener( bloq_events->removed, this, &ofApp::bloq_removed );
 
 }
 
 void ofApp::add_systems()
 {
-  ecs.add_system( new ParticleSystem() );
-  ecs.add_system( new ParticleEmitterSystem() );
-  //ecs.add_system( new RenderSystem() );
+  //TODO add systems on the fly parseando config
+  //game entity systems
+  ecs.add_system(new RGBDSystem());
+  ecs.add_system(new ArucoSystem());
+  ecs.add_system(new DepthFlowFieldSystem());
+  ecs.add_system(new ParticleFlowFieldSystem());
+  ecs.add_system(new ParticleSystem());
+  //bloq entities systems
+  ecs.add_system(new ParticleEmitterSystem());
 };
 
 void ofApp::update()
 {
   ofSetWindowTitle(ofToString(ofGetFrameRate(),2));
-
-  kinect.update();
-  if ( ! kinect.isFrameNew() )
-    return;
-
-  bloqs_input.update( kinect.getPixelsRef() );
 }
 
 void ofApp::draw()
 {
-  ofBackground(100,100,100);
-
-  ofSetColor(255);
-  int w = kinect.width;
-  int h = kinect.height;
-  kinect.draw( 0, 0, w, h );
-  kinect.drawDepth( 0, 480, w, h );
-
+  ofBackground(100,100,100); 
   ecs.update();
-
-  //debug
-  bloqs_input.render();
 }
-
 
 
 void ofApp::bloq_added( Bloq& bloq )
 {
-  artemis::Entity* e = bloqs_man.make_entity( bloq );
+  bloqs.make_entity( bloq );
 }
 
 void ofApp::bloq_updated( Bloq& bloq )
 {
-  bloqs_man.update_entity( bloq );
+  bloqs.update_entity( bloq );
 }
 
 void ofApp::bloq_removed( string& bloq_id )
 {
-  bloqs_man.remove_entity( bloq_id );
+  bloqs.remove_entity( bloq_id );
 }
 
 

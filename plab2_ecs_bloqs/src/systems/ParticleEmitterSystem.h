@@ -31,7 +31,7 @@ class ParticleEmitterSystem : public ECSsystem
       Bloq* bloq = bloq_m.get(e)->bloq;
       ofVec2f loc = bloq->loc;
 
-      //b2ParticleSystem* b2ps = system<ParticleSystem>()->particles->particleSystem;
+      //b2ParticleSystem* b2ps = system<ParticleSystem>()->particles.particleSystem;
 
       ofxBox2dParticleSystem& ps = system<ParticleSystem>()->particles;
       float f = 14;
@@ -40,7 +40,7 @@ class ParticleEmitterSystem : public ECSsystem
       int32 pidx = ps.createParticle( loc.x, loc.y, 0, 0 );
       ps.applyForce( pidx, force );
 
-      // render
+      // TODO move to render system
       ofSetLineWidth(2);
       ofSetColor( ofColor::green );
       ofLine( loc, loc + force.getNormalized() * 20 );

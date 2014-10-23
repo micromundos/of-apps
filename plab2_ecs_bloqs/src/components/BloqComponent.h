@@ -24,6 +24,5 @@ class BloqComponent : public artemis::Component
     {
       this->bloq = bloq;
     };
-
 };
 

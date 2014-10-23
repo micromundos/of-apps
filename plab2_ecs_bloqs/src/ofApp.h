@@ -2,15 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxJSON.h"
-#include "ofxKinect.h"
 
 #include "ecs/ECS.h"
-#include "managers/SimManager.h"
-#include "managers/BloqsManager.h"
-#include "bloqs/BloqsAruco.h"
-#include "systems/RenderSystem.h"
-#include "systems/ParticleSystem.h"
-#include "systems/ParticleEmitterSystem.h"
+#include "managers/Managers.h"
+#include "systems/Systems.h"
 
 class ofApp : public ofBaseApp
 {
@@ -33,17 +28,13 @@ class ofApp : public ofBaseApp
     ofxJSONElement config;
 
     ECS ecs;
-    SimManager sim_man;
-    BloqsManager bloqs_man;
-    BloqsAruco bloqs_input;
+    EntityConfigManager game;
+    BloqsManager bloqs;
 
-    ofxKinect kinect;
-
+    void add_systems();
     void bloq_added( Bloq& bloq );
     void bloq_updated( Bloq& bloq );
     void bloq_removed( string& bloq_id );
-
-    void add_systems();
 
 };
 

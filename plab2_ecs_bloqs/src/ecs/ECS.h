@@ -18,6 +18,7 @@ class ECS
     {
       sm = world.getSystemManager();
       em = world.getEntityManager();
+      tm = world.getTagManager();
     };
 
     void update()
@@ -58,11 +59,29 @@ class ECS
       return sm;
     };
 
+    artemis::TagManager* tags()
+    {
+      return tm;
+    };
+
+    template<typename TSystem>
+    TSystem* system()
+    {
+      return ((TSystem*)sm->getSystem<TSystem>());
+    };
+
+    template<typename TComponent>
+    TComponent* component(string tag)
+    {
+      return ((TComponent*)tm->getEntity( tag ).getComponent<TComponent>());
+    };
+
   private: 
 
     artemis::World world;
     artemis::SystemManager *sm;
     artemis::EntityManager *em;
+    artemis::TagManager *tm;
 
     vector<artemis::EntityProcessingSystem*> _systems; 
 

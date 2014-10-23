@@ -2,8 +2,8 @@
 
 #include <Artemis/Artemis.h>
 #include "ecs/ECS.h"
+#include "components/ComponentFactory.h"
 #include "bloqs/Bloq.h"
-#include "managers/ComponentFactory.h"
 
 class BloqsManager
 {

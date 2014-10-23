@@ -37,7 +37,7 @@ class ParticleSystem : public ECSsystem
       particles.setup( box2d.getWorld() );
     }; 
 
-    // entity: sim
+    // entity: game
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("ParticleSystem") << "process entity " << e.getId();
