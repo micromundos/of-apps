@@ -2,8 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
-#include "components/BloqComponent.h"
-#include "components/ParticleEmitterComponent.h"
+#include "components/Components.h"
 #include "systems/ParticleSystem.h"
 
 using namespace artemis;
@@ -22,35 +21,52 @@ class ParticleEmitterSystem : public ECSsystem
     virtual void initialize() 
     {
       bloq_m.init( *world );
+      emitter_m.init( *world );
+
+      ps = system<ParticleSystem>();
+      emit_remainder = 0.0f;
     };
 
     // entity: bloq
     virtual void processEntity(Entity &e) 
-    {
-
+    { 
       Bloq* bloq = bloq_m.get(e)->bloq;
-      ofVec2f loc = bloq->loc;
 
-      //b2ParticleSystem* b2ps = system<ParticleSystem>()->particles.particleSystem;
+      // How many (fractional) particles should we have emitted this frame?
+      float	dt = (1.0f / ps->FPS);
+      float rate = emitter_m.get(e)->rate;
+      emit_remainder += rate * dt;
 
-      ofxBox2dParticleSystem& ps = system<ParticleSystem>()->particles;
-      float f = 14;
-      float ang = bloq->angle;
-      ofVec2f force( f*cos(ang), f*sin(ang) );
-      int32 pidx = ps.createParticle( loc.x, loc.y, 0, 0 );
-      ps.applyForce( pidx, force );
-
-      // TODO move to render system
-      ofSetLineWidth(2);
-      ofSetColor( ofColor::green );
-      ofLine( loc, loc + force.getNormalized() * 20 );
-
-      ofLogNotice("ParticleEmitterSystem") << "process entity " << e.getId() << "; bloq " << bloq->id << "; create particle at loc " << loc << "; ang " << ang << "; force " << force;
+      // Keep emitting particles on this frame until we only have a fractional particle left.
+      while (emit_remainder > 1.0f) 
+      {
+        emit_remainder -= 1.0f;
+        emit( bloq );
+      } 
     };
 
   private:
 
+    ParticleSystem* ps;
+
     ComponentMapper<BloqComponent> bloq_m;
+    ComponentMapper<ParticleEmitterComponent> emitter_m;
+
+    float emit_remainder;
+
+    void emit( Bloq* bloq )
+    {
+      ofxBox2dParticleSystem* ofps = ps->of_particles();
+
+      RenderComponent* render_data = component<RenderComponent>("escena");
+      ofVec2f screen_loc( bloq->loc.x * render_data->width, bloq->loc.y * render_data->height );
+
+      int32 pidx = ofps->createParticle( screen_loc.x, screen_loc.y, 0, 0 );
+
+      //TODO emitter force param
+      ofVec2f force = bloq->dir * 14;
+      ofps->applyForce( pidx, force );
+    };
 
 };
 

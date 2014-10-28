@@ -3,12 +3,14 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 
-class ParticleSystemComponent : public artemis::Component 
+class CamaraLucidaComponent : public artemis::Component 
 {
   public:
     string id;
 
-    ParticleSystemComponent( string id )
+    int tex_width, tex_height;
+
+    CamaraLucidaComponent( string id )
     {
       this->id = id;
     };

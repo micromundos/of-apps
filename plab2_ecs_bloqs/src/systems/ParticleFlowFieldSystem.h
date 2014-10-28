@@ -2,8 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
-#include "components/ParticleFlowFieldComponent.h"
-#include "components/FlowFieldComponent.h"
+#include "components/Components.h"
 #include "systems/ParticleSystem.h"
 
 using namespace artemis;
@@ -26,7 +25,7 @@ class ParticleFlowFieldSystem : public ECSsystem
       flowfield_m.init( *world );
     };
 
-    // entity: game
+    // entity: escena
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("ParticleFlowFieldSystem") << "update";
@@ -34,7 +33,7 @@ class ParticleFlowFieldSystem : public ECSsystem
       ofVec2f *field = flowfield_m.get(e)->field;
       //float param = particle_flowfield_m.get(e)->param;
 
-      b2ParticleSystem* b2ps = system<ParticleSystem>()->particles.particleSystem;
+      b2ParticleSystem* b2ps = system<ParticleSystem>()->b2_particles();
 
       int32 n = b2ps->GetParticleCount();
       b2Vec2 *locs = b2ps->GetPositionBuffer();

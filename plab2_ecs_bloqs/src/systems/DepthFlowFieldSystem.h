@@ -2,8 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
-#include "components/DepthComponent.h"
-#include "components/FlowFieldComponent.h"
+#include "components/Components.h"
 
 using namespace artemis;
 
@@ -24,12 +23,11 @@ class DepthFlowFieldSystem : public ECSsystem
       flowfield_m.init( *world );
     };
 
-    // entity: game
+    // entity: escena
     virtual void processEntity(Entity &e) 
     { 
       DepthComponent* depth = depth_m.get(e);
       if ( ! depth->dirty ) return;
-
       uint16_t *depth_pix_mm = depth->depth_pix_mm;
       //TODO process depth, generate ff
       //flowfield_m.get(e)->update(xxx);

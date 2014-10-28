@@ -4,7 +4,12 @@ var fs = require('fs');
 var prog = require('commander');
 var setcase = require('change-case');
 
-// TODO agregar systems on the fly en ofApp
+// TODO 
+// separar en actions/functions
+// creación de components y de sistemas
+// pasar lista de componentes a make --system
+// manteniendo la creación de un componente y su sistema con el mismo comando (el sistema tiene ahí solo ese componente por default)
+// agregar systems on the fly en ofApp
 
 // ./make.js mi_xxx_cs
 
@@ -15,6 +20,11 @@ prog
     .parse(process.argv);
 
 var comp_name = prog.remove || prog.component;
+
+if ( !comp_name ) {
+    console.log('error: component name is',comp_name);
+    return;
+}
 
 var comp_pascalcase = setcase.pascalCase(comp_name);
 var comp_snakecase = setcase.snakeCase(comp_name);

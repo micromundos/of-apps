@@ -8,38 +8,42 @@ class BloqAruco : public Bloq
 {
   public:
 
-    BloqAruco( aruco::Marker& m )
+    BloqAruco( aruco::Marker& m, int w, int h )
     {
-      update( m );
+      update( m, w, h );
     };
     ~BloqAruco(){};
 
-    bool update( aruco::Marker& m )
+    bool update( aruco::Marker& m, int w, int h )
     {
       if (!diff_loc( m ))
         return false;
 
       id = ofToString( m.idMarker ); 
-      loc = get_center( m );
+      loc_m = get_center( m );
+      //normalized [0,1]
+      loc.set( loc_m.x / w, loc_m.y / h );
 
       p0 = ofVec2f( m[0].x, m[0].y );
       p1 = ofVec2f( m[1].x, m[1].y );
       p2 = ofVec2f( m[2].x, m[2].y );
       p3 = ofVec2f( m[3].x, m[3].y );
 
-      angle = p0.angleRad( p1 );
+      dir.set(p0 - p1);
+      dir.normalize();
 
       return true;
     };
 
-    bool diff_loc( aruco::Marker& m )
-    {
-      return loc != get_center(m);
-    };
+  private:
 
+    ofVec2f loc_m;
     ofVec2f p0,p1,p2,p3;
 
-  private:
+    bool diff_loc( aruco::Marker& m )
+    {
+      return loc_m != get_center(m);
+    };
 
     ofVec2f get_center(const aruco::Marker& marker)
     {

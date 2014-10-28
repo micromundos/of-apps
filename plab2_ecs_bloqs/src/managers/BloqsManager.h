@@ -42,11 +42,12 @@ class BloqsManager
 
       vector<artemis::Component*> components;
 
-      //siempre agregar por default un componente bloque, ya que estamos en el Bloqs Manager
+      //add default components
       artemis::Component* bloq_comp = component_factory.make( "bloq" );
       components.push_back( bloq_comp );
       ((BloqComponent*)bloq_comp)->update( &bloq );
 
+      //add config components
       for ( int i = 0; i < comp_ids.size(); i++ )
       {
         string comp_id = comp_ids[i];
@@ -78,12 +79,12 @@ class BloqsManager
 
       if ( ! has_entity( bloq_id ) )
       {
-        ofLogNotice("BloqsManager") << "update_entity bloq id " << bloq_id << ": entity not found"; 
+        //ofLogNotice("BloqsManager") << "update_entity bloq id " << bloq_id << ": entity not found"; 
         return;
       }
 
       artemis::Entity& e = ecs->entities()->getEntity( entities_by_bloq_id[ bloq_id ] );
-      ofLogNotice("BloqsManager") << "update_entity bloq id " << bloq_id << ": entity " << e.getId(); 
+      //ofLogNotice("BloqsManager") << "update_entity bloq id " << bloq_id << ": entity " << e.getId(); 
 
       BloqComponent* bloq_comp = (BloqComponent*)e.getComponent<BloqComponent>();
 

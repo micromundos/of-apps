@@ -2,9 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
-#include "components/RGBComponent.h"
-#include "components/DepthComponent.h"
-
+#include "components/Components.h"
 #include "ofxKinect.h"
 
 using namespace artemis;
@@ -41,13 +39,21 @@ class RGBDSystem : public ECSsystem
       depth_m.get(e)->init( w, h );
     };
 
-    // entity: game
+    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
+    {
+      kinect.update();
+
+      for (int i=0;i<bag.getCount();i++)
+        processEntity( *bag.get(i) );
+
+      render();
+    };
+
+    // entity: escena
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("RGBDSystem") << "process entity " << e.getId();
 
-      kinect.update();
-      
       bool dirty = kinect.isFrameNew();
       depth_m.get(e)->dirty = dirty; 
       rgb_m.get(e)->dirty = dirty; 
@@ -58,8 +64,6 @@ class RGBDSystem : public ECSsystem
         rgb_m.get(e)->update( kinect.getPixels() );
       }
 
-      // TODO move to render system
-      render(); 
     };
 
   private: 
@@ -72,10 +76,10 @@ class RGBDSystem : public ECSsystem
     void render()
     {
       ofSetColor(255);
-      int w = kinect.width;
-      int h = kinect.height;
+      int w = 1024;//kinect.width;
+      int h = 768;//kinect.height;
+      //render_depth(0,0,w,h);
       render_color(0,0,w,h);
-      render_depth(0,480,w,h);
     };
 
     void render_color( int x, int y, int w, int h )

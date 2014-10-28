@@ -3,9 +3,7 @@
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
 #include "bloqs/BloqAruco.h"
-#include "components/BloqEventsComponent.h"
-#include "components/ArucoComponent.h"
-#include "components/RGBComponent.h"
+#include "components/Components.h"
 
 using namespace artemis;
 
@@ -19,6 +17,7 @@ class ArucoSystem : public ECSsystem
       addComponentType<BloqEventsComponent>();
       addComponentType<ArucoComponent>();
       addComponentType<RGBComponent>();
+      addComponentType<RenderComponent>();
     };
 
     virtual void initialize() 
@@ -26,26 +25,19 @@ class ArucoSystem : public ECSsystem
       bloq_events_m.init( *world );
       aruco_m.init( *world );
       rgb_m.init( *world );
+      render_m.init( *world );
+
+      inited = false; 
     };
 
     virtual void added(Entity &e) 
     {
+      //TODO mejorar
       RGBComponent* rgb = rgb_m.get(e);
-
-      int w = rgb->width;
-      int h = rgb->height;
-      this->channels = 3;
-
-      rgb_pix.allocate( w, h, channels );
-      rgb_pix.set(0);
-
-      //no calibration, no board config
-      aruco.setup2d( w, h );
-      //aruco.setThresholdMethod(aruco::MarkerDetector::CANNY);
-
+      init( rgb->width, rgb->height );
     };
 
-    // entity: game
+    // entity: escena
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("ArucoSystem") << "process entity " << e.getId();
@@ -56,22 +48,38 @@ class ArucoSystem : public ECSsystem
       if ( rgb->dirty )
         update( rgb->color_pix, rgb->width, rgb->height, events );
 
-      // TODO move to render system
-      render(); 
-    };
+      RenderComponent* render_data = render_m.get(e);
+      render( render_data->width, render_data->height ); 
+    }; 
 
   private: 
 
     ComponentMapper<BloqEventsComponent> bloq_events_m;
     ComponentMapper<ArucoComponent> aruco_m;
     ComponentMapper<RGBComponent> rgb_m;
-
+    ComponentMapper<RenderComponent> render_m;
 
     ofxAruco aruco;
     ofPixels rgb_pix; 
     int channels;
+    bool inited;
     vector< shared_ptr<BloqAruco> > bloqs;
 
+    void init(int w, int h)
+    {
+      if (inited) return;
+
+      this->channels = 3;
+
+      rgb_pix.allocate( w, h, channels );
+      rgb_pix.set(0); 
+
+      //no calibration, no board config
+      aruco.setup2d( w, h );
+      //aruco.setThresholdMethod(aruco::MarkerDetector::CANNY);
+
+      inited = true;
+    };
 
     void update( uint8_t *pixels, int w, int h, BloqEventsComponent* events )
     {
@@ -90,12 +98,12 @@ class ArucoSystem : public ECSsystem
 
         if ( bloq == NULL )
         {
-          shared_ptr<BloqAruco> _bloq( new BloqAruco( m ) );
+          shared_ptr<BloqAruco> _bloq( new BloqAruco( m, w, h ) );
           bloqs.push_back( _bloq );
           ofNotifyEvent( events->added, *_bloq );
         }
 
-        else if ( bloq->update( m ) )
+        else if ( bloq->update(m, w, h) )
         {
           ofNotifyEvent( events->updated, *bloq );
         }
@@ -104,10 +112,23 @@ class ArucoSystem : public ECSsystem
       remove_bloqs_missing( markers, events );
     };
 
-    void render()
+    void render( int render_width, int render_height )
     {
       ofSetLineWidth( 3 );
-      aruco.draw2d();
+      //aruco.draw2d();
+
+      ofSetColor(ofColor::green);
+      for (int i = 0; i<bloqs.size(); i++)
+      {
+        string id = bloqs[i]->id;
+        ofVec2f loc( bloqs[i]->loc );
+        loc.x *= render_width;
+        loc.y *= render_height;
+        ofVec2f& dir = bloqs[i]->dir;
+        ofLine( loc, loc + dir * 40 );
+        ofRect( loc, 6, 6 );
+        ofDrawBitmapString( id, loc );
+      }
     }; 
 
     BloqAruco* get_bloq( string id )

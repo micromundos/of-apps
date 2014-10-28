@@ -1,17 +1,25 @@
 {
-  //[components] of (unique) game entity
+  //[components] de escena entity
   //~= environment
-  "game": [
-    //core
+  "escena": [
+
+    //--core--
     "bloq_events",
-    //input
+
+    //--input--
     "rgb",
     "aruco",
     "depth",
-    //behaviors
+
+    "render",
+    "camara_lucida",
+
+    //TODO sacar particulas de escena
+    //--particles--
+    //"flow_field",
     "particle_system",
-    "flow_field",
-    "particle_flow_field" 
+    "particle_depth_slope_constraint"
+    //"particle_flow_field" 
   ],
 
   //[entities:components]

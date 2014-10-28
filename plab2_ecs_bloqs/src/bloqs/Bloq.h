@@ -9,8 +9,9 @@ class Bloq
     Bloq(){};
     ~Bloq(){};
 
-    string id;
-    ofVec2f loc;
-    float angle;
+    string id; 
+    ofVec2f loc; //normalized [0,1]
+    ofVec2f dir; //normalized ang vec
+    //float angle; //radians
 };
 

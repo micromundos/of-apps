@@ -1,11 +1,11 @@
 #include "ofApp.h"
+#include "add_systems.h"
 
 void ofApp::setup()
 {
   ofSetLogLevel(OF_LOG_NOTICE);
   //ofSetLogLevel("BloqsManager", OF_LOG_NOTICE);
 
-  ECS::FPS = 60.;
   ofSetFrameRate( ECS::FPS ); 
   ofSetVerticalSync(true);
 
@@ -19,29 +19,16 @@ void ofApp::setup()
   add_systems();
   ecs.init_systems();
 
-  game.init( &ecs, &config, "game" );
+  escena.init( &ecs, &config, "escena" );
   bloqs.init( &ecs, &config );
 
-  BloqEventsComponent* bloq_events = ecs.component<BloqEventsComponent>("game");
+  BloqEventsComponent* bloq_events = ecs.component<BloqEventsComponent>("escena");
 
   ofAddListener( bloq_events->added, this, &ofApp::bloq_added );
   ofAddListener( bloq_events->updated, this, &ofApp::bloq_updated );
   ofAddListener( bloq_events->removed, this, &ofApp::bloq_removed );
 
 }
-
-void ofApp::add_systems()
-{
-  //TODO add systems on the fly parseando config
-  //game entity systems
-  ecs.add_system(new RGBDSystem());
-  ecs.add_system(new ArucoSystem());
-  ecs.add_system(new DepthFlowFieldSystem());
-  ecs.add_system(new ParticleFlowFieldSystem());
-  ecs.add_system(new ParticleSystem());
-  //bloq entities systems
-  ecs.add_system(new ParticleEmitterSystem());
-};
 
 void ofApp::update()
 {

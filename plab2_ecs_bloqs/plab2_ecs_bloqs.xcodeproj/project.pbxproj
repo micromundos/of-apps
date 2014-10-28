@@ -9,6 +9,870 @@
 		<string>46</string>
 		<key>objects</key>
 		<dict>
+			<key>CCDC6F9CCF925CC402160B85</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>21BDE665988474F1B1F4D302</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>src</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>FB84AAF8D1B7A95266DB5C09</key>
+			<dict>
+				<key>fileRef</key>
+				<string>21BDE665988474F1B1F4D302</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>21BDE665988474F1B1F4D302</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>jsoncpp.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxJSON/libs/jsoncpp/src/jsoncpp.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>2C7CF000B7B4F782C187C353</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>json.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxJSON/libs/jsoncpp/include/json/json.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>58AD3BD71B781D9BC25763C8</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>61313493CDB52744E22A604D</string>
+					<string>2C7CF000B7B4F782C187C353</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>json</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>D486FC87F063317BB47E9FAC</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>58AD3BD71B781D9BC25763C8</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>include</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>977A836DD2C489CCC5E330FF</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>D486FC87F063317BB47E9FAC</string>
+					<string>CCDC6F9CCF925CC402160B85</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>jsoncpp</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>F40E80CB2D443CBA9581DD03</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>977A836DD2C489CCC5E330FF</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>libs</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>61313493CDB52744E22A604D</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>json-forwards.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxJSON/libs/jsoncpp/include/json/json-forwards.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>26A541233BC6F736E758F718</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ofxJSONElement.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxJSON/src/ofxJSONElement.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>BEDFEE7400C58EA4E412B757</key>
+			<dict>
+				<key>fileRef</key>
+				<string>F2B099E6BD1199664C48B177</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>F2B099E6BD1199664C48B177</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ofxJSONElement.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxJSON/src/ofxJSONElement.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>292AF6148769654D0DF26018</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>1645F56257269CD0356320BD</string>
+					<string>F2B099E6BD1199664C48B177</string>
+					<string>26A541233BC6F736E758F718</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>src</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>2865DAEF86B1907A704CA70B</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>292AF6148769654D0DF26018</string>
+					<string>F40E80CB2D443CBA9581DD03</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>ofxJSON</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>1645F56257269CD0356320BD</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ofxJSON.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxJSON/src/ofxJSON.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>73F5B9A792D049B76828AF66</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>World.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/World.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>83DB5CFFE9EE444631A6BC6D</key>
+			<dict>
+				<key>fileRef</key>
+				<string>27241F909695F52446C5806F</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>27241F909695F52446C5806F</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>World.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/World.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>3D05707C91D2CF4E21C2DFC4</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>TypeInfoComparator.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/TypeInfoComparator.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>AB529D862D6009387D7DE0DC</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>TagManager.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/TagManager.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>DAC0E15C73E507D404BFFE0B</key>
+			<dict>
+				<key>fileRef</key>
+				<string>AFC69BDA371E7EB2B55DFDF0</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>AFC69BDA371E7EB2B55DFDF0</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>TagManager.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/TagManager.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>07D3DA6FEE651816EAD291C4</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>SystemManager.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/SystemManager.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>56BF5C5DC1B4955D377ECD85</key>
+			<dict>
+				<key>fileRef</key>
+				<string>2BB7B71D217840FFF6D646AD</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>2BB7B71D217840FFF6D646AD</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>SystemManager.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/SystemManager.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>399C451E8793624871670083</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>SystemBitManager.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/SystemBitManager.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>21AAF7CECF305B7B18F174F0</key>
+			<dict>
+				<key>fileRef</key>
+				<string>872912DB34CB29187FA7ABA7</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>872912DB34CB29187FA7ABA7</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>SystemBitManager.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/SystemBitManager.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>9682EF4BF2A94A8435B2A03E</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ImmutableBag.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/ImmutableBag.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>DC510FA3D38FBA6FC1C0052E</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>GroupManager.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/GroupManager.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>5AEF19FE1FED2F9A1976ED6C</key>
+			<dict>
+				<key>fileRef</key>
+				<string>09916D27B51D9990C7CAB748</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>09916D27B51D9990C7CAB748</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>GroupManager.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/GroupManager.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>A9EFB9ABA347C9A0E321F940</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>EntitySystem.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/EntitySystem.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>60BE693365F501F5AFF64A29</key>
+			<dict>
+				<key>fileRef</key>
+				<string>A33159D9B5D63F7B3EF786FF</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>A33159D9B5D63F7B3EF786FF</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>EntitySystem.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/EntitySystem.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>6E57C689C72E180F17BED780</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>EntityProcessingSystem.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/EntityProcessingSystem.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>11F49FA86DE701A8703B4AC4</key>
+			<dict>
+				<key>fileRef</key>
+				<string>4FA4B8DCAC28C1EED3E7E6AE</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>4FA4B8DCAC28C1EED3E7E6AE</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>EntityProcessingSystem.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/EntityProcessingSystem.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>BB77C3F996AA7BE415F4968A</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>EntityManager.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/EntityManager.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>2CB42D5DE840E840E9ED7C5E</key>
+			<dict>
+				<key>fileRef</key>
+				<string>1DDBA713433D2D19AC3351C6</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>1DDBA713433D2D19AC3351C6</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>EntityManager.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/EntityManager.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>F11A4CEEBC4C283276FE0258</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>Entity.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/Entity.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>70691F862A0A2172A16A634F</key>
+			<dict>
+				<key>fileRef</key>
+				<string>F3E0B1C691578C85317274F0</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>F3E0B1C691578C85317274F0</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>Entity.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/Entity.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>26685499D343D7D82DBA074D</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>DelayedEntitySystem.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/DelayedEntitySystem.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>F5D8670CE8524959DFFD04B6</key>
+			<dict>
+				<key>fileRef</key>
+				<string>F8920A41B119FACA578D79B5</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>F8920A41B119FACA578D79B5</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>DelayedEntitySystem.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/DelayedEntitySystem.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>A7A1315A4E24B94D52B19760</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>DelayedEntityProcessingSystem.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/DelayedEntityProcessingSystem.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>A964E4204CAB1BEDCC782C88</key>
+			<dict>
+				<key>fileRef</key>
+				<string>2B12083F0E6F97F2A147A98B</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>2B12083F0E6F97F2A147A98B</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>DelayedEntityProcessingSystem.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/DelayedEntityProcessingSystem.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>FEE04D6DC693683C528D7D81</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ComponentTypeManager.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentTypeManager.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>F91157F3D440F53E0C417D57</key>
+			<dict>
+				<key>fileRef</key>
+				<string>84924174AD0E4B0AB9DE1AE2</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>84924174AD0E4B0AB9DE1AE2</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ComponentTypeManager.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentTypeManager.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>E40F3E13D2EA50287A7D7653</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ComponentType.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentType.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>A06FDDCA251512EDD8920623</key>
+			<dict>
+				<key>fileRef</key>
+				<string>125EF4F14C786198D0174B4B</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>125EF4F14C786198D0174B4B</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ComponentType.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentType.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>A04910B3EEFFDFA373BEE557</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ComponentMapper.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentMapper.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>3173CE518A7D227B71ECC39A</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>Component.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/Component.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>FDAC5A695446252D05AFC3F2</key>
+			<dict>
+				<key>fileRef</key>
+				<string>5C7F150883C706DB8F71761D</string>
+				<key>isa</key>
+				<string>PBXBuildFile</string>
+			</dict>
+			<key>5C7F150883C706DB8F71761D</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.cpp.cpp</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>Component.cpp</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/Component.cpp</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>1A526CD396A9C3745FAC925D</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>BitSize.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/BitSize.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
+			<key>431D2A193461A06A6AB0769D</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>82CC0FB83DD2F74B30D3B149</string>
+					<string>1A526CD396A9C3745FAC925D</string>
+					<string>5C7F150883C706DB8F71761D</string>
+					<string>3173CE518A7D227B71ECC39A</string>
+					<string>A04910B3EEFFDFA373BEE557</string>
+					<string>125EF4F14C786198D0174B4B</string>
+					<string>E40F3E13D2EA50287A7D7653</string>
+					<string>84924174AD0E4B0AB9DE1AE2</string>
+					<string>FEE04D6DC693683C528D7D81</string>
+					<string>2B12083F0E6F97F2A147A98B</string>
+					<string>A7A1315A4E24B94D52B19760</string>
+					<string>F8920A41B119FACA578D79B5</string>
+					<string>26685499D343D7D82DBA074D</string>
+					<string>F3E0B1C691578C85317274F0</string>
+					<string>F11A4CEEBC4C283276FE0258</string>
+					<string>1DDBA713433D2D19AC3351C6</string>
+					<string>BB77C3F996AA7BE415F4968A</string>
+					<string>4FA4B8DCAC28C1EED3E7E6AE</string>
+					<string>6E57C689C72E180F17BED780</string>
+					<string>A33159D9B5D63F7B3EF786FF</string>
+					<string>A9EFB9ABA347C9A0E321F940</string>
+					<string>09916D27B51D9990C7CAB748</string>
+					<string>DC510FA3D38FBA6FC1C0052E</string>
+					<string>9682EF4BF2A94A8435B2A03E</string>
+					<string>872912DB34CB29187FA7ABA7</string>
+					<string>399C451E8793624871670083</string>
+					<string>2BB7B71D217840FFF6D646AD</string>
+					<string>07D3DA6FEE651816EAD291C4</string>
+					<string>AFC69BDA371E7EB2B55DFDF0</string>
+					<string>AB529D862D6009387D7DE0DC</string>
+					<string>3D05707C91D2CF4E21C2DFC4</string>
+					<string>27241F909695F52446C5806F</string>
+					<string>73F5B9A792D049B76828AF66</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>Artemis</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>48F293BA4FEC210CB5AB72E3</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>431D2A193461A06A6AB0769D</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>libs</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>F9BA9B23165D4EA28000B6EE</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>48F293BA4FEC210CB5AB72E3</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>ofxArtemis</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
+			<key>82CC0FB83DD2F74B30D3B149</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>Artemis.h</string>
+				<key>path</key>
+				<string>../../../addons/ofxArtemis/libs/Artemis/Artemis.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>DBCB84A37F9AECC254870D79</key>
 			<dict>
 				<key>fileRef</key>
@@ -6461,656 +7325,20 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
-			<key>73F5B9A792D049B76828AF66</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>World.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/World.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>83DB5CFFE9EE444631A6BC6D</key>
-			<dict>
-				<key>fileRef</key>
-				<string>27241F909695F52446C5806F</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>27241F909695F52446C5806F</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>World.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/World.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>3D05707C91D2CF4E21C2DFC4</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>TypeInfoComparator.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/TypeInfoComparator.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>AB529D862D6009387D7DE0DC</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>TagManager.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/TagManager.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>DAC0E15C73E507D404BFFE0B</key>
-			<dict>
-				<key>fileRef</key>
-				<string>AFC69BDA371E7EB2B55DFDF0</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>AFC69BDA371E7EB2B55DFDF0</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>TagManager.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/TagManager.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>07D3DA6FEE651816EAD291C4</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>SystemManager.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/SystemManager.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>56BF5C5DC1B4955D377ECD85</key>
-			<dict>
-				<key>fileRef</key>
-				<string>2BB7B71D217840FFF6D646AD</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>2BB7B71D217840FFF6D646AD</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>SystemManager.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/SystemManager.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>399C451E8793624871670083</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>SystemBitManager.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/SystemBitManager.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>21AAF7CECF305B7B18F174F0</key>
-			<dict>
-				<key>fileRef</key>
-				<string>872912DB34CB29187FA7ABA7</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>872912DB34CB29187FA7ABA7</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>SystemBitManager.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/SystemBitManager.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>9682EF4BF2A94A8435B2A03E</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ImmutableBag.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/ImmutableBag.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>DC510FA3D38FBA6FC1C0052E</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>GroupManager.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/GroupManager.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>5AEF19FE1FED2F9A1976ED6C</key>
-			<dict>
-				<key>fileRef</key>
-				<string>09916D27B51D9990C7CAB748</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>09916D27B51D9990C7CAB748</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>GroupManager.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/GroupManager.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>A9EFB9ABA347C9A0E321F940</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>EntitySystem.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/EntitySystem.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>60BE693365F501F5AFF64A29</key>
-			<dict>
-				<key>fileRef</key>
-				<string>A33159D9B5D63F7B3EF786FF</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>A33159D9B5D63F7B3EF786FF</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>EntitySystem.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/EntitySystem.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>6E57C689C72E180F17BED780</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>EntityProcessingSystem.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/EntityProcessingSystem.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>11F49FA86DE701A8703B4AC4</key>
-			<dict>
-				<key>fileRef</key>
-				<string>4FA4B8DCAC28C1EED3E7E6AE</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>4FA4B8DCAC28C1EED3E7E6AE</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>EntityProcessingSystem.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/EntityProcessingSystem.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>BB77C3F996AA7BE415F4968A</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>EntityManager.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/EntityManager.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>2CB42D5DE840E840E9ED7C5E</key>
-			<dict>
-				<key>fileRef</key>
-				<string>1DDBA713433D2D19AC3351C6</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>1DDBA713433D2D19AC3351C6</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>EntityManager.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/EntityManager.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>F11A4CEEBC4C283276FE0258</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>Entity.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/Entity.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>70691F862A0A2172A16A634F</key>
-			<dict>
-				<key>fileRef</key>
-				<string>F3E0B1C691578C85317274F0</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>F3E0B1C691578C85317274F0</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>Entity.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/Entity.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>26685499D343D7D82DBA074D</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>DelayedEntitySystem.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/DelayedEntitySystem.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>F5D8670CE8524959DFFD04B6</key>
-			<dict>
-				<key>fileRef</key>
-				<string>F8920A41B119FACA578D79B5</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>F8920A41B119FACA578D79B5</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>DelayedEntitySystem.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/DelayedEntitySystem.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>A7A1315A4E24B94D52B19760</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>DelayedEntityProcessingSystem.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/DelayedEntityProcessingSystem.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>A964E4204CAB1BEDCC782C88</key>
-			<dict>
-				<key>fileRef</key>
-				<string>2B12083F0E6F97F2A147A98B</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>2B12083F0E6F97F2A147A98B</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>DelayedEntityProcessingSystem.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/DelayedEntityProcessingSystem.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>FEE04D6DC693683C528D7D81</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ComponentTypeManager.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentTypeManager.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>F91157F3D440F53E0C417D57</key>
-			<dict>
-				<key>fileRef</key>
-				<string>84924174AD0E4B0AB9DE1AE2</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>84924174AD0E4B0AB9DE1AE2</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ComponentTypeManager.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentTypeManager.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>E40F3E13D2EA50287A7D7653</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ComponentType.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentType.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>A06FDDCA251512EDD8920623</key>
-			<dict>
-				<key>fileRef</key>
-				<string>125EF4F14C786198D0174B4B</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>125EF4F14C786198D0174B4B</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ComponentType.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentType.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>A04910B3EEFFDFA373BEE557</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ComponentMapper.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/ComponentMapper.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>3173CE518A7D227B71ECC39A</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>Component.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/Component.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>FDAC5A695446252D05AFC3F2</key>
-			<dict>
-				<key>fileRef</key>
-				<string>5C7F150883C706DB8F71761D</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>5C7F150883C706DB8F71761D</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>Component.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/Component.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>1A526CD396A9C3745FAC925D</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>BitSize.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/BitSize.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>431D2A193461A06A6AB0769D</key>
+			<key>6B6AD5A931E565B62CDF53FA</key>
 			<dict>
 				<key>children</key>
 				<array>
-					<string>82CC0FB83DD2F74B30D3B149</string>
-					<string>1A526CD396A9C3745FAC925D</string>
-					<string>5C7F150883C706DB8F71761D</string>
-					<string>3173CE518A7D227B71ECC39A</string>
-					<string>A04910B3EEFFDFA373BEE557</string>
-					<string>125EF4F14C786198D0174B4B</string>
-					<string>E40F3E13D2EA50287A7D7653</string>
-					<string>84924174AD0E4B0AB9DE1AE2</string>
-					<string>FEE04D6DC693683C528D7D81</string>
-					<string>2B12083F0E6F97F2A147A98B</string>
-					<string>A7A1315A4E24B94D52B19760</string>
-					<string>F8920A41B119FACA578D79B5</string>
-					<string>26685499D343D7D82DBA074D</string>
-					<string>F3E0B1C691578C85317274F0</string>
-					<string>F11A4CEEBC4C283276FE0258</string>
-					<string>1DDBA713433D2D19AC3351C6</string>
-					<string>BB77C3F996AA7BE415F4968A</string>
-					<string>4FA4B8DCAC28C1EED3E7E6AE</string>
-					<string>6E57C689C72E180F17BED780</string>
-					<string>A33159D9B5D63F7B3EF786FF</string>
-					<string>A9EFB9ABA347C9A0E321F940</string>
-					<string>09916D27B51D9990C7CAB748</string>
-					<string>DC510FA3D38FBA6FC1C0052E</string>
-					<string>9682EF4BF2A94A8435B2A03E</string>
-					<string>872912DB34CB29187FA7ABA7</string>
-					<string>399C451E8793624871670083</string>
-					<string>2BB7B71D217840FFF6D646AD</string>
-					<string>07D3DA6FEE651816EAD291C4</string>
-					<string>AFC69BDA371E7EB2B55DFDF0</string>
-					<string>AB529D862D6009387D7DE0DC</string>
-					<string>3D05707C91D2CF4E21C2DFC4</string>
-					<string>27241F909695F52446C5806F</string>
-					<string>73F5B9A792D049B76828AF66</string>
+					<string>55A045105C19CE4C432B5AE0</string>
 				</array>
 				<key>isa</key>
 				<string>PBXGroup</string>
 				<key>name</key>
-				<string>Artemis</string>
+				<string>utils</string>
 				<key>sourceTree</key>
 				<string>&lt;group&gt;</string>
 			</dict>
-			<key>48F293BA4FEC210CB5AB72E3</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>431D2A193461A06A6AB0769D</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>libs</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>F9BA9B23165D4EA28000B6EE</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>48F293BA4FEC210CB5AB72E3</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>ofxArtemis</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>82CC0FB83DD2F74B30D3B149</key>
+			<key>55A045105C19CE4C432B5AE0</key>
 			<dict>
 				<key>explicitFileType</key>
 				<string>sourcecode.c.h</string>
@@ -7119,209 +7347,9 @@
 				<key>isa</key>
 				<string>PBXFileReference</string>
 				<key>name</key>
-				<string>Artemis.h</string>
+				<string>CoordMap.h</string>
 				<key>path</key>
-				<string>../../../addons/ofxArtemis/libs/Artemis/Artemis.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>CCDC6F9CCF925CC402160B85</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>21BDE665988474F1B1F4D302</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>src</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>FB84AAF8D1B7A95266DB5C09</key>
-			<dict>
-				<key>fileRef</key>
-				<string>21BDE665988474F1B1F4D302</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>21BDE665988474F1B1F4D302</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>jsoncpp.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxJSON/libs/jsoncpp/src/jsoncpp.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>2C7CF000B7B4F782C187C353</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>json.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxJSON/libs/jsoncpp/include/json/json.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>58AD3BD71B781D9BC25763C8</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>61313493CDB52744E22A604D</string>
-					<string>2C7CF000B7B4F782C187C353</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>json</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>D486FC87F063317BB47E9FAC</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>58AD3BD71B781D9BC25763C8</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>include</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>977A836DD2C489CCC5E330FF</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>D486FC87F063317BB47E9FAC</string>
-					<string>CCDC6F9CCF925CC402160B85</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>jsoncpp</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>F40E80CB2D443CBA9581DD03</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>977A836DD2C489CCC5E330FF</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>libs</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>61313493CDB52744E22A604D</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>json-forwards.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxJSON/libs/jsoncpp/include/json/json-forwards.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>26A541233BC6F736E758F718</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxJSONElement.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxJSON/src/ofxJSONElement.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>BEDFEE7400C58EA4E412B757</key>
-			<dict>
-				<key>fileRef</key>
-				<string>F2B099E6BD1199664C48B177</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>F2B099E6BD1199664C48B177</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxJSONElement.cpp</string>
-				<key>path</key>
-				<string>../../../addons/ofxJSON/src/ofxJSONElement.cpp</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>292AF6148769654D0DF26018</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>1645F56257269CD0356320BD</string>
-					<string>F2B099E6BD1199664C48B177</string>
-					<string>26A541233BC6F736E758F718</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>src</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>2865DAEF86B1907A704CA70B</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>292AF6148769654D0DF26018</string>
-					<string>F40E80CB2D443CBA9581DD03</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>ofxJSON</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>1645F56257269CD0356320BD</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ofxJSON.h</string>
-				<key>path</key>
-				<string>../../../addons/ofxJSON/src/ofxJSON.h</string>
+				<string>src/utils/CoordMap.h</string>
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
@@ -7370,21 +7398,6 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
-			<key>5A963D18458732AA01653D20</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>RenderSystem.h</string>
-				<key>path</key>
-				<string>src/systems/RenderSystem.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
 			<key>621E81A850174366BA0768FE</key>
 			<dict>
 				<key>explicitFileType</key>
@@ -7430,6 +7443,21 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
+			<key>10E66E19BD3873B08A8D37CE</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>ParticleDepthSlopeConstraintSystem.h</string>
+				<key>path</key>
+				<string>src/systems/ParticleDepthSlopeConstraintSystem.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>FD292FA246CC48B786A6240D</key>
 			<dict>
 				<key>explicitFileType</key>
@@ -7445,16 +7473,32 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
+			<key>1F8010B003CA045E3DFE0093</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>CamaraLucidaSystem.h</string>
+				<key>path</key>
+				<string>src/systems/CamaraLucidaSystem.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>378F30302A2625932F04C905</key>
 			<dict>
 				<key>children</key>
 				<array>
 					<string>172FC973AE52A8778FE44843</string>
+					<string>1F8010B003CA045E3DFE0093</string>
 					<string>FD292FA246CC48B786A6240D</string>
+					<string>10E66E19BD3873B08A8D37CE</string>
 					<string>D50B3352170E1F8A1D980B8C</string>
 					<string>F2ECF09B77E160E4E5199795</string>
 					<string>621E81A850174366BA0768FE</string>
-					<string>5A963D18458732AA01653D20</string>
 					<string>D6AB83DD7FFBE42BFBB97697</string>
 					<string>9B621D4840C141380A0CBEEF</string>
 					<string>CD85B7B70436C05F9B499A3C</string>
@@ -7478,49 +7522,6 @@
 				<string>ArucoSystem.h</string>
 				<key>path</key>
 				<string>src/systems/ArucoSystem.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>490610157DC64CDC977B3620</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>34043379989CDC57F60E12BE</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>rgbd</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>34043379989CDC57F60E12BE</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>RGBDInput.h</string>
-				<key>path</key>
-				<string>src/rgbd/RGBDInput.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>697FA692CB067FAF47C7C20F</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>SimManager.h</string>
-				<key>path</key>
-				<string>src/managers/SimManager.h</string>
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
@@ -7561,7 +7562,6 @@
 					<string>9F365C2D47923106478BF7E5</string>
 					<string>0E5F720843F2F1C12E4B3BE3</string>
 					<string>43E87B1B445F3D24DE7BE777</string>
-					<string>697FA692CB067FAF47C7C20F</string>
 				</array>
 				<key>isa</key>
 				<string>PBXGroup</string>
@@ -7600,6 +7600,20 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
+			<key>E4966518D7E9278B6566F331</key>
+			<dict>
+				<key>children</key>
+				<array>
+					<string>405B81880ABD9266A44EF33B</string>
+					<string>795452C5794C30F0C5C3E8F2</string>
+				</array>
+				<key>isa</key>
+				<string>PBXGroup</string>
+				<key>name</key>
+				<string>ecs</string>
+				<key>sourceTree</key>
+				<string>&lt;group&gt;</string>
+			</dict>
 			<key>405B81880ABD9266A44EF33B</key>
 			<dict>
 				<key>explicitFileType</key>
@@ -7612,43 +7626,6 @@
 				<string>ECS.h</string>
 				<key>path</key>
 				<string>src/ecs/ECS.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>E4966518D7E9278B6566F331</key>
-			<dict>
-				<key>children</key>
-				<array>
-					<string>B855A85DB647FD383D8D31E0</string>
-					<string>405B81880ABD9266A44EF33B</string>
-					<string>795452C5794C30F0C5C3E8F2</string>
-				</array>
-				<key>isa</key>
-				<string>PBXGroup</string>
-				<key>name</key>
-				<string>ecs</string>
-				<key>sourceTree</key>
-				<string>&lt;group&gt;</string>
-			</dict>
-			<key>242FE1267BFF6CCE62874D21</key>
-			<dict>
-				<key>fileRef</key>
-				<string>B855A85DB647FD383D8D31E0</string>
-				<key>isa</key>
-				<string>PBXBuildFile</string>
-			</dict>
-			<key>B855A85DB647FD383D8D31E0</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.cpp.cpp</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>ECS.cpp</string>
-				<key>path</key>
-				<string>src/ecs/ECS.cpp</string>
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
@@ -7697,6 +7674,21 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
+			<key>E3B7BCF9FEB800759A528685</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>RenderComponent.h</string>
+				<key>path</key>
+				<string>src/components/RenderComponent.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>CB1CCA4A4CFB5769EFBCD2A9</key>
 			<dict>
 				<key>explicitFileType</key>
@@ -7742,7 +7734,7 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
-			<key>5E5C88F388D777487977579F</key>
+			<key>59494A6693278D23481F5A34</key>
 			<dict>
 				<key>explicitFileType</key>
 				<string>sourcecode.c.h</string>
@@ -7751,9 +7743,9 @@
 				<key>isa</key>
 				<string>PBXFileReference</string>
 				<key>name</key>
-				<string>MeshComponent.h</string>
+				<string>ParticleDepthSlopeConstraintComponent.h</string>
 				<key>path</key>
-				<string>src/components/MeshComponent.h</string>
+				<string>src/components/ParticleDepthSlopeConstraintComponent.h</string>
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
@@ -7817,6 +7809,21 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
+			<key>3A5D5773088E2061115B25CB</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>CamaraLucidaComponent.h</string>
+				<key>path</key>
+				<string>src/components/CamaraLucidaComponent.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>0F915D5EDC2D0448D2B91EDC</key>
 			<dict>
 				<key>explicitFileType</key>
@@ -7854,14 +7861,16 @@
 					<string>F67DCA143CC489B77AA6B813</string>
 					<string>F5BAF676AEC3D98D99B16C6B</string>
 					<string>0F915D5EDC2D0448D2B91EDC</string>
+					<string>3A5D5773088E2061115B25CB</string>
 					<string>5038A5607B73D076CFBA8D5D</string>
 					<string>2B89D0D0B8686D3AFFA62643</string>
 					<string>1C2D57922ABE22130FB8D40A</string>
 					<string>CB785D658B354629156F3DD9</string>
-					<string>5E5C88F388D777487977579F</string>
+					<string>59494A6693278D23481F5A34</string>
 					<string>083BD0E096BAF3FE5FAAD712</string>
 					<string>D996DB04C8B9AAA7EA1C4AC2</string>
 					<string>CB1CCA4A4CFB5769EFBCD2A9</string>
+					<string>E3B7BCF9FEB800759A528685</string>
 					<string>33FD79E0ADE7EBE3BA8A13C2</string>
 					<string>4FF300E885A291789231575C</string>
 					<string>14175D72B908BED1A3B18168</string>
@@ -7888,36 +7897,6 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
-			<key>222CB081B7CBEBA21F24A2F8</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>BloqsInput.h</string>
-				<key>path</key>
-				<string>src/bloqs/BloqsInput.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
-			<key>2F28B81946D8E43D782E0238</key>
-			<dict>
-				<key>explicitFileType</key>
-				<string>sourcecode.c.h</string>
-				<key>fileEncoding</key>
-				<string>30</string>
-				<key>isa</key>
-				<string>PBXFileReference</string>
-				<key>name</key>
-				<string>BloqsAruco.h</string>
-				<key>path</key>
-				<string>src/bloqs/BloqsAruco.h</string>
-				<key>sourceTree</key>
-				<string>SOURCE_ROOT</string>
-			</dict>
 			<key>B6DB3A66E7B25CA007800039</key>
 			<dict>
 				<key>explicitFileType</key>
@@ -7939,8 +7918,6 @@
 				<array>
 					<string>6080603729534AA0CC4F2663</string>
 					<string>B6DB3A66E7B25CA007800039</string>
-					<string>2F28B81946D8E43D782E0238</string>
-					<string>222CB081B7CBEBA21F24A2F8</string>
 				</array>
 				<key>isa</key>
 				<string>PBXGroup</string>
@@ -7964,17 +7941,32 @@
 				<key>sourceTree</key>
 				<string>SOURCE_ROOT</string>
 			</dict>
+			<key>BBA934A932BBD9D0FFD1C794</key>
+			<dict>
+				<key>explicitFileType</key>
+				<string>sourcecode.c.h</string>
+				<key>fileEncoding</key>
+				<string>30</string>
+				<key>isa</key>
+				<string>PBXFileReference</string>
+				<key>name</key>
+				<string>add_systems.h</string>
+				<key>path</key>
+				<string>src/add_systems.h</string>
+				<key>sourceTree</key>
+				<string>SOURCE_ROOT</string>
+			</dict>
 			<key>BB4B014C10F69532006C3DED</key>
 			<dict>
 				<key>children</key>
 				<array>
-					<string>2865DAEF86B1907A704CA70B</string>
-					<string>F9BA9B23165D4EA28000B6EE</string>
 					<string>9DBC3F5A51BD11C17FEB021B</string>
 					<string>9683228C705CA3FF4F2EA945</string>
 					<string>A0B90D3B0ADB9C1716816714</string>
 					<string>94040BE8EC56C89AD60B7651</string>
 					<string>6025FAF6414C2CA589764D26</string>
+					<string>F9BA9B23165D4EA28000B6EE</string>
+					<string>2865DAEF86B1907A704CA70B</string>
 				</array>
 				<key>isa</key>
 				<string>PBXGroup</string>
@@ -8367,15 +8359,6 @@
 					<key>HEADER_SEARCH_PATHS</key>
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
-						<string>../../../addons/ofxJSON/libs</string>
-						<string>../../../addons/ofxJSON/libs/jsoncpp</string>
-						<string>../../../addons/ofxJSON/libs/jsoncpp/include</string>
-						<string>../../../addons/ofxJSON/libs/jsoncpp/include/json</string>
-						<string>../../../addons/ofxJSON/libs/jsoncpp/src</string>
-						<string>../../../addons/ofxJSON/src</string>
-						<string>../../../addons/ofxArtemis/libs</string>
-						<string>../../../addons/ofxArtemis/libs/Artemis</string>
-						<string>../../../addons/ofxArtemis/src</string>
 						<string>../../../addons/ofxLiquidFun/libs</string>
 						<string>../../../addons/ofxLiquidFun/libs/Box2D</string>
 						<string>../../../addons/ofxLiquidFun/libs/Box2D/Collision</string>
@@ -8388,8 +8371,6 @@
 						<string>../../../addons/ofxLiquidFun/libs/Box2D/Rope</string>
 						<string>../../../addons/ofxLiquidFun/libs/triangle</string>
 						<string>../../../addons/ofxLiquidFun/src</string>
-						<string>../../../addons/addons/libs</string>
-						<string>../../../addons/addons/src</string>
 						<string>../../../addons/ofxKinect/libs</string>
 						<string>../../../addons/ofxKinect/libs/libfreenect</string>
 						<string>../../../addons/ofxKinect/libs/libfreenect/include</string>
@@ -8426,13 +8407,6 @@
 						<string>../../../addons/ofxOpenCv/libs/opencv/lib/linuxarmv7l</string>
 						<string>../../../addons/ofxOpenCv/libs/opencv/lib/osx</string>
 						<string>../../../addons/ofxOpenCv/src</string>
-						<string>src</string>
-						<string>src/bloqs</string>
-						<string>src/components</string>
-						<string>src/ecs</string>
-						<string>src/managers</string>
-						<string>src/rgbd</string>
-						<string>src/systems</string>
 						<string>../../../addons/ofxAruco/libs</string>
 						<string>../../../addons/ofxAruco/libs/aruco-1.2.4</string>
 						<string>../../../addons/ofxAruco/libs/aruco-1.2.4/src</string>
@@ -8447,6 +8421,24 @@
 						<string>../../../addons/ofxCv/libs/ofxCv/include/ofxCv</string>
 						<string>../../../addons/ofxCv/libs/ofxCv/src</string>
 						<string>../../../addons/ofxCv/src</string>
+						<string>../../../addons/ofxArtemis/libs</string>
+						<string>../../../addons/ofxArtemis/libs/Artemis</string>
+						<string>../../../addons/ofxArtemis/src</string>
+						<string>../../../addons/ofxJSON/libs</string>
+						<string>../../../addons/ofxJSON/libs/jsoncpp</string>
+						<string>../../../addons/ofxJSON/libs/jsoncpp/include</string>
+						<string>../../../addons/ofxJSON/libs/jsoncpp/include/json</string>
+						<string>../../../addons/ofxJSON/libs/jsoncpp/src</string>
+						<string>../../../addons/ofxJSON/src</string>
+						<string>../../../addons/libs</string>
+						<string>../../../addons/src</string>
+						<string>src</string>
+						<string>src/bloqs</string>
+						<string>src/components</string>
+						<string>src/ecs</string>
+						<string>src/managers</string>
+						<string>src/systems</string>
+						<string>src/utils</string>
 					</array>
 					<key>ARCHS</key>
 					<string>$(NATIVE_ARCH)</string>
@@ -8511,15 +8503,6 @@
 					<key>HEADER_SEARCH_PATHS</key>
 					<array>
 						<string>$(OF_CORE_HEADERS)</string>
-						<string>../../../addons/ofxJSON/libs</string>
-						<string>../../../addons/ofxJSON/libs/jsoncpp</string>
-						<string>../../../addons/ofxJSON/libs/jsoncpp/include</string>
-						<string>../../../addons/ofxJSON/libs/jsoncpp/include/json</string>
-						<string>../../../addons/ofxJSON/libs/jsoncpp/src</string>
-						<string>../../../addons/ofxJSON/src</string>
-						<string>../../../addons/ofxArtemis/libs</string>
-						<string>../../../addons/ofxArtemis/libs/Artemis</string>
-						<string>../../../addons/ofxArtemis/src</string>
 						<string>../../../addons/ofxLiquidFun/libs</string>
 						<string>../../../addons/ofxLiquidFun/libs/Box2D</string>
 						<string>../../../addons/ofxLiquidFun/libs/Box2D/Collision</string>
@@ -8532,8 +8515,6 @@
 						<string>../../../addons/ofxLiquidFun/libs/Box2D/Rope</string>
 						<string>../../../addons/ofxLiquidFun/libs/triangle</string>
 						<string>../../../addons/ofxLiquidFun/src</string>
-						<string>../../../addons/addons/libs</string>
-						<string>../../../addons/addons/src</string>
 						<string>../../../addons/ofxKinect/libs</string>
 						<string>../../../addons/ofxKinect/libs/libfreenect</string>
 						<string>../../../addons/ofxKinect/libs/libfreenect/include</string>
@@ -8570,13 +8551,6 @@
 						<string>../../../addons/ofxOpenCv/libs/opencv/lib/linuxarmv7l</string>
 						<string>../../../addons/ofxOpenCv/libs/opencv/lib/osx</string>
 						<string>../../../addons/ofxOpenCv/src</string>
-						<string>src</string>
-						<string>src/bloqs</string>
-						<string>src/components</string>
-						<string>src/ecs</string>
-						<string>src/managers</string>
-						<string>src/rgbd</string>
-						<string>src/systems</string>
 						<string>../../../addons/ofxAruco/libs</string>
 						<string>../../../addons/ofxAruco/libs/aruco-1.2.4</string>
 						<string>../../../addons/ofxAruco/libs/aruco-1.2.4/src</string>
@@ -8591,6 +8565,24 @@
 						<string>../../../addons/ofxCv/libs/ofxCv/include/ofxCv</string>
 						<string>../../../addons/ofxCv/libs/ofxCv/src</string>
 						<string>../../../addons/ofxCv/src</string>
+						<string>../../../addons/ofxArtemis/libs</string>
+						<string>../../../addons/ofxArtemis/libs/Artemis</string>
+						<string>../../../addons/ofxArtemis/src</string>
+						<string>../../../addons/ofxJSON/libs</string>
+						<string>../../../addons/ofxJSON/libs/jsoncpp</string>
+						<string>../../../addons/ofxJSON/libs/jsoncpp/include</string>
+						<string>../../../addons/ofxJSON/libs/jsoncpp/include/json</string>
+						<string>../../../addons/ofxJSON/libs/jsoncpp/src</string>
+						<string>../../../addons/ofxJSON/src</string>
+						<string>../../../addons/libs</string>
+						<string>../../../addons/src</string>
+						<string>src</string>
+						<string>src/bloqs</string>
+						<string>src/components</string>
+						<string>src/ecs</string>
+						<string>src/managers</string>
+						<string>src/systems</string>
+						<string>src/utils</string>
 					</array>
 					<key>ARCHS</key>
 					<string>$(NATIVE_ARCH)</string>
@@ -8650,23 +8642,6 @@
 				<array>
 					<string>E4B69E200A3A1BDC003C02F2</string>
 					<string>E4B69E210A3A1BDC003C02F2</string>
-					<string>242FE1267BFF6CCE62874D21</string>
-					<string>BEDFEE7400C58EA4E412B757</string>
-					<string>FB84AAF8D1B7A95266DB5C09</string>
-					<string>FDAC5A695446252D05AFC3F2</string>
-					<string>A06FDDCA251512EDD8920623</string>
-					<string>F91157F3D440F53E0C417D57</string>
-					<string>A964E4204CAB1BEDCC782C88</string>
-					<string>F5D8670CE8524959DFFD04B6</string>
-					<string>70691F862A0A2172A16A634F</string>
-					<string>2CB42D5DE840E840E9ED7C5E</string>
-					<string>11F49FA86DE701A8703B4AC4</string>
-					<string>60BE693365F501F5AFF64A29</string>
-					<string>5AEF19FE1FED2F9A1976ED6C</string>
-					<string>21AAF7CECF305B7B18F174F0</string>
-					<string>56BF5C5DC1B4955D377ECD85</string>
-					<string>DAC0E15C73E507D404BFFE0B</string>
-					<string>83DB5CFFE9EE444631A6BC6D</string>
 					<string>A1EF6471CC8B13F0C3210220</string>
 					<string>D454A93592CDD8538BD16BD2</string>
 					<string>87D2F402BEEF5E3CADC9DEB0</string>
@@ -8769,6 +8744,22 @@
 					<string>10B69DE456AED1288FC9316B</string>
 					<string>A6668C5B1272D7FCD5B5A16F</string>
 					<string>DBCB84A37F9AECC254870D79</string>
+					<string>FDAC5A695446252D05AFC3F2</string>
+					<string>A06FDDCA251512EDD8920623</string>
+					<string>F91157F3D440F53E0C417D57</string>
+					<string>A964E4204CAB1BEDCC782C88</string>
+					<string>F5D8670CE8524959DFFD04B6</string>
+					<string>70691F862A0A2172A16A634F</string>
+					<string>2CB42D5DE840E840E9ED7C5E</string>
+					<string>11F49FA86DE701A8703B4AC4</string>
+					<string>60BE693365F501F5AFF64A29</string>
+					<string>5AEF19FE1FED2F9A1976ED6C</string>
+					<string>21AAF7CECF305B7B18F174F0</string>
+					<string>56BF5C5DC1B4955D377ECD85</string>
+					<string>DAC0E15C73E507D404BFFE0B</string>
+					<string>83DB5CFFE9EE444631A6BC6D</string>
+					<string>BEDFEE7400C58EA4E412B757</string>
+					<string>FB84AAF8D1B7A95266DB5C09</string>
 				</array>
 				<key>isa</key>
 				<string>PBXSourcesBuildPhase</string>
@@ -9071,12 +9062,13 @@
 					<string>E4B69E1D0A3A1BDC003C02F2</string>
 					<string>E4B69E1E0A3A1BDC003C02F2</string>
 					<string>E4B69E1F0A3A1BDC003C02F2</string>
+					<string>BBA934A932BBD9D0FFD1C794</string>
 					<string>7CD508F4E1752093A044F771</string>
 					<string>65A0BDBA3A16D6F3D73C3AED</string>
 					<string>E4966518D7E9278B6566F331</string>
 					<string>DE15F79610BE299ACEE9C595</string>
-					<string>490610157DC64CDC977B3620</string>
 					<string>378F30302A2625932F04C905</string>
+					<string>6B6AD5A931E565B62CDF53FA</string>
 				</array>
 				<key>isa</key>
 				<string>PBXGroup</string>

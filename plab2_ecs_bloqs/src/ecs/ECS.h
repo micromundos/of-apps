@@ -12,7 +12,8 @@ class ECS
     ECS(){};
     ~ECS(){};
 
-    static float FPS;
+    //TODO add set FPS method
+    static const float FPS = 60.0f;
 
     void init()
     {
@@ -70,6 +71,7 @@ class ECS
       return ((TSystem*)sm->getSystem<TSystem>());
     };
 
+    //get component by entity tag
     template<typename TComponent>
     TComponent* component(string tag)
     {

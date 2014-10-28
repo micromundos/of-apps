@@ -2,7 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
-#include "components/TemplateComponent.h"
+#include "components/Components.h"
 
 using namespace artemis;
 
@@ -21,17 +21,21 @@ class TemplateSystem : public ECSsystem
       template_m.init( *world );
     };
 
+    virtual void added(Entity &e) 
+    {
+      //template_m.get(e)->data;
+    };
+
     virtual void processEntity(Entity &e) 
     {
-      template_m.get(e)->data += world->getDelta();
+      //ofLogNotice("TemplateSystem") << "process entity " << e.getId();
+      //template_m.get(e)->data;
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
-      for ( int i = 0; i < bag.getCount(); i++ )
-      {
+      for (int i=0;i<bag.getCount();i++)
         processEntity( *bag.get(i) );
-      }
     };
 
   private:

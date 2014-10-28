@@ -28,7 +28,9 @@ class ofApp : public ofBaseApp
     ofxJSONElement config;
 
     ECS ecs;
-    EntityConfigManager game;
+    //TODO crear lista de EntityConfigManagers de config.json (escena, particulas, etc)
+    EntityConfigManager escena;
+    //TODO escuchar eventos BloqEvents en desde un BloqsMakerSystem que contiene un BloqsManager para crear entidades
     BloqsManager bloqs;
 
     void add_systems();
