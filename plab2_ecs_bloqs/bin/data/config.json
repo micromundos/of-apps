@@ -1,6 +1,5 @@
 {
   //tipo prefabs
-  //http://docs.unity3d.com/Manual/InstantiatingPrefabs.html
   "entities": [
 
     {
@@ -42,9 +41,10 @@
     }
   ],
 
-  //lista de entidades/prefabs bloq
-  //tienen componente 'bloq' por default
   //bloq = operador
+  //lista de entidades/prefabs con bloq
+  //reciben componente 'bloq' por default
+  //para correr logica con interaccion bloq-bloq usar sistemas con <BloqComponent>
   "bloqs": [
 
     {

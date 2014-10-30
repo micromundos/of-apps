@@ -12,6 +12,5 @@ class ArucoComponent : public artemis::Component
     {
       this->id = id;
     };
-
 };
 
