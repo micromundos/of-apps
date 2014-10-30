@@ -14,19 +14,14 @@ class ArucoSystem : public ECSsystem
 
     ArucoSystem() 
     {
-      addComponentType<BloqEventsComponent>();
       addComponentType<ArucoComponent>();
       addComponentType<RGBComponent>();
-      addComponentType<RenderComponent>();
     };
 
     virtual void initialize() 
     {
-      bloq_events_m.init( *world );
       aruco_m.init( *world );
       rgb_m.init( *world );
-      render_m.init( *world );
-
       inited = false; 
     };
 
@@ -37,27 +32,25 @@ class ArucoSystem : public ECSsystem
       init( rgb->width, rgb->height );
     };
 
-    // entity: escena
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("ArucoSystem") << "process entity " << e.getId();
 
-      BloqEventsComponent* events = bloq_events_m.get(e);
       RGBComponent* rgb = rgb_m.get(e);
+
+      BloqEventsComponent* events = component<BloqEventsComponent>("core");
+      RenderComponent* render_data = component<RenderComponent>("output");
 
       if ( rgb->dirty )
         update( rgb->color_pix, rgb->width, rgb->height, events );
 
-      RenderComponent* render_data = render_m.get(e);
       render( render_data->width, render_data->height ); 
     }; 
 
   private: 
 
-    ComponentMapper<BloqEventsComponent> bloq_events_m;
     ComponentMapper<ArucoComponent> aruco_m;
     ComponentMapper<RGBComponent> rgb_m;
-    ComponentMapper<RenderComponent> render_m;
 
     ofxAruco aruco;
     ofPixels rgb_pix; 

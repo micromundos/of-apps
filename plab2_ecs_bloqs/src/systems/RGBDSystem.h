@@ -25,7 +25,8 @@ class RGBDSystem : public ECSsystem
       rgb_m.init( *world );
       depth_m.init( *world );
 
-      kinect.setRegistration(false);
+      kinect.setRegistration(true);
+      //kinect.enableDepthNearValueWhite(false);
       // ir, rgb, texture
       kinect.init(false, true, true);
       kinect.open();
@@ -46,7 +47,8 @@ class RGBDSystem : public ECSsystem
       for (int i=0;i<bag.getCount();i++)
         processEntity( *bag.get(i) );
 
-      render();
+      RenderComponent* render_data = component<RenderComponent>("output");
+      render( render_data->width, render_data->height ); 
     };
 
     // entity: escena
@@ -61,6 +63,7 @@ class RGBDSystem : public ECSsystem
       if ( dirty )
       {
         depth_m.get(e)->update( kinect.getRawDepthPixels() );
+        depth_m.get(e)->update( kinect.getDepthPixels() );
         rgb_m.get(e)->update( kinect.getPixels() );
       }
 
@@ -73,13 +76,13 @@ class RGBDSystem : public ECSsystem
 
     ofxKinect kinect;
 
-    void render()
+    void render( int render_width, int render_height )
     {
       ofSetColor(255);
-      int w = 1024;//kinect.width;
-      int h = 768;//kinect.height;
-      //render_depth(0,0,w,h);
-      render_color(0,0,w,h);
+      int w = render_width;
+      int h = render_height;
+      render_depth(0, 0, w, h);
+      //render_color(0, 0, w, h);
     };
 
     void render_color( int x, int y, int w, int h )

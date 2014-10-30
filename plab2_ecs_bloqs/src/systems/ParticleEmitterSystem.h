@@ -58,13 +58,13 @@ class ParticleEmitterSystem : public ECSsystem
     {
       ofxBox2dParticleSystem* ofps = ps->of_particles();
 
-      RenderComponent* render_data = component<RenderComponent>("escena");
+      RenderComponent* render_data = component<RenderComponent>("output");
       ofVec2f screen_loc( bloq->loc.x * render_data->width, bloq->loc.y * render_data->height );
 
       int32 pidx = ofps->createParticle( screen_loc.x, screen_loc.y, 0, 0 );
 
       //TODO emitter force param
-      ofVec2f force = bloq->dir * 14;
+      ofVec2f force = bloq->dir * 10;//14;
       ofps->applyForce( pidx, force );
     };
 

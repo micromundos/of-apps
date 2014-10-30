@@ -15,14 +15,12 @@ class ParticleFlowFieldSystem : public ECSsystem
     ParticleFlowFieldSystem() 
     {
       addComponentType<ParticleFlowFieldComponent>();
-      addComponentType<FlowFieldComponent>();
       addComponentType<ParticleSystemComponent>();
     };
 
     virtual void initialize() 
     {
       particle_flowfield_m.init( *world );
-      flowfield_m.init( *world );
     };
 
     // entity: escena
@@ -30,7 +28,8 @@ class ParticleFlowFieldSystem : public ECSsystem
     {
       //ofLogNotice("ParticleFlowFieldSystem") << "update";
 
-      ofVec2f *field = flowfield_m.get(e)->field;
+      FlowFieldComponent* flowfield_data = component<FlowFieldComponent>("input");
+      ofVec2f *field = flowfield_data->field;
       //float param = particle_flowfield_m.get(e)->param;
 
       b2ParticleSystem* b2ps = system<ParticleSystem>()->b2_particles();
@@ -51,7 +50,6 @@ class ParticleFlowFieldSystem : public ECSsystem
   private:
 
     ComponentMapper<ParticleFlowFieldComponent> particle_flowfield_m;
-    ComponentMapper<FlowFieldComponent> flowfield_m;
 
 };
 

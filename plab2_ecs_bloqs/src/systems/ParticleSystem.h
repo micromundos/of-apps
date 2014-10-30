@@ -77,7 +77,7 @@ class ParticleSystem : public ECSsystem
       v.Set( q.c * v.x - q.s * v.y, q.s * v.x + q.c * v.y );
     }
 
-    // TODO move steer to Boids component/system
+    // TODO move steer to Boids component/system?
 
     void steer( const b2Vec2& target, const b2Vec2& loc, const b2Vec2& vel, float maxspeed, float maxforce, b2Vec2& force ) 
     {

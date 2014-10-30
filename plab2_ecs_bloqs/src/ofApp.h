@@ -2,10 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxJSON.h"
-
 #include "ecs/ECS.h"
-#include "managers/Managers.h"
-#include "systems/Systems.h"
+#include "ecs/ECSconfig.h"
 
 class ofApp : public ofBaseApp
 {
@@ -25,18 +23,9 @@ class ofApp : public ofBaseApp
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
-    ofxJSONElement config;
-
     ECS ecs;
-    //TODO crear lista de EntityConfigManagers de config.json (escena, particulas, etc)
-    EntityConfigManager escena;
-    //TODO escuchar eventos BloqEvents en desde un BloqsMakerSystem que contiene un BloqsManager para crear entidades
-    BloqsManager bloqs;
-
-    void add_systems();
-    void bloq_added( Bloq& bloq );
-    void bloq_updated( Bloq& bloq );
-    void bloq_removed( string& bloq_id );
+    ECSconfig entities;
+    ofxJSONElement config;
 
 };
 

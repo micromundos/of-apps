@@ -15,6 +15,9 @@ class ECS
     //TODO add set FPS method
     static const float FPS = 60.0f;
 
+    //see src/ecs/add_systems.cpp
+    void add_systems();
+
     void init()
     {
       sm = world.getSystemManager();
@@ -30,7 +33,7 @@ class ECS
       //deciseconds ???
       //https://github.com/vinova/Artemis-Cpp
       //world.setDelta( 0.0016f ); 
-      world.setDelta( 1000/FPS*0.0001f ); 
+      world.setDelta( 1.0f/FPS*0.1f ); 
       int len = _systems.size();
       for (int i = 0; i < len; i++)
         _systems[i]->process();

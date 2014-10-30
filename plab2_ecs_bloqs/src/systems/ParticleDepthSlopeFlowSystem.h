@@ -7,50 +7,45 @@
 
 using namespace artemis;
 
-class ParticleDepthSlopeConstraintSystem : public ECSsystem 
+class ParticleDepthSlopeFlowSystem : public ECSsystem 
 { 
 
   //TODO usar box2d particle userData
   //para dividir los procesos en diferentes sistemas que guardan su resultado por cada particula userData
   //-> ParticleVisionSystem
-  //-> ParticleDepthSlopeConstraintRenderSystem
+  //-> ParticleDepthSlopeFlowRenderSystem
   //-> ParticleBoidSystem
 
   public:
 
-    ParticleDepthSlopeConstraintSystem() 
+    ParticleDepthSlopeFlowSystem() 
     {
-      addComponentType<ParticleDepthSlopeConstraintComponent>();
-      addComponentType<DepthComponent>();
-      addComponentType<RenderComponent>();
+      addComponentType<ParticleDepthSlopeFlowComponent>();
+      addComponentType<ParticleSystemComponent>();
     };
 
     virtual void initialize() 
     {
-      particle_depth_slope_constraint_m.init( *world );
-      depth_m.init( *world );
-      render_m.init( *world );
-
+      particle_depth_slope_flow_m.init( *world );
       ps = system<ParticleSystem>();
     };
 
     virtual void added(Entity &e) 
     {
-      DepthComponent* depth = depth_m.get(e);
-      RenderComponent* render_data = render_m.get(e);
+      DepthComponent* depth_data = component<DepthComponent>("input");
+      RenderComponent* render_data = component<RenderComponent>("output");
 
-      screen2depth.init( render_data->width, render_data->height, depth->width, depth->height );
+      screen2depth.init( render_data->width, render_data->height, depth_data->width, depth_data->height );
     };
 
-    // entity: escena
     virtual void processEntity(Entity &e) 
     {
-      //ofLogNotice("ParticleDepthSlopeConstraintSystem") << "process entity " << e.getId();
+      //ofLogNotice("ParticleDepthSlopeFlowSystem") << "process entity " << e.getId();
 
-      //particle_depth_slope_constraint_m.get(e)->data;
+      //particle_depth_slope_flow_m.get(e)->data;
 
-      DepthComponent* depth = depth_m.get(e);
-      if ( ! depth->dirty ) return;
+      DepthComponent* depth_data = component<DepthComponent>("input");
+      if ( ! depth_data->dirty ) return;
 
       b2ParticleSystem* b2ps = ps->b2_particles(); 
 
@@ -58,7 +53,7 @@ class ParticleDepthSlopeConstraintSystem : public ECSsystem
       ofVboMesh mesh;
       mesh.setMode(OF_PRIMITIVE_LINES);
 
-      uint16_t *depth_pix_mm = depth->depth_pix_mm; 
+      uint16_t *depth_pix_mm = depth_data->depth_pix_mm; 
 
       //particle loc
       ofVec2f depth_loc, screen_loc;
@@ -73,7 +68,7 @@ class ParticleDepthSlopeConstraintSystem : public ECSsystem
 
       //TODO vision calc params
       float vang = PI/4.0f;
-      float vmult = 0.1;//look ahead len
+      float vlen = 0.4; //vision length
       b2Rot rot1(vang);
       b2Rot rot2(-vang);
 
@@ -96,7 +91,8 @@ class ParticleDepthSlopeConstraintSystem : public ECSsystem
         //TODO move to particle_vision component
         // vision in physics coords 
         pvision[0].Set( vel.x, vel.y );
-        pvision[0] *= vmult;
+        pvision[0].Normalize();
+        pvision[0] *= vlen;
         float x0 = pvision[0].x;
         float y0 = pvision[0].y;
         pvision[1].Set(x0, y0);
@@ -118,42 +114,35 @@ class ParticleDepthSlopeConstraintSystem : public ECSsystem
 
           // vision slopes
           // depth mm difference really
-          // positive diff = lower height wrt particle
+          // positive slope = lower height wrt particle
           pv_slope[v] = particle_depth_mm - pv_dmm[v];
         }
 
         // calc particle force
         // vision points avg weighted by slope = lean towards lower or higher heights (see slope calc)
         //TODO params
-        float pv_slope_thres_mm = 10; //the particle follows lower or higher heights but if slope is too steep (regardless its sign) it will be repeled
-
-        //====================
-        //XXX DEBUGUEAR TARGET
-        //====================
+        float pv_slope_thres_mm = 100; //the particle follows lower or higher heights but if slope is too steep (regardless its sign) it will be repeled
 
         b2Vec2 target; 
         target.SetZero();
         for ( int v = 0; v < 3; v++ )
         {
-          //neg weight = follow higher heights (see slope calc)
-          //TODO lerp2d slope to get weight?
-          float weight = -pv_slope[v];
-          //if slope if steeper than thres then invert the weight to flee from there
-          if ( abs(pv_slope[v]) > pv_slope_thres_mm ) weight *= -1;
-          target += pvision[v] * weight;
+          float weight = pv_slope[v] * 0.001;
+          if (abs(pv_slope[v]) > pv_slope_thres_mm) weight *= -1.0;
+          target += (pvision[v] - loc) * weight;
         }
         //divide by 3 to get avg
-        target *= 1.0f/3.0f;
+        target *= (1.0f/3.0f);
+        target += loc;
 
         b2Vec2 force;
-        float maxspeed = 20; 
-        float maxforce = 10;
-        // TODO move steer to Boids component/system
+        float maxspeed = 10; 
+        float maxforce = 8;
         ps->steer( target, loc, vel, maxspeed, maxforce, force );
         b2ps->ParticleApplyForce( i, force );
 
         //debug render vision
-        for ( int v = 0; v < 1; v++ )
+        for ( int v = 0; v < 3; v++ )
         {
           mesh.addVertex( screen_loc );
           mesh.addColor(ofFloatColor::red);
@@ -194,9 +183,7 @@ class ParticleDepthSlopeConstraintSystem : public ECSsystem
     ParticleSystem* ps;
     CoordMap screen2depth;
 
-    ComponentMapper<ParticleDepthSlopeConstraintComponent> particle_depth_slope_constraint_m;
-    ComponentMapper<DepthComponent> depth_m;
-    ComponentMapper<RenderComponent> render_m;
+    ComponentMapper<ParticleDepthSlopeFlowComponent> particle_depth_slope_flow_m;
 
 };
 

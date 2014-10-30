@@ -1,29 +1,50 @@
 {
-  //[components] de escena entity
-  //~= environment
-  "escena": [
+  //tipo prefabs
+  //http://docs.unity3d.com/Manual/InstantiatingPrefabs.html
+  "entities": [
 
-    //--core--
-    "bloq_events",
+    {
+      "id": "core",
+      "components": [
+        "config",
+        "bloq_events",
+        "bloq_maker"
+      ]
+    },
 
-    //--input--
-    "rgb",
-    "aruco",
-    "depth",
+    {
+      "id": "output",
+      "components": [
+        "render",
+        "camara_lucida"
+      ]
+    },
 
-    "render",
-    "camara_lucida",
+    {
+      "id": "input",
+      "components": [
+        "rgb",
+        "depth",
+        "aruco",
+        "blobs"
+        //"flow_field"
+      ]
+    }, 
 
-    //TODO sacar particulas de escena
-    //--particles--
-    //"flow_field",
-    "particle_system",
-    "particle_depth_slope_constraint"
-    //"particle_flow_field" 
+    {
+      "id": "particles",
+      "components": [
+        "particle_system",
+        "particle_depth_blobs_containers"
+        //"particle_depth_slope_flow"
+        //"particle_flow_field" 
+      ]
+    }
   ],
 
-  //[entities:components]
-  //las entidades 'bloq' definidas aca reciben un componente 'bloq' por default
+  //lista de entidades/prefabs bloq
+  //tienen componente 'bloq' por default
+  //bloq = operador
   "bloqs": [
 
     {

@@ -25,13 +25,15 @@ class CamaraLucidaSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      CamaraLucidaComponent* cml = camara_lucida_m.get(e);
-      RenderComponent* render = render_m.get(e);
+      CamaraLucidaComponent* cml_data = camara_lucida_m.get(e);
+      RenderComponent* render_data = render_m.get(e);
       //TODO
-      cml->tex_width = 1024;
-      cml->tex_height = 768;
-      render->width = 1024;
-      render->height = 768;
+      int w = 1014;
+      int h = 768;
+      cml_data->tex_width = w;
+      cml_data->tex_height = h;
+      render_data->width = w;
+      render_data->height = h;
     };
 
     virtual void processEntity(Entity &e) 

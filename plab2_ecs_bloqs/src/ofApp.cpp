@@ -1,10 +1,8 @@
 #include "ofApp.h"
-#include "add_systems.h"
 
 void ofApp::setup()
 {
   ofSetLogLevel(OF_LOG_NOTICE);
-  //ofSetLogLevel("BloqsManager", OF_LOG_NOTICE);
 
   ofSetFrameRate( ECS::FPS ); 
   ofSetVerticalSync(true);
@@ -16,18 +14,9 @@ void ofApp::setup()
   }
 
   ecs.init();
-  add_systems();
+  ecs.add_systems();
   ecs.init_systems();
-
-  escena.init( &ecs, &config, "escena" );
-  bloqs.init( &ecs, &config );
-
-  BloqEventsComponent* bloq_events = ecs.component<BloqEventsComponent>("escena");
-
-  ofAddListener( bloq_events->added, this, &ofApp::bloq_added );
-  ofAddListener( bloq_events->updated, this, &ofApp::bloq_updated );
-  ofAddListener( bloq_events->removed, this, &ofApp::bloq_removed );
-
+  entities.make( &ecs, &config );
 }
 
 void ofApp::update()
@@ -42,31 +31,31 @@ void ofApp::draw()
 }
 
 
-void ofApp::bloq_added( Bloq& bloq )
-{
-  bloqs.make_entity( bloq );
-}
-
-void ofApp::bloq_updated( Bloq& bloq )
-{
-  bloqs.update_entity( bloq );
-}
-
-void ofApp::bloq_removed( string& bloq_id )
-{
-  bloqs.remove_entity( bloq_id );
-}
-
-
 void ofApp::keyPressed(int key)
 {
-
+  switch (key)
+  { 
+    case 'p':
+      break;
+  };
 }
 
 
 void ofApp::keyReleased(int key)
 {
+  switch (key)
+  { 
+    case 'p':
+      break;
 
+    case '+':
+    case '=':
+      break;
+
+    case '-':
+      break;
+
+  };
 }
 
 

@@ -52,8 +52,8 @@ var sys_path = __dirname + '/src/systems/'+ sys_filename;
 var systems_file_path = __dirname + '/src/systems/Systems.h';
 var sys_include = '#include "systems/'+ comp_pascalcase +'System.h"';
 
-var sys_factory_path = __dirname + '/src/add_systems.h'; 
-var sys_factory_code = 'ecs.add_system(new '+ comp_pascalcase +'System());'
+var sys_factory_path = __dirname + '/src/ecs/add_systems.cpp'; 
+var sys_factory_code = 'add_system(new '+ comp_pascalcase +'System());'
 
 
 //---Remove Component

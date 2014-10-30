@@ -3,12 +3,12 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 
-class ParticleDepthSlopeConstraintComponent : public artemis::Component 
+class ParticleDepthSlopeFlowComponent : public artemis::Component 
 {
   public:
     string id;
 
-    ParticleDepthSlopeConstraintComponent( string id )
+    ParticleDepthSlopeFlowComponent( string id )
     {
       this->id = id;
     };

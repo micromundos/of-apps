@@ -8,6 +8,7 @@ class DepthComponent : public artemis::Component
   public:
     string id; 
     uint16_t* depth_pix_mm;
+    uint8_t* depth_pix_grey;
     int width, height;
     bool dirty;
 
@@ -15,6 +16,7 @@ class DepthComponent : public artemis::Component
     {
       this->id = id;
       depth_pix_mm = NULL;
+      depth_pix_grey = NULL;
       dirty = false;
     };
 
@@ -27,6 +29,11 @@ class DepthComponent : public artemis::Component
     void update( uint16_t *depth_pix_mm )
     {
       this->depth_pix_mm = depth_pix_mm;
+    };
+
+    void update( uint8_t *depth_pix_grey )
+    {
+      this->depth_pix_grey = depth_pix_grey;
     };
 };
 

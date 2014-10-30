@@ -7,7 +7,7 @@ class ECSsystem : public artemis::EntityProcessingSystem
 
   protected:
 
-  //shortcuts
+  //some shortcuts
 
   template<typename TSystem>
   TSystem* system()
@@ -19,6 +19,21 @@ class ECSsystem : public artemis::EntityProcessingSystem
   TComponent* component(string tag)
   {
     return ((TComponent*)world->getTagManager()->getEntity( tag ).getComponent<TComponent>());
+  };
+
+  artemis::EntityManager* entities()
+  {
+    return world->getEntityManager();
+  };
+
+  artemis::SystemManager* systems()
+  {
+    return world->getSystemManager();
+  };
+
+  artemis::TagManager* tags()
+  {
+    return world->getTagManager();
   };
 
 };

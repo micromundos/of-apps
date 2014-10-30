@@ -23,7 +23,6 @@ class DepthFlowFieldSystem : public ECSsystem
       flowfield_m.init( *world );
     };
 
-    // entity: escena
     virtual void processEntity(Entity &e) 
     { 
       DepthComponent* depth = depth_m.get(e);
