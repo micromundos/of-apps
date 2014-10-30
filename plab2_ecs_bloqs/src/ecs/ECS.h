@@ -2,9 +2,8 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
-//#include "systems/RenderSystem.h"
 
-//ofxECS, ofxArtemis..?
+//ofxECS
 class ECS
 {
   public:
@@ -89,11 +88,6 @@ class ECS
     artemis::TagManager *tm;
 
     vector<artemis::EntityProcessingSystem*> _systems; 
-
-    //void init_default_systems()
-    //{
-      //_systems.push_back( (artemis::EntityProcessingSystem*)sm->setSystem( new RenderSystem() ) );
-    //};  
 
 };
 

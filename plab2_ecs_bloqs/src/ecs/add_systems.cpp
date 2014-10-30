@@ -7,7 +7,7 @@
 #include "systems/Systems.h"
 void ECS::add_systems()
 {
-	add_system(new BloqMakerSystem());
+  add_system(new BloqMakerSystem());
   add_system(new RGBDSystem());
   add_system(new ArucoSystem());
   add_system(new CamaraLucidaSystem());
@@ -18,5 +18,5 @@ void ECS::add_systems()
   add_system(new ParticleDepthSlopeFlowSystem());
   add_system(new ParticleFlowFieldSystem());
   add_system(new ParticleDepthBlobsContainersSystem());
-	//dont remove this line
+  //dont remove this line
 };
