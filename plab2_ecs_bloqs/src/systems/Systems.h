@@ -11,5 +11,5 @@
 #include "systems/ParticleDepthSlopeFlowSystem.h"
 #include "systems/ParticleFlowFieldSystem.h"
 #include "systems/DepthFlowFieldSystem.h"
-#include "systems/ParticleDepthBlobsContainersSystem.h"
+#include "systems/ParticleBlobsContainersSystem.h"
 #include "systems/DepthBlobsSystem.h"

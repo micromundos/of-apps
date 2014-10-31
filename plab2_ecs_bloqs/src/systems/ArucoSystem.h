@@ -39,13 +39,34 @@ class ArucoSystem : public ECSsystem
       RGBComponent* rgb = rgb_m.get(e);
 
       BloqEventsComponent* events = component<BloqEventsComponent>("core");
-      RenderComponent* render_data = component<RenderComponent>("output");
 
       if ( rgb->dirty )
         update( rgb->color_pix, rgb->width, rgb->height, events );
 
-      render( render_data->width, render_data->height ); 
     }; 
+
+    virtual void render()
+    {
+      RenderComponent* render_data = component<RenderComponent>("output");
+      int w = render_data->width;
+      int h = render_data->height;
+
+      ofSetLineWidth( 3 );
+      //aruco.draw2d();
+
+      ofSetColor(ofColor::green);
+      for (int i = 0; i<bloqs.size(); i++)
+      {
+        string id = bloqs[i]->id;
+        ofVec2f loc( bloqs[i]->loc );
+        loc.x *= w;
+        loc.y *= h;
+        ofVec2f& dir = bloqs[i]->dir;
+        ofLine( loc, loc + dir * 40 );
+        ofRect( loc, 6, 6 );
+        ofDrawBitmapString( id, loc );
+      }
+    };
 
   private: 
 
@@ -103,25 +124,6 @@ class ArucoSystem : public ECSsystem
       }
 
       remove_bloqs_missing( markers, events );
-    };
-
-    void render( int render_width, int render_height )
-    {
-      ofSetLineWidth( 3 );
-      //aruco.draw2d();
-
-      ofSetColor(ofColor::green);
-      for (int i = 0; i<bloqs.size(); i++)
-      {
-        string id = bloqs[i]->id;
-        ofVec2f loc( bloqs[i]->loc );
-        loc.x *= render_width;
-        loc.y *= render_height;
-        ofVec2f& dir = bloqs[i]->dir;
-        ofLine( loc, loc + dir * 40 );
-        ofRect( loc, 6, 6 );
-        ofDrawBitmapString( id, loc );
-      }
     }; 
 
     BloqAruco* get_bloq( string id )

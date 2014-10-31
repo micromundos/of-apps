@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECSsystem.h"
 
 //ofxECS
 class ECS
@@ -38,8 +39,12 @@ class ECS
         _systems[i]->process();
     };
 
-    //void render()
-    //{};
+    void render()
+    {
+      int len = _systems.size();
+      for (int i = 0; i < len; i++)
+        _systems[i]->render();
+    };
 
     void init_systems()
     {
@@ -47,9 +52,9 @@ class ECS
       sm->initializeAll();
     };
 
-    void add_system( artemis::EntityProcessingSystem* sys )
+    void add_system( ECSsystem* sys )
     {
-      _systems.push_back( (artemis::EntityProcessingSystem*)sm->setSystem( sys ) );
+      _systems.push_back( (ECSsystem*)sm->setSystem( sys ) );
     }; 
 
     artemis::EntityManager* entities()
@@ -87,7 +92,7 @@ class ECS
     artemis::EntityManager *em;
     artemis::TagManager *tm;
 
-    vector<artemis::EntityProcessingSystem*> _systems; 
+    vector<ECSsystem*> _systems; 
 
 };
 

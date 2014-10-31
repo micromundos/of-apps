@@ -5,6 +5,7 @@
 #include "components/Components.h"
 #include "ofxOpenCv.h"
 //#include "ofxCv.h"
+#include "keys.h"
 
 using namespace artemis;
 
@@ -24,6 +25,9 @@ class DepthBlobsSystem : public ECSsystem
       blobs_m.init( *world );
       depth_m.init( *world ); 
       inited = false; 
+
+      //TODO add params, rm keys
+      ofAddListener( ofEvents().keyPressed, this, &DepthBlobsSystem::keyPressed );
     };
 
     virtual void added(Entity &e) 
@@ -41,9 +45,7 @@ class DepthBlobsSystem : public ECSsystem
       BlobsComponent* blobs_data = blobs_m.get(e);
       if ( depth->dirty )
         update( depth->depth_pix_grey, depth->width, depth->height, blobs_data );
-
-      RenderComponent* render_data = component<RenderComponent>("output");
-      render( render_data->width, render_data->height ); 
+ 
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
@@ -51,6 +53,54 @@ class DepthBlobsSystem : public ECSsystem
       for (int i=0;i<bag.getCount();i++)
         processEntity( *bag.get(i) );
     };
+
+    virtual void render()
+    {
+      RenderComponent* render_data = component<RenderComponent>("output");
+      int w = render_data->width;
+      int h = render_data->height;
+
+      ofSetLineWidth(1);
+      ofSetColor(255);
+      grey_img.draw(0, 0, w, h);
+      contourFinder.draw(0, 0, w, h);
+    };
+
+
+    //TODO add params, rm keys
+    void keyPressed(ofKeyEventArgs &args)
+    {
+
+      switch (args.key)
+      { 
+        
+        case keys::blobs_thres_near_inc:
+          threshold_near ++;
+          if (threshold_near > 255) threshold_near = 255; 
+          ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
+          break;
+
+        case keys::blobs_thres_near_dec:
+          threshold_near --;
+          if (threshold_near < 0) threshold_near = 0;
+          ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
+          break;
+
+        case keys::blobs_thres_far_inc:
+          threshold_far ++;
+          if (threshold_far > 255) threshold_far = 255;
+          ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
+          break;
+
+        case keys::blobs_thres_far_dec:
+          threshold_far --;
+          if (threshold_far < 0) threshold_far = 0;
+          ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
+          break;
+      }
+
+    };
+
 
   private:
 
@@ -64,7 +114,7 @@ class DepthBlobsSystem : public ECSsystem
     ofxCvGrayscaleImage grey_near;
     ofxCvGrayscaleImage grey_far;
 
-    //TODO params
+    //TODO add params
     int threshold_near;
     int threshold_far;
     //float threshold;
@@ -76,14 +126,16 @@ class DepthBlobsSystem : public ECSsystem
       if (inited) return;
 
       //this->channels = 1;
-      //depth_pix.allocate(w, h, channels);
+      //depth_pix.allocate(w,h,channels);
       //depth_pix.set(0); 
 
       grey_img.allocate(w, h);
       grey_near.allocate(w, h);
       grey_far.allocate(w, h);
-      threshold_near = 230;
-      threshold_far = 70;
+
+      //[0,255]
+      threshold_near = 255;
+      threshold_far = 209;
 
       //contourFinder.setMinAreaRadius(10);
       //contourFinder.setMaxAreaRadius(150);
@@ -124,16 +176,7 @@ class DepthBlobsSystem : public ECSsystem
         blobs[i].length = ofblob.length;
       }
 
-    };
-
-    void render( int render_width, int render_height )
-    {
-      ofSetColor(255);
-      int w = render_width;
-      int h = render_height;
-      contourFinder.draw(0, 0, w, w);
-      //grey_img.draw(0, 0, w, w);
-    };
+    }; 
 
 };
 

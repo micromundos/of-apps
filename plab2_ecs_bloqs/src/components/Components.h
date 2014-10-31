@@ -17,4 +17,4 @@
 #include "components/ParticleDepthSlopeFlowComponent.h"
 #include "components/ParticleFlowFieldComponent.h"
 #include "components/ParticleEmitterComponent.h"
-#include "components/ParticleDepthBlobsContainersComponent.h"
+#include "components/ParticleBlobsContainersComponent.h"

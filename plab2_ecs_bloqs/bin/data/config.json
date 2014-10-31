@@ -1,4 +1,5 @@
 {
+  //entidades tagueadas
   //tipo prefabs
   "entities": [
 
@@ -34,8 +35,8 @@
       "id": "particles",
       "components": [
         "particle_system",
-        "particle_depth_blobs_containers"
-        //"particle_depth_slope_flow"
+        //"particle_blobs_containers"
+        "particle_depth_slope_flow"
         //"particle_flow_field" 
       ]
     }
@@ -48,7 +49,7 @@
   "bloqs": [
 
     {
-      "id": "477",
+      "id": "428", //"477",
       "components": [ 
         "particle_emitter"
       ]

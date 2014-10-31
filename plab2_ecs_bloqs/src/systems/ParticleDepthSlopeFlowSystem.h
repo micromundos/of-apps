@@ -26,8 +26,13 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
 
     virtual void initialize() 
     {
-      particle_depth_slope_flow_m.init( *world );
+      //TODO que es mejor, traer un componente de un tag o un sistema? 
+      //ParticleSystemComponent* ps_data = component<ParticleSystemComponent>("particles");
+      //ofps = ps_data->of_particles();
+      //b2ps = ps_data->b2_particles();
       ps = system<ParticleSystem>();
+
+      mesh.setMode(OF_PRIMITIVE_LINES);
     };
 
     virtual void added(Entity &e) 
@@ -42,18 +47,14 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
     {
       //ofLogNotice("ParticleDepthSlopeFlowSystem") << "process entity " << e.getId();
 
-      //particle_depth_slope_flow_m.get(e)->data;
-
       DepthComponent* depth_data = component<DepthComponent>("input");
       if ( ! depth_data->dirty ) return;
 
-      b2ParticleSystem* b2ps = ps->b2_particles(); 
-
-      //debug render
-      ofVboMesh mesh;
-      mesh.setMode(OF_PRIMITIVE_LINES);
+      b2ParticleSystem* b2ps = ps->b2_particles();  
 
       uint16_t *depth_pix_mm = depth_data->depth_pix_mm; 
+
+      mesh.clear();
 
       //particle loc
       ofVec2f depth_loc, screen_loc;
@@ -141,29 +142,29 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
         ps->steer( target, loc, vel, maxspeed, maxforce, force );
         b2ps->ParticleApplyForce( i, force );
 
+        ofFloatColor _color;
+
         //debug render vision
-        for ( int v = 0; v < 3; v++ )
-        {
-          mesh.addVertex( screen_loc );
-          mesh.addColor(ofFloatColor::red);
-          mesh.addVertex( pv_screen[v] );
-          mesh.addColor(ofFloatColor::red);
-        }
+        //_color = ofFloatColor::red;
+        //for ( int v = 0; v < 3; v++ )
+        //{
+          //mesh.addVertex(screen_loc);
+          //mesh.addColor(_color);
+          //mesh.addVertex(pv_screen[v]);
+          //mesh.addColor(_color);
+        //}
 
         //debug render force
+        _color = ofFloatColor::green;
         ofVec2f target_screen;
         ps->physics2screen( target, target_screen );
         mesh.addVertex( screen_loc );
-        mesh.addColor(ofFloatColor::green);
+        mesh.addColor(_color);
         mesh.addVertex( target_screen );
-        mesh.addColor(ofFloatColor::green);
+        mesh.addColor(_color);
 
       }
-      // end of particles iteration
-
-      //debug render
-      ofSetLineWidth( 1 );
-      mesh.draw();
+      // end of particles iteration 
 
       delete[] pvision;
       delete[] pv_screen;
@@ -178,12 +179,18 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
         processEntity( *bag.get(i) );
     };
 
+    virtual void render()
+    {
+      ofSetLineWidth( 1 );
+      mesh.draw();
+    };
+
   private:
 
     ParticleSystem* ps;
     CoordMap screen2depth;
 
-    ComponentMapper<ParticleDepthSlopeFlowComponent> particle_depth_slope_flow_m;
+    ofVboMesh mesh;
 
 };
 

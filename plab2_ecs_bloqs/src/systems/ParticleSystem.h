@@ -37,16 +37,19 @@ class ParticleSystem : public ECSsystem
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
       box2d.update();
-      for (int i=0;i<bag.getCount();i++)
-        processEntity( *bag.get(i) );
-      particles.draw();
+      //for(int i=0;i<bag.getCount();i++)
+        //processEntity( *bag.get(i) );
     };
 
-    // entity: escena
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("ParticleSystem") << "process entity " << e.getId();
     }; 
+
+    virtual void render()
+    {
+      particles.draw();
+    };
 
     ofxBox2dParticleSystem* of_particles()
     {

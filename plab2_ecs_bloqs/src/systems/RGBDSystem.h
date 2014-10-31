@@ -25,7 +25,7 @@ class RGBDSystem : public ECSsystem
       rgb_m.init( *world );
       depth_m.init( *world );
 
-      kinect.setRegistration(true);
+      kinect.setRegistration(false);
       //kinect.enableDepthNearValueWhite(false);
       // ir, rgb, texture
       kinect.init(false, true, true);
@@ -43,12 +43,8 @@ class RGBDSystem : public ECSsystem
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
       kinect.update();
-
       for (int i=0;i<bag.getCount();i++)
-        processEntity( *bag.get(i) );
-
-      RenderComponent* render_data = component<RenderComponent>("output");
-      render( render_data->width, render_data->height ); 
+        processEntity( *bag.get(i) ); 
     };
 
     // entity: escena
@@ -69,31 +65,22 @@ class RGBDSystem : public ECSsystem
 
     };
 
+    virtual void render()
+    {
+      RenderComponent* render_data = component<RenderComponent>("output");
+      int w = render_data->width;
+      int h = render_data->height;
+
+      ofSetColor(255);
+      kinect.drawDepth( 0, 0, w, h );
+      //kinect.draw( 0, 0, w, h );
+    };
+
   private: 
 
     ComponentMapper<RGBComponent> rgb_m;
     ComponentMapper<DepthComponent> depth_m;
 
-    ofxKinect kinect;
-
-    void render( int render_width, int render_height )
-    {
-      ofSetColor(255);
-      int w = render_width;
-      int h = render_height;
-      render_depth(0, 0, w, h);
-      //render_color(0, 0, w, h);
-    };
-
-    void render_color( int x, int y, int w, int h )
-    {
-      kinect.draw( x, y, w, h );
-    };
-
-    void render_depth( int x, int y, int w, int h )
-    {
-      kinect.drawDepth( x, y, w, h );
-    };
-
+    ofxKinect kinect; 
 };
 

@@ -12,6 +12,15 @@ class RenderComponent : public artemis::Component
     RenderComponent( string id )
     {
       this->id = id;
+      width = ofGetWidth();
+      height = ofGetHeight();
     };
+
+    void update( int w, int h )
+    {
+      width = w;
+      height = h;
+    };
+
 };
 

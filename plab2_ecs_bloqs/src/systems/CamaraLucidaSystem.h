@@ -3,6 +3,7 @@
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
 #include "components/Components.h"
+#include "ofxCamaraLucida.h"
 
 using namespace artemis;
 
@@ -25,20 +26,18 @@ class CamaraLucidaSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      CamaraLucidaComponent* cml_data = camara_lucida_m.get(e);
-      RenderComponent* render_data = render_m.get(e);
-      //TODO
-      int w = 1014;
-      int h = 768;
-      cml_data->tex_width = w;
-      cml_data->tex_height = h;
-      render_data->width = w;
-      render_data->height = h;
+      //cml::CamaraLucida* cml = component<CamaraLucidaComponent>("output")->cml;
+      //float w = cml->tex_width();
+      //float h = cml->tex_height();
+      //render_m.get(e)->update(w,h);
     };
 
     virtual void processEntity(Entity &e) 
     {
-      //ofLogNotice("CamaraLucidaSystem") << "process entity " << e.getId();
+      DepthComponent* depth = component<DepthComponent>("input");
+
+      if ( depth->dirty )
+        component<CamaraLucidaComponent>("output")->cml->update( depth->depth_pix_mm );
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 

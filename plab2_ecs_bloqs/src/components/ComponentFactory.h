@@ -32,7 +32,7 @@ class ComponentFactory
     else if (id == "particle_emitter") return new ParticleEmitterComponent(id);
     else if (id == "particle_flow_field") return new ParticleFlowFieldComponent(id);
     else if (id == "particle_depth_slope_flow") return new ParticleDepthSlopeFlowComponent(id);
-    else if (id == "particle_depth_blobs_containers") return new ParticleDepthBlobsContainersComponent(id);
+    else if (id == "particle_blobs_containers") return new ParticleBlobsContainersComponent(id);
 		//dont remove this line
 
     return NULL;

@@ -4,6 +4,7 @@
 #include "ofxJSON.h"
 #include "ecs/ECS.h"
 #include "ecs/ECSconfig.h"
+#include "keys.h"
 
 class ofApp : public ofBaseApp
 {
@@ -26,6 +27,9 @@ class ofApp : public ofBaseApp
     ECS ecs;
     ECSconfig entities;
     ofxJSONElement config;
+
+    bool cml_render;
+    void render_texture(ofEventArgs &args);
 
 };
 

@@ -5,36 +5,40 @@
 class ECSsystem : public artemis::EntityProcessingSystem
 {
 
+  public:
+
+    virtual void render(){};
+
   protected:
 
-  //some shortcuts
+    //some shortcuts
 
-  template<typename TSystem>
-  TSystem* system()
-  {
-    return ((TSystem*)world->getSystemManager()->getSystem<TSystem>());
-  };
+    template<typename TSystem>
+    TSystem* system()
+    {
+      return ((TSystem*)world->getSystemManager()->getSystem<TSystem>());
+    };
 
-  template<typename TComponent>
-  TComponent* component(string tag)
-  {
-    return ((TComponent*)world->getTagManager()->getEntity( tag ).getComponent<TComponent>());
-  };
+    template<typename TComponent>
+    TComponent* component(string tag)
+    {
+      return ((TComponent*)world->getTagManager()->getEntity( tag ).getComponent<TComponent>());
+    };
 
-  artemis::EntityManager* entities()
-  {
-    return world->getEntityManager();
-  };
+    artemis::EntityManager* entities()
+    {
+      return world->getEntityManager();
+    };
 
-  artemis::SystemManager* systems()
-  {
-    return world->getSystemManager();
-  };
+    artemis::SystemManager* systems()
+    {
+      return world->getSystemManager();
+    };
 
-  artemis::TagManager* tags()
-  {
-    return world->getTagManager();
-  };
+    artemis::TagManager* tags()
+    {
+      return world->getTagManager();
+    };
 
 };
 

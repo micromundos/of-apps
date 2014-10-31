@@ -38,6 +38,9 @@ class TemplateSystem : public ECSsystem
         processEntity( *bag.get(i) );
     };
 
+    virtual void render()
+    {};
+
   private:
 
     ComponentMapper<TemplateComponent> template_m;

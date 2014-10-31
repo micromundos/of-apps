@@ -1,3 +1,4 @@
+ofxCamaraLucida
 ofxLiquidFun
 ofxKinect
 ofxOpenCv

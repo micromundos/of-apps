@@ -14,7 +14,7 @@ class ParticleEmitterComponent : public artemis::Component
     ParticleEmitterComponent(string id)
     {
       this->id = id;
-      rate = 1.0;
+      rate = 10.0;
     };
 };
 

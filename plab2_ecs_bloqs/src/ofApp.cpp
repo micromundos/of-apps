@@ -17,44 +17,82 @@ void ofApp::setup()
   ecs.add_systems();
   ecs.init_systems();
   entities.make( &ecs, &config );
+
+  ofAddListener( ecs.component<CamaraLucidaComponent>("output")->cml->render_texture, this, &ofApp::render_texture );
 }
 
 void ofApp::update()
 {
   ofSetWindowTitle(ofToString(ofGetFrameRate(),2));
+
+  ecs.update();
 }
 
 void ofApp::draw()
 {
   ofBackground(100,100,100); 
-  ecs.update();
+
+  //pipe render to camara lucida
+  if (cml_render)
+    ecs.component<CamaraLucidaComponent>("output")->cml->render();
+  else
+    ecs.render();
 }
 
+void ofApp::render_texture(ofEventArgs &args)
+{
+  ecs.render();
+}
 
 void ofApp::keyPressed(int key)
 {
-  switch (key)
-  { 
-    case 'p':
-      break;
-  };
 }
 
 
 void ofApp::keyReleased(int key)
 {
+  cml::CamaraLucida* cml = ecs.component<CamaraLucidaComponent>("output")->cml;
+  RenderComponent* render_data = ecs.component<RenderComponent>("output");
+
   switch (key)
   { 
-    case 'p':
+
+    case keys::cml_render:
+
+      cml_render = !cml_render;
+
+      float w, h;
+      if ( cml_render )
+      {
+        w = cml->tex_width();
+        h = cml->tex_height();
+      }
+
+      else 
+      {
+        w = ofGetWidth();
+        h = ofGetHeight();
+      }
+
+      render_data->update( w, h );
+
       break;
 
-    case '+':
-    case '=':
+    case keys::projector:
+      ofSetWindowPosition( ofGetWindowPositionX() == 0 ? ofGetScreenWidth()+1 : 0, 0 );
       break;
 
-    case '-':
+    case keys::fullscreen:
+      ofToggleFullscreen();
       break;
 
+    case keys::cml_gpu:
+      cml->gpu( !cml->gpu() );
+      break;
+
+    case keys::cml_wireframe:
+      cml->wireframe( !cml->wireframe() );
+      break;
   };
 }
 
