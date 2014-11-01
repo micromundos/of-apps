@@ -34,7 +34,8 @@ class TemplateSystem : public ECSsystem
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
-      for (int i=0;i<bag.getCount();i++)
+      int len = bag.getCount();
+      for ( int i = 0; i < len; i++ )
         processEntity( *bag.get(i) );
     };
 

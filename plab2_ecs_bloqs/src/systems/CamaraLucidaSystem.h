@@ -26,7 +26,7 @@ class CamaraLucidaSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      //cml::CamaraLucida* cml = component<CamaraLucidaComponent>("output")->cml;
+      //cml::CamaraLucida* cml = camara_lucida_m.get(e)->cml;
       //float w = cml->tex_width();
       //float h = cml->tex_height();
       //render_m.get(e)->update(w,h);
@@ -37,16 +37,41 @@ class CamaraLucidaSystem : public ECSsystem
       DepthComponent* depth = component<DepthComponent>("input");
 
       if ( depth->dirty )
-        component<CamaraLucidaComponent>("output")->cml->update( depth->depth_pix_mm );
+      {
+        camara_lucida_m.get(e)->cml->update( depth->depth_pix_mm );
+      }
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
-      for (int i=0;i<bag.getCount();i++)
+      _bag = &bag;
+      int len = bag.getCount();
+      for ( int i = 0; i < len; i++ )
         processEntity( *bag.get(i) );
     };
 
+    //virtual void render()
+    //{
+      //int len = _bag->getCount();
+      //for ( int i = 0; i < len; i++ )
+        //render_entity( *_bag->get(i) );
+    //};
+
+    //void render_entity(Entity &e)
+    //{
+      //DepthComponent* depth = component<DepthComponent>("input");
+
+      //RenderComponent* render_data = render_m.get(e);
+      //int w = render_data->width;
+      //int h = render_data->height;
+
+      //ofSetColor(255);
+      //camara_lucida_m.get(e)->cml->depth_camera()->get_hue_tex_ref( depth->depth_pix_mm ).draw( 0, 0, w, h ); 
+    //};
+
   private:
+
+    ImmutableBag<Entity*>* _bag;
 
     ComponentMapper<CamaraLucidaComponent> camara_lucida_m;
     ComponentMapper<RenderComponent> render_m;

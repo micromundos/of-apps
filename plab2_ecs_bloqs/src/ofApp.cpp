@@ -93,6 +93,13 @@ void ofApp::keyReleased(int key)
     case keys::cml_wireframe:
       cml->wireframe( !cml->wireframe() );
       break;
+
+    case keys::cml_depth_xoff_inc:
+      cml->depth_camera()->xoff++;
+      break;
+    case keys::cml_depth_xoff_dec:
+      cml->depth_camera()->xoff--;
+      break;
   };
 }
 

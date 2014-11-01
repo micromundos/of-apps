@@ -51,7 +51,7 @@ class ArucoSystem : public ECSsystem
       int w = render_data->width;
       int h = render_data->height;
 
-      ofSetLineWidth( 3 );
+      ofSetLineWidth( 5 );
       //aruco.draw2d();
 
       ofSetColor(ofColor::green);
@@ -63,7 +63,7 @@ class ArucoSystem : public ECSsystem
         loc.y *= h;
         ofVec2f& dir = bloqs[i]->dir;
         ofLine( loc, loc + dir * 40 );
-        ofRect( loc, 6, 6 );
+        ofRect( loc, 8, 8 );
         ofDrawBitmapString( id, loc );
       }
     };

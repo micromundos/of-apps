@@ -25,7 +25,8 @@ class RGBDSystem : public ECSsystem
       rgb_m.init( *world );
       depth_m.init( *world );
 
-      kinect.setRegistration(false);
+      //registration transforms rgb pixels to match depth pixels, not the other way around, right? then we're fine!
+      kinect.setRegistration(true);
       //kinect.enableDepthNearValueWhite(false);
       // ir, rgb, texture
       kinect.init(false, true, true);
@@ -47,7 +48,6 @@ class RGBDSystem : public ECSsystem
         processEntity( *bag.get(i) ); 
     };
 
-    // entity: escena
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("RGBDSystem") << "process entity " << e.getId();
@@ -72,8 +72,8 @@ class RGBDSystem : public ECSsystem
       int h = render_data->height;
 
       ofSetColor(255);
-      kinect.drawDepth( 0, 0, w, h );
-      //kinect.draw( 0, 0, w, h );
+      //kinect.drawDepth( 0, 0, w, h );
+      kinect.draw( 0, 0, w, h );
     };
 
   private: 

@@ -26,8 +26,9 @@ class CamaraLucidaComponent : public artemis::Component
 
       cfg.tex_width = 1024 * 2;
       cfg.tex_height = 768 * 2;
+      cfg.mesh_res = 2;
 
-      cml = new cml::CamaraLucida(cfg);
+      cml = new cml::CamaraLucida( cfg );
     };
 };
 

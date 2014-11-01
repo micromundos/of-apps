@@ -62,7 +62,7 @@ class DepthBlobsSystem : public ECSsystem
 
       ofSetLineWidth(1);
       ofSetColor(255);
-      grey_img.draw(0, 0, w, h);
+      //grey_img.draw(0, 0, w, h);
       contourFinder.draw(0, 0, w, h);
     };
 
