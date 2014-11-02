@@ -26,7 +26,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
 
     virtual void initialize() 
     {
-      //TODO que es mejor, traer un componente de un tag o un sistema? 
+      //TODO que es mejor, traer un componente de una entidad taggeada o un sistema? 
       //ParticleSystemComponent* ps_data = component<ParticleSystemComponent>("particles");
       //ofps = ps_data->of_particles();
       //b2ps = ps_data->b2_particles();
@@ -36,12 +36,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
     };
 
     virtual void added(Entity &e) 
-    {
-      DepthComponent* depth_data = component<DepthComponent>("input");
-      RenderComponent* render_data = component<RenderComponent>("output");
-
-      screen2depth.init( render_data->width, render_data->height, depth_data->width, depth_data->height );
-    };
+    {};
 
     virtual void processEntity(Entity &e) 
     {
@@ -175,6 +170,8 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
+      //pudo haber cambiado el screen size
+      update_screen2depth();
       for (int i=0;i<bag.getCount();i++)
         processEntity( *bag.get(i) );
     };
@@ -191,6 +188,14 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
     CoordMap screen2depth;
 
     ofVboMesh mesh;
+
+    void update_screen2depth()
+    {
+      DepthComponent* depth_data = component<DepthComponent>("input");
+      RenderComponent* render_data = component<RenderComponent>("output");
+
+      screen2depth.set( render_data->width, render_data->height, depth_data->width, depth_data->height );
+    };
 
 };
 

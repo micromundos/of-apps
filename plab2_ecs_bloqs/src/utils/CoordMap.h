@@ -12,7 +12,7 @@ class CoordMap
     CoordMap(){};
     ~CoordMap(){};
 
-    void init( float src_w, float src_h, float dst_w, float dst_h  )
+    void set( float src_w, float src_h, float dst_w, float dst_h  )
     {
       this->src_w = src_w;
       this->src_h = src_h;

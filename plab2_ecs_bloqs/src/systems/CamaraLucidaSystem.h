@@ -50,24 +50,24 @@ class CamaraLucidaSystem : public ECSsystem
         processEntity( *bag.get(i) );
     };
 
-    //virtual void render()
-    //{
+    virtual void render()
+    {
       //int len = _bag->getCount();
       //for ( int i = 0; i < len; i++ )
         //render_entity( *_bag->get(i) );
-    //};
+    };
 
-    //void render_entity(Entity &e)
-    //{
-      //DepthComponent* depth = component<DepthComponent>("input");
+    void render_entity(Entity &e)
+    {
+      DepthComponent* depth = component<DepthComponent>("input");
 
-      //RenderComponent* render_data = render_m.get(e);
-      //int w = render_data->width;
-      //int h = render_data->height;
+      RenderComponent* render_data = render_m.get(e);
+      int w = render_data->width;
+      int h = render_data->height;
 
-      //ofSetColor(255);
-      //camara_lucida_m.get(e)->cml->depth_camera()->get_hue_tex_ref( depth->depth_pix_mm ).draw( 0, 0, w, h ); 
-    //};
+      ofSetColor(255);
+      camara_lucida_m.get(e)->cml->depth_camera()->get_hue_tex_ref( depth->depth_pix_mm ).draw( 0, 0, w, h ); 
+    };
 
   private:
 
