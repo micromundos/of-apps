@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
 class Blob
 {
@@ -14,15 +15,12 @@ class Blob
     float length;
 };
 
-class BlobsComponent : public artemis::Component 
+class BlobsComponent : public ECScomponent 
 {
   public:
-    string id;
     vector<Blob> blobs;
 
-    BlobsComponent( string id )
-    {
-      this->id = id;
-    };
+    BlobsComponent(string _id) : ECScomponent(_id) {};
+
 };
 

@@ -2,15 +2,13 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class ArucoComponent : public artemis::Component 
+class ArucoComponent : public ECScomponent
 {
   public:
-    string id;
 
-    ArucoComponent( string id )
-    {
-      this->id = id;
-    };
+    ArucoComponent(string _id) : ECScomponent(_id) {};
+
 };
 

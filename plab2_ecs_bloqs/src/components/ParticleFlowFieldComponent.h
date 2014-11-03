@@ -2,19 +2,16 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class ParticleFlowFieldComponent : public artemis::Component 
+class ParticleFlowFieldComponent : public ECScomponent
 {
   public:
-    string id;
 
     // TODO parametrizar el comportamiento de las particulas sobre el flowfield
     float param;
 
-    ParticleFlowFieldComponent( string id )
-    {
-      this->id = id;
-    };
+    ParticleFlowFieldComponent(string _id) : ECScomponent(_id) {};
 
     void update( float param )
     {

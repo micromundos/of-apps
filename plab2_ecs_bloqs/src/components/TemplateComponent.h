@@ -2,15 +2,13 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class TemplateComponent : public artemis::Component 
+class TemplateComponent : public ECScomponent 
 {
   public:
-    string id;
 
-    TemplateComponent( string id )
-    {
-      this->id = id;
-    };
+    TemplateComponent(string _id) : ECScomponent(_id) {};
+
 };
 

@@ -2,15 +2,13 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class FisicaComponent : public artemis::Component 
+class FisicaComponent : public ECScomponent
 {
   public:
-    string id;
 
-    FisicaComponent( string id )
-    {
-      this->id = id;
-    };
+    FisicaComponent(string _id) : ECScomponent(_id) {};
+
 };
 

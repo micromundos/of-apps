@@ -2,22 +2,14 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class FlowFieldComponent : public artemis::Component 
+class FlowFieldComponent : public ECScomponent
 {
   public:
-    string id;
     ofVec2f* field;
 
-    FlowFieldComponent( string id )
-    {
-      this->id = id;
-    };
-
-    void update()
-    {
-
-    };
+    FlowFieldComponent(string _id) : ECScomponent(_id) {};
 
 };
 

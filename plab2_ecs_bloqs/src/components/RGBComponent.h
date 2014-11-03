@@ -2,18 +2,17 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class RGBComponent : public artemis::Component 
+class RGBComponent : public ECScomponent
 {
   public:
-    string id; 
     uint8_t* color_pix;
     int width, height;
     bool dirty;
 
-    RGBComponent( string id ) 
+    RGBComponent(string _id) : ECScomponent(_id)
     {
-      this->id = id;
       color_pix = NULL;
       dirty = false;
     };

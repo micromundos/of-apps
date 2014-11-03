@@ -2,15 +2,12 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class ParticleSystemComponent : public artemis::Component 
+class ParticleSystemComponent : public ECScomponent
 {
   public:
-    string id;
 
-    ParticleSystemComponent( string id )
-    {
-      this->id = id;
-    };
+    ParticleSystemComponent(string _id) : ECScomponent(_id) {};
 };
 

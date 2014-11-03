@@ -4,6 +4,7 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 #include "components/Components.h"
 
 class ComponentFactory
@@ -13,7 +14,7 @@ class ComponentFactory
   ComponentFactory(){};
   ~ComponentFactory(){};
 
-  artemis::Component* make(string id)
+  ECScomponent* make(string id)
   {
     ofLogNotice("ComponentFactory") << "\t make " << id;
 

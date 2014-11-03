@@ -2,6 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
+#include "ecs/ECScomponent.h"
 #include "components/Components.h"
 #include "components/ComponentFactory.h"
 
@@ -52,7 +53,7 @@ class BloqMakerSystem : public ECSsystem
 
     ComponentFactory component_factory;
     //component ids by bloq id
-    map< string,vector<string> > components_cfg;
+    map< string,Json::Value > components_cfg;
     //entity id by bloq id
     map< string,int > entities_by_bloq_id;
 
@@ -95,9 +96,9 @@ class BloqMakerSystem : public ECSsystem
         return &e;
       }
 
-      vector<string> comp_ids = components_cfg[ bloq_id ];
+      Json::Value comps_cfg = components_cfg[ bloq_id ];
 
-      if ( ! comp_ids.size() )
+      if ( ! comps_cfg.size() )
       {
         ofLogNotice("BloqMakerSystem") << "make_entity by bloq id " << bloq_id << ": components config not found"; 
         return NULL;
@@ -111,12 +112,15 @@ class BloqMakerSystem : public ECSsystem
       ((BloqComponent*)bloq_comp)->update( &bloq );
 
       //add config components
-      for ( int i = 0; i < comp_ids.size(); i++ )
+      for ( int i = 0; i < comps_cfg.size(); i++ )
       {
-        string comp_id = comp_ids[i];
-        artemis::Component* comp = component_factory.make( comp_id );
+        const Json::Value& comp_cfg = comps_cfg[i];
+        ECScomponent* comp = component_factory.make( comp_cfg["id"].asString() );
         if ( comp != NULL ) 
+        {
+          comp->data( comp_cfg["data"] );
           components.push_back( comp );
+        }
       }
 
       if ( ! components.size() )
@@ -175,26 +179,18 @@ class BloqMakerSystem : public ECSsystem
       return entities_by_bloq_id.find( bloq_id ) != entities_by_bloq_id.end(); 
     };
 
-    map< string,vector<string> > parse_config( ofxJSONElement& cfg )
+    map< string,Json::Value > parse_config( ofxJSONElement& cfg )
     {
-      map< string,vector<string> > components_cfg;
+      map< string,Json::Value > comps_cfg_res;
 
       const Json::Value& _bloqs = cfg["bloqs"];
       for ( int i = 0; i < _bloqs.size(); ++i )
       {
-
         string bloq_id = _bloqs[i]["id"].asString();
-        vector<string> comp_ids;
-        const Json::Value& _comp_ids = _bloqs[i]["components"];
-        for ( int j = 0; j < _comp_ids.size(); ++j )
-        {
-          comp_ids.push_back( _comp_ids[j].asString() );
-        }
-
-        components_cfg[ bloq_id ] = comp_ids;
+        comps_cfg_res[ bloq_id ] = _bloqs[i]["components"];
       }
 
-      return components_cfg;
+      return comps_cfg_res;
     };
 
 };

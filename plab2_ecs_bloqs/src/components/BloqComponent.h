@@ -2,18 +2,15 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 #include "bloqs/Bloq.h"
 
-class BloqComponent : public artemis::Component 
+class BloqComponent : public ECScomponent
 {
   public:
-    string id;
     Bloq* bloq;
 
-    BloqComponent(string id)
-    {
-      this->id = id;
-    };
+    BloqComponent(string _id) : ECScomponent(_id) {};
 
     ~BloqComponent()
     {

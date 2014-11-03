@@ -2,16 +2,15 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class RenderComponent : public artemis::Component 
+class RenderComponent : public ECScomponent 
 {
   public:
-    string id;
     int width, height;
 
-    RenderComponent( string id )
+    RenderComponent(string _id) : ECScomponent(_id)
     {
-      this->id = id;
       width = ofGetWidth();
       height = ofGetHeight();
     };

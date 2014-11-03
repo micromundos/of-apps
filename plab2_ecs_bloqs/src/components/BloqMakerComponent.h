@@ -2,21 +2,13 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class BloqMakerComponent : public artemis::Component 
+class BloqMakerComponent : public ECScomponent
 {
   public:
-    string id;
-    float data;
 
-    BloqMakerComponent( string id )
-    {
-      this->id = id;
-    };
+    BloqMakerComponent(string _id) : ECScomponent(_id) {};
 
-    void update( float data )
-    {
-      this->data = data;
-    };
 };
 

@@ -52,7 +52,12 @@
     {
       "id": "477",//"428", 
       "components": [ 
-        "particle_emitter"
+        {
+          "id": "particle_emitter",
+          "data": {
+            "rate": 10.0
+          }
+        }
       ]
     }
 

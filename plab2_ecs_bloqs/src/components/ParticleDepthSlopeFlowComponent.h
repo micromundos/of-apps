@@ -2,16 +2,13 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class ParticleDepthSlopeFlowComponent : public artemis::Component 
+class ParticleDepthSlopeFlowComponent : public ECScomponent
 {
   public:
-    string id;
 
-    ParticleDepthSlopeFlowComponent( string id )
-    {
-      this->id = id;
-    };
+    ParticleDepthSlopeFlowComponent(string _id) : ECScomponent(_id) {};
 
 };
 

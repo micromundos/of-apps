@@ -74,11 +74,13 @@ class ParticleBlobsContainersSystem : public ECSsystem
 
     b2Body* make_body_blob( const Blob& blob, ofPolyline& points, RenderComponent* render_data )
     {
-      //TODO try cvApproxPoly
+      //TODO try other approaches: 
+      //cvApproxPoly
+      //blur source img
 
       float smooth_size = 4.0f;
       float resample_count = 100.0f;
-      float simplify_coef = 0.005f;
+      //float simplify_coef = 0.005f;
 
       points.clear();
       points.addVertices( blob.points );

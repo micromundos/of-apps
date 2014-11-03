@@ -2,19 +2,18 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 
-class DepthComponent : public artemis::Component 
+class DepthComponent : public ECScomponent
 {
   public:
-    string id; 
     uint16_t* depth_pix_mm;
     uint8_t* depth_pix_grey;
     int width, height;
     bool dirty;
 
-    DepthComponent( string id ) 
+    DepthComponent(string _id) : ECScomponent(_id)
     {
-      this->id = id;
       depth_pix_mm = NULL;
       depth_pix_grey = NULL;
       dirty = false;

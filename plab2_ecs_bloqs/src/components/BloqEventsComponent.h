@@ -2,21 +2,18 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 #include "bloqs/Bloq.h"
 
-class BloqEventsComponent : public artemis::Component 
+class BloqEventsComponent : public ECScomponent
 {
   public:
-    string id;
 
     ofEvent<Bloq> added;
     ofEvent<Bloq> updated;
     ofEvent<string> removed;
 
-    BloqEventsComponent(string id)
-    {
-      this->id = id;
-    };
+    BloqEventsComponent(string _id) : ECScomponent(_id) {};
 
 };
 

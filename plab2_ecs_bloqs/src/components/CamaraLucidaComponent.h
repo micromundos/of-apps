@@ -2,18 +2,17 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
+#include "ecs/ECScomponent.h"
 #include "ofxCamaraLucida.h"
 #include "keys.h"
 
-class CamaraLucidaComponent : public artemis::Component 
+class CamaraLucidaComponent : public ECScomponent 
 {
   public:
-    string id;
     cml::CamaraLucida* cml;
 
-    CamaraLucidaComponent( string id )
+    CamaraLucidaComponent(string _id) : ECScomponent(_id)
     {
-      this->id = id; 
 
       cml::Config cfg;
 
