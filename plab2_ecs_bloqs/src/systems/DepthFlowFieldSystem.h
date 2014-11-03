@@ -11,7 +11,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
   public:
 
-    DepthFlowFieldSystem() 
+    DepthFlowFieldSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<DepthComponent>();
       addComponentType<FlowFieldComponent>();

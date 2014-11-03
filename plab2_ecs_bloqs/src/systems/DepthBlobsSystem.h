@@ -14,7 +14,7 @@ class DepthBlobsSystem : public ECSsystem
 
   public:
 
-    DepthBlobsSystem() 
+    DepthBlobsSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<DepthComponent>();
       addComponentType<BlobsComponent>();
@@ -32,7 +32,7 @@ class DepthBlobsSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      //TODO mejorar
+      //TODO mejorar init
       DepthComponent* depth = depth_m.get(e);
       init(depth->width, depth->height);
     };
@@ -56,14 +56,14 @@ class DepthBlobsSystem : public ECSsystem
 
     virtual void render()
     {
-      RenderComponent* render_data = component<RenderComponent>("output");
-      int w = render_data->width;
-      int h = render_data->height;
+      //RenderComponent* render_data = component<RenderComponent>("output");
+      //int w = render_data->width;
+      //int h = render_data->height;
 
-      ofSetLineWidth(1);
-      ofSetColor(255);
-      //grey_img.draw(0, 0, w, h);
-      contourFinder.draw(0, 0, w, h);
+      //ofSetLineWidth(1);
+      //ofSetColor(255);
+      ////grey_img.draw(0, 0, w, h);
+      //contourFinder.draw(0, 0, w, h);
     };
 
 
@@ -156,7 +156,8 @@ class DepthBlobsSystem : public ECSsystem
 			grey_far.threshold( threshold_far );
 			cvAnd( grey_near.getCvImage(), grey_far.getCvImage(), grey_img.getCvImage(), NULL );
       grey_img.flagImageChanged();
-      contourFinder.findContours( grey_img, 10, (w*h)/2, 20, false ); 
+      //img, min area, max area, n considered, holes
+      contourFinder.findContours( grey_img, 10, (w*h)/3, 20, false ); 
 
       //threshold = ofMap( mouseX, 0, ofGetWidth(), 0, 255 );
       //contourFinder.setThreshold( threshold );
@@ -168,15 +169,34 @@ class DepthBlobsSystem : public ECSsystem
       for ( int i = 0; i < ofblobs.size(); i++ )
       {
         blobs.push_back( Blob() );
-        ofxCvBlob& ofblob = contourFinder.blobs[i];
-        blobs[i].centroid = ofblob.centroid;
-        blobs[i].points = ofblob.pts;
-        blobs[i].bounds = ofblob.boundingRect;
-        blobs[i].area = ofblob.area;
-        blobs[i].length = ofblob.length;
+        set_blob( w, h, contourFinder.blobs[i], blobs[i] ); 
       }
 
     }; 
+
+    void set_blob( int w, int h, const ofxCvBlob& ofblob, Blob& blob )
+    {
+      blob.centroid = ofblob.centroid;
+      blob.centroid.x /= w;
+      blob.centroid.y /= h;
+
+      blob.points = ofblob.pts;
+      int plen = blob.points.size();
+      for (int j = 0; j < plen; j++)
+      {
+        blob.points[j].x /= w;
+        blob.points[j].y /= h;
+      }
+
+      blob.bounds = ofblob.boundingRect;
+      blob.bounds.x /= w;
+      blob.bounds.y /= h;
+      blob.bounds.width /= w;
+      blob.bounds.height /= h;
+
+      blob.area = ofblob.area;
+      blob.length = ofblob.length;
+    };
 
 };
 

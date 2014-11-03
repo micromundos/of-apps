@@ -7,16 +7,17 @@
 #include "systems/Systems.h"
 void ECS::add_systems()
 {
-  add_system(new BloqMakerSystem());
-  add_system(new RGBDSystem());
-  add_system(new DepthBlobsSystem());
-  add_system(new ArucoSystem());
-  add_system(new CamaraLucidaSystem());
-  add_system(new DepthFlowFieldSystem());
-  add_system(new ParticleSystem());
-  add_system(new ParticleEmitterSystem());
-  add_system(new ParticleDepthSlopeFlowSystem());
-  add_system(new ParticleFlowFieldSystem());
-  add_system(new ParticleBlobsContainersSystem());
-  //dont remove this line
+  add_system(new BloqMakerSystem("bloq_maker"));
+  add_system(new RGBDSystem("rgbd"));
+  add_system(new DepthBlobsSystem("depth_blobs"));
+  add_system(new ArucoSystem("aruco"));
+  add_system(new CamaraLucidaSystem("camara_lucida"));
+  add_system(new DepthFlowFieldSystem("depth_flow_field"));
+  add_system(new FisicaSystem("fisica"));
+  add_system(new ParticleSystem("particle"));
+  add_system(new ParticleEmitterSystem("particle_emitter"));
+  add_system(new ParticleDepthSlopeFlowSystem("particle_depth_slope_flow"));
+  add_system(new ParticleFlowFieldSystem("particle_flow_field"));
+  add_system(new ParticleBlobsContainersSystem("particle_blobs_containers"));
+	//dont remove this line
 };

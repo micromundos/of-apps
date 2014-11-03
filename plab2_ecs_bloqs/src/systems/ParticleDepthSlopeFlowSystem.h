@@ -3,6 +3,7 @@
 #include <Artemis/Artemis.h>
 #include "ecs/ECSsystem.h"
 #include "components/Components.h"
+#include "systems/Systems.h"
 #include "utils/CoordMap.h"
 
 using namespace artemis;
@@ -18,7 +19,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
 
   public:
 
-    ParticleDepthSlopeFlowSystem() 
+    ParticleDepthSlopeFlowSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<ParticleDepthSlopeFlowComponent>();
       addComponentType<ParticleSystemComponent>();
@@ -26,10 +27,13 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
 
     virtual void initialize() 
     {
+
       //TODO que es mejor, traer un componente de una entidad taggeada o un sistema? 
       //ParticleSystemComponent* ps_data = component<ParticleSystemComponent>("particles");
       //ofps = ps_data->of_particles();
       //b2ps = ps_data->b2_particles();
+
+      fisica = system<FisicaSystem>();
       ps = system<ParticleSystem>();
 
       mesh.setMode(OF_PRIMITIVE_LINES);
@@ -48,8 +52,6 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
       b2ParticleSystem* b2ps = ps->b2_particles();  
 
       uint16_t *depth_pix_mm = depth_data->depth_pix_mm; 
-
-      mesh.clear();
 
       //particle loc
       ofVec2f depth_loc, screen_loc;
@@ -78,7 +80,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
         b2Vec2& vel = vels[i];
 
         //calc particle depth
-        ps->physics2screen( loc, screen_loc );
+        fisica->world2screen( loc, screen_loc );
         screen2depth.dst( screen_loc, depth_loc );
 
         uint16_t particle_depth_mm = depth_pix_mm[ screen2depth.dst_idx( depth_loc ) ];
@@ -92,15 +94,15 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
         float x0 = pvision[0].x;
         float y0 = pvision[0].y;
         pvision[1].Set(x0, y0);
-        ps->b2Mul( rot1, pvision[1] );
+        fisica->b2Mul(rot1, pvision[1]);
         pvision[2].Set(x0, y0);
-        ps->b2Mul( rot2, pvision[2] );
+        fisica->b2Mul(rot2, pvision[2]);
 
         for ( int v = 0; v < 3; v++ )
         {
           pvision[v] += loc;
           // vision physics to screen
-          ps->physics2screen( pvision[v], pv_screen[v] );
+          fisica->world2screen( pvision[v], pv_screen[v] );
 
           // vision screen to depth
           screen2depth.dst( pv_screen[v], pv_depth[v] );
@@ -134,7 +136,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
         b2Vec2 force;
         float maxspeed = 10; 
         float maxforce = 8;
-        ps->steer( target, loc, vel, maxspeed, maxforce, force );
+        fisica->steer( target, loc, vel, maxspeed, maxforce, force );
         b2ps->ParticleApplyForce( i, force );
 
         ofFloatColor _color;
@@ -152,7 +154,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
         //debug render force
         _color = ofFloatColor::green;
         ofVec2f target_screen;
-        ps->physics2screen( target, target_screen );
+        fisica->world2screen(target, target_screen);
         mesh.addVertex( screen_loc );
         mesh.addColor(_color);
         mesh.addVertex( target_screen );
@@ -172,19 +174,23 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
     {
       //pudo haber cambiado el screen size
       update_screen2depth();
-      for (int i=0;i<bag.getCount();i++)
+      mesh.clear();
+      int len = bag.getCount();
+      for ( int i = 0; i < len; i++ )
         processEntity( *bag.get(i) );
     };
 
     virtual void render()
     {
-      ofSetLineWidth( 1 );
+      ofSetLineWidth(1);
       mesh.draw();
     };
 
   private:
 
+    FisicaSystem* fisica;
     ParticleSystem* ps;
+
     CoordMap screen2depth;
 
     ofVboMesh mesh;

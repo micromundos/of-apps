@@ -12,7 +12,7 @@ class CamaraLucidaSystem : public ECSsystem
 
   public:
 
-    CamaraLucidaSystem() 
+    CamaraLucidaSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<CamaraLucidaComponent>();
       addComponentType<RenderComponent>();

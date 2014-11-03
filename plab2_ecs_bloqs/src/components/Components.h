@@ -13,6 +13,7 @@
 #include "components/ArucoComponent.h"
 #include "components/BlobsComponent.h"
 #include "components/FlowFieldComponent.h"
+#include "components/FisicaComponent.h"
 #include "components/ParticleSystemComponent.h"
 #include "components/ParticleDepthSlopeFlowComponent.h"
 #include "components/ParticleFlowFieldComponent.h"

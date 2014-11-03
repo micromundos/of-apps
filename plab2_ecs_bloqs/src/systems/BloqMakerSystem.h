@@ -12,7 +12,7 @@ class BloqMakerSystem : public ECSsystem
 
   public:
 
-    BloqMakerSystem() 
+    BloqMakerSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<BloqMakerComponent>();
       addComponentType<BloqEventsComponent>();

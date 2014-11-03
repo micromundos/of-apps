@@ -18,6 +18,10 @@ class ECS
     //see src/ecs/add_systems.cpp
     void add_systems();
 
+    //TODO add src/ecs/make_component.cpp
+    //remove ComponentFactory.h
+    //void make_component(string id);
+
     void init()
     {
       sm = world.getSystemManager();
@@ -27,11 +31,11 @@ class ECS
 
     void update()
     {
-      //ofLogNotice("ECS") << "---update";
+      //ofLogNotice("ECS") << "--update";
       //TODO game/sim loop accum
       world.loopStart();
       //deciseconds ???
-      //https://github.com/vinova/Artemis-Cpp
+      //github.com/vinova/Artemis-Cpp
       //world.setDelta( 0.0016f ); 
       world.setDelta( 1.0f/FPS*0.1f ); 
       int len = _systems.size();

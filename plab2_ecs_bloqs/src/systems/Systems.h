@@ -6,6 +6,7 @@
 #include "systems/RGBDSystem.h"
 #include "systems/ArucoSystem.h"
 #include "systems/CamaraLucidaSystem.h"
+#include "systems/FisicaSystem.h"
 #include "systems/ParticleSystem.h"
 #include "systems/ParticleEmitterSystem.h"
 #include "systems/ParticleDepthSlopeFlowSystem.h"

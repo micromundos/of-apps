@@ -6,11 +6,12 @@
 class Blob
 {
   public:
-  ofPoint centroid;
-  vector<ofPoint> points;
-  ofRectangle bounds;
-  float area;
-  float length;
+    //TODO normalized coords
+    ofPoint centroid;
+    vector<ofPoint> points;
+    ofRectangle bounds;
+    float area;
+    float length;
 };
 
 class BlobsComponent : public artemis::Component 

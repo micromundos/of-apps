@@ -7,6 +7,10 @@ class ECSsystem : public artemis::EntityProcessingSystem
 
   public:
 
+    ECSsystem(string _id) : id(_id)
+    {};
+
+    string id;
     virtual void render(){};
 
   protected:

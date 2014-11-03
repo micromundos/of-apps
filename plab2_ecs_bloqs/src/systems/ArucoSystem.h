@@ -12,7 +12,7 @@ class ArucoSystem : public ECSsystem
 
   public:
 
-    ArucoSystem() 
+    ArucoSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<ArucoComponent>();
       addComponentType<RGBComponent>();

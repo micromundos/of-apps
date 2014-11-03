@@ -12,7 +12,7 @@ class ParticleFlowFieldSystem : public ECSsystem
 
   public:
 
-    ParticleFlowFieldSystem() 
+    ParticleFlowFieldSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<ParticleFlowFieldComponent>();
       addComponentType<ParticleSystemComponent>();

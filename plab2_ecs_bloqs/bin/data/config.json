@@ -34,9 +34,10 @@
     {
       "id": "particles",
       "components": [
+        "fisica",
         "particle_system",
-        //"particle_blobs_containers"
-        "particle_depth_slope_flow"
+        "particle_blobs_containers"
+        //"particle_depth_slope_flow"
         //"particle_flow_field" 
       ]
     }
@@ -55,6 +56,9 @@
       ]
     }
 
-  ]
+  ],
+
+  //TODO
+  "renderable_systems": []
 
 }

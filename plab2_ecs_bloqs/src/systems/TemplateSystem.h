@@ -11,7 +11,7 @@ class TemplateSystem : public ECSsystem
 
   public:
 
-    TemplateSystem() 
+    TemplateSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<TemplateComponent>();
     };

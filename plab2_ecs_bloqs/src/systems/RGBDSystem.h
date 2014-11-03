@@ -12,7 +12,7 @@ class RGBDSystem : public ECSsystem
 
   public:
 
-    RGBDSystem() 
+    RGBDSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<RGBComponent>();
       addComponentType<DepthComponent>();
