@@ -10,5 +10,10 @@ class TemplateComponent : public ECScomponent
 
     TemplateComponent(string _id) : ECScomponent(_id) {};
 
+    virtual void data( Json::Value d )
+    {
+      ECScomponent::data(d);
+    };
+
 };
 

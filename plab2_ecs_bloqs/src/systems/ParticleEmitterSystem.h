@@ -61,15 +61,22 @@ class ParticleEmitterSystem : public ECSsystem
 
     void emit( Bloq* bloq, RenderComponent* render_data )
     {
-      ofxBox2dParticleSystem* ofps = ps->of_particles();
+      //ofxBox2dParticleSystem* ofps = ps->of_particles();
+      b2ParticleSystem* b2ps = ps->b2_particles();
 
       ofVec2f screen_loc( bloq->loc.x * render_data->width, bloq->loc.y * render_data->height );
 
-      int32 pidx = ofps->createParticle( screen_loc.x, screen_loc.y, 0, 0 );
+      //int32 pidx = ofps->createParticle( screen_loc.x, screen_loc.y, 0, 0 );
+      int32 pidx = ps->make_particle( screen_loc.x, screen_loc.y, 0, 0 );
 
       //TODO emitter force param
-      ofVec2f force = bloq->dir * 10;//14;
-      ofps->applyForce( pidx, force );
+      float force_m = 10; //14;
+
+      //ofVec2f force = bloq->dir * force_m;
+      //ofps->applyForce( pidx, force );
+      b2Vec2 force( bloq->dir.x, bloq->dir.y );
+      force *= force_m;
+      b2ps->ParticleApplyForce( pidx, force );
     };
 
 };

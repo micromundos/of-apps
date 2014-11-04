@@ -58,15 +58,25 @@ class FisicaSystem : public ECSsystem
 
     void world2screen( const b2Vec2& src, ofVec2f& dst ) 
     {
-      dst.x = src.x * OFX_BOX2D_SCALE;
-      dst.y = src.y * OFX_BOX2D_SCALE;
+      world2screen( src.x, src.y, dst.x, dst.y );
+    };
+
+    void world2screen( float src_x, float src_y, float& dst_x, float& dst_y ) 
+    {
+      dst_x = src_x * OFX_BOX2D_SCALE;
+      dst_y = src_y * OFX_BOX2D_SCALE;
     };
 
     void screen2world( const ofVec2f& src, b2Vec2& dst ) 
     {
-      dst.x = src.x / OFX_BOX2D_SCALE;
-      dst.y = src.y / OFX_BOX2D_SCALE;
+      screen2world( src.x, src.y, dst.x, dst.y );
     }; 
+
+    void screen2world( float src_x, float src_y, float& dst_x, float& dst_y ) 
+    {
+      dst_x = src_x / OFX_BOX2D_SCALE;
+      dst_y = src_y / OFX_BOX2D_SCALE;
+    };
 
     // Rotate a vector
     // see b2Math.h
