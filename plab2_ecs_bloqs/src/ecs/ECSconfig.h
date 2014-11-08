@@ -1,26 +1,24 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
-#include "ecs/ECS.h"
 #include "components/ComponentFactory.h"
-#include "bloqs/Bloq.h"
 
 class ECSconfig
 {
   public:
 
     ECSconfig(){};
-    ~ECSconfig()
-    {
-      ecs = NULL;
-    };
+    ~ECSconfig(){};
 
-    void make( ECS* ecs, ofxJSONElement* config )
+    void init( artemis::World* world, ofxJSONElement* config, string entities_cfg_name )
     {
-      this->ecs = ecs;
-      entities_cfg = parse_config(config);
+      this->world = world;
+      entities_cfg = parse_config( config, entities_cfg_name );
+    }
 
-      for ( map< string,vector<string> >::iterator it = entities_cfg.begin(); it != entities_cfg.end(); ++it )
+    void make_all()
+    {
+      for ( map< string,Json::Value >::iterator it = entities_cfg.begin(); it != entities_cfg.end(); ++it )
         make_entity( it->first );
     };
 
@@ -28,17 +26,16 @@ class ECSconfig
     {
       ofLogNotice("ECSconfig") << "make_entity by id/tag " << e_id; 
 
-      //TODO make muchas entities del mismo tipo, pero el e_id es tag... ver unity prefabs
       if ( has_entity( e_id ) )
       {
-        artemis::Entity& e = ecs->entities()->getEntity( entities_ids[ e_id ] );
+        artemis::Entity& e = world->getEntityManager()->getEntity( entities_ids[ e_id ] );
         ofLogNotice("ECSconfig") << "make_entity by id/tag " << e_id << ": entity " << e.getId() << " already exists"; 
         return &e;
       }
 
-      vector<string> comp_ids = entities_cfg[ e_id ];
+      Json::Value comps_cfg = entities_cfg[ e_id ];
 
-      if ( ! comp_ids.size() )
+      if ( ! comps_cfg.size() )
       {
         ofLogNotice("ECSconfig") << "make_entity by id/tag " << e_id << ": components config not found"; 
         return NULL;
@@ -47,12 +44,15 @@ class ECSconfig
       vector<artemis::Component*> components;
 
       //add config components
-      for ( int i = 0; i < comp_ids.size(); i++ )
+      for ( int i = 0; i < comps_cfg.size(); i++ )
       {
-        string comp_id = comp_ids[i];
-        artemis::Component* comp = component_factory.make( comp_id );
+        const Json::Value& comp_cfg = comps_cfg[i];
+        ECScomponent* comp = component_factory.make( comp_cfg["id"].asString() );
         if ( comp != NULL ) 
+        {
+          comp->data( comp_cfg["data"] );
           components.push_back( comp );
+        }
       }
 
       if ( ! components.size() )
@@ -61,14 +61,14 @@ class ECSconfig
         return NULL;
       }
 
-      artemis::Entity& e = ecs->entities()->create();
+      artemis::Entity& e = world->getEntityManager()->create();
       ofLogNotice("ECSconfig") << "\tentity " << e_id << " made: entity " << e.getId(); 
 
       for ( int i = 0; i < components.size(); i++ )
         e.addComponent( components[i] );
       e.refresh();
 
-      ecs->tags()->subscribe( e_id, e );
+      world->getTagManager()->subscribe( e_id, e );
 
       entities_ids[ e_id ] = e.getId();
 
@@ -83,22 +83,22 @@ class ECSconfig
         return;
       }
 
-      artemis::Entity& e = ecs->entities()->getEntity( entities_ids[ e_id ] );
+      artemis::Entity& e = world->getEntityManager()->getEntity( entities_ids[ e_id ] );
       ofLogNotice("ECSconfig") << "remove_entity by id/tag " << e_id << ": entity " << e.getId(); 
-      ecs->entities()->remove( e );
+      world->getEntityManager()->remove( e );
 
       entities_ids.erase( e_id );
     };
 
   private:
 
-    ECS* ecs;
+    artemis::World* world;
     ComponentFactory component_factory;
+ 
+    //{ entity_id : [ components ] }
+    map< string,Json::Value > entities_cfg;
 
-    //{ component_id: [entities_ids] }
-    map< string,vector<string> > entities_cfg;
-
-    //{ tag:id }
+    //{ tag : id }
     map< string,int > entities_ids;
 
     bool has_entity( string e_id )
@@ -106,24 +106,17 @@ class ECSconfig
       return entities_ids.find( e_id ) != entities_ids.end(); 
     };
 
-    map< string,vector<string> > parse_config( ofxJSONElement* config )
+    map< string,Json::Value > parse_config( ofxJSONElement* config, string entities_cfg_name )
     {
-      map< string,vector<string> > entities_cfg;
+      map< string,Json::Value > entities_cfg;
 
       ofxJSONElement& cfg = *config;
-      const Json::Value& _entities = cfg["entities"];
+      const Json::Value& _entities = cfg[ entities_cfg_name ];
+
       for ( int i = 0; i < _entities.size(); ++i )
       {
-
         string e_id = _entities[i]["id"].asString();
-        vector<string> comp_ids;
-        const Json::Value& _comp_ids = _entities[i]["components"];
-        for ( int j = 0; j < _comp_ids.size(); ++j )
-        {
-          comp_ids.push_back( _comp_ids[j].asString() );
-        }
-
-        entities_cfg[ e_id ] = comp_ids;
+        entities_cfg[ e_id ] = _entities[i]["components"];
       }
 
       return entities_cfg;

@@ -6,27 +6,27 @@
     {
       "id": "core",
       "components": [
-        "config",
-        "bloq_events",
-        "bloq_maker"
+        { "id": "config" },
+        { "id": "bloq_events" },
+        { "id": "bloq_maker" }
       ]
     },
 
     {
       "id": "output",
       "components": [
-        "render",
-        "camara_lucida"
+        { "id": "render" },
+        { "id": "camara_lucida" }
       ]
     },
 
     {
       "id": "input",
       "components": [
-        "rgb",
-        "depth",
-        "aruco",
-        "blobs"
+        { "id": "rgb" },
+        { "id": "depth" },
+        { "id": "aruco" },
+        { "id": "blobs" }
         //"flow_field"
       ]
     }, 
@@ -34,11 +34,11 @@
     {
       "id": "particles",
       "components": [
-        "fisica",
-        "particle_system",
-        "particle_blobs_containers"
-        //"particle_depth_slope_flow"
-        //"particle_flow_field" 
+        { "id": "fisica" },
+        { "id": "particle_system" },
+        { "id": "particle_blobs_containers" }
+        //{ "id": "particle_depth_slope_flow" }
+        //{ "id": "particle_flow_field" }
       ]
     }
   ],

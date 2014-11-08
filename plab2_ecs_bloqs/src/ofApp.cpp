@@ -16,7 +16,9 @@ void ofApp::setup()
   ecs.init();
   ecs.add_systems();
   ecs.init_systems();
-  entities.make( &ecs, &config );
+
+  entities.init( ecs.world(), &config, "entities" );
+  entities.make_all();
 
   ofAddListener( ecs.component<CamaraLucidaComponent>("output")->cml->render_texture, this, &ofApp::render_texture );
 }

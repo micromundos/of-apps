@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
+#include "ecs/ECSconfig.h"
 #include "ecs/ECSsystem.h"
 #include "ecs/ECScomponent.h"
 #include "components/Components.h"
@@ -50,17 +51,16 @@ class BloqMakerSystem : public ECSsystem
     ComponentMapper<BloqEventsComponent> bloq_events_m;
     ComponentMapper<ConfigComponent> config_m;
 
-
+    ECSconfig bloqs;
     ComponentFactory component_factory;
-    //component ids by bloq id
-    map< string,Json::Value > components_cfg;
-    //entity id by bloq id
-    map< string,int > entities_by_bloq_id;
+
+    //{ bloq_id : entity_id }
+    map< string,int > bloqs_by_id;
 
 
     void init( ConfigComponent* config_data, BloqEventsComponent* bloq_events )
     {
-      components_cfg = parse_config( config_data->config );
+      bloqs.init( world, &config_data->config, "bloqs" );
 
       ofAddListener( bloq_events->added, this, &BloqMakerSystem::bloq_added );
       ofAddListener( bloq_events->updated, this, &BloqMakerSystem::bloq_updated );
@@ -85,81 +85,26 @@ class BloqMakerSystem : public ECSsystem
     };
 
 
-    artemis::Entity* make_entity( Bloq& bloq )
+    void make_entity( Bloq& bloq )
     {
       string bloq_id = bloq.id;
 
-      if ( has_entity( bloq_id ) )
-      {
-        artemis::Entity& e = entities()->getEntity( entities_by_bloq_id[ bloq_id ] );
-        ofLogNotice("BloqMakerSystem") << "make_entity by bloq id " << bloq_id << ": entity " << e.getId() << " already exists"; 
-        return &e;
-      }
+      artemis::Entity* e = bloqs.make_entity( bloq_id );
 
-      Json::Value comps_cfg = components_cfg[ bloq_id ];
+      if ( e == NULL ) return;
 
-      if ( ! comps_cfg.size() )
-      {
-        ofLogNotice("BloqMakerSystem") << "make_entity by bloq id " << bloq_id << ": components config not found"; 
-        return NULL;
-      }
-
-      vector<artemis::Component*> components;
-
-      //add default components
-      artemis::Component* bloq_comp = component_factory.make( "bloq" );
-      components.push_back( bloq_comp );
+      //add default bloq component
+      ECScomponent* bloq_comp = component_factory.make( "bloq" );
       ((BloqComponent*)bloq_comp)->update( &bloq );
+      e->addComponent( bloq_comp );
+      e->refresh();
 
-      //add config components
-      for ( int i = 0; i < comps_cfg.size(); i++ )
-      {
-        const Json::Value& comp_cfg = comps_cfg[i];
-        ECScomponent* comp = component_factory.make( comp_cfg["id"].asString() );
-        if ( comp != NULL ) 
-        {
-          comp->data( comp_cfg["data"] );
-          components.push_back( comp );
-        }
-      }
-
-      if ( ! components.size() )
-      {
-        ofLogNotice("BloqMakerSystem") << "make_entity by bloq id " << bloq_id << ": components ids not found"; 
-        return NULL;
-      }
-
-      artemis::Entity& e = entities()->create();
-      ofLogNotice("BloqMakerSystem") << "make_entity by bloq id " << bloq_id << ": entity " << e.getId(); 
-
-      for ( int i = 0; i < components.size(); i++ )
-        e.addComponent( components[i] );
-      e.refresh();
-
-      entities_by_bloq_id[ bloq_id ] = e.getId();
-      return &e;
-    }; 
-
-    void update_entity( Bloq& bloq )
-    {
-      string bloq_id = bloq.id;
-
-      if ( ! has_entity( bloq_id ) )
-      {
-        //ofLogNotice("BloqMakerSystem") << "update_entity bloq id " << bloq_id << ": entity not found"; 
-        return;
-      }
-
-      artemis::Entity& e = entities()->getEntity( entities_by_bloq_id[ bloq_id ] );
-      //ofLogNotice("BloqMakerSystem") << "update_entity bloq id " << bloq_id << ": entity " << e.getId(); 
-
-      BloqComponent* bloq_comp = (BloqComponent*)e.getComponent<BloqComponent>();
-
-      bloq_comp->update( &bloq );
-    };
+      bloqs_by_id[ bloq_id ] = e->getId();
+    };  
 
     void remove_entity( string bloq_id )
     {
+      bloqs.remove_entity( bloq_id );
 
       if ( ! has_entity( bloq_id ) )
       {
@@ -167,30 +112,26 @@ class BloqMakerSystem : public ECSsystem
         return;
       }
 
-      artemis::Entity& e = entities()->getEntity( entities_by_bloq_id[ bloq_id ] );
-      ofLogNotice("BloqMakerSystem") << "remove_entity by bloq id " << bloq_id << ": entity " << e.getId(); 
-      entities()->remove( e );
+      bloqs_by_id.erase(bloq_id);
+    };
 
-      entities_by_bloq_id.erase(bloq_id);
+    void update_entity( Bloq& bloq )
+    {
+      string bloq_id = bloq.id;
+
+      if ( ! has_entity( bloq_id ) )
+        return;
+
+      artemis::Entity& e = entities()->getEntity( bloqs_by_id[ bloq_id ] );
+
+      BloqComponent* bloq_comp = (BloqComponent*)e.getComponent<BloqComponent>();
+
+      bloq_comp->update( &bloq );
     };
 
     bool has_entity( string bloq_id )
     {
-      return entities_by_bloq_id.find( bloq_id ) != entities_by_bloq_id.end(); 
-    };
-
-    map< string,Json::Value > parse_config( ofxJSONElement& cfg )
-    {
-      map< string,Json::Value > comps_cfg_res;
-
-      const Json::Value& _bloqs = cfg["bloqs"];
-      for ( int i = 0; i < _bloqs.size(); ++i )
-      {
-        string bloq_id = _bloqs[i]["id"].asString();
-        comps_cfg_res[ bloq_id ] = _bloqs[i]["components"];
-      }
-
-      return comps_cfg_res;
+      return bloqs_by_id.find( bloq_id ) != bloqs_by_id.end(); 
     };
 
 };

@@ -24,20 +24,20 @@ class ECS
 
     void init()
     {
-      sm = world.getSystemManager();
-      em = world.getEntityManager();
-      tm = world.getTagManager();
+      sm = _world.getSystemManager();
+      em = _world.getEntityManager();
+      tm = _world.getTagManager();
     };
 
     void update()
     {
       //ofLogNotice("ECS") << "--update";
       //TODO game/sim loop accum
-      world.loopStart();
+      _world.loopStart();
       //deciseconds ???
       //github.com/vinova/Artemis-Cpp
-      //world.setDelta( 0.0016f ); 
-      world.setDelta( 1.0f/FPS*0.1f ); 
+      //_world.setDelta( 0.0016f ); 
+      _world.setDelta( 1.0f/FPS*0.1f ); 
       int len = _systems.size();
       for (int i = 0; i < len; i++)
         _systems[i]->process();
@@ -89,9 +89,14 @@ class ECS
       return ((TComponent*)tm->getEntity( tag ).getComponent<TComponent>());
     };
 
+    artemis::World* world()
+    {
+      return &_world;
+    };
+
   private: 
 
-    artemis::World world;
+    artemis::World _world;
     artemis::SystemManager *sm;
     artemis::EntityManager *em;
     artemis::TagManager *tm;
