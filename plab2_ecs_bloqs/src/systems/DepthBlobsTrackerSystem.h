@@ -64,9 +64,8 @@ class DepthBlobsTrackerSystem : public ECSsystem
       ofPushStyle();
       ofSetColor(255);
       //ofSetLineWidth(1);
-      dpix_img.draw(0, 0, w, h);
+      //dpix_img.draw(0, 0, w, h);
       //contourFinder.draw();
-      //render_blobs();
       ofPopStyle();
     };
 
@@ -140,9 +139,9 @@ class DepthBlobsTrackerSystem : public ECSsystem
       resampled_len = 100.0f;
       interpolation_coef = 0.06f;
       blur_size = 5;
-      img_scale = 0.25;
-      channels = 1;
+      img_scale = 0.15;
       blobs_threshold = 15;
+      channels = 1;
       //[0,255]
       threshold_near = 255;
       threshold_far = 209; 
@@ -180,8 +179,6 @@ class DepthBlobsTrackerSystem : public ECSsystem
       int w = (float)depth_w * img_scale;
       int h = (float)depth_h * img_scale;
 
-      //dpix.setFromPixels( depth_pix_grey, w, h, channels );
-
       dpix_orig_size.setFromPixels( depth_pix_grey, depth_w, depth_h, channels );
 
       ofxCv::resize( dpix_orig_size, dpix, img_scale, img_scale );
@@ -198,8 +195,7 @@ class DepthBlobsTrackerSystem : public ECSsystem
       contourFinder.setThreshold( blobs_threshold );
       contourFinder.findContours( dpix );
 
-      //TODO refactor Blob to be a ofPolyline !!
-      vector<Blob>& blobs = blobs_data->blobs;
+      vector<ofPolyline>& blobs = blobs_data->blobs;
       const vector<ofPolyline>& ofblobs = contourFinder.getPolylines();
 
       ofxCv::RectTracker& tracker = contourFinder.getTracker();
@@ -215,45 +211,31 @@ class DepthBlobsTrackerSystem : public ECSsystem
         if ( tracker.existsPrevious(label) ) 
         {
           ofPolyline interpolated = interpolate( prev, ofblobs[i] );
-          blobs.push_back( Blob() );
-          set_blob( w, h, interpolated, blobs[i] ); 
+          blobs.push_back( interpolated );
           prev.clear();
           prev.addVertices( interpolated.getVertices() );
         }
         else
         {
-          blobs.push_back( Blob() );
-          set_blob( w, h, ofblobs[i], blobs[i] ); 
+          ofPolyline resampled = ofblobs[i].getResampledByCount( resampled_len );
+          blobs.push_back( resampled );
           prev.clear();
-          prev.addVertices( ofblobs[i].getResampledByCount( resampled_len ).getVertices() );
+          prev.addVertices(resampled.getVertices());
         }
 
+        normalize_blob( w, h, blobs[i] );
       }
 
     }; 
 
-    void set_blob( int w, int h, const ofPolyline& ofblob, Blob& blob )
+    void normalize_blob( int w, int h, ofPolyline& blob )
     {
-      blob.centroid = ofblob.getCentroid2D();
-      blob.centroid.x /= w;
-      blob.centroid.y /= h;
-
-      blob.points = ofblob.getVertices();
-      int plen = blob.points.size();
+      int plen = blob.size();
       for (int j = 0; j < plen; j++)
       {
-        blob.points[j].x /= w;
-        blob.points[j].y /= h;
+        blob[j].x /= w;
+        blob[j].y /= h;
       }
-
-      blob.bounds = ofblob.getBoundingBox();
-      blob.bounds.x /= w;
-      blob.bounds.y /= h;
-      blob.bounds.width /= w;
-      blob.bounds.height /= h;
-
-      blob.area = ofblob.getArea();
-      blob.perimeter = ofblob.getPerimeter();
     };
 
     ofPolyline interpolate( const ofPolyline& src, const ofPolyline& dst )

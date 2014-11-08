@@ -1,3 +1,8 @@
+
+//==========
+//DEPRECATED
+//==========
+
 #pragma once
 
 #include <Artemis/Artemis.h>
@@ -185,8 +190,8 @@ class DepthBlobsSystem : public ECSsystem
       //img, min area, max area, n considered, holes
       contourFinder.findContours( grey_img, 10, (w*h)/3, 20, false ); 
 
-      //TODO refactor Blob to be a ofPolyline !!
-      vector<Blob>& blobs = blobs_data->blobs;
+      //vector<Blob>& blobs = blobs_data->blobs;
+      vector<ofPolyline>& blobs = blobs_data->blobs;
       vector<ofxCvBlob>& ofblobs = contourFinder.blobs;
       blobs.clear();
       for ( int i = 0; i < ofblobs.size(); i++ )
@@ -206,8 +211,9 @@ class DepthBlobsSystem : public ECSsystem
 
         polyblob.close();
 
-        blobs.push_back( Blob() );
-        set_blob( w, h, polyblob, blobs[i] ); 
+        blobs.push_back( polyblob );
+        //blobs.push_back( Blob() );
+        //set_blob( w, h, polyblob, blobs[i] ); 
         //set_blob(w, h, ofblobs[i], blobs[i]); 
       }
 
@@ -215,53 +221,53 @@ class DepthBlobsSystem : public ECSsystem
 
     }; 
 
-    void set_blob( int w, int h, const ofPolyline& polyblob, Blob& blob )
-    {
-      blob.centroid = polyblob.getCentroid2D();
-      blob.centroid.x /= w;
-      blob.centroid.y /= h;
+    //void set_blob( int w, int h, const ofPolyline& polyblob, Blob& blob )
+    //{
+      //blob.centroid = polyblob.getCentroid2D();
+      //blob.centroid.x /= w;
+      //blob.centroid.y /= h;
 
-      blob.points = polyblob.getVertices();
-      int plen = blob.points.size();
-      for (int j = 0; j < plen; j++)
-      {
-        blob.points[j].x /= w;
-        blob.points[j].y /= h;
-      }
+      //blob.points = polyblob.getVertices();
+      //int plen = blob.points.size();
+      //for (int j = 0; j < plen; j++)
+      //{
+        //blob.points[j].x /= w;
+        //blob.points[j].y /= h;
+      //}
 
-      blob.bounds = polyblob.getBoundingBox();
-      blob.bounds.x /= w;
-      blob.bounds.y /= h;
-      blob.bounds.width /= w;
-      blob.bounds.height /= h;
+      //blob.bounds = polyblob.getBoundingBox();
+      //blob.bounds.x /= w;
+      //blob.bounds.y /= h;
+      //blob.bounds.width /= w;
+      //blob.bounds.height /= h;
 
-      blob.area = polyblob.getArea();
-      blob.perimeter = polyblob.getPerimeter();
-    };
+      //blob.area = polyblob.getArea();
+      //blob.perimeter = polyblob.getPerimeter();
+    //};
 
-    void set_blob( int w, int h, const ofxCvBlob& ofblob, Blob& blob )
-    {
-      blob.centroid = ofblob.centroid;
-      blob.centroid.x /= w;
-      blob.centroid.y /= h;
+    //void set_blob( int w, int h, const ofxCvBlob& ofblob, Blob& blob )
+    //{
+      //blob.centroid = ofblob.centroid;
+      //blob.centroid.x /= w;
+      //blob.centroid.y /= h;
 
-      blob.points = ofblob.pts;
-      int plen = blob.points.size();
-      for (int j = 0; j < plen; j++)
-      {
-        blob.points[j].x /= w;
-        blob.points[j].y /= h;
-      }
+      //blob.points = ofblob.pts;
+      //int plen = blob.points.size();
+      //for (int j = 0; j < plen; j++)
+      //{
+        //blob.points[j].x /= w;
+        //blob.points[j].y /= h;
+      //}
 
-      blob.bounds = ofblob.boundingRect;
-      blob.bounds.x /= w;
-      blob.bounds.y /= h;
-      blob.bounds.width /= w;
-      blob.bounds.height /= h;
+      //blob.bounds = ofblob.boundingRect;
+      //blob.bounds.x /= w;
+      //blob.bounds.y /= h;
+      //blob.bounds.width /= w;
+      //blob.bounds.height /= h;
 
-      blob.area = ofblob.area;
-      blob.perimeter = ofblob.length;
-    };
+      //blob.area = ofblob.area;
+      //blob.perimeter = ofblob.length;
+    //};
 
     ofPolyline interpolate( const vector<ofPoint>& src_pts, const vector<ofPoint>& dst_pts )
     {

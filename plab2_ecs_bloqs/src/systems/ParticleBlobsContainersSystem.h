@@ -33,17 +33,15 @@ class ParticleBlobsContainersSystem : public ECSsystem
 
       RenderComponent* render_data = component<RenderComponent>("output");
       BlobsComponent* blobs_data = component<BlobsComponent>("input");
-      vector<Blob>& blobs = blobs_data->blobs;
+      vector<ofPolyline>& blobs = blobs_data->blobs;
 
       for ( int i = 0; i < blob_bodies.size(); i++ )
         fisica->b2world()->DestroyBody( blob_bodies[i] );
       blob_bodies.clear();
  
-      ofPolyline points;
       for( int i = 0; i < blobs.size(); i++ )
       {
-        Blob& blob = blobs[i];
-        blob_bodies.push_back( make_blob_body( blob, points, render_data ) );
+        blob_bodies.push_back( make_blob_body( blobs[i], render_data ) );
       }
 
     };
@@ -69,7 +67,7 @@ class ParticleBlobsContainersSystem : public ECSsystem
 
     ofVboMesh mesh;
 
-    b2Body* make_blob_body( const Blob& blob, ofPolyline& points, RenderComponent* render_data )
+    b2Body* make_blob_body( const ofPolyline& blob, RenderComponent* render_data )
     {
       //TODO try other approaches: 
       //cvApproxPoly
@@ -79,17 +77,16 @@ class ParticleBlobsContainersSystem : public ECSsystem
       float resample_count = 100.0f;
       //float simplify_coef = 0.005f;
 
-      points.clear();
-      points.addVertices( blob.points );
-      //points.simplify( simplify_coef );
-      //points = points.getSmoothed( smooth_size );
-      points = points.getResampledByCount( resample_count ).getSmoothed( smooth_size );
-      points.setClosed(true);
-      int plen = points.size();
+      //ofPolyline blob2(blob.getVertices());
+      ofPolyline blob2 = blob.getResampledByCount( resample_count ).getSmoothed( smooth_size );
+      ////blob2.simplify( simplify_coef );
+      ////blob2 = blob2.getSmoothed(smooth_size);
+      blob2.close();
+      int plen = blob2.size();
       int vlen = plen;
       int step = 1;
 
-      //const vector<ofPoint>& points = blob.points;
+      //vector<ofPoint>& points=blob.getVertices();
       //int plen = points.size();
       //int max = 200;
       //int vlen = plen > max ? max : plen;
@@ -105,18 +102,18 @@ class ParticleBlobsContainersSystem : public ECSsystem
       b2Vec2* vertices = new b2Vec2[vlen];
       ofVec2f screen_loc, prev_screen_loc;
 
-      //iterate points
+      //iterate blob2 points
       for ( int vi = 0, pi = 0; 
           vi < vlen; 
           vi++, pi += step )
       {
-        screen_loc.set( points[pi].x * render_data->width, points[pi].y * render_data->height );
+        screen_loc.set( blob2[pi].x * render_data->width, blob2[pi].y * render_data->height );
         fisica->screen2world( screen_loc, vertices[vi] );
 
         //debug render 
         //body_blob contours
         if ( pi == 0 ) continue;
-        prev_screen_loc.set( points[pi-step].x * render_data->width, points[pi-step].y * render_data->height );
+        prev_screen_loc.set( blob2[pi-step].x * render_data->width, blob2[pi-step].y * render_data->height );
         mesh.addVertex(prev_screen_loc);
         mesh.addColor(ofFloatColor::yellow);
         mesh.addVertex(screen_loc);
@@ -125,7 +122,7 @@ class ParticleBlobsContainersSystem : public ECSsystem
 
       //debug render 
       //connect last -> first
-      ofVec2f screen_loc_0( points[0].x * render_data->width, points[0].y * render_data->height );
+      ofVec2f screen_loc_0( blob2[0].x * render_data->width, blob2[0].y * render_data->height );
       mesh.addVertex(screen_loc);
       mesh.addColor(ofFloatColor::yellow);
       mesh.addVertex(screen_loc_0);
