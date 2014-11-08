@@ -34,18 +34,19 @@ class ParticleEmitterSystem : public ECSsystem
     { 
       Bloq* bloq = bloq_m.get(e)->bloq;
 
+      ParticleEmitterComponent* emitter_data = emitter_m.get(e);
       RenderComponent* render_data = component<RenderComponent>("output");
 
       // How many (fractional) particles should we have emitted this frame?
       float	dt = (1.0f / fisica->FPS);
-      float rate = emitter_m.get(e)->rate;
+      float rate = emitter_data->rate;
       emit_remainder += rate * dt;
 
       // Keep emitting particles on this frame until we only have a fractional particle left.
       while (emit_remainder > 1.0f) 
       {
         emit_remainder -= 1.0f;
-        emit( bloq, render_data );
+        emit( bloq, emitter_data, render_data );
       } 
     };
 
@@ -59,7 +60,7 @@ class ParticleEmitterSystem : public ECSsystem
 
     float emit_remainder;
 
-    void emit( Bloq* bloq, RenderComponent* render_data )
+    void emit( Bloq* bloq, ParticleEmitterComponent* emitter_data, RenderComponent* render_data )
     {
       //ofxBox2dParticleSystem* ofps = ps->of_particles();
       b2ParticleSystem* b2ps = ps->b2_particles();
@@ -69,8 +70,7 @@ class ParticleEmitterSystem : public ECSsystem
       //int32 pidx = ofps->createParticle( screen_loc.x, screen_loc.y, 0, 0 );
       int32 pidx = ps->make_particle( screen_loc.x, screen_loc.y, 0, 0 );
 
-      //TODO emitter force param
-      float force_m = 10; //14;
+      float force_m = emitter_data->force_m;
 
       //ofVec2f force = bloq->dir * force_m;
       //ofps->applyForce( pidx, force );

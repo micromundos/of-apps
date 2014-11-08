@@ -14,3 +14,4 @@
 #include "systems/DepthFlowFieldSystem.h"
 #include "systems/ParticleBlobsContainersSystem.h"
 #include "systems/DepthBlobsSystem.h"
+#include "systems/DepthBlobsTrackerSystem.h"

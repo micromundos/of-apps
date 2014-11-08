@@ -13,6 +13,7 @@ class TemplateComponent : public ECScomponent
     virtual void data( Json::Value d )
     {
       ECScomponent::data(d);
+      //data = d.get("data",1.0).asFloat();
     };
 
 };

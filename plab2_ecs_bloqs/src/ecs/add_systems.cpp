@@ -9,7 +9,8 @@ void ECS::add_systems()
 {
   add_system(new BloqMakerSystem("bloq_maker"));
   add_system(new RGBDSystem("rgbd"));
-  add_system(new DepthBlobsSystem("depth_blobs"));
+  //add_system(new DepthBlobsSystem("depth_blobs"));
+  add_system(new DepthBlobsTrackerSystem("depth_blobs_tracker"));
   add_system(new ArucoSystem("aruco"));
   add_system(new CamaraLucidaSystem("camara_lucida"));
   add_system(new DepthFlowFieldSystem("depth_flow_field"));

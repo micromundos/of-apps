@@ -8,8 +8,10 @@ class ParticleEmitterComponent : public ECScomponent
 {
   public:
 
-    // Particles per second
+    // particles per second
     float rate;
+    // emitter force (by bloq ang) multiplier
+    float force_m;
 
     ParticleEmitterComponent(string _id) : ECScomponent(_id) {};
 
@@ -17,6 +19,7 @@ class ParticleEmitterComponent : public ECScomponent
     {
       ECScomponent::data(d);
       rate = d.get("rate",1.0).asFloat();
+      force_m = d.get("force_m",10.0).asFloat();
     };
 
 };

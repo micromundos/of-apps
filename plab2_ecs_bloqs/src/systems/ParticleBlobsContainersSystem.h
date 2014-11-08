@@ -31,9 +31,6 @@ class ParticleBlobsContainersSystem : public ECSsystem
     {
       //ofLogNotice("ParticleBlobsContainersSystem") << "process entity " << e.getId();
 
-      //TODO track blobs 
-      //listen to add/remove events
-
       RenderComponent* render_data = component<RenderComponent>("output");
       BlobsComponent* blobs_data = component<BlobsComponent>("input");
       vector<Blob>& blobs = blobs_data->blobs;
@@ -46,7 +43,7 @@ class ParticleBlobsContainersSystem : public ECSsystem
       for( int i = 0; i < blobs.size(); i++ )
       {
         Blob& blob = blobs[i];
-        blob_bodies.push_back( make_body_blob( blob, points, render_data ) );
+        blob_bodies.push_back( make_blob_body( blob, points, render_data ) );
       }
 
     };
@@ -72,7 +69,7 @@ class ParticleBlobsContainersSystem : public ECSsystem
 
     ofVboMesh mesh;
 
-    b2Body* make_body_blob( const Blob& blob, ofPolyline& points, RenderComponent* render_data )
+    b2Body* make_blob_body( const Blob& blob, ofPolyline& points, RenderComponent* render_data )
     {
       //TODO try other approaches: 
       //cvApproxPoly
@@ -116,7 +113,8 @@ class ParticleBlobsContainersSystem : public ECSsystem
         screen_loc.set( points[pi].x * render_data->width, points[pi].y * render_data->height );
         fisica->screen2world( screen_loc, vertices[vi] );
 
-        //debug render body_blob contours
+        //debug render 
+        //body_blob contours
         if ( pi == 0 ) continue;
         prev_screen_loc.set( points[pi-step].x * render_data->width, points[pi-step].y * render_data->height );
         mesh.addVertex(prev_screen_loc);
@@ -125,6 +123,7 @@ class ParticleBlobsContainersSystem : public ECSsystem
         mesh.addColor(ofFloatColor::yellow);
       }
 
+      //debug render 
       //connect last -> first
       ofVec2f screen_loc_0( points[0].x * render_data->width, points[0].y * render_data->height );
       mesh.addVertex(screen_loc);
@@ -135,12 +134,13 @@ class ParticleBlobsContainersSystem : public ECSsystem
       b2ChainShape loop;
       loop.CreateLoop(vertices, vlen);
 
-      //b2FixtureDef fd;
-      //fd.shape = &loop;
-      //fd.density = 0.0f;
-      //fd.restitution = 0.0f;
-      //body->CreateFixture(&fd);
-      body->CreateFixture( &loop, 0.0f );
+      b2FixtureDef fd;
+      fd.shape = &loop;
+      fd.density = 0.0f;
+      fd.restitution = 0.0f;
+      fd.friction = 0.2f;;
+      body->CreateFixture(&fd);
+      //body->CreateFixture(&loop, 0.0f);
 
       delete[] vertices;
       return body;

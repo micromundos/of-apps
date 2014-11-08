@@ -55,7 +55,8 @@
         {
           "id": "particle_emitter",
           "data": {
-            "rate": 10.0
+            "rate": 10.0,
+            "force_m": 15.0
           }
         }
       ]

@@ -4,7 +4,7 @@
 #include "ecs/ECSsystem.h"
 #include "components/Components.h"
 #include "ofxOpenCv.h"
-//#include "ofxCv.h"
+//#include "ofxBlur.h"
 #include "keys.h"
 
 using namespace artemis;
@@ -56,14 +56,15 @@ class DepthBlobsSystem : public ECSsystem
 
     virtual void render()
     {
-      //RenderComponent* render_data = component<RenderComponent>("output");
-      //int w = render_data->width;
-      //int h = render_data->height;
+      RenderComponent* render_data = component<RenderComponent>("output");
+      int w = render_data->width;
+      int h = render_data->height;
 
+      ofSetColor(255);
       //ofSetLineWidth(1);
-      //ofSetColor(255);
-      ////grey_img.draw(0, 0, w, h);
-      //contourFinder.draw(0, 0, w, h);
+      grey_img.draw(0, 0, w, h);
+      //blur_img.draw(0, 0, w, h);
+      contourFinder.draw(0, 0, w, h);
     };
 
 
@@ -107,72 +108,136 @@ class DepthBlobsSystem : public ECSsystem
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<BlobsComponent> blobs_m;
 
-    //ofxCv::ContourFinder contourFinder;
-    //ofShortPixels depth_pix; 
     ofxCvContourFinder contourFinder;
+    ofxCvGrayscaleImage grey_img_depth_size;
     ofxCvGrayscaleImage grey_img;
     ofxCvGrayscaleImage grey_near;
     ofxCvGrayscaleImage grey_far;
 
+    vector<ofxCvBlob> ofblobs_prev;
+
+    //ofxBlur blur;
+    //ofPixels blur_pix;
+    //ofxCvGrayscaleImage blur_img;
+
     //TODO add params
+    int blur_size;
+    int img_scale;
     int threshold_near;
     int threshold_far;
     //float threshold;
-    //int channels;
+
     bool inited;
 
-    void init(int w, int h)
+    void init(int depth_w, int depth_h)
     {
       if (inited) return;
 
-      //this->channels = 1;
-      //depth_pix.allocate(w,h,channels);
-      //depth_pix.set(0); 
-
-      grey_img.allocate(w, h);
-      grey_near.allocate(w, h);
-      grey_far.allocate(w, h);
-
+      blur_size = 3;
+      img_scale = 6;
       //[0,255]
       threshold_near = 255;
       threshold_far = 209;
 
-      //contourFinder.setMinAreaRadius(10);
-      //contourFinder.setMaxAreaRadius(150);
-      ////contourFinder.setInvert(true); // find black instead of white
+      int w = (float)depth_w/img_scale;
+      int h = (float)depth_h/img_scale;
+
+      grey_img_depth_size.allocate(depth_w,depth_h);
+      grey_img.allocate(w, h);
+      grey_near.allocate(w, h);
+      grey_far.allocate(w, h);
+ 
+      //int radius = 32, float shape = .2, int passes = 1, float downsample = .5
+      //blur.setup(w, h, 10, 0.2, 4, 1.0);
+      //blur_img.allocate(w, h);
+      //blur_pix.allocate(w, h, 1); //channels
 
       inited = true;
     };
 
-    void update( uint8_t *depth_pix_grey, int w, int h, BlobsComponent* blobs_data )
+    void update( uint8_t *depth_pix_grey, int depth_w, int depth_h, BlobsComponent* blobs_data )
     {
 
-      //depth_pix.setFromPixels( depth_pix_grey, w, h, channels );
+      int w = (float)depth_w/img_scale;
+      int h = (float)depth_h/img_scale;
 
-      grey_img.setFromPixels( depth_pix_grey, w, h );
+      grey_img_depth_size.setFromPixels( depth_pix_grey, depth_w, depth_h );
+      //grey_img.resize(w,h);
+      grey_img.scaleIntoMe(grey_img_depth_size);
+
       grey_near = grey_img;
 			grey_far = grey_img;
 			grey_near.threshold( threshold_near, true );
 			grey_far.threshold( threshold_far );
 			cvAnd( grey_near.getCvImage(), grey_far.getCvImage(), grey_img.getCvImage(), NULL );
-      grey_img.flagImageChanged();
+      //grey_img.flagImageChanged();
+      grey_img.blurGaussian( blur_size );
+
+      //blur.begin();
+      //ofSetColor(255);
+      //grey_img.draw(0, 0, w, h);
+      //blur.end();
+      //blur.getTextureReference().readToPixels(blur_pix);
+      //blur_img.setFromPixels(blur_pix.getPixels(), w, h);
+      //blur_img.flagImageChanged();
+      //contourFinder.findContours( blur_img, 10, (w*h)/3, 20, false ); 
+
       //img, min area, max area, n considered, holes
       contourFinder.findContours( grey_img, 10, (w*h)/3, 20, false ); 
 
-      //threshold = ofMap( mouseX, 0, ofGetWidth(), 0, 255 );
-      //contourFinder.setThreshold( threshold );
-      //contourFinder.findContours( ofxCv::toCv( depth_pix ) );
-
+      //TODO refactor Blob to be a ofPolyline !!
       vector<Blob>& blobs = blobs_data->blobs;
       vector<ofxCvBlob>& ofblobs = contourFinder.blobs;
       blobs.clear();
       for ( int i = 0; i < ofblobs.size(); i++ )
       {
+        ofPolyline polyblob;
+
+        int prev_i = find_closest( ofblobs_prev, ofblobs[i] );
+
+        if ( prev_i > -1 )
+        {
+          polyblob = interpolate( ofblobs_prev[prev_i].pts, ofblobs[i].pts );
+        }
+        else
+        {
+          polyblob.addVertices( ofblobs[i].pts );
+        }
+
+        polyblob.close();
+
         blobs.push_back( Blob() );
-        set_blob( w, h, contourFinder.blobs[i], blobs[i] ); 
+        set_blob( w, h, polyblob, blobs[i] ); 
+        //set_blob(w, h, ofblobs[i], blobs[i]); 
       }
 
+      ofblobs_prev = contourFinder.blobs;
+
     }; 
+
+    void set_blob( int w, int h, const ofPolyline& polyblob, Blob& blob )
+    {
+      blob.centroid = polyblob.getCentroid2D();
+      blob.centroid.x /= w;
+      blob.centroid.y /= h;
+
+      blob.points = polyblob.getVertices();
+      int plen = blob.points.size();
+      for (int j = 0; j < plen; j++)
+      {
+        blob.points[j].x /= w;
+        blob.points[j].y /= h;
+      }
+
+      blob.bounds = polyblob.getBoundingBox();
+      blob.bounds.x /= w;
+      blob.bounds.y /= h;
+      blob.bounds.width /= w;
+      blob.bounds.height /= h;
+
+      blob.area = polyblob.getArea();
+      blob.perimeter = polyblob.getPerimeter();
+    };
 
     void set_blob( int w, int h, const ofxCvBlob& ofblob, Blob& blob )
     {
@@ -195,7 +260,51 @@ class DepthBlobsSystem : public ECSsystem
       blob.bounds.height /= h;
 
       blob.area = ofblob.area;
-      blob.length = ofblob.length;
+      blob.perimeter = ofblob.length;
+    };
+
+    ofPolyline interpolate( const vector<ofPoint>& src_pts, const vector<ofPoint>& dst_pts )
+    {
+      float resampled_len = 200.0f;
+
+      ofPolyline src( src_pts );
+      src.close();
+
+      ofPolyline dst( dst_pts );
+      dst.close();
+
+      ofPolyline dst_resampled = dst.getResampledByCount( resampled_len );
+      dst_resampled.close();
+
+      ofPolyline src_resampled = src.getResampledByCount( resampled_len );
+      src_resampled.close();
+
+      int len = dst_resampled.size();
+
+      src_resampled.resize( len );
+      src_resampled.close();
+
+      for ( int i = 0; i < len; i++ )
+        dst_resampled[i].interpolate( src_resampled[i], 0.9999f );
+
+      return dst_resampled;
+    };
+
+    int find_closest( const vector<ofxCvBlob>& ofblobs_ls, const ofxCvBlob& ofblob )
+    {
+      float thres_dist = 300;
+      float closest_dist = FLT_MAX;
+      int closest_dist_idx;
+      for (int i = 0; i < ofblobs_ls.size(); i++)
+      {
+        float d = ofblob.centroid.distance( ofblobs_ls[i].centroid );
+        if ( d < closest_dist ) 
+        {
+          closest_dist_idx = i;
+          closest_dist = d;
+        }
+      }
+      return closest_dist < thres_dist ? closest_dist_idx : -1;
     };
 
 };

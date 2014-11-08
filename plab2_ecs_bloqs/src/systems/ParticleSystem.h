@@ -76,7 +76,7 @@ class ParticleSystem : public ECSsystem
       fisica->screen2world(_locx,_locy,locx,locy);
       fisica->screen2world(_velx,_vely,velx,vely);
 
-      uint32 flags = b2_waterParticle | b2_springParticle; // | b2_viscousParticle;
+      uint32 flags = b2_waterParticle | b2_springParticle | b2_viscousParticle;
 
       b2ParticleDef pd;
       pd.flags = flags;
@@ -84,7 +84,7 @@ class ParticleSystem : public ECSsystem
       pd.velocity.Set( velx, vely );
       pd.color = b2color;
       if ( lifetime > 0.0 )
-        pd.lifetime = lifetime;
+        pd.lifetime = lifetime; 
 
       return b2particles->CreateParticle( pd );
     }; 
@@ -131,8 +131,20 @@ class ParticleSystem : public ECSsystem
       b2ParticleSystemDef psd;
       psd.radius = radius / OFX_BOX2D_SCALE;
       psd.maxCount = max_count;
-      //psd.density = 1.0f;
-      //psd.ejectionStrength = 0.5f;
+
+      /// Reduces relative velocity of viscous particles
+      /// Larger values slow down viscous particles more
+      psd.viscousStrength = 0.6f; //0.25f;
+
+      /// Change the particle density.
+      /// Particle density affects the mass of the particles, which in turn
+      /// affects how the particles interact with b2Bodies. Note that the density
+      /// does not affect how the particles interact with each other.
+      //psd.density = 0.0f; //1.0f;
+
+      /// Pushes particles out of solid particle group
+      /// Larger values repulse more
+      //psd.ejectionStrength = 0.0f; //0.5f;
 
       b2particles = fisica->b2world()->CreateParticleSystem( &psd );
     };

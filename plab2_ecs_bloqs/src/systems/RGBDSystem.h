@@ -27,7 +27,7 @@ class RGBDSystem : public ECSsystem
 
       //registration transforms rgb pixels to match depth pixels, not the other way around, right? then we're fine!
       kinect.setRegistration(true);
-      //kinect.enableDepthNearValueWhite(false);
+      kinect.enableDepthNearValueWhite(true);
       // ir, rgb, texture
       kinect.init(false, true, true);
       kinect.open();
@@ -72,8 +72,8 @@ class RGBDSystem : public ECSsystem
       int h = render_data->height;
 
       ofSetColor(255);
-      //kinect.drawDepth( 0, 0, w, h );
-      kinect.draw( 0, 0, w, h );
+      //kinect.drawDepth( 0, 0, w, h ); 
+      kinect.draw( 0, 0, w, h ); //rgb img
     };
 
   private: 
