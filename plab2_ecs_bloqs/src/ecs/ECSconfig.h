@@ -2,6 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "components/ComponentFactory.h"
+#include "utils/Config.h"
 
 class ECSconfig
 {
@@ -10,7 +11,7 @@ class ECSconfig
     ECSconfig(){};
     ~ECSconfig(){};
 
-    void init( artemis::World* world, ofxJSONElement* config, string entities_cfg_name )
+    void init( artemis::World* world, Config config, string entities_cfg_name )
     {
       this->world = world;
       entities_cfg = parse_config( config, entities_cfg_name );
@@ -50,7 +51,7 @@ class ECSconfig
         ECScomponent* comp = component_factory.make( comp_cfg["id"].asString() );
         if ( comp != NULL ) 
         {
-          comp->data( comp_cfg["data"] );
+          comp->init( comp_cfg["data"], &params );
           components.push_back( comp );
         }
       }
@@ -92,11 +93,12 @@ class ECSconfig
 
   private:
 
+    ofParameterGroup params;
     artemis::World* world;
     ComponentFactory component_factory;
  
     //{ entity_id : [ components ] }
-    map< string,Json::Value > entities_cfg;
+    map<string,Json::Value> entities_cfg;
 
     //{ tag : id }
     map< string,int > entities_ids;
@@ -106,11 +108,11 @@ class ECSconfig
       return entities_ids.find( e_id ) != entities_ids.end(); 
     };
 
-    map< string,Json::Value > parse_config( ofxJSONElement* config, string entities_cfg_name )
+    map< string,Json::Value > parse_config( Config config, string entities_cfg_name )
     {
       map< string,Json::Value > entities_cfg;
 
-      ofxJSONElement& cfg = *config;
+      const ofxJSONElement& cfg = config.json();
       const Json::Value& _entities = cfg[ entities_cfg_name ];
 
       for ( int i = 0; i < _entities.size(); ++i )

@@ -16,7 +16,15 @@
       "id": "output",
       "components": [
         { "id": "render" },
-        { "id": "camara_lucida" }
+        { 
+          "id": "camara_lucida",
+          "data": {
+            //2048, 1536, 1152
+            "tex_width": 1536,
+            "tex_height": 1152,
+            "mesh_res": 2
+          }
+        }
       ]
     },
 
@@ -55,16 +63,13 @@
         {
           "id": "particle_emitter",
           "data": {
-            "rate": 10.0,
-            "force_m": 15.0
+            "rate": 10.1, //particulas x seg
+            "force": 15.0 //emitter force multiplier (bloq ang)
           }
         }
       ]
     }
 
-  ],
-
-  //TODO
-  "renderable_systems": []
+  ]
 
 }

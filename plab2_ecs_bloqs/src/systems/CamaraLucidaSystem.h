@@ -46,8 +46,15 @@ class CamaraLucidaSystem : public ECSsystem
     {
       _bag = &bag;
       int len = bag.getCount();
-      for ( int i = 0; i < len; i++ )
-        processEntity( *bag.get(i) );
+
+      if ( len == 1 )
+        processEntity( *bag.get(0) );
+
+      else if ( len > 1 )
+        ofLogError("CamaraLucidaSystem") << "there are more than 1 entities with a CamaraLucidaComponent and there should be only 1";
+
+      //for ( int i = 0; i < len; i++ )
+        //processEntity( *bag.get(i) );
     };
 
     virtual void render()

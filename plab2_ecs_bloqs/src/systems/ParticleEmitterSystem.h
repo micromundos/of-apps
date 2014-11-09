@@ -70,7 +70,7 @@ class ParticleEmitterSystem : public ECSsystem
       //int32 pidx = ofps->createParticle( screen_loc.x, screen_loc.y, 0, 0 );
       int32 pidx = ps->make_particle( screen_loc.x, screen_loc.y, 0, 0 );
 
-      float force_m = emitter_data->force_m;
+      float force_m = emitter_data->force;
 
       //ofVec2f force = bloq->dir * force_m;
       //ofps->applyForce( pidx, force );

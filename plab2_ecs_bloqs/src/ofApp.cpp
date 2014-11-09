@@ -7,26 +7,23 @@ void ofApp::setup()
   ofSetFrameRate( ECS::FPS ); 
   ofSetVerticalSync(true);
 
-  if ( ! config.open("config.json") )
-  {
-    ofLogError() << "error opening config.json";
-    return;
-  }
-
   ecs.init();
   ecs.add_systems();
   ecs.init_systems();
 
-  entities.init( ecs.world(), &config, "entities" );
+  entities.init( ecs.world(), config, "entities" );
   entities.make_all();
 
-  ofAddListener( ecs.component<CamaraLucidaComponent>("output")->cml->render_texture, this, &ofApp::render_texture );
+  cml_data = ecs.component<CamaraLucidaComponent>("output");
+  if (cml_data)
+    ofAddListener( cml_data->cml->render_texture, this, &ofApp::render_texture );
+  else
+    ofLogError() << "CamaraLucidaComponent is NULL";
 }
 
 void ofApp::update()
 {
   ofSetWindowTitle(ofToString(ofGetFrameRate(),2));
-
   ecs.update();
 }
 
@@ -35,10 +32,14 @@ void ofApp::draw()
   ofBackground(100,100,100); 
 
   //pipe render to camara lucida
-  if (cml_render)
-    ecs.component<CamaraLucidaComponent>("output")->cml->render();
+  if (cml_render && cml_data)
+    cml_data->cml->render();
   else
     ecs.render();
+}
+
+void ofApp::exit()
+{
 }
 
 void ofApp::render_texture(ofEventArgs &args)

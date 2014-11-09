@@ -19,7 +19,7 @@ class DepthComponent : public ECScomponent
       dirty = false;
     };
 
-    void init( int w, int h )
+    void setup( int w, int h )
     {
       this->width = w;
       this->height = h;

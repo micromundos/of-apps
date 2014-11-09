@@ -10,10 +10,11 @@ class TemplateComponent : public ECScomponent
 
     TemplateComponent(string _id) : ECScomponent(_id) {};
 
-    virtual void data( Json::Value d )
+    virtual void init( Json::Value d, ofParameterGroup* p )
     {
-      ECScomponent::data(d);
-      //data = d.get("data",1.0).asFloat();
+      ECScomponent::init(d,p);
+      //data=d.get("data",1.0).asFloat();
+      //set(data, "data");
     };
 
 };

@@ -8,18 +8,16 @@ class ParticleEmitterComponent : public ECScomponent
 {
   public:
 
-    // particles per second
-    float rate;
-    // emitter force (by bloq ang) multiplier
-    float force_m;
+    ofParameter<float> rate;
+    ofParameter<float> force;
 
     ParticleEmitterComponent(string _id) : ECScomponent(_id) {};
 
-    virtual void data( Json::Value d )
+    virtual void init( Json::Value d, ofParameterGroup* p )
     {
-      ECScomponent::data(d);
-      rate = d.get("rate",1.0).asFloat();
-      force_m = d.get("force_m",10.0).asFloat();
+      ECScomponent::init(d,p);
+      param( rate, "rate" );
+      param( force, "force" );
     };
 
 };

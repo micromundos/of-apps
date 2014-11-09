@@ -3,16 +3,15 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ecs/ECScomponent.h"
+#include "utils/Config.h"
 
 class ConfigComponent : public ECScomponent
 {
   public:
-    ofxJSONElement config;
+
+    Config config;
 
     ConfigComponent(string _id) : ECScomponent(_id)
-    {
-      if ( ! config.open("config.json") )
-        ofLogError("ConfigComponent") << "error opening config.json";
-    };
+    {};
 };
 

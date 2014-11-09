@@ -37,8 +37,8 @@ class RGBDSystem : public ECSsystem
     {
       int w = kinect.width;
       int h = kinect.height;
-      rgb_m.get(e)->init( w, h );
-      depth_m.get(e)->init( w, h );
+      rgb_m.get(e)->setup( w, h );
+      depth_m.get(e)->setup( w, h );
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 

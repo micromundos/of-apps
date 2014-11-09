@@ -4,6 +4,7 @@
 #include "ofxJSON.h"
 #include "ecs/ECS.h"
 #include "ecs/ECSconfig.h"
+#include "utils/Config.h"
 #include "keys.h"
 
 class ofApp : public ofBaseApp
@@ -13,6 +14,7 @@ class ofApp : public ofBaseApp
     void setup();
     void update();
     void draw();
+    void exit();
 
     void keyPressed(int key);
     void keyReleased(int key);
@@ -26,8 +28,9 @@ class ofApp : public ofBaseApp
 
     ECS ecs;
     ECSconfig entities;
-    ofxJSONElement config;
+    Config config;
 
+    CamaraLucidaComponent* cml_data;
     bool cml_render;
     void render_texture(ofEventArgs &args);
 
