@@ -1,3 +1,4 @@
+ofxECS
 ofxCamaraLucida
 ofxLiquidFun
 ofxKinect

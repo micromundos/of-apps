@@ -2,9 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxJSON.h"
-#include "ecs/ECS.h"
-#include "ecs/ECSconfig.h"
-#include "utils/Config.h"
+#include "ofxECS.h"
+#include "components/PlabComponentFactory.h"
 #include "keys.h"
 
 class ofApp : public ofBaseApp
@@ -29,6 +28,12 @@ class ofApp : public ofBaseApp
     ECS ecs;
     ECSconfig entities;
     Config config;
+    PlabComponentFactory* component_factory;
+
+    //TODO systems factory
+    //instanciar solo los que se usan
+    //segun config.json
+    void add_systems();
 
     CamaraLucidaComponent* cml_data;
     bool cml_render;

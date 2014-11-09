@@ -1,8 +1,7 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
-#include "ecs/ECS.h"
-#include "ecs/ECSsystem.h"
+#include "ofxECS.h"
 #include "components/Components.h"
 #include "ofxOpenCv.h"
 #include "ofxCv.h"

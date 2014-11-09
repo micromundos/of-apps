@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
-#include "ecs/ECScomponent.h"
+#include "ofxECS.h"
 #include "ofxCamaraLucida.h"
 #include "keys.h"
 
@@ -13,7 +13,14 @@ class CamaraLucidaComponent : public ECScomponent
     cml::CamaraLucida* cml;
 
     CamaraLucidaComponent(string _id) : ECScomponent(_id) 
-    { cml = NULL; };
+    { 
+      cml = NULL; 
+    };
+
+    virtual ~CamaraLucidaComponent()
+    {
+      delete cml;
+    };
 
     virtual void init( Json::Value d, ofParameterGroup* p )
     {

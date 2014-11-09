@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
-#include "ecs/ECScomponent.h"
+#include "ofxECS.h"
 
 class ArucoComponent : public ECScomponent
 {

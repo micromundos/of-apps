@@ -4,14 +4,16 @@ void ofApp::setup()
 {
   ofSetLogLevel(OF_LOG_NOTICE);
 
+  //TODO set ECS::FPS
   ofSetFrameRate( ECS::FPS ); 
   ofSetVerticalSync(true);
 
   ecs.init();
-  ecs.add_systems();
+  add_systems();
   ecs.init_systems();
 
-  entities.init( ecs.world(), config, "entities" );
+  component_factory = new PlabComponentFactory();
+  entities.init( ecs.world(), ((ComponentFactory*)component_factory), config, "entities" );
   entities.make_all();
 
   cml_data = ecs.component<CamaraLucidaComponent>("output");

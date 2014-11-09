@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
-#include "ecs/ECSsystem.h"
+#include "ofxECS.h"
 #include "bloqs/BloqAruco.h"
 #include "components/Components.h"
 

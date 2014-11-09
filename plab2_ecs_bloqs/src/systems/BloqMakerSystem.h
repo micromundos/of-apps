@@ -1,11 +1,9 @@
 #pragma once
 
 #include <Artemis/Artemis.h>
-#include "ecs/ECSconfig.h"
-#include "ecs/ECSsystem.h"
-#include "ecs/ECScomponent.h"
+#include "ofxECS.h"
 #include "components/Components.h"
-#include "components/ComponentFactory.h"
+#include "components/PlabComponentFactory.h"
 
 using namespace artemis;
 
@@ -19,6 +17,13 @@ class BloqMakerSystem : public ECSsystem
       addComponentType<BloqMakerComponent>();
       addComponentType<BloqEventsComponent>();
       addComponentType<ConfigComponent>();
+
+      component_factory = new PlabComponentFactory();
+    };
+
+    virtual ~BloqMakerSystem()
+    {
+      delete component_factory;
     };
 
     virtual void initialize() 
@@ -30,7 +35,7 @@ class BloqMakerSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      init( config_m.get(e), bloq_events_m.get(e) ); 
+      init( config_m.get(e), bloq_events_m.get(e) );
     };
 
     virtual void processEntity(Entity &e) 
@@ -52,7 +57,7 @@ class BloqMakerSystem : public ECSsystem
     ComponentMapper<ConfigComponent> config_m;
 
     ECSconfig bloqs;
-    ComponentFactory component_factory;
+    PlabComponentFactory* component_factory;
 
     //{ bloq_id : entity_id }
     map< string,int > bloqs_by_id;
@@ -60,7 +65,7 @@ class BloqMakerSystem : public ECSsystem
 
     void init( ConfigComponent* config_data, BloqEventsComponent* bloq_events )
     {
-      bloqs.init( world, config_data->config, "bloqs" );
+      bloqs.init( world, ((ComponentFactory*)component_factory), config_data->config, "bloqs" );
 
       ofAddListener( bloq_events->added, this, &BloqMakerSystem::bloq_added );
       ofAddListener( bloq_events->updated, this, &BloqMakerSystem::bloq_updated );
@@ -94,7 +99,7 @@ class BloqMakerSystem : public ECSsystem
       if ( e == NULL ) return;
 
       //add default bloq component
-      ECScomponent* bloq_comp = component_factory.make( "bloq" );
+      ECScomponent* bloq_comp = component_factory->make( "bloq" );
       ((BloqComponent*)bloq_comp)->update( &bloq );
       e->addComponent( bloq_comp );
       e->refresh();

@@ -2,8 +2,7 @@
 
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
-#include "ecs/ECScomponent.h"
-#include "utils/Config.h"
+#include "ofxECS.h"
 
 class ConfigComponent : public ECScomponent
 {
