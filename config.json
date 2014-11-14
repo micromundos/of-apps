@@ -1,7 +1,8 @@
 {
-  //entidades tagueadas
-  //tipo prefabs
-  "entities": [
+
+  //listas de entidades tagueadas (prefabs)
+
+  "motor": [
 
     {
       "id": "core",
@@ -15,10 +16,13 @@
     {
       "id": "output",
       "components": [
-        { "id": "render" },
+        { 
+          "id": "render" 
+        },
         { 
           "id": "camara_lucida",
           "data": {
+            "render_hue_tex": false,
             //2048, 1536, 1152
             "tex_width": 1536,
             "tex_height": 1152,
@@ -31,10 +35,30 @@
     {
       "id": "input",
       "components": [
-        { "id": "rgb" },
-        { "id": "depth" },
-        { "id": "aruco" },
-        { "id": "blobs" }
+        { 
+          "id": "rgb",
+          "data": {
+            "render": true
+          }
+        },
+        { 
+          "id": "depth", 
+          "data": {
+            "render": false
+          }
+        },
+        { 
+          "id": "aruco", 
+          "data": {
+            "render": true
+          }
+        },
+        { 
+          "id": "blobs",
+          "data": {
+            "render": true
+          }
+        }
         //"flow_field"
       ]
     }, 
@@ -58,13 +82,13 @@
   "bloqs": [
 
     {
-      "id": "477",//"428", 
+      "id": "477", //"428",
       "components": [ 
         {
           "id": "particle_emitter",
           "data": {
-            "rate": 10.1, //particulas x seg
-            "force": 15.0 //emitter force multiplier (bloq ang)
+            "rate": [ 10, 0, 100 ], //particulas x seg
+            "force": [ 15, 0, 100 ] //emitter force multiplier (bloq ang)
           }
         }
       ]

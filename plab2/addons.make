@@ -1,0 +1,11 @@
+ofxECS
+ofxJSON
+ofxOsc
+ofxKeyValueOSC
+ofxCamaraLucida
+ofxLiquidFun
+ofxKinect
+ofxOpenCv
+ofxAruco
+ofxCv
+addons
