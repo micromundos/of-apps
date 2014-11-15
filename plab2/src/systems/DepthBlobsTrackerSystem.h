@@ -42,9 +42,10 @@ class DepthBlobsTrackerSystem : public ECSsystem
 
       DepthComponent* depth = depth_m.get(e);
       BlobsComponent* blobs_data = blobs_m.get(e);
+
       if ( depth->dirty )
         update( depth->depth_pix_grey, depth->width, depth->height, blobs_data );
- 
+
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
