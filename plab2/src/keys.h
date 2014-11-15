@@ -18,10 +18,5 @@ namespace keys
   const char cml_key_scene_reset = 'x';
   const char cml_key_view_prev = 'c';
   const char cml_key_view_next = 'v';
-
-  const char blobs_thres_near_inc = '.';
-  const char blobs_thres_near_dec = ',';
-  const char blobs_thres_far_inc = '=';
-  const char blobs_thres_far_dec = '-';
 };
 
