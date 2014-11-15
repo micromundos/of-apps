@@ -11,7 +11,9 @@ class CamaraLucidaComponent : public ECScomponent
   public:
 
     cml::CamaraLucida* cml;
+
     ofParameter<bool> render_hue_tex;
+    ofParameter<bool> enabled;
 
     CamaraLucidaComponent(string _id) : ECScomponent(_id) 
     { 
@@ -21,6 +23,11 @@ class CamaraLucidaComponent : public ECScomponent
     virtual ~CamaraLucidaComponent()
     {
       delete cml;
+    };
+
+    void toggle()
+    {
+      enabled = !enabled;
     };
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )

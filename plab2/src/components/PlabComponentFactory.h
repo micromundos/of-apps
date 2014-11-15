@@ -10,7 +10,6 @@
 class PlabComponentFactory : ComponentFactory
 {
   public:
-
   PlabComponentFactory(){};
 
   virtual ECScomponent* make(string id)
@@ -34,6 +33,7 @@ class PlabComponentFactory : ComponentFactory
     else if (id == "particle_depth_slope_flow") return new ParticleDepthSlopeFlowComponent(id);
     else if (id == "particle_blobs_containers") return new ParticleBlobsContainersComponent(id);
 		else if (id == "fisica") return new FisicaComponent(id);
+		else if (id == "keyboard") return new KeyboardComponent(id);
 		//dont remove this line
 
     return NULL;

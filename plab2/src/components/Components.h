@@ -19,3 +19,5 @@
 #include "components/ParticleFlowFieldComponent.h"
 #include "components/ParticleEmitterComponent.h"
 #include "components/ParticleBlobsContainersComponent.h"
+#include "components/KeyboardComponent.h"
+//dont remove this line

@@ -44,14 +44,13 @@ class CamaraLucidaSystem : public ECSsystem
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
-      _bag = &bag;
       int len = bag.getCount();
 
       if ( len == 1 )
         processEntity( *bag.get(0) );
 
       else if ( len > 1 )
-        ofLogError("CamaraLucidaSystem") << "there are more than 1 entities with a CamaraLucidaComponent and there should be only 1";
+        ofLogError("CamaraLucidaSystem") << "expected only 1 entity with CamaraLucidaComponent and got " << len;
 
       //for ( int i = 0; i < len; i++ )
         //processEntity( *bag.get(i) );
@@ -73,8 +72,6 @@ class CamaraLucidaSystem : public ECSsystem
     };
 
   private:
-
-    ImmutableBag<Entity*>* _bag;
 
     ComponentMapper<CamaraLucidaComponent> cml_m;
     ComponentMapper<RenderComponent> render_m;

@@ -3,9 +3,5 @@
       "host": "localhost",
       "ctrl_port": 6666,
       "app_port": 6667
-  },
-
-  //TODO
-  "renderable_systems": []
-
+  }
 }

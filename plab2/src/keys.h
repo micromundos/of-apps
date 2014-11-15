@@ -5,7 +5,7 @@ namespace keys
   const char fullscreen = 'f';
   const char projector = 'p';
 
-  const char cml_render = 'r';
+  const char cml_enabled = 'r';
   const char cml_gpu = 'g';
   const char cml_depth_xoff_inc = 's';
   const char cml_depth_xoff_dec = 'a';

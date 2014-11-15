@@ -9,7 +9,7 @@ void ofApp::setup()
   ofSetVerticalSync(true);
 
   ecs.init();
-  add_systems();
+  system_factory.add_systems( ecs );
   ecs.init_systems();
 
   component_factory = new PlabComponentFactory();
@@ -31,10 +31,10 @@ void ofApp::update()
 
 void ofApp::draw()
 {
-  ofBackground(100,100,100); 
+  ofBackground(255,255,255); 
 
   //pipe render to camara lucida
-  if (cml_render && cml_data)
+  if ( cml_data && cml_data->enabled )
     cml_data->cml->render();
   else
     ecs.render();
@@ -56,18 +56,20 @@ void ofApp::keyPressed(int key)
 
 void ofApp::keyReleased(int key)
 {
-  cml::CamaraLucida* cml = ecs.component<CamaraLucidaComponent>("output")->cml;
+
+  cml::CamaraLucida* cml = cml_data->cml;
+
   RenderComponent* render_data = ecs.component<RenderComponent>("output");
 
   switch (key)
   { 
 
-    case keys::cml_render:
+    case keys::cml_enabled:
 
-      cml_render = !cml_render;
+      cml_data->toggle();
 
       float w, h;
-      if ( cml_render )
+      if ( cml_data->enabled )
       {
         w = cml->tex_width();
         h = cml->tex_height();
@@ -81,14 +83,6 @@ void ofApp::keyReleased(int key)
 
       render_data->update( w, h );
 
-      break;
-
-    case keys::projector:
-      ofSetWindowPosition( ofGetWindowPositionX() == 0 ? ofGetScreenWidth()+1 : 0, 0 );
-      break;
-
-    case keys::fullscreen:
-      ofToggleFullscreen();
       break;
 
     case keys::cml_gpu:
@@ -105,6 +99,16 @@ void ofApp::keyReleased(int key)
     case keys::cml_depth_xoff_dec:
       cml->depth_camera()->xoff--;
       break;
+
+
+    case keys::projector:
+      ofSetWindowPosition( ofGetWindowPositionX() == 0 ? ofGetScreenWidth()+1 : 0, 0 );
+      break;
+
+    case keys::fullscreen:
+      ofToggleFullscreen();
+      break;
+ 
   };
 }
 

@@ -4,6 +4,7 @@
 #include "ofxJSON.h"
 #include "ofxECS.h"
 #include "components/PlabComponentFactory.h"
+#include "systems/PlabSystemFactory.h"
 #include "utils/Config.h"
 #include "keys.h"
 
@@ -30,14 +31,9 @@ class ofApp : public ofBaseApp
     ECmaker motor;
     Config config;
     PlabComponentFactory* component_factory;
-
-    //TODO systems factory
-    //instanciar solo los que se usan
-    //segun config.json
-    void add_systems();
+    PlabSystemFactory system_factory;
 
     CamaraLucidaComponent* cml_data;
-    bool cml_render;
     void render_texture(ofEventArgs &args);
 
 };
