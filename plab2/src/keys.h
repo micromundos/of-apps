@@ -5,11 +5,13 @@ namespace keys
   const char fullscreen = 'f';
   const char projector = 'p';
 
-  const char cml_enabled = 'r';
+  //app
   const char cml_gpu = 'g';
   const char cml_depth_xoff_inc = 's';
   const char cml_depth_xoff_dec = 'a';
   const char cml_wireframe = 'w';
+
+  //cml
   const char cml_key_debug = 'd';
   const char cml_key_help = 'h';
   const char cml_key_scene_zoom = 'z';

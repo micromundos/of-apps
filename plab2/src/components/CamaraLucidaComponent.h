@@ -12,8 +12,9 @@ class CamaraLucidaComponent : public ECScomponent
 
     cml::CamaraLucida* cml;
 
-    ofParameter<bool> render_hue_tex;
     ofParameter<bool> enabled;
+    ofParameter<bool> render_background;
+    ofParameter<bool> render_hue_tex;
 
     CamaraLucidaComponent(string _id) : ECScomponent(_id) 
     { 
@@ -25,16 +26,15 @@ class CamaraLucidaComponent : public ECScomponent
       delete cml;
     };
 
-    void toggle()
-    {
-      enabled = !enabled;
-    };
-
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
       ECScomponent::init(e_id,d,p);
-      init_cml( d.get( "tex_width", 1024 ).asInt(), d.get( "tex_height", 768).asInt(), d.get( "mesh_res", 2).asInt() );
+
+      param( enabled, "enabled" );
+      param( render_background, "render_background" );
       param( render_hue_tex, "render_hue_tex" );
+
+      init_cml( d.get( "tex_width", 1024 ).asInt(), d.get( "tex_height", 768).asInt(), d.get( "mesh_res", 2).asInt() );
     };
 
   private:

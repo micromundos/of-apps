@@ -31,7 +31,7 @@ void ofApp::update()
 
 void ofApp::draw()
 {
-  ofBackground(255,255,255); 
+  ofBackground(100,100,100); 
 
   //pipe render to camara lucida
   if ( cml_data && cml_data->enabled )
@@ -63,27 +63,6 @@ void ofApp::keyReleased(int key)
 
   switch (key)
   { 
-
-    case keys::cml_enabled:
-
-      cml_data->toggle();
-
-      float w, h;
-      if ( cml_data->enabled )
-      {
-        w = cml->tex_width();
-        h = cml->tex_height();
-      }
-
-      else 
-      {
-        w = ofGetWidth();
-        h = ofGetHeight();
-      }
-
-      render_data->update( w, h );
-
-      break;
 
     case keys::cml_gpu:
       cml->gpu( !cml->gpu() );

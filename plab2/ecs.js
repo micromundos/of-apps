@@ -32,8 +32,10 @@ if ( prog.add !== undefined && prog.remove !== undefined ) {
 }
 
 if ( prog.component === undefined && prog.system === undefined ) {
-    console.log('error: pick --component AND/OR --system / -h for help');
-    return;
+    prog.component = true;
+    prog.system = true;
+    //console.log('error: pick --component AND/OR --system / -h for help');
+    //return;
 }
 
 var comp_name = prog.name;
@@ -61,7 +63,7 @@ var comp_include_path = __dirname + '/src/components/Components.h';
 var comp_include_code = '#include "components/'+ comp_pascalcase +'Component.h"' + '\n';
 
 var comp_factory_path = __dirname + '/src/components/PlabComponentFactory.h'; 
-var comp_factory_code = 'else if (id == "'+ comp_snakecase +'") return new '+ comp_pascalcase +'Component(id);' + '\n\t\t';
+var comp_factory_code = 'else if (id == "'+ comp_snakecase +'") return new '+ comp_pascalcase +'Component(id);' + '\n';
 
 
 var sys_filename = comp_pascalcase+'System.h';
@@ -71,7 +73,7 @@ var sys_include_path = __dirname + '/src/systems/Systems.h';
 var sys_include_code = '#include "systems/'+ comp_pascalcase +'System.h"' + '\n';
 
 var sys_factory_path = __dirname + '/src/systems/PlabSystemFactory.h'; 
-var sys_factory_code = 'ecs.add_system(new '+ comp_pascalcase +'System("'+comp_snakecase+'"));' + '\n\t\t';
+var sys_factory_code = 'ecs.add_system(new '+ comp_pascalcase +'System("'+comp_snakecase+'"));' + '\n';
 
 
 //Remove

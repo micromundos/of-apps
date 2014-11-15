@@ -14,9 +14,15 @@ class CamaraLucidaSystem : public ECSsystem
 
     CamaraLucidaSystem(string _id) : ECSsystem(_id)
     {
+      cml_data = NULL;
+      render_data = NULL;
+
       addComponentType<CamaraLucidaComponent>();
       addComponentType<RenderComponent>();
     };
+
+    //~CamaraLucidaSystem()
+    //{ dispose(); };
 
     virtual void initialize() 
     {
@@ -24,21 +30,45 @@ class CamaraLucidaSystem : public ECSsystem
       render_m.init( *world );
     };
 
+    void dispose()
+    {
+      if ( cml_data != NULL ) 
+        cml_data->enabled.removeListener(this, &CamaraLucidaSystem::update_render_data);
+      cml_data = NULL;
+      render_data = NULL;
+    };
+
     virtual void added(Entity &e) 
     {
-      //cml::CamaraLucida* cml = cml_m.get(e)->cml;
-      //float w = cml->tex_width();
-      //float h = cml->tex_height();
-      //render_m.get(e)->update(w,h);
+      if ( cml_data != NULL ) 
+      {
+        ofLogWarning("CamaraLucidaSystem") << "add entity: entity already exists and only 1 entity with CamaraLucidaComponent is expected";
+        dispose();
+      }
+
+      cml_data = cml_m.get(e);
+      render_data = render_m.get(e);
+
+      cml_data->enabled.addListener(this, &CamaraLucidaSystem::update_render_data);
+
+      bool enabled = cml_data->enabled;
+      update_render_data( enabled );
+    };
+
+    virtual void removed(Entity &e) 
+    {
+      dispose();
     };
 
     virtual void processEntity(Entity &e) 
     {
+      //update_render_data();
+
       DepthComponent* depth = component<DepthComponent>("input");
 
       if ( depth->dirty )
       {
-        cml_m.get(e)->cml->update( depth->depth_pix_mm );
+        cml_data->cml->update( depth->depth_pix_mm );
       }
     };
 
@@ -58,20 +88,56 @@ class CamaraLucidaSystem : public ECSsystem
 
     virtual void render_entity(Entity &e)
     {
-      if ( !cml_m.get(e)->render_hue_tex )
-        return;
+      if ( cml_data->render_background )
+      {
+        ofPushStyle();
+        ofColor(255,255,255);
+        ofRect( 0, 0, render_data->width, render_data->height );
+        ofPopStyle();
+      }
 
+      if ( cml_data->render_hue_tex )
+      {
+        render_hue_tex(); 
+      }
+    };
+
+    void update_render_data(bool& enabled)
+    { 
+      //ofLogNotice("CamaraLucidaSystem") << "update_render_data, cml enabled: " << enabled;
+
+      float w, h;
+
+      if ( enabled )
+      {
+        w = cml_data->cml->tex_width();
+        h = cml_data->cml->tex_height();
+      }
+      else 
+      {
+        w = ofGetWidth();
+        h = ofGetHeight();
+      }
+
+      render_data->update( w, h );
+    };
+
+  private:
+
+    void render_hue_tex()
+    {
       DepthComponent* depth = component<DepthComponent>("input");
 
-      RenderComponent* render_data = render_m.get(e);
       int w = render_data->width;
       int h = render_data->height;
 
       ofSetColor(255);
-      cml_m.get(e)->cml->depth_camera()->get_hue_tex_ref( depth->depth_pix_mm ).draw( 0, 0, w, h ); 
+      cml_data->cml->depth_camera()->get_hue_tex_ref( depth->depth_pix_mm ).draw( 0, 0, w, h );
     };
 
-  private:
+    //single entity
+    CamaraLucidaComponent* cml_data;
+    RenderComponent* render_data;
 
     ComponentMapper<CamaraLucidaComponent> cml_m;
     ComponentMapper<RenderComponent> render_m;

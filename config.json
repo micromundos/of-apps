@@ -20,9 +20,13 @@
           "id": "render" 
         },
         { 
+          "id": "screen" 
+        },
+        { 
           "id": "camara_lucida",
           "data": {
             "render_hue_tex": false,
+            "render_background": false,
             "enabled": false,
             //2048, 1536, 1152
             "tex_width": 1536,
@@ -36,9 +40,6 @@
     {
       "id": "input",
       "components": [
-        {
-          "id": "keyboard"
-        },
         { 
           "id": "rgb",
           "data": {
