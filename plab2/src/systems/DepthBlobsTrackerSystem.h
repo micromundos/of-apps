@@ -165,8 +165,10 @@ class DepthBlobsTrackerSystem : public ECSsystem
       ofxCv::add(dpix_near, dpix_far, dpix);
       ofxCv::blur( dpix, blur_size );
 
-      //debug render
-      dpix_img.setFromPixels( dpix );
+      if ( blobs_data->render_depth_filtered )
+      {
+        dpix_img.setFromPixels( dpix );
+      }
 
       contourFinder.setThreshold( blobs_threshold );
       contourFinder.findContours( dpix );
