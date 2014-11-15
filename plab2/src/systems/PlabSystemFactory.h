@@ -29,6 +29,7 @@ class PlabSystemFactory
     ecs.add_system(new ParticleDepthSlopeFlowSystem("particle_depth_slope_flow"));
     ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
     ecs.add_system(new ParticleBlobsContainersSystem("particle_blobs_containers"));
+		ecs.add_system(new KeyboardSystem("keyboard"));
 		//dont remove this line
   };
 

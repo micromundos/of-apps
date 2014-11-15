@@ -3,7 +3,6 @@
  */
 #pragma once
 #include "systems/BloqMakerSystem.h"
-#include "systems/KeyboardSystem.h"
 #include "systems/RGBDSystem.h"
 #include "systems/ArucoSystem.h"
 #include "systems/CamaraLucidaSystem.h"
@@ -16,4 +15,5 @@
 #include "systems/ParticleBlobsContainersSystem.h"
 #include "systems/DepthBlobsSystem.h"
 #include "systems/DepthBlobsTrackerSystem.h"
+#include "systems/KeyboardSystem.h"
 //dont remove this line
