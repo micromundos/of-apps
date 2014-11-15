@@ -27,14 +27,13 @@ class DepthBlobsTrackerSystem : public ECSsystem
       inited = false; 
 
       //TODO add params, rm keys
-      ofAddListener( ofEvents().keyPressed, this, &DepthBlobsTrackerSystem::keyPressed );
+      //ofAddListener( ofEvents().keyPressed, this, &DepthBlobsTrackerSystem::keyPressed );
     };
 
     virtual void added(Entity &e) 
     {
       //TODO mejorar init
-      DepthComponent* depth = depth_m.get(e);
-      init(depth->width, depth->height);
+      init( depth_m.get(e) );
     };
 
     virtual void processEntity(Entity &e) 
@@ -56,51 +55,27 @@ class DepthBlobsTrackerSystem : public ECSsystem
 
     virtual void render_entity(Entity &e)
     {
-      RenderComponent* render_data = component<RenderComponent>("output");
-      int w = render_data->width;
-      int h = render_data->height;
+      BlobsComponent* blobs_data = blobs_m.get(e);
 
-      ofPushStyle();
-      ofSetColor(255);
-      //ofSetLineWidth(1);
-      //dpix_img.draw(0, 0, w, h);
-      //contourFinder.draw();
-      ofPopStyle();
-    };
+      if ( blobs_data->render_depth_filtered )
+      {
+        RenderComponent* render_data = component<RenderComponent>("output");
+        int w = render_data->width;
+        int h = render_data->height;
 
-
-    //TODO add params, rm keys
-    void keyPressed(ofKeyEventArgs &args)
-    {
-
-      switch (args.key)
-      { 
-        
-        case keys::blobs_thres_near_inc:
-          threshold_near ++;
-          if (threshold_near > 255) threshold_near = 255; 
-          ofLogNotice("DepthBlobsTrackerSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
-          break;
-
-        case keys::blobs_thres_near_dec:
-          threshold_near --;
-          if (threshold_near < 0) threshold_near = 0;
-          ofLogNotice("DepthBlobsTrackerSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
-          break;
-
-        case keys::blobs_thres_far_inc:
-          threshold_far ++;
-          if (threshold_far > 255) threshold_far = 255;
-          ofLogNotice("DepthBlobsTrackerSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
-          break;
-
-        case keys::blobs_thres_far_dec:
-          threshold_far --;
-          if (threshold_far < 0) threshold_far = 0;
-          ofLogNotice("DepthBlobsTrackerSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
-          break;
+        ofPushStyle();
+        ofSetColor(255);
+        dpix_img.draw(0, 0, w, h);
+        ofPopStyle();
       }
 
+      if ( blobs_data->render_contour_finder )
+      {
+        ofPushStyle();
+        ofSetLineWidth(1);
+        contourFinder.draw();
+        ofPopStyle();
+      }
     };
 
 
@@ -124,15 +99,16 @@ class DepthBlobsTrackerSystem : public ECSsystem
     float img_scale;
     int blur_size;
     int channels;
-    int threshold_near;
-    int threshold_far;
     float blobs_threshold;
 
     bool inited;
 
-    void init(int depth_w, int depth_h)
+    void init( DepthComponent* depth )
     {
       if (inited) return;
+
+      int depth_w = depth->width;
+      int depth_h = depth->height;
 
       //TODO add params
       resampled_len = 100.0f;
@@ -141,9 +117,10 @@ class DepthBlobsTrackerSystem : public ECSsystem
       img_scale = 0.15;
       blobs_threshold = 15;
       channels = 1;
+
       //[0,255]
-      threshold_near = 255;
-      threshold_far = 209; 
+      //threshold_near = 255;
+      //threshold_far = 209; 
 
       int w = (float)depth_w * img_scale;
       int h = (float)depth_h * img_scale;
@@ -183,8 +160,8 @@ class DepthBlobsTrackerSystem : public ECSsystem
       ofxCv::resize( dpix_orig_size, dpix, img_scale, img_scale );
       ofxCv::copy( dpix, dpix_near );
       ofxCv::copy( dpix, dpix_far );
-      ofxCv::threshold( dpix_far, threshold_far );
-      ofxCv::threshold( dpix_near, threshold_near );
+      ofxCv::threshold( dpix_far, blobs_data->threshold_far );
+      ofxCv::threshold( dpix_near, blobs_data->threshold_near );
       ofxCv::add(dpix_near, dpix_far, dpix);
       ofxCv::blur( dpix, blur_size );
 

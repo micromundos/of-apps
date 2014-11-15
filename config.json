@@ -61,7 +61,11 @@
         { 
           "id": "blobs",
           "data": {
-            "render": true
+            "threshold_near": [ 255, 0, 255 ],
+            "threshold_far": [ 209, 0, 255 ],
+            "render_depth_filtered": true,
+            "render_contour_finder": false
+
           }
         }
         //"flow_field"
