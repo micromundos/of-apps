@@ -14,31 +14,36 @@ class ParticleEmitterSystem : public ECSsystem
 
     ParticleEmitterSystem(string _id) : ECSsystem(_id)
     {
-      addComponentType<BloqComponent>();
       addComponentType<ParticleEmitterComponent>();
+      addComponentType<BloqComponent>();
     };
 
     virtual void initialize() 
     {
-      bloq_m.init( *world );
       emitter_m.init( *world );
+      bloq_m.init( *world );
 
       fisica = system<FisicaSystem>();
       ps = system<ParticleSystem>();
 
+      initial_fps_fisica = fisica->fps();
       emit_remainder = 0.0f;
     };
 
     // entity: bloq
     virtual void processEntity(Entity &e) 
     { 
+      //ofLogNotice("ParticleEmitterSystem") << "process entity " << e.getId();
+
       Bloq* bloq = bloq_m.get(e)->bloq;
 
       ParticleEmitterComponent* emitter_data = emitter_m.get(e);
       RenderComponent* render_data = component<RenderComponent>("output");
 
       // How many (fractional) particles should we have emitted this frame?
-      float	dt = (1.0f / fisica->FPS);
+      float	dt = (1.0f / initial_fps_fisica);
+      //float	dt = (1.0f / fisica->fps());
+      //float	dt = (1.0f / ofGetFrameRate());
       float rate = emitter_data->rate;
       emit_remainder += rate * dt;
 
@@ -58,9 +63,10 @@ class ParticleEmitterSystem : public ECSsystem
     FisicaSystem* fisica;
     ParticleSystem* ps;
 
-    ComponentMapper<BloqComponent> bloq_m;
     ComponentMapper<ParticleEmitterComponent> emitter_m;
+    ComponentMapper<BloqComponent> bloq_m;
 
+    float initial_fps_fisica;
     float emit_remainder;
 
     void emit( Bloq* bloq, ParticleEmitterComponent* emitter_data, RenderComponent* render_data )

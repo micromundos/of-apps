@@ -4,8 +4,7 @@ void ofApp::setup()
 {
   ofSetLogLevel(OF_LOG_NOTICE);
 
-  //TODO set ECS::FPS
-  ofSetFrameRate( ECS::FPS ); 
+  ofSetFrameRate( 60.0f ); 
   ofSetVerticalSync(true);
 
   ecs.init();

@@ -22,21 +22,12 @@ class RGBDSystem : public ECSsystem
     {
       rgb_m.init( *world );
       depth_m.init( *world );
-
-      //registration transforms rgb pixels to match depth pixels, not the other way around, right? then we're fine!
-      kinect.setRegistration(true);
-      kinect.enableDepthNearValueWhite(true);
-      // ir, rgb, texture
-      kinect.init(false, true, true);
-      kinect.open();
+      inited = false; 
     };
 
     virtual void added(Entity &e) 
-    {
-      int w = kinect.width;
-      int h = kinect.height;
-      rgb_m.get(e)->setup( w, h );
-      depth_m.get(e)->setup( w, h );
+    { 
+      init(rgb_m.get(e), depth_m.get(e));
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
@@ -86,5 +77,30 @@ class RGBDSystem : public ECSsystem
     ComponentMapper<DepthComponent> depth_m;
 
     ofxKinect kinect; 
+    bool inited;
+
+
+    void init( RGBComponent* rgb_data, DepthComponent* depth_data )
+    {
+      if (inited)
+      {
+        ofLogWarning("RGBDSystem") << "calling init but kinect is already inited";
+        return;
+      }
+      inited = true; 
+
+      int w = kinect.width;
+      int h = kinect.height;
+
+      rgb_data->setup( w, h );
+      depth_data->setup( w, h );
+
+      //registration transforms rgb pixels to match depth pixels, not the other way around, right? then we're fine!
+      kinect.setRegistration(true);
+      kinect.enableDepthNearValueWhite(true);
+      // ir, rgb, texture
+      kinect.init( rgb_data->ir, true, true );
+      kinect.open();
+    };
 };
 

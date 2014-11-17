@@ -32,9 +32,6 @@ class TemplateSystem : public ECSsystem
       //template_m.get(e)->data;
     };
 
-    virtual void render_entity(Entity &e)
-    {};
-
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
       int len = bag.getCount();
@@ -42,12 +39,8 @@ class TemplateSystem : public ECSsystem
         processEntity( *bag.get(i) );
     };
 
-    virtual void render_entities( ImmutableBag<Entity*>& bag ) 
-    {
-      int len = bag.getCount();
-      for ( int i = 0; i < len; i++ )
-        render_entity( *bag.get(i) );
-    }; 
+    virtual void render_entity(Entity &e)
+    {};
 
   private:
 

@@ -27,29 +27,31 @@ class ArucoSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      //TODO mejorar
-      RGBComponent* rgb = rgb_m.get(e);
-      init( rgb->width, rgb->height );
+      init( rgb_m.get(e) );
     };
 
     virtual void processEntity(Entity &e) 
     {
+      ArucoComponent* aruco_data = aruco_m.get(e);
       RGBComponent* rgb = rgb_m.get(e);
 
       BloqEventsComponent* events = component<BloqEventsComponent>("core");
 
       if ( rgb->dirty )
-        update( rgb->color_pix, rgb->width, rgb->height, events );
+        update( rgb->color_pix, rgb->width, rgb->height, events, aruco_data );
 
     }; 
 
     virtual void render_entity(Entity &e)
     {
 
-      if ( !aruco_m.get(e)->render )
+      ArucoComponent* aruco_data = aruco_m.get(e);
+
+      if ( !aruco_data->render )
         return;
 
       RenderComponent* render_data = component<RenderComponent>("output");
+
       int w = render_data->width;
       int h = render_data->height;
 
@@ -57,8 +59,10 @@ class ArucoSystem : public ECSsystem
       ofSetLineWidth( 5 );
       //aruco.draw2d();
 
+      vector< shared_ptr<BloqAruco> >& bloqs = aruco_data->bloqs;
+
       ofSetColor(ofColor::green);
-      for (int i = 0; i<bloqs.size(); i++)
+      for (int i = 0; i < bloqs.size(); i++)
       {
         string id = bloqs[i]->id;
         ofVec2f loc( bloqs[i]->loc );
@@ -82,13 +86,20 @@ class ArucoSystem : public ECSsystem
     ofPixels rgb_pix; 
     int channels;
     bool inited;
-    vector< shared_ptr<BloqAruco> > bloqs;
 
-    void init(int w, int h)
+    void init( RGBComponent* rgb_data )
     {
-      if (inited) return;
+      if (inited) 
+      {
+        ofLogWarning("ArucoSystem") << "calling init but aruco is already inited";
+        return;
+      }
+      inited = true;
 
-      this->channels = 3;
+      int w = rgb_data->width;
+      int h = rgb_data->height;
+
+      this->channels = rgb_data->ir ?1:3;
 
       rgb_pix.allocate( w, h, channels );
       rgb_pix.set(0); 
@@ -96,12 +107,12 @@ class ArucoSystem : public ECSsystem
       //no calibration, no board config
       aruco.setup2d( w, h );
       //aruco.setThresholdMethod(aruco::MarkerDetector::CANNY);
-
-      inited = true;
     };
 
-    void update( uint8_t *pixels, int w, int h, BloqEventsComponent* events )
+    void update( uint8_t *pixels, int w, int h, BloqEventsComponent* events, ArucoComponent* aruco_data )
     {
+      vector< shared_ptr<BloqAruco> >& bloqs = aruco_data->bloqs;
+
       rgb_pix.setFromPixels( pixels, w, h, channels );
 
       aruco.detectMarkers( rgb_pix );
@@ -113,7 +124,7 @@ class ArucoSystem : public ECSsystem
 
         aruco::Marker& m = markers[i];
         string bloq_id = ofToString( m.idMarker );
-        BloqAruco* bloq = get_bloq( bloq_id );
+        BloqAruco* bloq = get_bloq( bloq_id, aruco_data );
 
         if ( bloq == NULL )
         {
@@ -128,11 +139,13 @@ class ArucoSystem : public ECSsystem
         }
       }
 
-      remove_bloqs_missing( markers, events );
+      remove_bloqs_missing( markers, events, aruco_data );
     }; 
 
-    BloqAruco* get_bloq( string id )
+    BloqAruco* get_bloq( string id, ArucoComponent* aruco_data )
     {
+      vector< shared_ptr<BloqAruco> >& bloqs = aruco_data->bloqs;
+
       for( size_t i = 0; i < bloqs.size(); i++ )
         if ( bloqs[i]->id == id )
           return bloqs[i].get();
@@ -147,8 +160,10 @@ class ArucoSystem : public ECSsystem
       return NULL;
     }; 
 
-    void remove_bloqs_missing( vector<aruco::Marker>& markers, BloqEventsComponent* events )
+    void remove_bloqs_missing( vector<aruco::Marker>& markers, BloqEventsComponent* events, ArucoComponent* aruco_data )
     {
+
+      vector< shared_ptr<BloqAruco> >& bloqs = aruco_data->bloqs;
 
       vector< vector< shared_ptr<BloqAruco> >::iterator> to_remove;
 

@@ -11,6 +11,7 @@ class RGBComponent : public ECScomponent
     uint8_t* color_pix;
     int width, height;
     bool dirty;
+    bool ir;
 
     ofParameter<bool> render;
 
@@ -24,6 +25,7 @@ class RGBComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
+      ir = d.get("ir", false).asBool();
     };
 
     void setup( int w, int h )

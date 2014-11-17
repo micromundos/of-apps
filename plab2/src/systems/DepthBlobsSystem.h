@@ -32,7 +32,7 @@ class DepthBlobsSystem : public ECSsystem
       inited = false; 
 
       //TODO add params, rm keys
-      ofAddListener( ofEvents().keyPressed, this, &DepthBlobsSystem::keyPressed );
+      //ofAddListener( ofEvents().keyPressed, this, &DepthBlobsSystem::keyPressed );
     };
 
     virtual void added(Entity &e) 
@@ -74,38 +74,38 @@ class DepthBlobsSystem : public ECSsystem
 
 
     //TODO add params, rm keys
-    void keyPressed(ofKeyEventArgs &args)
-    {
+    //void keyPressed(ofKeyEventArgs &args)
+    //{
 
-      switch (args.key)
-      { 
+      //switch (args.key)
+      //{ 
         
-        case keys::blobs_thres_near_inc:
-          threshold_near ++;
-          if (threshold_near > 255) threshold_near = 255; 
-          ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
-          break;
+        //case keys::blobs_thres_near_inc:
+          //threshold_near ++;
+          //if (threshold_near > 255) threshold_near = 255; 
+          //ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
+          //break;
 
-        case keys::blobs_thres_near_dec:
-          threshold_near --;
-          if (threshold_near < 0) threshold_near = 0;
-          ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
-          break;
+        //case keys::blobs_thres_near_dec:
+          //threshold_near --;
+          //if (threshold_near < 0) threshold_near = 0;
+          //ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
+          //break;
 
-        case keys::blobs_thres_far_inc:
-          threshold_far ++;
-          if (threshold_far > 255) threshold_far = 255;
-          ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
-          break;
+        //case keys::blobs_thres_far_inc:
+          //threshold_far ++;
+          //if (threshold_far > 255) threshold_far = 255;
+          //ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
+          //break;
 
-        case keys::blobs_thres_far_dec:
-          threshold_far --;
-          if (threshold_far < 0) threshold_far = 0;
-          ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
-          break;
-      }
+        //case keys::blobs_thres_far_dec:
+          //threshold_far --;
+          //if (threshold_far < 0) threshold_far = 0;
+          //ofLogNotice("DepthBlobsSystem") << "threshold near " << threshold_near << " / far " << threshold_far;
+          //break;
+      //}
 
-    };
+    //};
 
 
   private:

@@ -17,14 +17,12 @@ class FisicaSystem : public ECSsystem
       addComponentType<FisicaComponent>();
     };
 
-    const float FPS = 30.0f;
-
     virtual void initialize() 
     {
       fisica_m.init( *world );
       box2d.init();
       box2d.setGravity(0,0);
-      box2d.setFPS( FPS );
+      fps( 30.0f );
     };
 
     virtual void added(Entity &e) 
@@ -52,6 +50,17 @@ class FisicaSystem : public ECSsystem
     b2World* b2world()
     {
       return box2d.getWorld();
+    }; 
+
+    void fps( float val )
+    {
+      _fps = val;
+      box2d.setFPS( _fps );
+    };
+
+    float fps() 
+    {
+      return _fps;
     };
 
     //utils
@@ -126,6 +135,7 @@ class FisicaSystem : public ECSsystem
   private:
 
     ofxBox2d box2d; 
+    float _fps;
 
     ComponentMapper<FisicaComponent> fisica_m;
 

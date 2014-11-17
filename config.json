@@ -43,7 +43,8 @@
         { 
           "id": "rgb",
           "data": {
-            "render": true
+            "render": true,
+            "ir": false
           }
         },
         { 
@@ -63,7 +64,7 @@
           "data": {
             "threshold_near": [ 255, 0, 255 ],
             "threshold_far": [ 209, 0, 255 ],
-            "render_depth_filtered": true,
+            "render_depth_filtered": false,
             "render_contour_finder": false
 
           }
@@ -91,7 +92,7 @@
   "bloqs": [
 
     {
-      "id": "477", //"428",
+      "id": "838",
       "components": [ 
         {
           "id": "particle_emitter",
@@ -102,6 +103,18 @@
         }
       ]
     }
+
+    //{
+      //"id": "985",
+      //"components": [ 
+        //{ 
+          //"id": "time_bender",
+          //"data": {
+            //"coef": [ 20, 1, 100 ]
+          //}
+        //}
+      //]
+    //}
 
   ]
 

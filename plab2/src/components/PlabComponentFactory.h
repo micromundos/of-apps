@@ -34,6 +34,7 @@ else if (id == "particle_flow_field") return new ParticleFlowFieldComponent(id);
 else if (id == "particle_depth_slope_flow") return new ParticleDepthSlopeFlowComponent(id);
 else if (id == "particle_blobs_containers") return new ParticleBlobsContainersComponent(id);
 else if (id == "fisica") return new FisicaComponent(id);
+else if (id == "time_bender") return new TimeBenderComponent(id);
 //dont remove this line
 
 return NULL;

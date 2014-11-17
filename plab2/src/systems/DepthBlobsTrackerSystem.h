@@ -33,7 +33,7 @@ class DepthBlobsTrackerSystem : public ECSsystem
     virtual void added(Entity &e) 
     {
       //TODO mejorar init
-      init( depth_m.get(e) );
+      init(depth_m.get(e),blobs_m.get(e));
     };
 
     virtual void processEntity(Entity &e) 
@@ -61,12 +61,10 @@ class DepthBlobsTrackerSystem : public ECSsystem
       if ( blobs_data->render_depth_filtered )
       {
         RenderComponent* render_data = component<RenderComponent>("output");
-        int w = render_data->width;
-        int h = render_data->height;
 
         ofPushStyle();
         ofSetColor(255);
-        dpix_img.draw(0, 0, w, h);
+        blobs_data->depth_filtered_img.draw( 0, 0, render_data->width, render_data->height );
         ofPopStyle();
       }
 
@@ -74,11 +72,10 @@ class DepthBlobsTrackerSystem : public ECSsystem
       {
         ofPushStyle();
         ofSetLineWidth(1);
-        contourFinder.draw();
+        blobs_data->contourFinder.draw();
         ofPopStyle();
       }
     };
-
 
   private:
 
@@ -89,11 +86,7 @@ class DepthBlobsTrackerSystem : public ECSsystem
     ofPixels dpix_orig_size; 
     ofPixels dpix_near; 
     ofPixels dpix_far; 
-    ofxCv::ContourFinder contourFinder; 
 		map<unsigned int, ofPolyline> ofblobs_prev;
-
-    //debug render
-    ofImage dpix_img; 
 
     float resampled_len;
     float interpolation_coef;
@@ -104,9 +97,12 @@ class DepthBlobsTrackerSystem : public ECSsystem
 
     bool inited;
 
-    void init( DepthComponent* depth )
+    void init( DepthComponent* depth, BlobsComponent* blobs_data )
     {
       if (inited) return;
+
+      ofxCv::ContourFinder& contourFinder = blobs_data->contourFinder; 
+      ofImage& depth_filtered_img = blobs_data->depth_filtered_img; 
 
       int depth_w = depth->width;
       int depth_h = depth->height;
@@ -136,8 +132,7 @@ class DepthBlobsTrackerSystem : public ECSsystem
       dpix_near.set(0);
       dpix_far.set(0);
 
-      //debug render
-      dpix_img.allocate(w, h, OF_IMAGE_GRAYSCALE);
+      depth_filtered_img.allocate(w, h, OF_IMAGE_GRAYSCALE);
 
       contourFinder.setMinAreaRadius( 10 );
       contourFinder.setMaxAreaRadius( (w*h)/3 );
@@ -152,6 +147,8 @@ class DepthBlobsTrackerSystem : public ECSsystem
 
     void update( uint8_t *depth_pix_grey, int depth_w, int depth_h, BlobsComponent* blobs_data )
     {
+
+      ofxCv::ContourFinder& contourFinder = blobs_data->contourFinder; 
 
       int w = (float)depth_w * img_scale;
       int h = (float)depth_h * img_scale;
@@ -168,7 +165,7 @@ class DepthBlobsTrackerSystem : public ECSsystem
 
       if ( blobs_data->render_depth_filtered )
       {
-        dpix_img.setFromPixels( dpix );
+        blobs_data->depth_filtered_img.setFromPixels( dpix );
       }
 
       contourFinder.setThreshold( blobs_threshold );

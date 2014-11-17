@@ -3,11 +3,14 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
+#include "ofxCv.h"
 
 class BlobsComponent : public ECScomponent 
 {
   public:
     vector<ofPolyline> blobs;
+    ofImage depth_filtered_img; 
+    ofxCv::ContourFinder contourFinder; 
 
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;

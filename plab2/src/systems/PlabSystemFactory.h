@@ -30,6 +30,7 @@ ecs.add_system(new ParticleEmitterSystem("particle_emitter"));
 ecs.add_system(new ParticleDepthSlopeFlowSystem("particle_depth_slope_flow"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new ParticleBlobsContainersSystem("particle_blobs_containers"));
+ecs.add_system(new TimeBenderSystem("time_bender"));
 //dont remove this line
 };
 
