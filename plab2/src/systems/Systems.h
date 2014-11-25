@@ -1,5 +1,5 @@
 /*
- * this file is tranformed by make.js
+ * this file is tranformed by ecs.js
  */
 #pragma once
 #include "systems/BloqMakerSystem.h"
@@ -13,7 +13,6 @@
 #include "systems/ParticleFlowFieldSystem.h"
 #include "systems/DepthFlowFieldSystem.h"
 #include "systems/ParticleBlobsContainersSystem.h"
-#include "systems/DepthBlobsSystem.h"
-#include "systems/DepthBlobsTrackerSystem.h"
+#include "systems/BlobsSystem.h"
 #include "systems/TimeBenderSystem.h"
 //dont remove this line

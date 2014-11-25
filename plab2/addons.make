@@ -6,6 +6,6 @@ ofxCamaraLucida
 ofxLiquidFun
 ofxKinect
 ofxOpenCv
-ofxAruco
 ofxCv
+ofxAruco
 addons

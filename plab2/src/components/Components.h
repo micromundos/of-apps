@@ -1,5 +1,5 @@
 /*
- * this file is tranformed by make.js
+ * this file is tranformed by ecs.js
  */
 #pragma once
 #include "components/ConfigComponent.h"

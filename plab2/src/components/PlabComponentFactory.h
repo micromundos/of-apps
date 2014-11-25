@@ -1,5 +1,5 @@
 /*
- * this file is tranformed by make.js
+ * this file is tranformed by ecs.js
  * no tabs, no spaces
  */
 #pragma once

@@ -1,5 +1,5 @@
 /*
- * this file is tranformed by make.js
+ * this file is tranformed by ecs.js
  * no tabs, no spaces
  *
  * TODO only add the systems needed parsing config.json on the fly
@@ -21,7 +21,7 @@ ofLogNotice("PlabSystemFactory") << "add systems";
 ecs.add_system(new BloqMakerSystem("bloq_maker"));
 ecs.add_system(new CamaraLucidaSystem("camara_lucida"));
 ecs.add_system(new RGBDSystem("rgbd"));
-ecs.add_system(new DepthBlobsTrackerSystem("depth_blobs_tracker"));
+ecs.add_system(new BlobsSystem("blobs"));
 ecs.add_system(new ArucoSystem("aruco"));
 ecs.add_system(new DepthFlowFieldSystem("depth_flow_field"));
 ecs.add_system(new FisicaSystem("fisica"));

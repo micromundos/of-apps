@@ -227,6 +227,7 @@
 		1185BC900175438AC80FC7F5 /* b2Particle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2Particle.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Particle/b2Particle.cpp; sourceTree = SOURCE_ROOT; };
 		11AB92BA5A01947BD5C8AFD2 /* triangle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = triangle.h; path = ../../../addons/ofxLiquidFun/libs/triangle/triangle.h; sourceTree = SOURCE_ROOT; };
 		14175D72B908BED1A3B18168 /* TemplateComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = TemplateComponent.h; path = src/components/TemplateComponent.h; sourceTree = SOURCE_ROOT; };
+		14CC5D5B7B6337AF49CFF4B2 /* TimeBenderSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = TimeBenderSystem.h; path = src/systems/TimeBenderSystem.h; sourceTree = SOURCE_ROOT; };
 		1586732FE45F7F867B631177 /* SystemBitManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = SystemBitManager.h; path = ../../../addons/ofxECS/libs/Artemis/SystemBitManager.h; sourceTree = SOURCE_ROOT; };
 		1645F56257269CD0356320BD /* ofxJSON.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxJSON.h; path = ../../../addons/ofxJSON/src/ofxJSON.h; sourceTree = SOURCE_ROOT; };
 		16A4AE238493FFCE90D1ED03 /* DelayedEntityProcessingSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = DelayedEntityProcessingSystem.cpp; path = ../../../addons/ofxECS/libs/Artemis/DelayedEntityProcessingSystem.cpp; sourceTree = SOURCE_ROOT; };
@@ -419,6 +420,7 @@
 		85025E2A7A6FAB0C5A8E9937 /* b2Stat.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2Stat.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Common/b2Stat.cpp; sourceTree = SOURCE_ROOT; };
 		8530EAD600CD792B81B2E79D /* legacy.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = legacy.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/legacy/legacy.hpp; sourceTree = SOURCE_ROOT; };
 		864C623936175512CEEFF951 /* b2TimeOfImpact.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2TimeOfImpact.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Collision/b2TimeOfImpact.cpp; sourceTree = SOURCE_ROOT; };
+		86A6420627062A56C462D4CA /* TimeBenderComponent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = TimeBenderComponent.h; path = src/components/TimeBenderComponent.h; sourceTree = SOURCE_ROOT; };
 		8738DE90218B1E9054A88B54 /* Helpers.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Helpers.h; path = ../../../addons/ofxCv/libs/ofxCv/include/ofxCv/Helpers.h; sourceTree = SOURCE_ROOT; };
 		88477790681667039EA442E6 /* EntityProcessingSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = EntityProcessingSystem.cpp; path = ../../../addons/ofxECS/libs/Artemis/EntityProcessingSystem.cpp; sourceTree = SOURCE_ROOT; };
 		88FD29E7442D6730613A3832 /* ofxBox2dEdge.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxBox2dEdge.cpp; path = ../../../addons/ofxLiquidFun/src/ofxBox2dEdge.cpp; sourceTree = SOURCE_ROOT; };
@@ -482,10 +484,10 @@
 		A47F3891070B93763C21F7C0 /* b2EdgeShape.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = b2EdgeShape.h; path = ../../../addons/ofxLiquidFun/libs/Box2D/Collision/Shapes/b2EdgeShape.h; sourceTree = SOURCE_ROOT; };
 		A7D31BD6350F68A08851CD97 /* b2BlockAllocator.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2BlockAllocator.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Common/b2BlockAllocator.cpp; sourceTree = SOURCE_ROOT; };
 		A810DF70319A10353588F5DB /* Tracker.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Tracker.cpp; path = ../../../addons/ofxCv/libs/ofxCv/src/Tracker.cpp; sourceTree = SOURCE_ROOT; };
+		A8E0B223769F7404CDAB53C9 /* BlobsSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = BlobsSystem.h; path = src/systems/BlobsSystem.h; sourceTree = SOURCE_ROOT; };
 		A91048F2958D13C16C9318E8 /* b2ContactManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2ContactManager.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Dynamics/b2ContactManager.cpp; sourceTree = SOURCE_ROOT; };
 		A9C85208C7E45FB9D1926789 /* wimage.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = wimage.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core/wimage.hpp; sourceTree = SOURCE_ROOT; };
 		A9E4618F6B72CFC9892BA840 /* b2PulleyJoint.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2PulleyJoint.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Dynamics/Joints/b2PulleyJoint.cpp; sourceTree = SOURCE_ROOT; };
-		AAD1EE0CF382EBF291017336 /* DepthBlobsTrackerSystem.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = DepthBlobsTrackerSystem.h; path = src/systems/DepthBlobsTrackerSystem.h; sourceTree = SOURCE_ROOT; };
 		AAED7044735182EF138A8C10 /* b2VoronoiDiagram.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = b2VoronoiDiagram.h; path = ../../../addons/ofxLiquidFun/libs/Box2D/Particle/b2VoronoiDiagram.h; sourceTree = SOURCE_ROOT; };
 		AB2AE477F82ACF17D0121166 /* mat.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = mat.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core/mat.hpp; sourceTree = SOURCE_ROOT; };
 		AC10B1BD9511CF1CB323B25D /* b2Body.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = b2Body.h; path = ../../../addons/ofxLiquidFun/libs/Box2D/Dynamics/b2Body.h; sourceTree = SOURCE_ROOT; };
@@ -934,9 +936,9 @@
 			isa = PBXGroup;
 			children = (
 				172FC973AE52A8778FE44843 /* ArucoSystem.h */,
+				A8E0B223769F7404CDAB53C9 /* BlobsSystem.h */,
 				76CB81EFEF52CF9C5A0A93CE /* BloqMakerSystem.h */,
 				1F8010B003CA045E3DFE0093 /* CamaraLucidaSystem.h */,
-				AAD1EE0CF382EBF291017336 /* DepthBlobsTrackerSystem.h */,
 				FD292FA246CC48B786A6240D /* DepthFlowFieldSystem.h */,
 				38CD8464CC614404942F4591 /* FisicaSystem.h */,
 				215EFF877CFFF602834AFE30 /* ParticleBlobsContainersSystem.h */,
@@ -948,6 +950,7 @@
 				D6AB83DD7FFBE42BFBB97697 /* RGBDSystem.h */,
 				9B621D4840C141380A0CBEEF /* Systems.h */,
 				CD85B7B70436C05F9B499A3C /* TemplateSystem.h */,
+				14CC5D5B7B6337AF49CFF4B2 /* TimeBenderSystem.h */,
 			);
 			name = systems;
 			sourceTree = "<group>";
@@ -1158,6 +1161,7 @@
 				E3B7BCF9FEB800759A528685 /* RenderComponent.h */,
 				33FD79E0ADE7EBE3BA8A13C2 /* RGBComponent.h */,
 				14175D72B908BED1A3B18168 /* TemplateComponent.h */,
+				86A6420627062A56C462D4CA /* TimeBenderComponent.h */,
 			);
 			name = components;
 			sourceTree = "<group>";
@@ -1533,8 +1537,8 @@
 				9DBC3F5A51BD11C17FEB021B /* ofxLiquidFun */,
 				9683228C705CA3FF4F2EA945 /* ofxKinect */,
 				A0B90D3B0ADB9C1716816714 /* ofxOpenCv */,
-				94040BE8EC56C89AD60B7651 /* ofxAruco */,
 				6025FAF6414C2CA589764D26 /* ofxCv */,
+				94040BE8EC56C89AD60B7651 /* ofxAruco */,
 			);
 			name = addons;
 			sourceTree = "<group>";
@@ -2162,14 +2166,6 @@
 				E212C821D1064B92DD953A42 /* ofxCvHaarFinder.cpp in Sources */,
 				63020F16C7E8DED980111241 /* ofxCvImage.cpp in Sources */,
 				D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */,
-				126F12C38BF359E97877D207 /* ofxAruco.cpp in Sources */,
-				5D90AE834EBD769618E71DAB /* arucofidmarkers.cpp in Sources */,
-				BA74179BDC805DCD07255A92 /* board.cpp in Sources */,
-				EEB647DC83F0B13C5E3C4D84 /* boarddetector.cpp in Sources */,
-				3B7779E1187156CA78A38FFE /* cameraparameters.cpp in Sources */,
-				14FFB7ACFF020F370244526D /* cvdrawingutils.cpp in Sources */,
-				6222FA14758CA3836CB9DECC /* marker.cpp in Sources */,
-				E4603834097F61C4C9032F71 /* markerdetector.cpp in Sources */,
 				B6840996567E78436F7ECFAB /* ETF.cpp in Sources */,
 				F76B4A79BD8DE4854141CB47 /* fdog.cpp in Sources */,
 				EBCDE831EFAE08274E799C97 /* Calibration.cpp in Sources */,
@@ -2183,6 +2179,14 @@
 				10B69DE456AED1288FC9316B /* Tracker.cpp in Sources */,
 				A6668C5B1272D7FCD5B5A16F /* Utilities.cpp in Sources */,
 				DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */,
+				126F12C38BF359E97877D207 /* ofxAruco.cpp in Sources */,
+				5D90AE834EBD769618E71DAB /* arucofidmarkers.cpp in Sources */,
+				BA74179BDC805DCD07255A92 /* board.cpp in Sources */,
+				EEB647DC83F0B13C5E3C4D84 /* boarddetector.cpp in Sources */,
+				3B7779E1187156CA78A38FFE /* cameraparameters.cpp in Sources */,
+				14FFB7ACFF020F370244526D /* cvdrawingutils.cpp in Sources */,
+				6222FA14758CA3836CB9DECC /* marker.cpp in Sources */,
+				E4603834097F61C4C9032F71 /* markerdetector.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2291,10 +2295,6 @@
 					../../../addons/ofxOpenCv/libs/opencv/lib/linuxarmv7l,
 					../../../addons/ofxOpenCv/libs/opencv/lib/osx,
 					../../../addons/ofxOpenCv/src,
-					../../../addons/ofxAruco/libs,
-					"../../../addons/ofxAruco/libs/aruco-1.2.4",
-					"../../../addons/ofxAruco/libs/aruco-1.2.4/src",
-					../../../addons/ofxAruco/src,
 					../../../addons/ofxCv/libs,
 					../../../addons/ofxCv/libs/CLD,
 					../../../addons/ofxCv/libs/CLD/include,
@@ -2305,6 +2305,10 @@
 					../../../addons/ofxCv/libs/ofxCv/include/ofxCv,
 					../../../addons/ofxCv/libs/ofxCv/src,
 					../../../addons/ofxCv/src,
+					../../../addons/ofxAruco/libs,
+					"../../../addons/ofxAruco/libs/aruco-1.2.4",
+					"../../../addons/ofxAruco/libs/aruco-1.2.4/src",
+					../../../addons/ofxAruco/src,
 					../../../addons/libs,
 					../../../addons/src,
 					src,
@@ -2423,10 +2427,6 @@
 					../../../addons/ofxOpenCv/libs/opencv/lib/linuxarmv7l,
 					../../../addons/ofxOpenCv/libs/opencv/lib/osx,
 					../../../addons/ofxOpenCv/src,
-					../../../addons/ofxAruco/libs,
-					"../../../addons/ofxAruco/libs/aruco-1.2.4",
-					"../../../addons/ofxAruco/libs/aruco-1.2.4/src",
-					../../../addons/ofxAruco/src,
 					../../../addons/ofxCv/libs,
 					../../../addons/ofxCv/libs/CLD,
 					../../../addons/ofxCv/libs/CLD/include,
@@ -2437,6 +2437,10 @@
 					../../../addons/ofxCv/libs/ofxCv/include/ofxCv,
 					../../../addons/ofxCv/libs/ofxCv/src,
 					../../../addons/ofxCv/src,
+					../../../addons/ofxAruco/libs,
+					"../../../addons/ofxAruco/libs/aruco-1.2.4",
+					"../../../addons/ofxAruco/libs/aruco-1.2.4/src",
+					../../../addons/ofxAruco/src,
 					../../../addons/libs,
 					../../../addons/src,
 					src,
@@ -2463,6 +2467,8 @@
 		E4B69B600A3A1757003C02F2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2541,6 +2547,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)Debug";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2549,6 +2556,8 @@
 		E4B69B610A3A1757003C02F2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -2626,6 +2635,7 @@
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

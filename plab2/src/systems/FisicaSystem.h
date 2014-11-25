@@ -26,9 +26,7 @@ class FisicaSystem : public ECSsystem
     };
 
     virtual void added(Entity &e) 
-    {
-      //fisica_m.get(e)->data;
-    };
+    {};
 
     virtual void processEntity(Entity &e) 
     {

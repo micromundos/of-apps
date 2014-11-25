@@ -18,6 +18,11 @@ class RGBDSystem : public ECSsystem
       addComponentType<DepthComponent>();
     };
 
+    ~RGBDSystem()
+    {
+      kinect.close();
+    };
+
     virtual void initialize() 
     {
       rgb_m.init( *world );
