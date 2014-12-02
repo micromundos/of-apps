@@ -2,6 +2,8 @@
 // Hacking the Kinect
 #pragma once
 
+//TODO fix convex hull stuff
+
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/filters/passthrough.h>
 #include <pcl/filters/extract_indices.h>
