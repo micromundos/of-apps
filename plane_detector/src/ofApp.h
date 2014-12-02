@@ -3,8 +3,8 @@
 #include "ofMain.h"
 #include "ofxKinect.h"
 #include "ofxPCL.h"
+#include "ofxGeom.h"
 #include "TableTopDetector.h"
-#include "ofxPlane.h"
 
 class ofApp : public ofBaseApp{
 

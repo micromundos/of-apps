@@ -90,12 +90,14 @@ void ofApp::detect_table()
   done_detection = false;
 
   // Create a smaller cloud and detect it!
-  //pcl::PointCloud<pcl::PointNormal>::Ptr small_cloud = preprocessImageCloud(cloud);
+  //pcl::PointCloud<pcl::PointNormal>::Ptr small_cloud = detector.preprocessImageCloud(cloud);
   //detector.detect(*small_cloud);
   //detector.detect(*cloud);
 
   detector.filter(*cloud);
   detector.findTable();
+  //detector.findTableObjects();
+  //detector.splitTableObjects();
 
   done_detection = true;
   do_detection = false;

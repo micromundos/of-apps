@@ -113,6 +113,11 @@
 		12363E4D1A239B1B003CA788 /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		12363E531A23B2C4003CA788 /* TableTopDetector.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TableTopDetector.cpp; sourceTree = "<group>"; };
 		12363E541A23B2C4003CA788 /* TableTopDetector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableTopDetector.h; sourceTree = "<group>"; };
+		12A8D1CD1A2E50DD00E425AA /* ofxGeom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGeom.h; sourceTree = "<group>"; };
+		12A8D1CE1A2E50DD00E425AA /* ofxLine2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxLine2.h; sourceTree = "<group>"; };
+		12A8D1CF1A2E50DD00E425AA /* ofxLine3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxLine3.h; sourceTree = "<group>"; };
+		12A8D1D01A2E50DD00E425AA /* ofxPlane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPlane.h; sourceTree = "<group>"; };
+		12A8D1D11A2E50DD00E425AA /* ofxTriangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxTriangle.h; sourceTree = "<group>"; };
 		178547E33CE398C7B59F08AB /* ContourFinder.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ContourFinder.h; path = ../../../addons/ofxCv/libs/ofxCv/include/ofxCv/ContourFinder.h; sourceTree = SOURCE_ROOT; };
 		1E95EFD35ED9C5D97F2F015E /* timer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = timer.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/timer.h; sourceTree = SOURCE_ROOT; };
 		241AAF7769D555E4ECD57E17 /* cameras.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cameras.h; path = ../../../addons/ofxKinect/libs/libfreenect/src/cameras.h; sourceTree = SOURCE_ROOT; };
@@ -364,6 +369,27 @@
 			);
 			name = src;
 			path = ../../../addons/ofxPCL/src;
+			sourceTree = "<group>";
+		};
+		12A8D1CA1A2E50DD00E425AA /* ofxGeom */ = {
+			isa = PBXGroup;
+			children = (
+				12A8D1CC1A2E50DD00E425AA /* src */,
+			);
+			name = ofxGeom;
+			path = ../../../addons/ofxGeom;
+			sourceTree = "<group>";
+		};
+		12A8D1CC1A2E50DD00E425AA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				12A8D1CD1A2E50DD00E425AA /* ofxGeom.h */,
+				12A8D1CE1A2E50DD00E425AA /* ofxLine2.h */,
+				12A8D1CF1A2E50DD00E425AA /* ofxLine3.h */,
+				12A8D1D01A2E50DD00E425AA /* ofxPlane.h */,
+				12A8D1D11A2E50DD00E425AA /* ofxTriangle.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 		13C72B31738CA9F68523CB1C /* include */ = {
@@ -678,6 +704,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				12A8D1CA1A2E50DD00E425AA /* ofxGeom */,
 				12363E461A239B01003CA788 /* ofxPCL */,
 				9683228C705CA3FF4F2EA945 /* ofxKinect */,
 				A0B90D3B0ADB9C1716816714 /* ofxOpenCv */,

@@ -98,5 +98,7 @@ class TableTopDetector
   PointCloudConstPtr cloud_objects_, cloud_objects_downsampled_;
 
   Eigen::Vector4f plane_;
-  std::vector< PointCloudPtr > objects_;
+  std::vector< PointCloudPtr > objects_; 
+
 };
+
