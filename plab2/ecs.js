@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var fs = require('fs');
+var fs = require('fs-extra');
 var prog = require('commander');
 var setcase = require('change-case');
 
@@ -12,19 +12,20 @@ prog
     .option('-n, --name [name_with_snake_case]', 'Name for the specified component and/or system')
     .option('-a, --add', 'Add system and/or component')
     .option('-r, --remove', 'Remove system and/or component')
+    .option('-x, --archive', 'Archive system and/or component')
     .option('-c, --component', 'Process a component')
     .option('-s, --system', 'Process a system')
     //TODO optimization for later...
     //.option('-S, --rendersystem', 'Process a render system')
     .parse(process.argv);
 
-if ( prog.add === undefined && prog.remove === undefined ) {
-    console.log('error: pick --add OR --remove / -h for help');
-    return;
-}
-
-if ( prog.add !== undefined && prog.remove !== undefined ) {
-    console.log('error: pick --add OR --remove not both / -h for help');
+var _ops = ['add','remove','archive'];
+var _opcount = 0;
+for ( var i = 0; i < _ops.length; i++ )
+    if ( prog[ _ops[i] ] !== undefined )
+        _opcount++;
+if ( _opcount !== 1 ) {
+    console.log('error: pick --add OR --remove OR --archive / -h for help');
     return;
 }
 
@@ -57,6 +58,7 @@ console.log(' - snake case:', name_snakecase);
 
 var comp_filename = name_pascalcase+'Component.h';
 var comp_path = __dirname + '/src/components/'+ comp_filename;
+var comp_archive_path = __dirname + '/archive/components/'+ comp_filename;
 
 var comp_include_path = __dirname + '/src/components/Components.h';
 var comp_include_code = '#include "components/'+ name_pascalcase +'Component.h"' + '\n';
@@ -71,6 +73,7 @@ var comp_factory_code = 'else if (id == "'+ name_snakecase +'") return new '+ na
 
 var sys_filename = name_pascalcase+'System.h';
 var sys_path = __dirname + '/src/systems/'+ sys_filename;
+var sys_archive_path = __dirname + '/archive/systems/'+ sys_filename;
 
 var sys_include_path = __dirname + '/src/systems/Systems.h';
 var sys_include_code = '#include "systems/'+ name_pascalcase +'System.h"' + '\n';
@@ -86,6 +89,7 @@ var sys_factory_code = 'ecs.add_system(new '+ name_pascalcase +'System("'+name_s
 
 //var sys_render_filename = name_pascalcase+'RenderSystem.h';
 //var sys_render_path = __dirname + '/src/systems/'+ sys_render_filename;
+//var sys_render_archive_path = __dirname + '/archive/systems/'+ sys_render_filename;
 
 //var sys_render_include_path = sys_include_path; //__dirname + '/src/systems/Systems.h';
 //var sys_render_include_code = '#include "systems/'+ name_pascalcase +'RenderSystem.h"' + '\n';
@@ -109,6 +113,19 @@ function remove_file( path ) {
         if (err) throw err;
         console.log('successfully deleted',path);
     });
+}
+
+function archive_file( path, archive_path ) {
+
+    if ( ! fs.existsSync(path) ) {
+        console.log('archive_file: file not found',path);
+        return;
+    }
+
+    fs.move( path, archive_path, function(err) {
+        if (err) throw err;
+        console.log('successfully archived [',path,'] into [',archive_path,']');
+    })
 }
 
 function remove_code_from_file( path, code ) {
@@ -203,6 +220,32 @@ if ( prog.remove !== undefined ) {
     //}
 
 }
+
+// Archive
+
+if ( prog.archive !== undefined ) {
+
+    if ( prog.component !== undefined ) {
+        archive_file( comp_path, comp_archive_path ); 
+        remove_code_from_file( comp_include_path, comp_include_code );
+        remove_code_from_file( comp_factory_path, comp_factory_code ); 
+    }
+
+    if ( prog.system !== undefined ) {
+        archive_file( sys_path, sys_archive_path );  
+        remove_code_from_file( sys_include_path, sys_include_code ); 
+        remove_code_from_file( sys_factory_path, sys_factory_code ); 
+    }  
+
+    //if ( prog.rendersystem !== undefined ) {
+        //archive_file( sys_render_archive_path, sys_render_path );  
+        //remove_code_from_file( sys_render_include_path, sys_render_include_code ); 
+        //remove_code_from_file( sys_render_factory_path, sys_render_factory_code ); 
+    //}
+
+}
+
+
 
 
 // Add

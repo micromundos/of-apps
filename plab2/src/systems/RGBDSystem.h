@@ -32,7 +32,7 @@ class RGBDSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     { 
-      init(rgb_m.get(e), depth_m.get(e));
+      init(e);
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
@@ -46,15 +46,19 @@ class RGBDSystem : public ECSsystem
     {
       //ofLogNotice("RGBDSystem") << "process entity " << e.getId();
 
+      DepthComponent* depth_data = depth_m.get(e);
+      RGBComponent* rgb_data = rgb_m.get(e);
+
       bool dirty = kinect.isFrameNew();
-      depth_m.get(e)->dirty = dirty; 
-      rgb_m.get(e)->dirty = dirty; 
+      depth_data->dirty = dirty; 
+      rgb_data->dirty = dirty; 
 
       if ( dirty )
       {
-        depth_m.get(e)->update( kinect.getRawDepthPixels() );
-        depth_m.get(e)->update( kinect.getDepthPixels() );
-        rgb_m.get(e)->update( kinect.getPixels() );
+        depth_data->update( kinect.getRawDepthPixels() );
+        depth_data->update( kinect.getDepthPixels() );
+        //depth_data->update( kinect.getDepthTextureReference() );
+        rgb_data->update( kinect.getPixels() );
       }
 
     };
@@ -85,7 +89,7 @@ class RGBDSystem : public ECSsystem
     bool inited;
 
 
-    void init( RGBComponent* rgb_data, DepthComponent* depth_data )
+    void init( Entity &e )
     {
       if (inited)
       {
@@ -93,6 +97,9 @@ class RGBDSystem : public ECSsystem
         return;
       }
       inited = true; 
+
+      DepthComponent* depth_data = depth_m.get(e);
+      RGBComponent* rgb_data = rgb_m.get(e);
 
       int w = kinect.width;
       int h = kinect.height;

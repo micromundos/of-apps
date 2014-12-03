@@ -9,6 +9,7 @@ class RGBComponent : public ECScomponent
   public:
 
     uint8_t* color_pix;
+
     int width, height;
     bool dirty;
     bool ir;

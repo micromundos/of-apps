@@ -10,6 +10,8 @@ class DepthComponent : public ECScomponent
 
     uint16_t* depth_pix_mm;
     uint8_t* depth_pix_grey;
+    //ofTexture depth_tex;
+
     int width, height;
     bool dirty;
 
@@ -43,5 +45,11 @@ class DepthComponent : public ECScomponent
     {
       this->depth_pix_grey = depth_pix_grey;
     };
+
+    //void update( ofTexture& depth_tex )
+    //{
+      ////copy texture
+      //this->depth_tex = depth_tex;
+    //};
 };
 
