@@ -1,8 +1,9 @@
 // Author: Nicolas Burrus
 // Hacking the Kinect
+
 #pragma once
 
-//TODO fix convex hull stuff
+//TODO FIXME convex hull stuff is not working
 
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/filters/passthrough.h>
@@ -17,6 +18,9 @@
 //#include <pcl/surface/convex_hull.h>
 #include <pcl/segmentation/extract_polygonal_prism_data.h>
 #include <pcl/segmentation/extract_clusters.h>
+
+namespace ofxPCL
+{
 
 template <class PointT>
 class TableTopDetector
@@ -33,14 +37,12 @@ class TableTopDetector
   TableTopDetector();
   void initialize();
 
-  public:
   float voxelSize() const { return object_voxel_size_; }
   void setObjectVoxelSize(float s = 0.003) { object_voxel_size_ = s; }
   void setBackgroundVoxelSize(float s = 0.01) { background_voxel_size_ = s; }
   void setDepthLimits(float min_z = -1.6, float max_z = -0.4) { min_z_bounds_ = min_z; max_z_bounds_ = max_z; }
   void setObjectHeightLimits(float min_h = 0.01, float max_h = 0.5) { object_min_height_ = min_h;  object_max_height_ = max_h; }
 
-  public:
   /*! Returns true if at least one object and plane are detected. */
   bool detect(PointCloud& cloud);
   bool filter(pcl::PointCloud<Point>& cloud);
@@ -48,12 +50,11 @@ class TableTopDetector
   bool findTableObjects();
   bool splitTableObjects();
 
-  public:
   const Eigen::Vector4f& plane() const { return plane_; }
   const std::vector < PointCloudPtr >& objects() const { return objects_; }
-  //PointCloudConstPtr tableHull() const { return table_hull_; }
   PointCloudConstPtr tableCloud() const { return table_cloud_; }
   PointCloudConstPtr tableProjectedCloud() const { return table_projected_; }
+  //PointCloudConstPtr tableHull() const { return table_hull_; }
   //pcl::PolygonMeshConstPtr tableHullMesh() const { return table_hull_mesh_; }
   PointCloudConstPtr nonTableCloud() const { return non_table_cloud_; }
   PointCloudConstPtr objectCloud() const { return cloud_objects_; }
@@ -86,9 +87,7 @@ class TableTopDetector
 
   PointCloudConstPtr cloud_;
   PointCloudConstPtr cloud_filtered_;
-  public:
   PointCloudConstPtr cloud_downsampled_;
-  private:
   pcl::PointCloud<pcl::Normal>::ConstPtr cloud_normals_;
   pcl::PointIndices::ConstPtr table_inliers_;
   PointCloudConstPtr table_cloud_;
@@ -101,6 +100,8 @@ class TableTopDetector
 
   Eigen::Vector4f plane_;
   std::vector< PointCloudPtr > objects_; 
+
+};
 
 };
 

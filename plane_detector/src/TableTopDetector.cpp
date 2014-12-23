@@ -3,6 +3,9 @@
 
 #include "TableTopDetector.h"
 
+namespace ofxPCL
+{
+
 template <class PointT>
 TableTopDetector<PointT> :: TableTopDetector()
 {
@@ -215,6 +218,7 @@ template <class PointT>
 bool TableTopDetector<PointT> :: splitTableObjects()
 {
   printf("\tSplitting objects...\n");
+
   // Downsample the object points
   pcl::PointCloud<Point> cloud_objects_downsampled;
   grid_objects_.setInputCloud (cloud_objects_);
@@ -244,4 +248,6 @@ bool TableTopDetector<PointT> :: splitTableObjects()
 // Explicit instanciations.
 template class TableTopDetector<pcl::PointNormal>;
 template class TableTopDetector<pcl::PointXYZ>;
+
+};
 
