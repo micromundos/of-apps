@@ -34,7 +34,7 @@ void ofApp::setup()
   kinect.setRegistration(true);
   // ir, rgb, texture
   kinect.init(false, true, true);
-	kinect.open();
+  kinect.open();
 
   calib_settings = load_calib_settings();
 
@@ -48,12 +48,12 @@ void ofApp::allocate()
   pix_ps3eye.allocate( w, h, chan );
 
   imitate(undistorted_kinect, pix_kinect);
-	imitate(previous_kinect, pix_kinect);
-	imitate(diff_kinect, pix_kinect);
+  imitate(previous_kinect, pix_kinect);
+  imitate(diff_kinect, pix_kinect);
 
   imitate(undistorted_ps3eye, pix_ps3eye);
-	imitate(previous_ps3eye, pix_ps3eye);
-	imitate(diff_ps3eye, pix_ps3eye);
+  imitate(previous_ps3eye, pix_ps3eye);
+  imitate(diff_ps3eye, pix_ps3eye);
 
   //undistorted.allocate( w, h, OF_IMAGE_COLOR );
   //previous.allocate( w, h, chan );
@@ -137,6 +137,8 @@ void ofApp::calib_save_aruco_format( ofxCv::Calibration& calibration, string nam
   fs << "distortion_coefficients" << calibration.getDistCoeffs();
   fs << "reprojection_error" << calibration.getReprojectionError();
 
+  ofLog() << "save aruco calib to file " << filename;
+
 }
 
 void ofApp::calib_save_stereo_RT( string src_name, ofxCv::Calibration& src_calib, string dst_name, ofxCv::Calibration& dst_calib )
@@ -153,6 +155,8 @@ void ofApp::calib_save_stereo_RT( string src_name, ofxCv::Calibration& src_calib
 
   fs << "R" << R;
   fs << "T" << T;
+
+  ofLog() << "save stereo RT from [" << src_name << "] to [" << dst_name << "] to file " << filename;
 }
 
 void ofApp::render_calib( ofxCv::Calibration& calibration, int x )
@@ -262,7 +266,7 @@ bool ofApp::update_calib( string name, ofxCv::Calibration& calibration, Mat& cam
 
   //if ( calibration.size() > startCleaning ) 
   //{
-    //calibration.clean();
+  //calibration.clean();
   //}
 
   //calibration.save("calibration_" + name + ".yml");
