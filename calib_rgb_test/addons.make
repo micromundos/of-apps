@@ -1,0 +1,5 @@
+ofxKinect
+ofxOpenCv
+ofxAruco
+ofxCv
+ofxPS3EyeGrabber

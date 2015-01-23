@@ -109,6 +109,8 @@ void ofApp::draw()
 
   undistorted_kinect.draw( 0, h );
   undistorted_ps3eye.draw( w, h );
+
+  drawHighlightString("press: spacebar to capture / s to save / r to reset", 10, ofGetHeight()-30, magentaPrint);
 }
 
 void ofApp::calib_save_aruco_format( ofxCv::Calibration& calibration, string name )
@@ -121,7 +123,7 @@ void ofApp::calib_save_aruco_format( ofxCv::Calibration& calibration, string nam
   string filename = "calibration_aruco_"+ name +".yml";
   bool absolute = false;
 
-  cv::FileStorage fs( ofToDataPath(filename, absolute), cv::FileStorage::WRITE);
+  cv::FileStorage fs( ofToDataPath(filename, absolute), cv::FileStorage::WRITE );
 
   const ofxCv::Intrinsics& distorted_intrinsics = calibration.getDistortedIntrinsics();
 
@@ -199,6 +201,12 @@ void ofApp::keyPressed(int key)
     calib_save_stereo_RT( "kinect", calib_kinect, "ps3eye", calib_ps3eye );
   }
 
+  else if ( key == 'r' )
+  {
+    calib_kinect.reset();
+    calib_ps3eye.reset();
+  }
+
 }
 
 bool ofApp::update_kinect()
@@ -265,11 +273,8 @@ bool ofApp::update_calib( string name, ofxCv::Calibration& calibration, Mat& cam
   calibration.calibrate();
 
   //if ( calibration.size() > startCleaning ) 
-  //{
-  //calibration.clean();
-  //}
-
-  //calibration.save("calibration_" + name + ".yml");
+    //calibration.clean();
+  //calibration.save("calibration_"+name+".yml");
 
   calib_save_aruco_format( calibration, name );
 
@@ -278,6 +283,7 @@ bool ofApp::update_calib( string name, ofxCv::Calibration& calibration, Mat& cam
     calibration.undistort( toCv(pix), toCv(undistorted) );
     undistorted.update();
   }
+
 }
 
 cv::FileStorage ofApp::load_calib_settings()
