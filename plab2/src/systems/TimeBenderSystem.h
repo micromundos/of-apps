@@ -23,6 +23,11 @@ class TimeBenderSystem : public ECSsystem
       bloq_m.init( *world );
 
       fisica = system<FisicaSystem>();
+      if ( fisica == NULL )
+      {
+        throw "TimeBenderSystem needs a FisicaSystem";
+      }
+
       initial_fps_fisica = fisica->fps();
       initial_fps_of = ofGetFrameRate();
       axis = ofVec2f(0,1);

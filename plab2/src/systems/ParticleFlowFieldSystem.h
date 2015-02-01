@@ -21,6 +21,12 @@ class ParticleFlowFieldSystem : public ECSsystem
     virtual void initialize() 
     {
       particle_flowfield_m.init( *world );
+
+      ps = system<ParticleSystem>();
+      if ( ps == NULL )
+      {
+        throw "ParticleFlowFieldSystem needs a ParticleSystem";
+      }
     };
 
     // entity: escena
@@ -32,7 +38,7 @@ class ParticleFlowFieldSystem : public ECSsystem
       ofVec2f *field = flowfield_data->field;
       //float param = particle_flowfield_m.get(e)->param;
 
-      b2ParticleSystem* b2ps = system<ParticleSystem>()->b2_particles();
+      b2ParticleSystem* b2ps = ps->b2_particles();
 
       int32 n = b2ps->GetParticleCount();
       b2Vec2 *locs = b2ps->GetPositionBuffer();
@@ -53,6 +59,8 @@ class ParticleFlowFieldSystem : public ECSsystem
   private:
 
     ComponentMapper<ParticleFlowFieldComponent> particle_flowfield_m;
+
+    ParticleSystem *ps;
 
 };
 

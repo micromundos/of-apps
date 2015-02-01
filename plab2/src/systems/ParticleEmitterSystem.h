@@ -26,6 +26,11 @@ class ParticleEmitterSystem : public ECSsystem
       fisica = system<FisicaSystem>();
       ps = system<ParticleSystem>();
 
+      if ( fisica == NULL || ps == NULL )
+      {
+        throw "ParticleEmitterSystem needs a FisicaSystem and a ParticleSystem";
+      }
+
       initial_fps_fisica = fisica->fps();
       emit_remainder = 0.0f;
     };

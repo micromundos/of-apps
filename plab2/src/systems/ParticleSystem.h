@@ -23,7 +23,13 @@ class ParticleSystem : public ECSsystem
     virtual void initialize() 
     {
       ps_m.init( *world ); 
+
       fisica = system<FisicaSystem>();
+      if ( fisica == NULL )
+      {
+        throw "ParticleSystem needs a FisicaSystem";
+      }
+
       init(); 
     }; 
 

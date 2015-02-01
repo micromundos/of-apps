@@ -21,6 +21,10 @@ class ParticleBlobsContainersSystem : public ECSsystem
     virtual void initialize() 
     {
       fisica = system<FisicaSystem>();
+      if ( fisica == NULL )
+      {
+        throw "ParticleBlobsContainersSystem needs a FisicaSystem";
+      }
       mesh.setMode(OF_PRIMITIVE_LINES);
     };
 
