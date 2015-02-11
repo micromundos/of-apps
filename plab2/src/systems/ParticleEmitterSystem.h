@@ -23,13 +23,8 @@ class ParticleEmitterSystem : public ECSsystem
       emitter_m.init( *world );
       bloq_m.init( *world );
 
-      fisica = system<FisicaSystem>();
-      ps = system<ParticleSystem>();
-
-      if ( fisica == NULL || ps == NULL )
-      {
-        throw "ParticleEmitterSystem needs a FisicaSystem and a ParticleSystem";
-      }
+      fisica = require_system<FisicaSystem>();
+      ps = require_system<ParticleSystem>();
 
       initial_fps_fisica = fisica->fps();
       emit_remainder = 0.0f;

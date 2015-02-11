@@ -63,7 +63,7 @@ class CamaraLucidaSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
 
-      DepthComponent* depth = component<DepthComponent>("input");
+      DepthComponent* depth = require_component<DepthComponent>("input");
 
       if ( depth->dirty )
       {

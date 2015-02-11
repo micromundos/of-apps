@@ -21,12 +21,7 @@ class ParticleFlowFieldSystem : public ECSsystem
     virtual void initialize() 
     {
       particle_flowfield_m.init( *world );
-
-      ps = system<ParticleSystem>();
-      if ( ps == NULL )
-      {
-        throw "ParticleFlowFieldSystem needs a ParticleSystem";
-      }
+      ps = require_system<ParticleSystem>();
     };
 
     // entity: escena

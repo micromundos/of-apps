@@ -24,11 +24,7 @@ class ParticleSystem : public ECSsystem
     {
       ps_m.init( *world ); 
 
-      fisica = system<FisicaSystem>();
-      if ( fisica == NULL )
-      {
-        throw "ParticleSystem needs a FisicaSystem";
-      }
+      fisica = require_system<FisicaSystem>();
 
       init(); 
     }; 

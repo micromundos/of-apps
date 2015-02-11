@@ -33,13 +33,8 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
       //ofps = ps_data->of_particles();
       //b2ps = ps_data->b2_particles();
 
-      fisica = system<FisicaSystem>();
-      ps = system<ParticleSystem>();
-
-      if ( fisica == NULL || ps == NULL )
-      {
-        throw "ParticleDepthSlopeFlowSystem needs a FisicaSystem and a ParticleSystem";
-      }
+      fisica = require_system<FisicaSystem>();
+      ps = require_system<ParticleSystem>();
 
       mesh.setMode(OF_PRIMITIVE_LINES);
     };
