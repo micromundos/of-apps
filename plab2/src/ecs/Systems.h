@@ -1,11 +1,12 @@
 /*
- * this file is tranformed by ecs.js
+ * this file is transformed by ecs.js
  */
 #pragma once
 #include "systems/BloqMakerSystem.h"
-#include "systems/RGBDSystem.h"
 #include "systems/ArucoSystem.h"
 #include "systems/CamaraLucidaSystem.h"
+#include "systems/KinectSystem.h"
+#include "systems/Ps3EyeSystem.h"
 #include "systems/FisicaSystem.h"
 #include "systems/ParticleSystem.h"
 #include "systems/ParticleEmitterSystem.h"

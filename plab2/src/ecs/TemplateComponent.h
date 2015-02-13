@@ -8,8 +8,8 @@ class TemplateComponent : public ECScomponent
 {
   public:
 
-    //float _data;
-    //ofParameter<float> _param;
+    //float _data; //to get value from config.json or live in code only
+    //ofParameter<float> _param; //to get value from a sender via osc
 
     TemplateComponent(string _id) : ECScomponent(_id) {};
 

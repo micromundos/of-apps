@@ -19,7 +19,7 @@ void ofApp::setup()
   kinect.init(false, true, true);
 	kinect.open();
 
-	aruco.setupXML( "calibration_aruco_ps3eye.yml", ofGetWidth(), ofGetHeight() );
+	aruco.setupXML( "calib_ps3eye.aruco.yml", ofGetWidth(), ofGetHeight() );
 
   load_aruco_kinect_calib();
   load_aruco_ps3_calib();
@@ -177,7 +177,7 @@ void ofApp::draw_kinect_undistorted( int x, int y )
 
 void ofApp::load_aruco_kinect_calib() 
 {
-  string filename = "calibration_aruco_kinect.yml";
+  string filename = "calib_kinect.aruco.yml";
   bool absolute = false;
 
   cv::FileStorage fs( ofToDataPath(filename, absolute), cv::FileStorage::READ );
@@ -202,7 +202,7 @@ void ofApp::load_aruco_kinect_calib()
 
 void ofApp::load_aruco_ps3_calib() 
 {
-  string filename = "calibration_aruco_ps3eye.yml";
+  string filename = "calib_ps3eye.aruco.yml";
   bool absolute = false;
 
   cv::FileStorage fs( ofToDataPath(filename, absolute), cv::FileStorage::READ );
@@ -227,8 +227,8 @@ void ofApp::load_aruco_ps3_calib()
 
 void ofApp::load_stereo_calib()
 {
-  string filename = "calibration_RT_ps3eye_to_kinect.yml";
-  //string filename = "calibration_RT_kinect_to_ps3eye.yml";
+  string filename = "calib_RT_ps3eye_to_kinect.yml";
+  //string filename = "calib_RT_kinect_to_ps3eye.yml";
 
   bool absolute = false;
 

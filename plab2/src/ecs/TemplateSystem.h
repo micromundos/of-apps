@@ -2,7 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "components/Components.h"
+#include "ecs/Components.h"
 
 using namespace artemis;
 
@@ -26,18 +26,19 @@ class TemplateSystem : public ECSsystem
       //template_m.get(e)->data;
     };
 
+    //virtual void processEntities( ImmutableBag<Entity*>& bag ) 
+    //{
+      //artemis::EntityProcessingSystem::processEntities( bag );
+      //int len = bag.getCount();
+      //for ( int i = 0; i < len; i++ )
+        //processEntity( *bag.get(i) );
+    //};
+
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("TemplateSystem") << "process entity " << e.getId();
       //template_m.get(e)->data;
-    };
-
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      int len = bag.getCount();
-      for ( int i = 0; i < len; i++ )
-        processEntity( *bag.get(i) );
-    };
+    }; 
 
     virtual void render_entity(Entity &e)
     {};

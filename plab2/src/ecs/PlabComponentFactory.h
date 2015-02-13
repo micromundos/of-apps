@@ -1,12 +1,12 @@
 /*
- * this file is tranformed by ecs.js
+ * this file is transformed by ecs.js
  * no tabs, no spaces
  */
 #pragma once
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "components/Components.h"
+#include "ecs/Components.h"
 
 class PlabComponentFactory : ComponentFactory
 {
@@ -23,7 +23,7 @@ else if (id == "bloq_maker") return new BloqMakerComponent(id);
 else if (id == "bloq_events") return new BloqEventsComponent(id);
 else if (id == "camara_lucida") return new CamaraLucidaComponent(id);
 else if (id == "render") return new RenderComponent(id);
-else if (id == "rgb") return new RGBComponent(id);
+else if (id == "rgb") return new RgbComponent(id);
 else if (id == "depth") return new DepthComponent(id);
 else if (id == "aruco") return new ArucoComponent(id);
 else if (id == "blobs") return new BlobsComponent(id);

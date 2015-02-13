@@ -4,7 +4,7 @@
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
 
-class RGBComponent : public ECScomponent
+class RgbComponent : public ECScomponent
 {
   public:
 
@@ -12,11 +12,11 @@ class RGBComponent : public ECScomponent
 
     int width, height;
     bool dirty;
-    bool ir;
+    string calibration;
 
     ofParameter<bool> render;
 
-    RGBComponent(string _id) : ECScomponent(_id)
+    RgbComponent(string _id) : ECScomponent(_id)
     {
       color_pix = NULL;
       dirty = false;
@@ -26,7 +26,9 @@ class RGBComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
-      ir = d.get("ir", false).asBool();
+      width = d.get("width",640).asInt();
+      height = d.get("height",480).asInt();
+      calibration = d.get("calibration","").asString();
     };
 
     void setup( int w, int h )

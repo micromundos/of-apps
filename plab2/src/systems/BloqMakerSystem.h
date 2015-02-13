@@ -2,8 +2,8 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "components/Components.h"
-#include "components/PlabComponentFactory.h"
+#include "ecs/Components.h"
+#include "ecs/PlabComponentFactory.h"
 
 using namespace artemis;
 

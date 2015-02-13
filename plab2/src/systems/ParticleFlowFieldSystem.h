@@ -2,7 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "components/Components.h"
+#include "ecs/Components.h"
 #include "systems/ParticleSystem.h"
 
 using namespace artemis;

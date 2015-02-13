@@ -120,7 +120,7 @@ void ofApp::calib_save_aruco_format( ofxCv::Calibration& calibration, string nam
     ofLog(OF_LOG_ERROR, "calib_save_aruco_format for " + name + " failed, because your calibration isn't ready yet!");
   }
 
-  string filename = "calibration_aruco_"+ name +".yml";
+  string filename = "calib_"+ name +".aruco.yml";
   bool absolute = false;
 
   cv::FileStorage fs( ofToDataPath(filename, absolute), cv::FileStorage::WRITE );
@@ -150,7 +150,7 @@ void ofApp::calib_save_stereo_RT( string src_name, ofxCv::Calibration& src_calib
 
   if ( ! src_calib.getTransformation( dst_calib, R, T ) ) return;
 
-  string filename = "calibration_RT_" + src_name + "_to_" + dst_name + ".yml";
+  string filename = "calib_RT_" + src_name + "_to_" + dst_name + ".yml";
   bool absolute = false;
 
   cv::FileStorage fs( ofToDataPath(filename, absolute), cv::FileStorage::WRITE); 
@@ -274,7 +274,7 @@ bool ofApp::update_calib( string name, ofxCv::Calibration& calibration, Mat& cam
 
   //if ( calibration.size() > startCleaning ) 
     //calibration.clean();
-  //calibration.save("calibration_"+name+".yml");
+  //calibration.save("calib_"+name+".yml");
 
   calib_save_aruco_format( calibration, name );
 

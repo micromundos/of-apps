@@ -1,5 +1,5 @@
 /*
- * this file is tranformed by ecs.js
+ * this file is transformed by ecs.js
  */
 #pragma once
 #include "components/ConfigComponent.h"
@@ -8,7 +8,7 @@
 #include "components/BloqMakerComponent.h"
 #include "components/RenderComponent.h"
 #include "components/CamaraLucidaComponent.h"
-#include "components/RGBComponent.h"
+#include "components/RgbComponent.h"
 #include "components/DepthComponent.h"
 #include "components/ArucoComponent.h"
 #include "components/BlobsComponent.h"

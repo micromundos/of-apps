@@ -3,7 +3,7 @@
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
 #include "bloqs/BloqAruco.h"
-#include "components/Components.h"
+#include "ecs/Components.h"
 
 using namespace artemis;
 
@@ -15,7 +15,7 @@ class ArucoSystem : public ECSsystem
     ArucoSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<ArucoComponent>();
-      addComponentType<RGBComponent>();
+      addComponentType<RgbComponent>();
     };
 
     virtual void initialize() 
@@ -33,9 +33,9 @@ class ArucoSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
       ArucoComponent* aruco_data = aruco_m.get(e);
-      RGBComponent* rgb = rgb_m.get(e);
+      RgbComponent* rgb = rgb_m.get(e);
 
-      BloqEventsComponent* events = component<BloqEventsComponent>("core");
+      BloqEventsComponent* events = require_component<BloqEventsComponent>("core");
 
       if ( rgb->dirty )
         update( rgb->color_pix, rgb->width, rgb->height, events, aruco_data );
@@ -80,26 +80,28 @@ class ArucoSystem : public ECSsystem
   private: 
 
     ComponentMapper<ArucoComponent> aruco_m;
-    ComponentMapper<RGBComponent> rgb_m;
+    ComponentMapper<RgbComponent> rgb_m;
 
     ofxAruco aruco;
     ofPixels rgb_pix; 
     int channels;
     bool inited;
 
-    void init( RGBComponent* rgb_data )
+    void init( RgbComponent* rgb_data )
     {
       if (inited) 
       {
-        ofLogWarning("ArucoSystem") << "calling init but aruco is already inited";
+        ofLogWarning("ArucoSystem") << "aruco is already inited";
         return;
       }
       inited = true;
 
       int w = rgb_data->width;
       int h = rgb_data->height;
+      string calib = rgb_data->calibration;
 
-      this->channels = rgb_data->ir ?1:3;
+      //this->channels = rgb_data->ir ?1:3;
+      this->channels = 3;
 
       rgb_pix.allocate( w, h, channels );
       rgb_pix.set(0); 

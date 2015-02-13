@@ -8,4 +8,5 @@ ofxKinect
 ofxOpenCv
 ofxCv
 ofxAruco
+ofxPS3EyeGrabber
 addons

@@ -44,13 +44,16 @@
           "id": "rgb",
           "data": {
             "render": true,
-            "ir": false
+            "width": 640,
+            "height": 480,
+            "calibration": "calib_ps3eye.aruco.yml"
           }
         },
         { 
           "id": "depth", 
           "data": {
-            "render": false
+            "render": false,
+            "ir": false
           }
         },
         { 
@@ -92,7 +95,7 @@
   "bloqs": [
 
     {
-      "id": "882",
+      "id": "985",
       "components": [ 
         {
           "id": "particle_emitter",

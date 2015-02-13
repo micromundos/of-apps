@@ -1,14 +1,15 @@
 /*
- * this file is tranformed by ecs.js
+ * this file is transformed by ecs.js
  * no tabs, no spaces
  *
- * TODO only add the systems needed parsing config.json on the fly
+ * TODO 
+ * only add the systems needed parsing config.json on the fly
  * take the order from config.json
  */
 #pragma once
 
 #include "ofxECS.h"
-#include "systems/Systems.h"
+#include "ecs/Systems.h"
 
 class PlabSystemFactory
 {
@@ -20,7 +21,8 @@ void add_systems( ECS& ecs )
 ofLogNotice("PlabSystemFactory") << "add systems";
 ecs.add_system(new BloqMakerSystem("bloq_maker"));
 ecs.add_system(new CamaraLucidaSystem("camara_lucida"));
-ecs.add_system(new RGBDSystem("rgbd"));
+ecs.add_system(new KinectSystem("kinect"));
+ecs.add_system(new Ps3EyeSystem("ps_3_eye"));
 ecs.add_system(new BlobsSystem("blobs"));
 ecs.add_system(new ArucoSystem("aruco"));
 ecs.add_system(new DepthFlowFieldSystem("depth_flow_field"));

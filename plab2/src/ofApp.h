@@ -3,8 +3,8 @@
 #include "ofMain.h"
 #include "ofxJSON.h"
 #include "ofxECS.h"
-#include "components/PlabComponentFactory.h"
-#include "systems/PlabSystemFactory.h"
+#include "ecs/PlabComponentFactory.h"
+#include "ecs/PlabSystemFactory.h"
 #include "utils/Config.h"
 #include "keys.h"
 

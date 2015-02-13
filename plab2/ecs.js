@@ -9,32 +9,20 @@ var setcase = require('change-case');
  */
 
 prog
+    //id
     .option('-n, --name [name_with_snake_case]', 'Name for the specified component and/or system')
-    .option('-a, --add', 'Add system and/or component')
-    .option('-r, --remove', 'Remove system and/or component')
-    .option('-x, --archive', 'Archive system and/or component')
-    .option('-c, --component', 'Process a component')
-    .option('-s, --system', 'Process a system')
+    //operators
+    .option('-a, --add', 'Add system and/or component (operator)')
+    .option('-r, --remove', 'Remove system and/or component (operator)')
+    .option('-x, --archive', 'Archive system and/or component (operator)')
+    .option('-d, --disable', 'Disable system and/or component (operator)')
+    .option('-e, --enable', 'Enable system and/or component (operator)')
+    //operands
+    .option('-c, --component', 'Process a component (operand)')
+    .option('-s, --system', 'Process a system (operand)')
     //TODO optimization for later...
     //.option('-S, --rendersystem', 'Process a render system')
     .parse(process.argv);
-
-var _ops = ['add','remove','archive'];
-var _opcount = 0;
-for ( var i = 0; i < _ops.length; i++ )
-    if ( prog[ _ops[i] ] !== undefined )
-        _opcount++;
-if ( _opcount !== 1 ) {
-    console.log('error: pick --add OR --remove OR --archive / -h for help');
-    return;
-}
-
-if ( prog.component === undefined && prog.system === undefined /*&& prog.rendersystem === undefined*/ ) {
-    prog.component = true;
-    prog.system = true;
-    //console.log('error: pick --component AND/OR --system AND/OR --rendersystem / -h for help');
-    return;
-}
 
 var _name = prog.name;
 
@@ -43,14 +31,35 @@ if ( typeof _name !== 'string' ) {
     return;
 }
 
+var _operators = ['add','remove','archive','disable','enable'];
+var _operands = ['component','system'];
+
+var _operators_count = 0;
+for ( var i = 0; i < _operators.length; i++ )
+    if ( prog[ _operators[i] ] !== undefined )
+        _operators_count++;
+if ( _operators_count !== 1 ) {
+    console.log('error: pick one operator of [',_operators.join(','),'] / -h for help');
+    return;
+}
+
+if ( prog.component === undefined 
+    && prog.system === undefined 
+    //&& prog.rendersystem === undefined
+    ) {
+    console.log('error: pick one operand of [',_operands.join(','),'] / -h for help');
+    return;
+}
+
 var code_placeholder = '//dont remove this line';
 
 var name_pascalcase = setcase.pascalCase(_name);
 var name_snakecase = setcase.snakeCase(_name);
 
-console.log(' - component name:', _name);
+console.log(' - name:', _name);
 console.log(' - pascal case:', name_pascalcase);
 console.log(' - snake case:', name_snakecase);
+
 
 // files
 
@@ -60,12 +69,12 @@ var comp_filename = name_pascalcase+'Component.h';
 var comp_path = __dirname + '/src/components/'+ comp_filename;
 var comp_archive_path = __dirname + '/archive/components/'+ comp_filename;
 
-var comp_include_path = __dirname + '/src/components/Components.h';
+var comp_include_path = __dirname + '/src/ecs/Components.h';
 var comp_include_code = '#include "components/'+ name_pascalcase +'Component.h"' + '\n';
 
-var comp_tpl_path = __dirname + '/src/components/TemplateComponent.h';
+var comp_tpl_path = __dirname + '/src/ecs/TemplateComponent.h';
 
-var comp_factory_path = __dirname + '/src/components/PlabComponentFactory.h'; 
+var comp_factory_path = __dirname + '/src/ecs/PlabComponentFactory.h'; 
 var comp_factory_code = 'else if (id == "'+ name_snakecase +'") return new '+ name_pascalcase +'Component(id);' + '\n';
 
 
@@ -75,12 +84,12 @@ var sys_filename = name_pascalcase+'System.h';
 var sys_path = __dirname + '/src/systems/'+ sys_filename;
 var sys_archive_path = __dirname + '/archive/systems/'+ sys_filename;
 
-var sys_include_path = __dirname + '/src/systems/Systems.h';
+var sys_include_path = __dirname + '/src/ecs/Systems.h';
 var sys_include_code = '#include "systems/'+ name_pascalcase +'System.h"' + '\n';
 
-var sys_tpl_path = __dirname + '/src/systems/TemplateSystem.h';
+var sys_tpl_path = __dirname + '/src/ecs/TemplateSystem.h';
 
-var sys_factory_path = __dirname + '/src/systems/PlabSystemFactory.h'; 
+var sys_factory_path = __dirname + '/src/ecs/PlabSystemFactory.h'; 
 var sys_factory_code = 'ecs.add_system(new '+ name_pascalcase +'System("'+name_snakecase+'"));' + '\n';
 
 
@@ -91,12 +100,12 @@ var sys_factory_code = 'ecs.add_system(new '+ name_pascalcase +'System("'+name_s
 //var sys_render_path = __dirname + '/src/systems/'+ sys_render_filename;
 //var sys_render_archive_path = __dirname + '/archive/systems/'+ sys_render_filename;
 
-//var sys_render_include_path = sys_include_path; //__dirname + '/src/systems/Systems.h';
+//var sys_render_include_path = sys_include_path; //__dirname + '/src/ecs/Systems.h';
 //var sys_render_include_code = '#include "systems/'+ name_pascalcase +'RenderSystem.h"' + '\n';
 
-//var sys_render_tpl_path = sys_tpl_path; //__dirname + '/src/systems/TemplateSystem.h';
+//var sys_render_tpl_path = sys_tpl_path; //__dirname + '/src/ecs/TemplateSystem.h';
 
-//var sys_render_factory_path = sys_factory_path; //__dirname + '/src/systems/PlabSystemFactory.h'; 
+//var sys_render_factory_path = sys_factory_path; //__dirname + '/src/ecs/PlabSystemFactory.h'; 
 //var sys_render_factory_code = 'ecs.add_render_system(new '+ name_pascalcase +'RenderSystem("'+name_snakecase+'"));' + '\n';
 
 
@@ -197,6 +206,7 @@ function add_code_to_file( include_path, include_code ) {
 
 // process...
 
+
 // Remove
 
 if ( prog.remove !== undefined ) {
@@ -245,16 +255,13 @@ if ( prog.archive !== undefined ) {
 
 }
 
-
-
-
 // Add
 
 else if ( prog.add !== undefined ) {
 
     if ( prog.component !== undefined ) {
 
-        // copia ./src/components/TemplateComponent.h a ./src/components/MiXxxCsComponent.h
+        // copia TemplateComponent.h a components/MiXxxCsComponent.h
         // en MiXxxCsComponent.h reemplaza: 
         // * TemplateComponent por MiXxxCsComponent
 
@@ -265,7 +272,7 @@ else if ( prog.add !== undefined ) {
 
     if ( prog.system !== undefined ) {
 
-        // copia ./src/systems/TemplateSystem.h a ./src/systems/MiXxxCsSystem.h
+        // copia TemplateSystem.h a systems/MiXxxCsSystem.h
         // en MiXxxCsSystem.h reemplaza:
         // * TemplateComponent por MiXxxCsComponent
         // * TemplateSystem por MiXxxCsSystem
@@ -282,4 +289,29 @@ else if ( prog.add !== undefined ) {
         //add_code_to_file( sys_render_factory_path, sys_render_factory_code ); 
     //}
 }
+
+else if ( prog.disable !== undefined ) {
+
+    if ( prog.component !== undefined ) {
+        remove_code_from_file( comp_include_path, comp_include_code );
+        remove_code_from_file( comp_factory_path, comp_factory_code ); 
+    }
+    if ( prog.system !== undefined ) {
+        remove_code_from_file( sys_include_path, sys_include_code ); 
+        remove_code_from_file( sys_factory_path, sys_factory_code ); 
+    }
+}
+
+else if ( prog.enable !== undefined ) {
+
+    if ( prog.component !== undefined ) {
+        add_code_to_file( comp_include_path, comp_include_code ); 
+        add_code_to_file( comp_factory_path, comp_factory_code ); 
+    }
+    if ( prog.system !== undefined ) {
+        add_code_to_file( sys_include_path, sys_include_code ); 
+        add_code_to_file( sys_factory_path, sys_factory_code ); 
+    }
+}
+
 
