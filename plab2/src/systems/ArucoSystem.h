@@ -2,8 +2,9 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "bloqs/BloqAruco.h"
+#include "bloqs/Bloq.h"
 #include "ecs/Components.h"
+#include "ofxAruco.h"
 
 using namespace artemis;
 
@@ -50,7 +51,7 @@ class ArucoSystem : public ECSsystem
       if ( !aruco_data->render )
         return;
 
-      RenderComponent* render_data = component<RenderComponent>("output");
+      RenderComponent* render_data = require_component<RenderComponent>("output");
 
       int w = render_data->width;
       int h = render_data->height;
@@ -59,7 +60,7 @@ class ArucoSystem : public ECSsystem
       ofSetLineWidth( 5 );
       //aruco.draw2d();
 
-      vector< shared_ptr<BloqAruco> >& bloqs = aruco_data->bloqs;
+      vector< shared_ptr<Bloq> >& bloqs = aruco_data->bloqs;
 
       ofSetColor(ofColor::green);
       for (int i = 0; i < bloqs.size(); i++)
@@ -113,7 +114,7 @@ class ArucoSystem : public ECSsystem
 
     void update( uint8_t *pixels, int w, int h, BloqEventsComponent* events, ArucoComponent* aruco_data )
     {
-      vector< shared_ptr<BloqAruco> >& bloqs = aruco_data->bloqs;
+      vector< shared_ptr<Bloq> >& bloqs = aruco_data->bloqs;
 
       rgb_pix.setFromPixels( pixels, w, h, channels );
 
@@ -126,16 +127,20 @@ class ArucoSystem : public ECSsystem
 
         aruco::Marker& m = markers[i];
         string bloq_id = ofToString( m.idMarker );
-        BloqAruco* bloq = get_bloq( bloq_id, aruco_data );
+        Bloq* bloq = get_bloq(bloq_id, aruco_data);
 
         if ( bloq == NULL )
         {
-          shared_ptr<BloqAruco> _bloq( new BloqAruco( m, w, h ) );
+
+          //TODO project marker loc from rgb to depth
+          shared_ptr<Bloq> _bloq( new Bloq() );
+          _bloq->id = ofToString( m.idMarker ); 
+          update_bloq(_bloq.get(),m,w,h); 
           bloqs.push_back( _bloq );
           ofNotifyEvent( events->added, *_bloq );
         }
 
-        else if ( bloq->update(m, w, h) )
+        else if (update_bloq(bloq,m,w,h))
         {
           ofNotifyEvent( events->updated, *bloq );
         }
@@ -144,9 +149,9 @@ class ArucoSystem : public ECSsystem
       remove_bloqs_missing( markers, events, aruco_data );
     }; 
 
-    BloqAruco* get_bloq( string id, ArucoComponent* aruco_data )
+    Bloq* get_bloq( string id, ArucoComponent* aruco_data )
     {
-      vector< shared_ptr<BloqAruco> >& bloqs = aruco_data->bloqs;
+      vector< shared_ptr<Bloq> >& bloqs = aruco_data->bloqs;
 
       for( size_t i = 0; i < bloqs.size(); i++ )
         if ( bloqs[i]->id == id )
@@ -165,9 +170,9 @@ class ArucoSystem : public ECSsystem
     void remove_bloqs_missing( vector<aruco::Marker>& markers, BloqEventsComponent* events, ArucoComponent* aruco_data )
     {
 
-      vector< shared_ptr<BloqAruco> >& bloqs = aruco_data->bloqs;
+      vector< shared_ptr<Bloq> >& bloqs = aruco_data->bloqs;
 
-      vector< vector< shared_ptr<BloqAruco> >::iterator> to_remove;
+      vector< vector< shared_ptr<Bloq> >::iterator> to_remove;
 
       for ( int i = 0; i < bloqs.size(); i++ )
       {
@@ -183,6 +188,50 @@ class ArucoSystem : public ECSsystem
       for (size_t i = 0; i < to_remove.size(); i++)
         bloqs.erase( to_remove[i] );
 
+    };
+
+    ofVec2f get_marker_loc(const aruco::Marker& m, int w, int h )
+    {
+      ofVec2f ctr(0,0);
+      for ( int i = 0; i < 4; i++ )
+      {
+        ctr.x += m[i].x;
+        ctr.y += m[i].y;
+      }
+      ctr.x /= 4.;
+      ctr.y /= 4.;
+
+      //normalize
+      ctr.x /= w;
+      ctr.y /= h;
+
+      return ctr;
+    };
+
+    ofVec2f get_marker_dir(const aruco::Marker& m)
+    {
+      ofVec2f dir;
+      ofVec2f p0,p1,p2,p3;
+
+      p0.set( m[0].x, m[0].y );
+      p1.set( m[1].x, m[1].y );
+      p2.set( m[2].x, m[2].y );
+      p3.set( m[3].x, m[3].y );
+
+      dir.set( p0 - p1 );
+      dir.normalize();
+
+      return dir;
+    };
+
+    bool update_bloq( Bloq* bloq, aruco::Marker& m, int w, int h )
+    {
+      ofVec2f mloc = get_marker_loc(m,w,h);
+      if ( bloq->loc == mloc )
+        return false;
+      bloq->loc.set( mloc );
+      bloq->dir.set( get_marker_dir(m) );
+      return true;
     };
 
 };

@@ -53,7 +53,8 @@
           "id": "depth", 
           "data": {
             "render": false,
-            "ir": false
+            "ir": false,
+            "calibration": "calib_kinect.aruco.yml"
           }
         },
         { 

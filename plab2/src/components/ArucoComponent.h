@@ -3,14 +3,14 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "bloqs/BloqAruco.h"
+#include "bloqs/Bloq.h"
 
 class ArucoComponent : public ECScomponent
 {
   public:
 
     ofParameter<bool> render;
-    vector< shared_ptr<BloqAruco> > bloqs;
+    vector< shared_ptr<Bloq> > bloqs;
 
     ArucoComponent(string _id) : ECScomponent(_id) {};
 

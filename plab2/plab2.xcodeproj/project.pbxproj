@@ -501,7 +501,6 @@
 		B64879796F990B3D5282C671 /* SystemBitManager.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = SystemBitManager.cpp; path = ../../../addons/ofxECS/libs/Artemis/SystemBitManager.cpp; sourceTree = SOURCE_ROOT; };
 		B678094A3063DF6F41F12CCB /* b2RopeJoint.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = b2RopeJoint.h; path = ../../../addons/ofxLiquidFun/libs/Box2D/Dynamics/Joints/b2RopeJoint.h; sourceTree = SOURCE_ROOT; };
 		B683B7ADA51410A7F0B13E6A /* matrix_operations.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = matrix_operations.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/gpu/matrix_operations.hpp; sourceTree = SOURCE_ROOT; };
-		B6DB3A66E7B25CA007800039 /* BloqAruco.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = BloqAruco.h; path = src/bloqs/BloqAruco.h; sourceTree = SOURCE_ROOT; };
 		B71BAB6F2F9F1DBADC1EBF68 /* Artemis.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Artemis.h; path = ../../../addons/ofxECS/libs/Artemis/Artemis.h; sourceTree = SOURCE_ROOT; };
 		B797FCD887640BEA00D9BEEB /* ofxKeyValueOSC.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxKeyValueOSC.h; path = ../../../addons/ofxKeyValueOSC/src/ofxKeyValueOSC.h; sourceTree = SOURCE_ROOT; };
 		B7A6BDC5110033D30FE17D27 /* Entity.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Entity.h; path = ../../../addons/ofxECS/libs/Artemis/Entity.h; sourceTree = SOURCE_ROOT; };
@@ -1254,7 +1253,6 @@
 			isa = PBXGroup;
 			children = (
 				6080603729534AA0CC4F2663 /* Bloq.h */,
-				B6DB3A66E7B25CA007800039 /* BloqAruco.h */,
 			);
 			name = bloqs;
 			sourceTree = "<group>";

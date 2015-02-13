@@ -15,6 +15,7 @@ class DepthComponent : public ECScomponent
     int width, height;
     bool dirty;
     bool ir;
+    string calibration;
 
     ofParameter<bool> render;
 
@@ -30,6 +31,7 @@ class DepthComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
       ir = d.get("ir", false).asBool();
+      calibration = d.get("calibration","").asString();
     };
 
     void setup( int w, int h )
