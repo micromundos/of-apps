@@ -12,14 +12,11 @@ void ofApp::setup()
   ecs.init_systems();
 
   component_factory = new PlabComponentFactory();
-  motor.init( ecs.world(), ((ComponentFactory*)component_factory), config.json()["motor"] );
+  motor.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.json()["motor"] );
   motor.make_all();
 
-  cml_data = ecs.component<CamaraLucidaComponent>("output");
-  if (cml_data)
-    ofAddListener( cml_data->cml->render_texture, this, &ofApp::render_texture );
-  else
-    ofLogError() << "CamaraLucidaComponent is NULL";
+  cml_data = ecs.require_component<CamaraLucidaComponent>("output");
+  ofAddListener( cml_data->cml->render_texture, this, &ofApp::render_texture );
 }
 
 void ofApp::update()
@@ -33,7 +30,7 @@ void ofApp::draw()
   ofBackground(100,100,100); 
 
   //pipe render to camara lucida
-  if ( cml_data && cml_data->enabled )
+  if ( cml_data->enabled )
     cml_data->cml->render();
   else
     ecs.render();
@@ -58,7 +55,7 @@ void ofApp::keyReleased(int key)
 
   cml::CamaraLucida* cml = cml_data->cml;
 
-  RenderComponent* render_data = ecs.component<RenderComponent>("output");
+  RenderComponent* render_data = ecs.require_component<RenderComponent>("output");
 
   switch (key)
   { 

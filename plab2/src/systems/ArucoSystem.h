@@ -5,6 +5,7 @@
 #include "bloqs/Bloq.h"
 #include "ecs/Components.h"
 #include "ofxAruco.h"
+#include "ofxCv.h"
 
 using namespace artemis;
 
@@ -17,6 +18,7 @@ class ArucoSystem : public ECSsystem
     {
       addComponentType<ArucoComponent>();
       addComponentType<RgbComponent>();
+      addComponentType<DepthComponent>();
     };
 
     virtual void initialize() 
@@ -122,6 +124,9 @@ class ArucoSystem : public ECSsystem
 
       vector<aruco::Marker>& markers = aruco.getMarkers();
 
+      vector<ofVec2f> corners(4,ofVec2f());
+      ofVec2f mloc, mdir;
+
       for ( int i = 0; i < markers.size(); i++ )
       {
 
@@ -131,16 +136,14 @@ class ArucoSystem : public ECSsystem
 
         if ( bloq == NULL )
         {
-
-          //TODO project marker loc from rgb to depth
           shared_ptr<Bloq> _bloq( new Bloq() );
           _bloq->id = ofToString( m.idMarker ); 
-          update_bloq(_bloq.get(),m,w,h); 
+          update_bloq( _bloq.get(), m, w, h, corners, mloc, mdir ); 
           bloqs.push_back( _bloq );
           ofNotifyEvent( events->added, *_bloq );
         }
 
-        else if (update_bloq(bloq,m,w,h))
+        else if (update_bloq( bloq, m, w, h, corners, mloc, mdir ))
         {
           ofNotifyEvent( events->updated, *bloq );
         }
@@ -190,49 +193,69 @@ class ArucoSystem : public ECSsystem
 
     };
 
-    ofVec2f get_marker_loc(const aruco::Marker& m, int w, int h )
+    //normalized [0,1] corners
+    void marker_corners(const aruco::Marker& m, int w, int h, vector<ofVec2f>& corners )
     {
-      ofVec2f ctr(0,0);
-      for ( int i = 0; i < 4; i++ )
+      for ( int i = 0; i < m.size(); i++ )
       {
-        ctr.x += m[i].x;
-        ctr.y += m[i].y;
+        //TODO project_on_kinect()
+        corners[i].set( m[i].x / w, m[i].y / h );
       }
-      ctr.x /= 4.;
-      ctr.y /= 4.;
-
-      //normalize
-      ctr.x /= w;
-      ctr.y /= h;
-
-      return ctr;
     };
 
-    ofVec2f get_marker_dir(const aruco::Marker& m)
+    void marker_loc( const vector<ofVec2f>& corners, ofVec2f& mloc )
     {
-      ofVec2f dir;
-      ofVec2f p0,p1,p2,p3;
-
-      p0.set( m[0].x, m[0].y );
-      p1.set( m[1].x, m[1].y );
-      p2.set( m[2].x, m[2].y );
-      p3.set( m[3].x, m[3].y );
-
-      dir.set( p0 - p1 );
-      dir.normalize();
-
-      return dir;
+      for ( int i = 0; i < corners.size(); i++ )
+      {
+        mloc.x += corners[i].x;
+        mloc.y += corners[i].y;
+      }
+      mloc.x /= 4.;
+      mloc.y /= 4.;
     };
 
-    bool update_bloq( Bloq* bloq, aruco::Marker& m, int w, int h )
+    void marker_dir( const vector<ofVec2f>& corners, ofVec2f& mdir )
     {
-      ofVec2f mloc = get_marker_loc(m,w,h);
+      ofVec2f p0,p1;
+      //ofVec2f p2,p3;
+
+      p0.set( corners[0].x, corners[0].y );
+      p1.set( corners[1].x, corners[1].y );
+      //p2.set( corners[2].x, corners[2].y );
+      //p3.set( corners[3].x, corners[3].y );
+
+      mdir.set( p0 - p1 );
+      mdir.normalize();
+    };
+
+    bool update_bloq( Bloq* bloq, const aruco::Marker& m, int w, int h, vector<ofVec2f>& corners, ofVec2f& mloc, ofVec2f& mdir )
+    {
+      marker_corners(m,w,h, corners);
+      marker_loc(corners, mloc);
+      marker_dir(corners, mdir);
       if ( bloq->loc == mloc )
         return false;
       bloq->loc.set( mloc );
-      bloq->dir.set( get_marker_dir(m) );
+      bloq->dir.set( mdir );
       return true;
     };
+
+    //void project_on_kinect( const ofVec3f& p3, ofVec2f& p2 )
+    //{
+      //const ofxCv::Intrinsics& _int = calib_kinect.getDistortedIntrinsics();
+      ////const ofxCv::Intrinsics& _int = calib_kinect.getUndistortedIntrinsics();
+
+      //cv::Mat cameraMatrix = _int.getCameraMatrix();
+      //cv::Point2d principalPoint = _int.getPrincipalPoint();
+
+      //float fx = cameraMatrix.at<double>(0, 0);
+      //float fy = cameraMatrix.at<double>(1, 1);
+      //float cx = principalPoint.x;
+      //float cy = principalPoint.y;
+
+      //p2.x = (p3.x * fx / p3.z) + cx;
+      //p2.y = (p3.y * fy / p3.z) + cy;
+    //};
 
 };
 

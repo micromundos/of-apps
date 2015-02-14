@@ -238,6 +238,7 @@
 		12AA20C11A8E8F3D00B8479B /* Systems.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Systems.h; sourceTree = "<group>"; };
 		12AA20C21A8E8F3D00B8479B /* TemplateComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateComponent.h; sourceTree = "<group>"; };
 		12AA20C31A8E8F3D00B8479B /* TemplateSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateSystem.h; sourceTree = "<group>"; };
+		12AA20C41A8FD6F500B8479B /* ECSgetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ECSgetter.h; path = ../../../addons/ofxECS/src/ECSgetter.h; sourceTree = "<group>"; };
 		1586732FE45F7F867B631177 /* SystemBitManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = SystemBitManager.h; path = ../../../addons/ofxECS/libs/Artemis/SystemBitManager.h; sourceTree = SOURCE_ROOT; };
 		1645F56257269CD0356320BD /* ofxJSON.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxJSON.h; path = ../../../addons/ofxJSON/src/ofxJSON.h; sourceTree = SOURCE_ROOT; };
 		16A4AE238493FFCE90D1ED03 /* DelayedEntityProcessingSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = DelayedEntityProcessingSystem.cpp; path = ../../../addons/ofxECS/libs/Artemis/DelayedEntityProcessingSystem.cpp; sourceTree = SOURCE_ROOT; };
@@ -694,6 +695,7 @@
 				EC0502733603A3C6061C28B4 /* ECmaker.h */,
 				2B7C02B0F0D198F7749788BA /* ECS.h */,
 				EBF015393868B4BE17DDE58A /* ECScomponent.h */,
+				12AA20C41A8FD6F500B8479B /* ECSgetter.h */,
 				CF4A68F9A865902EFAF986C3 /* ECSsystem.h */,
 				FC25F72C9C862B1983659B14 /* ofxECS.h */,
 				6A86F651BD75690DF7A5EB49 /* params */,
