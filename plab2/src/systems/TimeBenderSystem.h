@@ -25,7 +25,7 @@ class TimeBenderSystem : public ECSsystem
       fisica = require_system<FisicaSystem>();
 
       initial_fps_fisica = fisica->fps();
-      initial_fps_of = ofGetFrameRate();
+      //initial_fps_of = ofGetFrameRate();
     };
 
     virtual void added(Entity &e) 
@@ -71,7 +71,7 @@ class TimeBenderSystem : public ECSsystem
     ComponentMapper<BloqComponent> bloq_m;
 
     FisicaSystem* fisica;
-    float initial_fps_of;
     float initial_fps_fisica;
+    //float initial_fps_of;
 };
 

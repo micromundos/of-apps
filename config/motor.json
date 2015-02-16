@@ -58,6 +58,7 @@
             "calibration": "calib_kinect.aruco.yml"
           }
         },
+        //input process components
         { 
           "id": "aruco", 
           "data": {
