@@ -26,7 +26,6 @@ class TimeBenderSystem : public ECSsystem
 
       initial_fps_fisica = fisica->fps();
       initial_fps_of = ofGetFrameRate();
-      axis = ofVec2f(0,1);
     };
 
     virtual void added(Entity &e) 
@@ -44,7 +43,7 @@ class TimeBenderSystem : public ECSsystem
       float coef = time_bender_m.get(e)->coef;
 
       Bloq* bloq = bloq_m.get(e)->bloq;
-      float ang = ( bloq->dir.angleRad( axis ) + PI ) / TWO_PI; //[0,1]
+      float ang = bloq->radians / TWO_PI;
 
       //http://stackoverflow.com/questions/13097005/easing-functions-for-bell-curves
       float t = ((sin( TWO_PI * (ang - 0.25f)) + 1) * 0.5);
@@ -74,6 +73,5 @@ class TimeBenderSystem : public ECSsystem
     FisicaSystem* fisica;
     float initial_fps_of;
     float initial_fps_fisica;
-    ofVec2f axis;
 };
 

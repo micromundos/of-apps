@@ -13,6 +13,7 @@ class RgbComponent : public ECScomponent
     int width, height;
     bool dirty;
     string calibration;
+    string calibration_stereo;
 
     ofParameter<bool> render;
 
@@ -29,6 +30,7 @@ class RgbComponent : public ECScomponent
       width = d.get("width",640).asInt();
       height = d.get("height",480).asInt();
       calibration = d.get("calibration","").asString();
+      calibration_stereo = d.get("calibration_stereo","").asString();
     };
 
     void setup( int w, int h )

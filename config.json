@@ -46,7 +46,8 @@
             "render": true,
             "width": 640,
             "height": 480,
-            "calibration": "calib_ps3eye.aruco.yml"
+            "calibration": "calib_ps3eye.aruco.yml",
+            "calibration_stereo": "calib_RT_ps3eye_to_kinect.yml"
           }
         },
         { 
