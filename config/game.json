@@ -1,0 +1,52 @@
+{
+
+  //listas de entidades tagueadas (prefabs)
+
+  "game": [
+
+    {
+      "id": "particles",
+      "components": [
+        { "id": "fisica" },
+        { "id": "particle_system" },
+        { "id": "particle_blobs_containers" }
+        //{ "id": "particle_depth_slope_flow" }
+        //{ "id": "particle_flow_field" }
+      ]
+    }
+  ],
+
+  //bloq = operador
+  //lista de entidades/prefabs con bloq
+  //reciben componente 'bloq' por default
+  //para correr logica con interaccion bloq-bloq usar sistemas con <BloqComponent>
+  "bloqs": [
+
+    {
+      "id": "985",
+      "components": [ 
+        {
+          "id": "particle_emitter",
+          "data": {
+            "rate": [ 10, 0, 100 ], //particulas x seg
+            "force": [ 15, 0, 100 ] //emitter force multiplier (bloq ang)
+          }
+        }
+      ]
+    }
+
+    //{
+      //"id": "985",
+      //"components": [ 
+        //{ 
+          //"id": "time_bender",
+          //"data": {
+            //"coef": [ 20, 1, 100 ]
+          //}
+        //}
+      //]
+    //}
+
+  ]
+
+}

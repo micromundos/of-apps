@@ -368,7 +368,7 @@ class ArucoSystem : public ECSsystem
       ofVec2f mloc, mdir;
 
       //3d loc
-      marker_loc_on_depth( m.Tvec, m.ssize, w, h, mloc );
+      marker_loc_on_depth( m.Tvec.clone(), m.ssize, w, h, mloc );
       //debug: project back on rgb
       //ofVec2f mloc_rgb;
       //debug_marker_loc_on_rgb(m, mloc_rgb);

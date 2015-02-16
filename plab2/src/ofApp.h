@@ -28,7 +28,7 @@ class ofApp : public ofBaseApp
     void gotMessage(ofMessage msg);
 
     ECS ecs;
-    ECmaker motor;
+    ECmaker motor, game;
     Config config;
     PlabComponentFactory* component_factory;
     PlabSystemFactory system_factory;

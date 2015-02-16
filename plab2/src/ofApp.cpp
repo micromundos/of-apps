@@ -12,8 +12,12 @@ void ofApp::setup()
   ecs.init_systems();
 
   component_factory = new PlabComponentFactory();
-  motor.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.json()["motor"] );
+
+  motor.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.motor()["motor"] );
   motor.make_all();
+
+  game.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.game()["game"] );
+  game.make_all();
 
   cml_data = ecs.require_component<CamaraLucidaComponent>("output");
   ofAddListener( cml_data->cml->render_texture, this, &ofApp::render_texture );
