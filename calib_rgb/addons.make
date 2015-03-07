@@ -1,5 +1,0 @@
-ofxCv
-addons
-ofxKinect
-ofxOpenCv
-ofxPS3EyeGrabber

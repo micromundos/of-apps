@@ -38,6 +38,7 @@
     {
       "id": "838",
       "components": [ 
+        { "id": "knob" },
         { 
           "id": "time_bender",
           "data": {
