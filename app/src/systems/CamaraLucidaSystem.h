@@ -105,7 +105,7 @@ class CamaraLucidaSystem : public ECSsystem
       render_data->update( w, h );
     };
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {
       if ( cml_data == NULL )
         return;

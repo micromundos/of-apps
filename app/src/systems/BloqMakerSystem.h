@@ -50,7 +50,7 @@ class BloqMakerSystem : public ECSsystem
         processEntity( *bag.get(i) );
     };
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {};
 
   private:

@@ -77,7 +77,7 @@ class Ps3EyeSystem : public ECSsystem
       }
     }; 
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {
       if ( !rgb_m.get(e)->render )
         return;

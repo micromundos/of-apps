@@ -32,7 +32,7 @@ class DepthFlowFieldSystem : public ECSsystem
       //flowfield_m.get(e)->update(xxx);
     };
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {};
 
   private:

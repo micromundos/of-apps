@@ -39,7 +39,7 @@ class KnobSystem : public ECSsystem
       //ofLogNotice("KnobSystem") << "ang: " << ang << ", value: " << knob_m.get(e)->value;
     }; 
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {};
 
   private:

@@ -44,7 +44,7 @@ class ParticleSystem : public ECSsystem
       //ofLogNotice("ParticleSystem") << "process entity " << e.getId();
     }; 
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {
       //particles.draw();
 

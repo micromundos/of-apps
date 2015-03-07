@@ -54,7 +54,7 @@ class ParticleBlobsContainersSystem : public ECSsystem
 
     }; 
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {
       ofSetLineWidth(1);
       mesh.draw();

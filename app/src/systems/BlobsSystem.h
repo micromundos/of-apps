@@ -50,7 +50,7 @@ class BlobsSystem : public ECSsystem
         processEntity( *bag.get(i) );
     };
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {
       BlobsComponent* blobs_data = blobs_m.get(e);
 

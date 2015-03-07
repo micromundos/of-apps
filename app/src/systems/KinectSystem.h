@@ -87,7 +87,7 @@ class KinectSystem : public ECSsystem
 
     };
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {
 
       RenderComponent* render_data = require_component<RenderComponent>("output");

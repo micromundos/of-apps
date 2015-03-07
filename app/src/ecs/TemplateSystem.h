@@ -40,7 +40,7 @@ class TemplateSystem : public ECSsystem
       //template_m.get(e)->data;
     }; 
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {};
 
   private:

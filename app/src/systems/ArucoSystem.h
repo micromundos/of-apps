@@ -111,7 +111,7 @@ class ArucoSystem : public ECSsystem
       remove_bloqs_missing( markers, events );
     }; 
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {
 
       ArucoComponent* aruco_data = aruco_m.get(e);

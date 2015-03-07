@@ -47,7 +47,7 @@ class ParticleFlowFieldSystem : public ECSsystem
 
     };
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {};
 
   private:

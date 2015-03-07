@@ -180,7 +180,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
       delete[] pv_slope;
     }; 
 
-    virtual void render_entity(Entity &e)
+    virtual void renderEntity(Entity &e)
     {
       ofSetLineWidth(1);
       mesh.draw();
