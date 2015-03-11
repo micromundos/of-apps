@@ -239,6 +239,7 @@
 		12AA20C21A8E8F3D00B8479B /* TemplateComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateComponent.h; sourceTree = "<group>"; };
 		12AA20C31A8E8F3D00B8479B /* TemplateSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateSystem.h; sourceTree = "<group>"; };
 		12AA20C41A8FD6F500B8479B /* ECSgetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ECSgetter.h; path = ../../../addons/ofxECS/src/ECSgetter.h; sourceTree = "<group>"; };
+		12AEE4051AB1005F00A246E4 /* data_path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = data_path.h; sourceTree = "<group>"; };
 		1586732FE45F7F867B631177 /* SystemBitManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = SystemBitManager.h; path = ../../../addons/ofxECS/libs/Artemis/SystemBitManager.h; sourceTree = SOURCE_ROOT; };
 		1645F56257269CD0356320BD /* ofxJSON.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxJSON.h; path = ../../../addons/ofxJSON/src/ofxJSON.h; sourceTree = SOURCE_ROOT; };
 		16A4AE238493FFCE90D1ED03 /* DelayedEntityProcessingSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = DelayedEntityProcessingSystem.cpp; path = ../../../addons/ofxECS/libs/Artemis/DelayedEntityProcessingSystem.cpp; sourceTree = SOURCE_ROOT; };
@@ -799,6 +800,15 @@
 				12AA20C31A8E8F3D00B8479B /* TemplateSystem.h */,
 			);
 			path = ecs;
+			sourceTree = "<group>";
+		};
+		12AEE4041AB1005F00A246E4 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				12AEE4051AB1005F00A246E4 /* data_path.h */,
+			);
+			name = common;
+			path = ../common;
 			sourceTree = "<group>";
 		};
 		13C72B31738CA9F68523CB1C /* include */ = {
@@ -1748,6 +1758,7 @@
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
+				12AEE4041AB1005F00A246E4 /* common */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,

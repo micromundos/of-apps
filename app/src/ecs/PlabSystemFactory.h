@@ -1,6 +1,7 @@
 /*
  * this file is transformed by ecs.js
  * no tabs, no spaces
+ * watch the order carefuly
  *
  * TODO 
  * only add the systems needed parsing config.json on the fly

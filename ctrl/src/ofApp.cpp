@@ -6,10 +6,10 @@ void ofApp::setup(){
   ofSetFrameRate( 30 ); 
 	ofSetVerticalSync(true);
 
-  if ( !settings.open("../../../settings.json") ) 
+  if ( !settings.open( "config/settings.json") )
     ofLogError() << "error opening settings.json";
 
-  if ( !config.open("../../../config.json") ) 
+  if ( !config.open( "config/config.json") )
     ofLogError() << "error opening config.json";
 
 

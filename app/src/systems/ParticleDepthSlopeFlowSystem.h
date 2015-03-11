@@ -66,8 +66,8 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
       //particle loc
       ofVec2f depth_loc, screen_loc;
 
-      //particle vision
-      //[head, left, right]
+      //particle vision triangle
+      //[ head, left, right ]
       b2Vec2 *pvision = new b2Vec2[3];
       ofVec2f *pv_screen = new ofVec2f[3];
       ofVec2f *pv_depth = new ofVec2f[3];
@@ -75,7 +75,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
       float *pv_slope = new float[3];
 
       //TODO vision calc params
-      float vang = PI/4.0f;
+      float vang = PI/4.0f; //45deg
       float vlen = 0.4; //vision length
       b2Rot rot1(vang);
       b2Rot rot2(-vang);
@@ -97,20 +97,24 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
 
         //calc particle vision
         //TODO move to particle_vision component
-        // vision in physics coords 
+        //vision in physics coords 
+        //head
         pvision[0].Set( vel.x, vel.y );
         pvision[0].Normalize();
         pvision[0] *= vlen;
         float x0 = pvision[0].x;
         float y0 = pvision[0].y;
+        //left
         pvision[1].Set(x0, y0);
         fisica->b2Mul(rot1, pvision[1]);
+        //right
         pvision[2].Set(x0, y0);
         fisica->b2Mul(rot2, pvision[2]);
 
         for ( int v = 0; v < 3; v++ )
         {
           pvision[v] += loc;
+
           // vision physics to screen
           fisica->world2screen( pvision[v], pv_screen[v] );
 
@@ -126,8 +130,8 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
           pv_slope[v] = particle_depth_mm - pv_dmm[v];
         }
 
-        // calc particle force
-        // vision points avg weighted by slope = lean towards lower or higher heights (see slope calc)
+        //calc particle force
+        //vision points avg weighted by slope = lean towards lower or higher heights (see slope calc)
         //TODO params
         float pv_slope_thres_mm = 100; //the particle follows lower or higher heights but if slope is too steep (regardless its sign) it will be repeled
 

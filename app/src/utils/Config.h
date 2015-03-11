@@ -6,13 +6,18 @@ class Config
 {
   public:
 
-    Config()
+    Config(){};
+
+    void init()
     {
-      if ( !_motor.open("../../../config/motor.json") ) ofLogError("Config") << "error opening config.json";
+      if ( !_motor.open( "config/motor.json" ) ) 
+        ofLogError("Config") << "error opening motor.json \n";
 
-      if ( !_game.open("../../../config/game.json") ) ofLogError("Config") << "error opening config.json";
+      if ( !_game.open( "config/game.json" ) )
+        ofLogError("Config") << "error opening game.json \n";
 
-      if (!_settings.open("../../../settings.json")) ofLogError("Config") << "error opening settings.json";
+      if ( !_settings.open( "config/settings.json" ) )
+        ofLogError("Config") << "error opening settings.json \n";
     };
 
     const ofxJSONElement& motor()

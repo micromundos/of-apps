@@ -46,8 +46,8 @@
             "render": true,
             "width": 640,
             "height": 480,
-            "calibration": "calib_ps3eye.aruco.yml",
-            "calibration_stereo": "calib_RT_ps3eye_to_kinect.yml"
+            "calibration": "calib/calib_ps3eye.aruco.yml",
+            "calibration_stereo": "calib/calib_RT_ps3eye_to_kinect.yml"
           }
         },
         { 
@@ -55,7 +55,7 @@
           "data": {
             "render": false,
             "ir": false,
-            "calibration": "calib_kinect.aruco.yml"
+            "calibration": "calib/calib_kinect.aruco.yml"
           }
         },
         //input process components

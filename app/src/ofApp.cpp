@@ -2,11 +2,14 @@
 
 void ofApp::setup()
 {
+  ofSetDataPathRoot( __data_path__ );
+
   ofSetLogLevel(OF_LOG_NOTICE);
 
   //ofSetFrameRate(60.0f); 
   ofSetVerticalSync(true);
 
+  config.init();
   ecs.init();
   system_factory.add_systems( ecs );
   ecs.init_systems();
