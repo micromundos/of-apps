@@ -3,6 +3,8 @@
 
 void ofApp::setup(){
 
+  ofSetDataPathRoot( __data_path__ );
+
   ofSetFrameRate( 30 ); 
 	ofSetVerticalSync(true);
 

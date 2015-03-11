@@ -6,6 +6,7 @@
 #include "oscParamSender.h"
 #include "params/ECSparamsSender.h"
 #include "params/ParamID.h"
+#include "data_path.h"
 
 class ofApp : public ofBaseApp{
 
