@@ -30,10 +30,14 @@ class ofApp : public ofBaseApp{
     ofxOscSender sender;
     ofxPanel gui;
 
-    ofxJSONElement config;
+    ofxJSONElement motor;
+    ofxJSONElement game;
     ofxJSONElement settings;
 
     ECSparamsSender params_sender;
+
+    void load_jsons();
+    void parse_config( ofxJSONElement& config );
 
 };
 

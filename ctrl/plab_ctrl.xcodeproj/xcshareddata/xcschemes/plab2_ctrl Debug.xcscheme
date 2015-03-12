@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-               BuildableName = "plab2_ctrl.app"
-               BlueprintName = "plab2_ctrl"
-               ReferencedContainer = "container:plab2_ctrl.xcodeproj">
+               BuildableName = "plab_ctrl.app"
+               BlueprintName = "plab_ctrl"
+               ReferencedContainer = "container:plab_ctrl.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "plab2_ctrl.app"
-            BlueprintName = "plab2_ctrl"
-            ReferencedContainer = "container:plab2_ctrl.xcodeproj">
+            BuildableName = "plab_ctrl.app"
+            BlueprintName = "plab_ctrl"
+            ReferencedContainer = "container:plab_ctrl.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "plab2_ctrl.app"
-            BlueprintName = "plab2_ctrl"
-            ReferencedContainer = "container:plab2_ctrl.xcodeproj">
+            BuildableName = "plab_ctrl.app"
+            BlueprintName = "plab_ctrl"
+            ReferencedContainer = "container:plab_ctrl.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "E4B69B5A0A3A1756003C02F2"
-            BuildableName = "plab2_ctrl.app"
-            BlueprintName = "plab2_ctrl"
-            ReferencedContainer = "container:plab2_ctrl.xcodeproj">
+            BuildableName = "plab_ctrl.app"
+            BlueprintName = "plab_ctrl"
+            ReferencedContainer = "container:plab_ctrl.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

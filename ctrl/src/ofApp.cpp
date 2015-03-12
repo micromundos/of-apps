@@ -6,14 +6,9 @@ void ofApp::setup(){
   ofSetDataPathRoot( __data_path__ );
 
   ofSetFrameRate( 30 ); 
-	ofSetVerticalSync(true);
+	ofSetVerticalSync(true); 
 
-  if ( !settings.open( "config/settings.json") )
-    ofLogError() << "error opening settings.json";
-
-  if ( !config.open( "config/config.json") )
-    ofLogError() << "error opening config.json";
-
+  load_jsons();
 
   string host = "localhost";
   int app_port = settings["params"]["app_port"].asInt();
@@ -22,22 +17,33 @@ void ofApp::setup(){
   sender.setup( host, app_port );
 
   params_sender.init( &sender );
-
 	params.setName("params");
+
+  parse_config( motor );
+  parse_config( game );
+
+  ofxGuiSetDefaultWidth(ofGetWidth()-20);
+  gui.setup( params );
+}
+
+
+void ofApp::parse_config( ofxJSONElement& config )
+{
+  ofLog() << "*** parse config ***";
 
   Json::Value::Members members( config.getMemberNames() );
   for (Json::Value::Members::iterator it = members.begin(); it != members.end(); ++it) 
   {
 
     const std::string &key = *it;
-    ofLog() << "config key: " << key;
+    ofLog() << "\t" << "config key: " << key;
     Json::Value& entities = config[key];
 
     for (int i = 0; i < entities.size(); i++)
     {
       Json::Value& entity = entities[i];
       string entity_id = entity["id"].asString();
-      ofLog() << "-- entity " << entity_id;
+      ofLog() << "\t\t" << "entity " << entity_id;
 
       Json::Value& components = entity["components"];
 
@@ -46,7 +52,7 @@ void ofApp::setup(){
         Json::Value& component = components[j];
         string component_id = component["id"].asString();
         bool has_data = component.isMember("data");
-        ofLog() << "---- component " << component_id << ", has data: " << has_data;
+        ofLog() << "\t\t\t" << "component " << component_id << ", has data: " << has_data;
         if ( !has_data ) continue;
 
         Json::Value& component_data = component["data"];
@@ -61,7 +67,15 @@ void ofApp::setup(){
           //see ECScomponent::param
           string param_id = ParamID::make( entity_id, component_id, key );
 
-          ofLog() << "------ component data key: " << key << ", value as str: " << ( !value.isArray() ? value.asString() : "[array]" ) << " / param_id " << param_id;
+          ofLog() 
+            << "\t\t\t\t" 
+            << "component data" 
+            << "\n" << "\t\t\t\t\t\t" 
+            << "key: " << key 
+            << "\n" << "\t\t\t\t\t\t" 
+            << "value as str: " << ( !value.isArray() ? value.asString() : "[array]" ) 
+            << "\n" << "\t\t\t\t\t\t" 
+            << "param_id " << param_id;
 
           params_sender.add( param_id, value, params ); 
 
@@ -69,11 +83,20 @@ void ofApp::setup(){
       }
     }
   }
+};
 
-  ofxGuiSetDefaultWidth(ofGetWidth()-20);
-  gui.setup( params );
 
-}
+void ofApp::load_jsons()
+{
+  if ( !settings.open( "config/settings.json") )
+    ofLogError() << "error opening settings.json";
+
+  if ( !game.open( "config/game.json") )
+    ofLogError() << "error opening game.json";
+
+  if ( !motor.open( "config/motor.json") )
+    ofLogError() << "error opening motor.json";
+};
 
 
 void ofApp::update(){
