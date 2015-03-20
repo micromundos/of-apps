@@ -12,6 +12,8 @@ class ConfigComponent : public ECScomponent
     Config config;
 
     ConfigComponent(string _id) : ECScomponent(_id)
-    {};
+    {
+      config.init();
+    };
 };
 

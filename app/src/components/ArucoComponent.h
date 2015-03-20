@@ -17,6 +17,5 @@ class ArucoComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
     };
-
 };
 

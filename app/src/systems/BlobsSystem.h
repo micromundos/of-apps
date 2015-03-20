@@ -24,7 +24,6 @@ class BlobsSystem : public ECSsystem
       blobs_m.init( *world );
       depth_m.init( *world ); 
       inited = false; 
-
     };
 
     virtual void added(Entity &e) 

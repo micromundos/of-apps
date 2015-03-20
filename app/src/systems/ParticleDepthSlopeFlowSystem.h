@@ -203,7 +203,6 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
     {
       DepthComponent* depth_data = require_component<DepthComponent>("input");
       RenderComponent* render_data = require_component<RenderComponent>("output");
-
       screen2depth.set( render_data->width, render_data->height, depth_data->width, depth_data->height );
     };
 

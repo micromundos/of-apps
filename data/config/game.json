@@ -9,9 +9,9 @@
       "components": [
         { "id": "fisica" },
         { "id": "particle_system" },
-        { "id": "particle_blobs_containers" }
+        { "id": "particle_blobs_containers" },
+        { "id": "particle_flow_field" }
         //{ "id": "particle_depth_slope_flow" }
-        //{ "id": "particle_flow_field" }
       ]
     }
   ],
@@ -23,7 +23,7 @@
   "bloqs": [
 
     {
-      "id": "985",
+      "id": "760",
       "components": [ 
         {
           "id": "particle_emitter",

@@ -9,4 +9,5 @@ ofxOpenCv
 ofxCv
 ofxAruco
 ofxPS3EyeGrabber
+ofxGPGPU
 addons

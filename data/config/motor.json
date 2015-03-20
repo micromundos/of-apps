@@ -43,7 +43,7 @@
         { 
           "id": "rgb",
           "data": {
-            "render": true,
+            "render": false,
             "width": 640,
             "height": 480,
             "calibration": "calib/calib_ps3eye.aruco.yml",
@@ -53,11 +53,12 @@
         { 
           "id": "depth", 
           "data": {
-            "render": false,
+            "render": true,
             "ir": false,
             "calibration": "calib/calib_kinect.aruco.yml"
           }
         },
+
         //input process components
         { 
           "id": "aruco", 
@@ -75,8 +76,15 @@
 
           }
         }
-        //"flow_field"
-      ]
-    }
+        ,{ 
+          "id": "flow_field",
+          "data": {
+            "width": 320,
+            "height": 240,
+            "render": false
+          }
+        }
+      ] //end of input components
+    } //end of input entity
   ]
 }

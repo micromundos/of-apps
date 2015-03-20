@@ -1,11 +1,12 @@
 /*
  * this file is transformed by ecs.js
  * no tabs, no spaces
- * watch the order carefuly
+ *
+ * XXX order is very important!
  *
  * TODO 
- * only add the systems needed parsing config.json on the fly
  * take the order from config.json
+ * only add the systems needed parsing config.json on the fly
  */
 #pragma once
 

@@ -1,4 +1,6 @@
 #version 120
+#extension GL_EXT_gpu_shader4 : enable
+#extension GL_ARB_texture_rectangle : enable
 
 #pragma include "math.glsl"
 
@@ -19,11 +21,11 @@ const int kernel = 6;
 void main( void ) 
 {
   vec2 loc = gl_TexCoord[0].st;
-  /*float depth = texture2DRect(data,loc).r;*/
+  vec2 size = vec2(textureSize2DRect(data,0));
 
   float ndepth;
-  vec2 nloc = vec2(0.);
-  vec2 force = vec2(0.);
+  vec2 nloc = vec2(0.,0.);
+  vec2 force = vec2(0.,0.);
 
   int n = 0;
   int ini = -kernel / 2;
@@ -34,23 +36,32 @@ void main( void )
   {
     if ( i == 0 && j == 0 )
       continue;
-    nloc = loc + vec2( i,j );
+
+    nloc = loc + vec2(i,j);
+    if ( nloc.x < 0 || nloc.x >= size.x || nloc.y < 0 || nloc.y >= size.y )
+      continue;
+
     ndepth = texture2DRect( data, nloc ).r;
     // * ndepth: drives far away from the plane
     // * -ndepth: drives towards the plane
-    force += vec2( i,j ) * ndepth;
+    force += vec2(i,j) * ndepth;
     n++;
   }
 
-  force /= n; 
-  force = normalize( force );
+  if (n > 0 && force.x != 0 && force.y != 0) 
+  {
+    force /= n; 
+    force = normalize( force );
+  }
 
-  vec2 force_vis = vec2(
-      lerp2d( force.x, -1., 1., 0., 1. ),
-      lerp2d( force.y, -1., 1., 0., 1. )
-      );
+  gl_FragColor = vec4( force, 0., 1. );
 
-  gl_FragColor = vec4( force_vis, 0., 1. );
-  /*gl_FragColor = vec4( force, 0., 1. );*/
+  /*vec2 force_vis = vec2(*/
+    /*lerp2d( force.x, -1., 1., 0., 1. ),*/
+    /*lerp2d( force.y, -1., 1., 0., 1. )*/
+  /*);*/
+  /*gl_FragColor = vec4( force_vis, 0., 1. );*/
+
+  /*float depth = texture2DRect(data,loc).r;*/
   /*gl_FragColor = vec4( depth, 0., 0., 1. );*/
 }

@@ -77,14 +77,14 @@ class KinectSystem : public ECSsystem
       depth_data->dirty = dirty; 
       //rgb_data->dirty = dirty; 
 
-      if ( dirty )
-      {
-        depth_data->update( kinect.getRawDepthPixels() );
-        depth_data->update( kinect.getDepthPixels() );
-        //depth_data->update( kinect.getDepthTextureReference() );
-        //rgb_data->update( kinect.getPixels() );
-      }
+      if ( !dirty ) return;
 
+      //TODO move all getXXXPixels() to ofXXXPixelsRef(), see DepthComponent
+      depth_data->update( kinect.getRawDepthPixels() );
+      depth_data->update( kinect.getDistancePixels() );
+      depth_data->update( kinect.getDepthPixels() );
+      //depth_data->update( kinect.getDepthTextureReference() );
+      //rgb_data->update( kinect.getPixels() );
     };
 
     virtual void renderEntity(Entity &e)

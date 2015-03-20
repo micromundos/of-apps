@@ -14,6 +14,7 @@
 		0F8F016776681D468C0D0949 /* audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 34FC4C582EA5ED68F36013CD /* audio.c */; };
 		109B799A08029E0E78AA8FB0 /* b2Rope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F39FC388F7A908D23B2FE216 /* b2Rope.cpp */; };
 		10B69DE456AED1288FC9316B /* Tracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A810DF70319A10353588F5DB /* Tracker.cpp */; };
+		120671401AB26AB100235F89 /* process.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1206713B1AB26AB100235F89 /* process.cpp */; };
 		126F12C38BF359E97877D207 /* ofxAruco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C42F260C1D187B145FA6B49B /* ofxAruco.cpp */; };
 		12AA20BB1A8D01C500B8479B /* ps3eye.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12AA20B51A8D01C500B8479B /* ps3eye.cpp */; };
 		12AA20BC1A8D01C500B8479B /* ofxPS3EyeGrabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12AA20B91A8D01C500B8479B /* ofxPS3EyeGrabber.cpp */; };
@@ -226,6 +227,11 @@
 		114B872696817CC33990FC83 /* imgproc.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imgproc.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/imgproc/imgproc.hpp; sourceTree = SOURCE_ROOT; };
 		1185BC900175438AC80FC7F5 /* b2Particle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = b2Particle.cpp; path = ../../../addons/ofxLiquidFun/libs/Box2D/Particle/b2Particle.cpp; sourceTree = SOURCE_ROOT; };
 		11AB92BA5A01947BD5C8AFD2 /* triangle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = triangle.h; path = ../../../addons/ofxLiquidFun/libs/triangle/triangle.h; sourceTree = SOURCE_ROOT; };
+		1206713A1AB26AB100235F89 /* ofxGPGPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGPGPU.h; sourceTree = "<group>"; };
+		1206713B1AB26AB100235F89 /* process.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = process.cpp; sourceTree = "<group>"; };
+		1206713C1AB26AB100235F89 /* process.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = process.h; sourceTree = "<group>"; };
+		1206713D1AB26AB100235F89 /* shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		1206713F1AB26AB100235F89 /* oddevenmergesort.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oddevenmergesort.h; sourceTree = "<group>"; };
 		12AA20B11A8D01C500B8479B /* addon_config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = addon_config.mk; path = ../../../addons/ofxPS3EyeGrabber/addon_config.mk; sourceTree = "<group>"; };
 		12AA20B51A8D01C500B8479B /* ps3eye.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ps3eye.cpp; sourceTree = "<group>"; };
 		12AA20B61A8D01C500B8479B /* ps3eye.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ps3eye.h; sourceTree = "<group>"; };
@@ -740,6 +746,35 @@
 				59626D03C690200AD4E8B3A6 /* ml.hpp */,
 			);
 			name = ml;
+			sourceTree = "<group>";
+		};
+		120671371AB26A9A00235F89 /* ofxGPGPU */ = {
+			isa = PBXGroup;
+			children = (
+				120671381AB26AB100235F89 /* src */,
+			);
+			name = ofxGPGPU;
+			sourceTree = "<group>";
+		};
+		120671381AB26AB100235F89 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				1206713A1AB26AB100235F89 /* ofxGPGPU.h */,
+				1206713B1AB26AB100235F89 /* process.cpp */,
+				1206713C1AB26AB100235F89 /* process.h */,
+				1206713D1AB26AB100235F89 /* shader.h */,
+				1206713E1AB26AB100235F89 /* shaders */,
+			);
+			name = src;
+			path = ../../../addons/ofxGPGPU/src;
+			sourceTree = "<group>";
+		};
+		1206713E1AB26AB100235F89 /* shaders */ = {
+			isa = PBXGroup;
+			children = (
+				1206713F1AB26AB100235F89 /* oddevenmergesort.h */,
+			);
+			path = shaders;
 			sourceTree = "<group>";
 		};
 		12AA20B01A8D01A600B8479B /* ofxPS3EyeGrabber */ = {
@@ -1525,6 +1560,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				120671371AB26A9A00235F89 /* ofxGPGPU */,
 				12AA20B01A8D01A600B8479B /* ofxPS3EyeGrabber */,
 				0CDEF3768A418E430623C366 /* ofxECS */,
 				2865DAEF86B1907A704CA70B /* ofxJSON */,
@@ -2104,6 +2140,7 @@
 				F0A2BB1960C6187B7EA12EA5 /* b2PolygonShape.cpp in Sources */,
 				12AA20BC1A8D01C500B8479B /* ofxPS3EyeGrabber.cpp in Sources */,
 				D178E2BCBC7F027A53B6C9DF /* b2BlockAllocator.cpp in Sources */,
+				120671401AB26AB100235F89 /* process.cpp in Sources */,
 				35D2652CBB47ABA129250F91 /* b2Draw.cpp in Sources */,
 				ACFD9F73073C6D26A4300E4C /* b2FreeList.cpp in Sources */,
 				D7014DA1DC8ABBB6FB6C76EE /* b2Math.cpp in Sources */,
