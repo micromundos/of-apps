@@ -21,18 +21,23 @@ class TemplateSystem : public ECSsystem
       template_m.init( *world );
     };
 
-    virtual void added(Entity &e) 
-    {
-      //template_m.get(e)->data;
-    };
-
     //virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     //{
-      //artemis::EntityProcessingSystem::processEntities( bag );
+      //EntityProcessingSystem::processEntities(bag);
       //int len = bag.getCount();
       //for ( int i = 0; i < len; i++ )
         //processEntity( *bag.get(i) );
     //};
+
+    //virtual void renderEntities( ImmutableBag<Entity*>& bag ) 
+    //{
+      //EntityProcessingSystem::renderEntities(bag);
+    //};
+
+    virtual void added(Entity &e) 
+    {
+      //template_m.get(e)->data;
+    }; 
 
     virtual void processEntity(Entity &e) 
     {

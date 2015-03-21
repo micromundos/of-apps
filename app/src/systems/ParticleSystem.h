@@ -5,7 +5,6 @@
 #include "ecs/Components.h"
 #include "ecs/Systems.h"
 #include "bloqs/Bloq.h"
-#include "ofxLiquidFun.h"
 
 using namespace artemis;
 
@@ -23,29 +22,14 @@ class ParticleSystem : public ECSsystem
     virtual void initialize() 
     {
       ps_m.init( *world ); 
-
       fisica = require_system<FisicaSystem>();
-
       init(); 
     }; 
 
-    virtual void added(Entity &e) 
-    {};
-
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
+    void renderEntities(ImmutableBag<Entity*>& bag) 
     {
-      //int len = bag.getCount();
-      //for ( int i = 0; i < len; i++ )
-        //processEntity( *bag.get(i) );
-    };
+      //EntityProcessingSystem::renderEntities(bag);
 
-    virtual void processEntity(Entity &e) 
-    {
-      //ofLogNotice("ParticleSystem") << "process entity " << e.getId();
-    }; 
-
-    virtual void renderEntity(Entity &e)
-    {
       //particles.draw();
 
       mesh.clear();
@@ -66,11 +50,20 @@ class ParticleSystem : public ECSsystem
 
       ofSetColor(255);
       ofPushMatrix();
-      ofScale( OFX_BOX2D_SCALE, OFX_BOX2D_SCALE );
+      ofScale( fisica->scale(), fisica->scale() );
       glPointSize( render_size );
       mesh.draw();
       ofPopMatrix();
     };
+
+    virtual void added(Entity &e) 
+    {};
+
+    virtual void processEntity(Entity &e) 
+    {}; 
+
+    virtual void renderEntity(Entity &e)
+    {};
 
     int32 make_particle( float _locx, float _locy, float _velx, float _vely )
     {
@@ -119,7 +112,6 @@ class ParticleSystem : public ECSsystem
 
     void init()
     {
-
       mesh.setMode( OF_PRIMITIVE_POINTS );
 
       max_count = 5000;
@@ -131,7 +123,7 @@ class ParticleSystem : public ECSsystem
       b2color.Set( ofcolor.r, ofcolor.g, ofcolor.b, ofcolor.a );
 
       b2ParticleSystemDef psd;
-      psd.radius = radius / OFX_BOX2D_SCALE;
+      psd.radius = radius / fisica->scale();
       psd.maxCount = max_count;
 
       /// Reduces relative velocity of viscous particles

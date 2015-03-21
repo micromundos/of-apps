@@ -55,7 +55,7 @@ class ParticleFlowFieldSystem : public ECSsystem
       {
         b2Vec2& loc = locs[i]; 
         get_force( field, loc, ff_data, ff_loc, screen_loc, force );
-        b2ps->ParticleApplyForce(i, force);
+        b2ps->ParticleApplyForce( i, force );
       }
 
     };

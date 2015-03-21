@@ -3,7 +3,6 @@
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
 #include "ecs/Components.h"
-#include "ofxLiquidFun.h"
 
 using namespace artemis;
 
@@ -22,22 +21,12 @@ class ParticleBlobsContainersSystem : public ECSsystem
     {
       fisica = require_system<FisicaSystem>();
       mesh.setMode(OF_PRIMITIVE_LINES);
-    };
-
-    virtual void added(Entity &e) 
-    {};
+    }; 
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
+      //EntityProcessingSystem::processEntities(bag);
       mesh.clear();
-      int len = bag.getCount();
-      for ( int i = 0; i < len; i++ )
-        processEntity( *bag.get(i) );
-    };
-
-    virtual void processEntity(Entity &e) 
-    {
-      //ofLogNotice("ParticleBlobsContainersSystem") << "process entity " << e.getId();
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
       BlobsComponent* blobs_data = require_component<BlobsComponent>("input");
@@ -51,14 +40,23 @@ class ParticleBlobsContainersSystem : public ECSsystem
       {
         blob_bodies.push_back( make_blob_body( blobs[i], render_data ) );
       }
+    };
 
-    }; 
-
-    virtual void renderEntity(Entity &e)
+    virtual void renderEntities( ImmutableBag<Entity*>& bag ) 
     {
+      //EntityProcessingSystem::renderEntities(bag);
       ofSetLineWidth(1);
       mesh.draw();
     };
+
+    virtual void added(Entity &e) 
+    {};
+
+    virtual void processEntity(Entity &e) 
+    {}; 
+
+    virtual void renderEntity(Entity &e)
+    {};
 
   private:
 

@@ -3,7 +3,9 @@
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
 #include "ecs/Components.h"
-#include "ofxLiquidFun.h"
+//#include "ofxLiquidFun.h"
+#include <Box2D/Box2D.h>
+//#include "Box2D.h"
 
 using namespace artemis;
 
@@ -17,49 +19,77 @@ class FisicaSystem : public ECSsystem
       addComponentType<FisicaComponent>();
     };
 
+    ~FisicaSystem()
+    {
+      delete m_world;
+      m_world = NULL;
+    };
+
     virtual void initialize() 
     {
       fisica_m.init( *world );
-      box2d.init();
-      box2d.setGravity(0,0);
-      fps( 30.0f );
+
+      //box2d.init();
+      //box2d.setGravity(0,0);
+
+      b2Vec2 gravity;
+      gravity.Set(0.0f,0.0f);
+      m_world = new b2World(gravity); 
+
+      _fps = 30.0f;
+      _scale = 30.0f; //see OFX_BOX2D_SCALE
+      vel_iterations = 8;
+      pos_iterations = 3;
+      particle_iterations = 1;
+      //particle_iterations = b2CalculateParticleIterations( 10, 0.04f, 1.0f / _fps );
+    };
+
+    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
+    {
+      //box2d.update();
+
+      m_world->SetAllowSleeping(true);
+      //debugging
+      m_world->SetWarmStarting(false);
+      m_world->SetContinuousPhysics(false);
+      m_world->SetSubStepping(false);
+
+      //particle_iterations = ceil( ofGetFrameRate() / 30.0f );
+
+      float	time_step = _fps > 0.0f ? (1.0f / _fps) : 0.0f;
+      m_world->Step( time_step,
+          vel_iterations,
+          pos_iterations,
+          particle_iterations);
     };
 
     virtual void added(Entity &e) 
     {};
 
     virtual void processEntity(Entity &e) 
-    {
-      //ofLogNotice("FisicaSystem") << "process entity " << e.getId();
-      //fisica_m.get(e)->data;
-    };
-
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      box2d.update();
-      //int len = bag.getCount();
-      //for ( int i = 0; i < len; i++ )
-        //processEntity( *bag.get(i) );
-    };
+    {}; 
 
     virtual void renderEntity(Entity &e)
     {};
 
     b2World* b2world()
     {
-      return box2d.getWorld();
+      return m_world;
+      //return box2d.getWorld();
     }; 
 
     void fps( float val )
-    {
-      _fps = val;
-      box2d.setFPS( _fps );
-    };
+    { _fps = val; };
+      //box2d.setFPS( _fps );
 
     float fps() 
-    {
-      return _fps;
-    };
+    { return _fps; };
+
+    void scale( float val )
+    { _scale = val; };
+
+    float scale() 
+    { return _scale; };
 
     //utils
 
@@ -70,8 +100,8 @@ class FisicaSystem : public ECSsystem
 
     void world2screen( float src_x, float src_y, float& dst_x, float& dst_y ) 
     {
-      dst_x = src_x * OFX_BOX2D_SCALE;
-      dst_y = src_y * OFX_BOX2D_SCALE;
+      dst_x = src_x * _scale;
+      dst_y = src_y * _scale;
     };
 
     void screen2world( const ofVec2f& src, b2Vec2& dst ) 
@@ -81,8 +111,8 @@ class FisicaSystem : public ECSsystem
 
     void screen2world( float src_x, float src_y, float& dst_x, float& dst_y ) 
     {
-      dst_x = src_x / OFX_BOX2D_SCALE;
-      dst_y = src_y / OFX_BOX2D_SCALE;
+      dst_x = src_x / _scale;
+      dst_y = src_y / _scale;
     };
 
     // Rotate a vector
@@ -132,8 +162,14 @@ class FisicaSystem : public ECSsystem
 
   private:
 
-    ofxBox2d box2d; 
+    //ofxBox2d box2d; 
+    b2World* m_world;
+
+    int vel_iterations;
+    int pos_iterations;
+    int particle_iterations;
     float _fps;
+    float _scale;
 
     ComponentMapper<FisicaComponent> fisica_m;
 
