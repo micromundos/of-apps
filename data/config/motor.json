@@ -1,6 +1,7 @@
 {
 
   //listas de entidades tagueadas (prefabs)
+  //TODO motor = una entidad sola
 
   "motor": [
 

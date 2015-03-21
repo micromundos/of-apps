@@ -38,17 +38,16 @@ class BloqMakerSystem : public ECSsystem
       init( config_m.get(e), bloq_events_m.get(e) );
     };
 
+    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
+    {
+      artemis::EntityProcessingSystem::processEntities( bag );
+    };
+
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("BloqMakerSystem") << "process entity " << e.getId();
       //bloq_maker_m.get(e)->data;
-    };
-
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      for (int i=0;i<bag.getCount();i++)
-        processEntity( *bag.get(i) );
-    };
+    }; 
 
     virtual void renderEntity(Entity &e)
     {};
@@ -79,6 +78,9 @@ class BloqMakerSystem : public ECSsystem
 
     void bloq_added( Bloq& bloq )
     {
+      //ofLogNotice("BloqMakerSystem") 
+        //<< "bloq_added: " 
+        //<< bloq.id;
       make_entity( bloq );
     };
 
@@ -89,6 +91,9 @@ class BloqMakerSystem : public ECSsystem
 
     void bloq_removed( string& bloq_id )
     {
+      //ofLogNotice("BloqMakerSystem") 
+        //<< "bloq_removed: " 
+        //<< bloq_id;
       remove_entity( bloq_id );
     };
 
@@ -116,7 +121,7 @@ class BloqMakerSystem : public ECSsystem
 
       if ( ! has_entity( bloq_id ) )
       {
-        ofLogNotice("BloqMakerSystem") << "remove_entity by bloq id " << bloq_id << ": entity not found"; 
+        ofLogWarning("BloqMakerSystem") << "remove_entity by bloq id " << bloq_id << ": entity not found"; 
         return;
       }
 

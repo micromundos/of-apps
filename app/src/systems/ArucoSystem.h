@@ -88,7 +88,7 @@ class ArucoSystem : public ECSsystem
       //ofLog() << "aruco update" 
         //<< ", markers: " << markers.size();
 
-      for ( int i = 0; i < markers.size(); i++ )
+      for ( int i = 0; i < aruco.getNumMarkers(); i++ )
       {
         aruco::Marker& m = markers[i];
         string bloq_id = ofToString( m.idMarker );
@@ -108,7 +108,7 @@ class ArucoSystem : public ECSsystem
         }
       }
 
-      remove_bloqs_missing( markers, events );
+      remove_bloqs_missing( events );
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -177,24 +177,26 @@ class ArucoSystem : public ECSsystem
       return NULL;
     };
 
-    aruco::Marker* get_marker( int id, vector<aruco::Marker>& markers )
+    aruco::Marker* get_marker( int id )
     {
-      for( size_t i = 0; i < markers.size(); i++ )
+      vector<aruco::Marker>& markers = aruco.getMarkers();
+      for( size_t i = 0; i < aruco.getNumMarkers(); i++ )
         if ( markers[i].idMarker == id )
           return &markers[i];
       return NULL;
     }; 
 
-    void remove_bloqs_missing( vector<aruco::Marker>& markers, BloqEventsComponent* events )
+    void remove_bloqs_missing( BloqEventsComponent* events )
     {
-
+      vector<aruco::Marker>& markers = aruco.getMarkers();
       vector< vector< shared_ptr<Bloq> >::iterator> to_remove;
 
       for ( int i = 0; i < bloqs.size(); i++ )
       {
         string bloq_id = bloqs[i]->id;
         int marker_id = ofToInt( bloq_id );
-        if ( get_marker( marker_id, markers ) != NULL ) continue;
+        if ( get_marker( marker_id ) != NULL ) 
+          continue;
         to_remove.push_back( bloqs.begin() + i );
 
         ofNotifyEvent( events->removed, bloq_id );

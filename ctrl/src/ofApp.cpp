@@ -1,6 +1,9 @@
 #include "ofApp.h"
 
 
+int prev;
+int send_interval = 2;
+
 void ofApp::setup(){
 
   ofSetDataPathRoot( __data_path__ );
@@ -24,6 +27,18 @@ void ofApp::setup(){
 
   ofxGuiSetDefaultWidth(ofGetWidth()-20);
   gui.setup( params );
+
+  prev = ofGetSeconds();
+}
+
+void ofApp::update()
+{
+  int now = ofGetSeconds();
+  if ( (now-prev) == send_interval )
+  {
+    params_sender.send();
+    prev = now;
+  }
 }
 
 
@@ -97,10 +112,6 @@ void ofApp::load_jsons()
   if ( !motor.open( "config/motor.json") )
     ofLogError() << "error opening motor.json";
 };
-
-
-void ofApp::update(){
-}
 
 
 void ofApp::draw(){
