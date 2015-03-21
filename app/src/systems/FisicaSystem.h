@@ -3,9 +3,7 @@
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
 #include "ecs/Components.h"
-//#include "ofxLiquidFun.h"
 #include <Box2D/Box2D.h>
-//#include "Box2D.h"
 
 using namespace artemis;
 
@@ -29,9 +27,6 @@ class FisicaSystem : public ECSsystem
     {
       fisica_m.init( *world );
 
-      //box2d.init();
-      //box2d.setGravity(0,0);
-
       b2Vec2 gravity;
       gravity.Set(0.0f,0.0f);
       m_world = new b2World(gravity); 
@@ -46,8 +41,6 @@ class FisicaSystem : public ECSsystem
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
-      //box2d.update();
-
       m_world->SetAllowSleeping(true);
       //debugging
       m_world->SetWarmStarting(false);
@@ -75,12 +68,10 @@ class FisicaSystem : public ECSsystem
     b2World* b2world()
     {
       return m_world;
-      //return box2d.getWorld();
     }; 
 
     void fps( float val )
     { _fps = val; };
-      //box2d.setFPS( _fps );
 
     float fps() 
     { return _fps; };
@@ -162,7 +153,6 @@ class FisicaSystem : public ECSsystem
 
   private:
 
-    //ofxBox2d box2d; 
     b2World* m_world;
 
     int vel_iterations;
