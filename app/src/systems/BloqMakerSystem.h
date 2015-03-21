@@ -67,7 +67,7 @@ class BloqMakerSystem : public ECSsystem
 
     void init( ConfigComponent* config_data, BloqEventsComponent* bloq_events )
     {
-      bloq_maker.init( world, ((ComponentFactory*)component_factory), config_data->config.game()["bloqs"] );
+      bloq_maker.init( world, ((ComponentFactory*)component_factory), config_data->config.game()["bloqs"], config_data->config.settings()["params"]["app_port"].asInt() );
 
       ofAddListener( bloq_events->added, this, &BloqMakerSystem::bloq_added );
       ofAddListener( bloq_events->updated, this, &BloqMakerSystem::bloq_updated );

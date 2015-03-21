@@ -2,7 +2,7 @@
 
 
 int prev;
-int send_interval = 2;
+int send_interval;
 
 void ofApp::setup(){
 
@@ -16,6 +16,8 @@ void ofApp::setup(){
   string host = "localhost";
   int app_port = settings["params"]["app_port"].asInt();
   //int ctrl_port = settings["params"]["ctrl_port"].asInt();
+
+  send_interval = settings["params"]["ctrl_send_interval"].asInt();
 
   sender.setup( host, app_port );
 
@@ -34,7 +36,7 @@ void ofApp::setup(){
 void ofApp::update()
 {
   int now = ofGetSeconds();
-  if ( (now-prev) == send_interval )
+  if ( abs(now-prev) >= send_interval )
   {
     params_sender.send();
     prev = now;

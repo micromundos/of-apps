@@ -108,6 +108,7 @@ class ArucoSystem : public ECSsystem
         }
       }
 
+      //FIXME
       remove_bloqs_missing( events );
     }; 
 

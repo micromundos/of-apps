@@ -16,10 +16,12 @@ void ofApp::setup()
 
   component_factory = new PlabComponentFactory();
 
-  motor.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.motor()["motor"] );
+  int app_port = config.settings()["params"]["app_port"].asInt();
+
+  motor.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.motor()["motor"], app_port );
   motor.make_all();
 
-  game.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.game()["game"] );
+  game.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.game()["game"], app_port );
   game.make_all();
 
   cml_data = ecs.require_component<CamaraLucidaComponent>("output");
