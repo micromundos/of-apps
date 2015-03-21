@@ -82,11 +82,14 @@ class Ps3EyeSystem : public ECSsystem
       if ( !rgb_m.get(e)->render )
         return;
 
+      RenderComponent* render_data = require_component<RenderComponent>("output");
+
       ofPushStyle();
       ofSetColor(255);
 
       ps3_tex.loadData( ps3.getPixelsRef() );
-      ps3_tex.draw( 0, 0 );
+      ps3_tex.draw( 0, 0,
+          render_data->width, render_data->height );
 
       ofPopStyle();
     };

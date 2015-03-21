@@ -9,7 +9,12 @@
       "components": [
         { "id": "fisica" },
         { "id": "particle_system" },
-        { "id": "particle_blobs_containers" },
+        { 
+          "id": "particle_blobs_containers",
+          "data": {
+            "render": true
+          }
+        },
         { "id": "particle_flow_field" }
         //{ "id": "particle_depth_slope_flow" }
       ]
@@ -28,8 +33,8 @@
         {
           "id": "particle_emitter",
           "data": {
-            "rate": [ 10, 0, 100 ], //particulas x seg
-            "force": [ 15, 0, 100 ] //emitter force multiplier (bloq ang)
+            "rate": [ 5, 0, 100 ], //particulas x seg
+            "force": [ 1.5, 0, 100 ] //emitter force multiplier (bloq ang)
           }
         }
       ]

@@ -60,9 +60,7 @@ class KinectSystem : public ECSsystem
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
-
       kinect.update();
-
       artemis::EntityProcessingSystem::processEntities( bag );
     };
 

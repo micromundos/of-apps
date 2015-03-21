@@ -19,8 +19,8 @@ class FisicaSystem : public ECSsystem
 
     ~FisicaSystem()
     {
-      delete m_world;
-      m_world = NULL;
+      delete _world;
+      _world = NULL;
     };
 
     virtual void initialize() 
@@ -29,7 +29,7 @@ class FisicaSystem : public ECSsystem
 
       b2Vec2 gravity;
       gravity.Set(0.0f,0.0f);
-      m_world = new b2World(gravity); 
+      _world = new b2World(gravity); 
 
       _fps = 30.0f;
       _scale = 30.0f; //see OFX_BOX2D_SCALE
@@ -41,16 +41,16 @@ class FisicaSystem : public ECSsystem
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
-      m_world->SetAllowSleeping(true);
+      _world->SetAllowSleeping(true);
       //debugging
-      m_world->SetWarmStarting(false);
-      m_world->SetContinuousPhysics(false);
-      m_world->SetSubStepping(false);
+      _world->SetWarmStarting(false);
+      _world->SetContinuousPhysics(false);
+      _world->SetSubStepping(false);
 
       //particle_iterations = ceil( ofGetFrameRate() / 30.0f );
 
       float	time_step = _fps > 0.0f ? (1.0f / _fps) : 0.0f;
-      m_world->Step( time_step,
+      _world->Step( time_step,
           vel_iterations,
           pos_iterations,
           particle_iterations);
@@ -67,7 +67,7 @@ class FisicaSystem : public ECSsystem
 
     b2World* b2world()
     {
-      return m_world;
+      return _world;
     }; 
 
     void fps( float val )
@@ -153,7 +153,7 @@ class FisicaSystem : public ECSsystem
 
   private:
 
-    b2World* m_world;
+    b2World* _world;
 
     int vel_iterations;
     int pos_iterations;

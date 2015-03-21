@@ -75,9 +75,10 @@ class DepthFlowFieldSystem : public ECSsystem
       if ( !ff_data->render )
         return;
 
-      DepthComponent* depth_data = depth_m.get(e);
+      RenderComponent* render_data = require_component<RenderComponent>("output");
 
-      ff.get().draw( 0, 0, ff_data->width, ff_data->height );
+      ff.get().draw( 0, 0, 
+          render_data->width, render_data->height );
     };
 
   private:

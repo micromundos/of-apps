@@ -71,7 +71,7 @@
           "id": "blobs",
           "data": {
             "threshold_near": [ 255, 0, 255 ],
-            "threshold_far": [ 209, 0, 255 ],
+            "threshold_far": [ 100, 0, 255 ],
             "render_depth_filtered": false,
             "render_contour_finder": false
 

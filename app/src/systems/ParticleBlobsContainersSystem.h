@@ -19,13 +19,16 @@ class ParticleBlobsContainersSystem : public ECSsystem
 
     virtual void initialize() 
     {
+      p_blob_container_m.init(*world);
       fisica = require_system<FisicaSystem>();
       mesh.setMode(OF_PRIMITIVE_LINES);
     }; 
 
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
+    virtual void added(Entity &e) 
+    {};
+
+    virtual void processEntity(Entity &e) 
     {
-      //EntityProcessingSystem::processEntities(bag);
       mesh.clear();
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
@@ -40,25 +43,21 @@ class ParticleBlobsContainersSystem : public ECSsystem
       {
         blob_bodies.push_back( make_blob_body( blobs[i], render_data ) );
       }
-    };
-
-    virtual void renderEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      //EntityProcessingSystem::renderEntities(bag);
-      ofSetLineWidth(1);
-      mesh.draw();
-    };
-
-    virtual void added(Entity &e) 
-    {};
-
-    virtual void processEntity(Entity &e) 
-    {}; 
+    }; 
 
     virtual void renderEntity(Entity &e)
-    {};
+    {
+      if ( ! p_blob_container_m.get(e)->render ) 
+        return;
+      ofPushStyle();
+      ofSetLineWidth(1);
+      mesh.draw();
+      ofPopStyle();
+    };
 
   private:
+
+    ComponentMapper<ParticleBlobsContainersComponent> p_blob_container_m;
 
     FisicaSystem* fisica; 
     vector<b2Body*> blob_bodies;

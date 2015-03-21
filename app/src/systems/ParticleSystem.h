@@ -30,8 +30,6 @@ class ParticleSystem : public ECSsystem
     {
       //EntityProcessingSystem::renderEntities(bag);
 
-      //particles.draw();
-
       mesh.clear();
 
       int32 n = b2particles->GetParticleCount();
@@ -87,13 +85,7 @@ class ParticleSystem : public ECSsystem
     b2ParticleSystem* b2_particles()
     {
       return b2particles;
-      //return particles.particleSystem;
     }; 
-
-    //ofxBox2dParticleSystem* of_particles()
-    //{
-      //return &particles;
-    //};
 
   private:
 
@@ -101,7 +93,6 @@ class ParticleSystem : public ECSsystem
 
     FisicaSystem* fisica;
     b2ParticleSystem* b2particles;
-    //ofxBox2dParticleSystem particles;
 
     ofVboMesh mesh;
 
@@ -142,17 +133,6 @@ class ParticleSystem : public ECSsystem
 
       b2particles = fisica->b2world()->CreateParticleSystem( &psd );
     };
-
-    //void init()
-    //{
-      //max_count = 5000;
-      //lifetime = 10.0; 
-      //radius = 6.0; 
-      //render_size = 4.0;
-      //ofcolor.set( 127, 200, 255 );
-      //b2color.Set( ofcolor.r, ofcolor.g, ofcolor.b, ofcolor.a );
-      //particles.setup( fisica->b2world(), max_count, lifetime, radius, render_size, ofcolor );
-    //};
 
 };
 
