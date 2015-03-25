@@ -51,16 +51,10 @@ void main( void )
   if (n > 0 && force.x != 0 && force.y != 0) 
   {
     force /= n; 
-    force = normalize( force );
+    force = normalize(force) * 1.;
   }
 
   gl_FragColor = vec4( force, 0., 1. );
-
-  /*vec2 force_vis = vec2(*/
-    /*lerp2d( force.x, -1., 1., 0., 1. ),*/
-    /*lerp2d( force.y, -1., 1., 0., 1. )*/
-  /*);*/
-  /*gl_FragColor = vec4( force_vis, 0., 1. );*/
 
   /*float depth = texture2DRect(data,loc).r;*/
   /*gl_FragColor = vec4( depth, 0., 0., 1. );*/

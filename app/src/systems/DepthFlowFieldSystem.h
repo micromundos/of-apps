@@ -44,6 +44,7 @@ class DepthFlowFieldSystem : public ECSsystem
       f_depth_tex.allocate( w, h, GL_LUMINANCE32F_ARB );
 
       ff.init("glsl/flowfield.frag",w,h);
+      ff_debug.init("glsl/flowfield_debug.frag",w,h);
     };
 
     virtual void processEntity(Entity &e) 
@@ -64,6 +65,9 @@ class DepthFlowFieldSystem : public ECSsystem
       ff.set( "data", f_depth_tex ); 
       ff.update();
 
+      ff_debug.set( "data", ff.get() ); 
+      ff_debug.update();
+
       ff_data->field = ff.get_data();
       //ff_data->field = &(ff.get());
     };
@@ -77,7 +81,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
-      ff.get().draw( 0, 0, 
+      ff_debug.get().draw( 0, 0, 
           render_data->width, render_data->height );
     };
 
@@ -86,7 +90,7 @@ class DepthFlowFieldSystem : public ECSsystem
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
 
-    gpgpu::Process ff;
+    gpgpu::Process ff, ff_debug;
     ofTexture f_depth_tex;
     ofFloatPixels f_depth_pix_mm;
     ofFloatPixels f_depth_pix_resized;

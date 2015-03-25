@@ -9,6 +9,10 @@
       "components": [
         { "id": "fisica" },
         { "id": "particle_system" },
+        //TODO blobs containers: 
+        //no funcionan con box2d blob-bodies
+        //baja la performance y la física no anda
+        //reemplazar por glsl masks
         { 
           "id": "particle_blobs_containers",
           "data": {

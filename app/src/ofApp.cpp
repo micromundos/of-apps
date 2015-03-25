@@ -3,6 +3,7 @@
 void ofApp::setup()
 {
   ofSetDataPathRoot( __data_path__ );
+  ofSetWindowPosition(0,0);
 
   ofSetLogLevel(OF_LOG_NOTICE);
 

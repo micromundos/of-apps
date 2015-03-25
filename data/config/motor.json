@@ -80,8 +80,8 @@
         ,{ 
           "id": "flow_field",
           "data": {
-            "width": 320,
-            "height": 240,
+            "width": 160,
+            "height": 120,
             "render": false
           }
         }

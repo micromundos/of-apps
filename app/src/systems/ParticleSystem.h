@@ -69,7 +69,7 @@ class ParticleSystem : public ECSsystem
       fisica->screen2world(_locx,_locy,locx,locy);
       fisica->screen2world(_velx,_vely,velx,vely);
 
-      uint32 flags = b2_waterParticle | b2_springParticle | b2_viscousParticle;
+      uint32 flags = b2_waterParticle | /*b2_springParticle |*/ b2_viscousParticle;
 
       b2ParticleDef pd;
       pd.flags = flags;
@@ -107,7 +107,7 @@ class ParticleSystem : public ECSsystem
 
       max_count = 5000;
       lifetime = 10.0; 
-      radius = 6.0; 
+      radius = 6.0;
       render_size = 4.0;
       ofcolor.set( 127, 200, 255 );
 

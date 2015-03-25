@@ -4,9 +4,17 @@
 int prev;
 int send_interval;
 
-void ofApp::setup(){
+void ofApp::setup()
+{
+  //TODO
+  //1) 
+  //load settings.xml at init
+  //save settings.xml with 's'
+  //2)
+  //save settings to config/**.json with 's'
 
   ofSetDataPathRoot( __data_path__ );
+  ofSetWindowPosition( ofGetScreenWidth()-ofGetWidth(), 0 );
 
   ofSetFrameRate( 30 ); 
 	ofSetVerticalSync(true); 
