@@ -5,6 +5,8 @@
 #include "ofxKinect.h"
 #include "ofxCamaraLucidaCalibration.h"
 
+#include "data_path.h"
+
 class ofApp : public ofBaseApp
 {
 

@@ -3,6 +3,7 @@
 
 void ofApp::setup()
 {
+  ofSetDataPathRoot( __data_path__ );
   ofSetFrameRate(30);
   ofSetVerticalSync(true);
   ofSetLogLevel(OF_LOG_NOTICE);
@@ -25,7 +26,7 @@ void ofApp::setup()
 
   kinect.setRegistration(true);
   // ir, rgb, texture
-  kinect.init(true, true, true);
+  kinect.init(false, true, true);
   kinect.open();
 
   kinect.update(); 
@@ -102,7 +103,7 @@ void ofApp::keyReleased(int key)
 
   else if ( key == 's' )
   {
-    calibration.save_all();
+    calibration.save_all( "calib" );
   }
 
   else if ( key == 'r' )

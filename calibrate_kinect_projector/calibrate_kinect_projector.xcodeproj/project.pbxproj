@@ -104,6 +104,7 @@
 		096CB33CAD6C5A446E7026E9 /* dynamic_bitset.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = dynamic_bitset.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/dynamic_bitset.h; sourceTree = SOURCE_ROOT; };
 		0CF0AA3895D28E97D8A1E4A9 /* ground_truth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ground_truth.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/ground_truth.h; sourceTree = SOURCE_ROOT; };
 		114B872696817CC33990FC83 /* imgproc.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imgproc.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/imgproc/imgproc.hpp; sourceTree = SOURCE_ROOT; };
+		12AA04951AC4DC020066C125 /* data_path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = data_path.h; sourceTree = "<group>"; };
 		12B012941AC20EA5001C275C /* Calibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calibration.h; sourceTree = "<group>"; };
 		12B012951AC20EA5001C275C /* ofxCamaraLucidaCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCamaraLucidaCalibration.h; sourceTree = "<group>"; };
 		12B012961AC20EA5001C275C /* ProjectorCameraCalibration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ProjectorCameraCalibration.cpp; sourceTree = "<group>"; };
@@ -339,6 +340,15 @@
 				59626D03C690200AD4E8B3A6 /* ml.hpp */,
 			);
 			name = ml;
+			sourceTree = "<group>";
+		};
+		12AA04941AC4DC020066C125 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				12AA04951AC4DC020066C125 /* data_path.h */,
+			);
+			name = common;
+			path = ../common;
 			sourceTree = "<group>";
 		};
 		12B012901AC20EA4001C275C /* src */ = {
@@ -803,6 +813,7 @@
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
+				12AA04941AC4DC020066C125 /* common */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
 				E45BE5980E8CC70C009D7055 /* frameworks */,

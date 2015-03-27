@@ -6,6 +6,8 @@
 #include "ofxCamaraLucidaCalibration.h"
 #include "ofxPS3EyeGrabber.h"
 
+#include "data_path.h"
+
 class ofApp : public ofBaseApp
 {
 

@@ -11,6 +11,10 @@ bool render_downsampled = true;
 
 void ofApp::setup()
 {
+  ofSetDataPathRoot( __data_path__ );
+  ofSetFrameRate(30);
+  ofSetVerticalSync(true);
+  ofSetLogLevel(OF_LOG_NOTICE);
 
   cloud = ofxPCL::New<PointCloud>();
 

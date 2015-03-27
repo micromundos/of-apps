@@ -1,0 +1,16 @@
+%YAML:1.0
+cameraMatrix: !!opencv-matrix
+   rows: 0
+   cols: 0
+   dt: u
+   data: []
+imageSize_width: 0
+imageSize_height: 0
+sensorSize_width: 0
+sensorSize_height: 0
+distCoeffs: !!opencv-matrix
+   rows: 0
+   cols: 0
+   dt: u
+   data: []
+reprojectionError: 0.

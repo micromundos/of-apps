@@ -3,9 +3,15 @@
 
 void ofApp::setup()
 {
+  ofSetDataPathRoot( __data_path__ );
   ofSetFrameRate(30);
   ofSetVerticalSync(true);
   ofSetLogLevel(OF_LOG_NOTICE);
+
+  //TODO
+  //glfwWindowHint(GLFW_DECORATED, GL_FALSE);
+  //draw projector chessboard fbo: ofxReprojectionCalibration::updateChessboard
+  //gui slider for projector chessboard brightness
 
   w = 640;
   h = 480;
@@ -13,13 +19,12 @@ void ofApp::setup()
 
   kinect.setRegistration(true);
   // ir, rgb, texture
-  kinect.init(true, true, true);
+  kinect.init(false, true, true);
   kinect.open();
   kinect.update(); 
 
-  pix_kinect_rgb = kinect.getPixelsRef(); //copy
-
-  calibration.init( pix_kinect_rgb, "calib_kinect.yml", "kinect_rgb", "proj_lg" );
+  //pix_kinect_rgb = kinect.getPixelsRef(); //copy
+  calibration.init( kinect.getPixelsRef(), "calib/calib_kinect.ofxcv.yml", "kinect_rgb", "proj_lg" );
 }
 
 
@@ -37,9 +42,8 @@ void ofApp::update()
 
   if ( !kinect.isFrameNew() ) return;
 
-  pix_kinect_rgb = kinect.getPixelsRef(); //copy
-
-  calibration.update( pix_kinect_rgb );
+  //pix_kinect_rgb = kinect.getPixelsRef(); //copy
+  calibration.update( kinect.getPixelsRef() );
 }
 
 
@@ -78,7 +82,7 @@ void ofApp::keyReleased(int key)
 
   else if ( key == 's' )
   {
-    calibration.save_all();
+    calibration.save_all( "calib" );
   }
 
   else if ( key == 'r' )

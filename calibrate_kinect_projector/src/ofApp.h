@@ -5,6 +5,8 @@
 #include "ofxKinect.h"
 #include "ofxCamaraLucidaCalibration.h"
 
+#include "data_path.h"
+
 class ofApp : public ofBaseApp
 {
 
@@ -26,7 +28,7 @@ class ofApp : public ofBaseApp
 
     cml::ProjectorCameraCalibration calibration;
 
-    ofPixels pix_kinect_rgb;
+    //ofPixels pix_kinect_rgb;
     ofxKinect kinect;
     int w, h, chan;
 };

@@ -6,7 +6,10 @@
 #include "ofxGeom.h"
 #include "TableTopDetector.h"
 
-class ofApp : public ofBaseApp{
+#include "data_path.h"
+
+class ofApp : public ofBaseApp
+{
 
   public:
     void setup();
