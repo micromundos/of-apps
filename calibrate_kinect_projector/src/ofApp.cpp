@@ -7,6 +7,7 @@ void ofApp::setup()
   ofSetFrameRate(30);
   ofSetVerticalSync(true);
   ofSetLogLevel(OF_LOG_NOTICE);
+  ofSetWindowPosition(0,0);
 
   //TODO
   //glfwWindowHint(GLFW_DECORATED, GL_FALSE);
@@ -23,8 +24,8 @@ void ofApp::setup()
   kinect.open();
   kinect.update(); 
 
-  //pix_kinect_rgb = kinect.getPixelsRef(); //copy
-  calibration.init( kinect.getPixelsRef(), "calib/calib_kinect.ofxcv.yml", "kinect_rgb", "proj_lg" );
+  pix_kinect_rgb = kinect.getPixelsRef(); //copy
+  calibration.init( pix_kinect_rgb, "calib/calib_kinect.ofxcv.yml", "kinect_rgb", "proj_lg" );
 }
 
 
@@ -42,8 +43,8 @@ void ofApp::update()
 
   if ( !kinect.isFrameNew() ) return;
 
-  //pix_kinect_rgb = kinect.getPixelsRef(); //copy
-  calibration.update( kinect.getPixelsRef() );
+  pix_kinect_rgb = kinect.getPixelsRef(); //copy
+  calibration.update( pix_kinect_rgb );
 }
 
 
@@ -61,10 +62,10 @@ void ofApp::draw()
 
 void ofApp::keyPressed(int key)
 {
-  if ( key == ' ' ) 
-  {
-    calibration.toggle_capture();
-  }
+  //if ( key == ' ' ) 
+  //{
+    //calibration.toggle_capture();
+  //}
 }
 
 

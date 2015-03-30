@@ -28,7 +28,7 @@ class ofApp : public ofBaseApp
 
     cml::ProjectorCameraCalibration calibration;
 
-    //ofPixels pix_kinect_rgb;
+    ofPixels pix_kinect_rgb;
     ofxKinect kinect;
     int w, h, chan;
 };
