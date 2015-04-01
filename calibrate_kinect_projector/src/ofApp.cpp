@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-int yoff = 20;
+int yoff = 20; //window undecorated yoffset
 
 void ofApp::setup()
 {
