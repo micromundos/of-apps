@@ -24,15 +24,41 @@ void ofApp::setup()
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
   calibration.init( pix_kinect_rgb, "calib/calib_kinect.ofxcv.yml", "kinect_rgb", "proj_lg" );
 
+  calibrate_btn.addListener(this,&ofApp::calibrate);
+  save_calib_btn.addListener(this,&ofApp::save_calib);
+  reset_calib_btn.addListener(this,&ofApp::reset_calib);
+
 	gui.setup();
   gui.add( chessboard_brightness.setup( "chessboard_brightness", 127, 0, 255 ) );
   gui.add( chessboard_projected.setup( "chessboard_projected", true ) );
+  gui.add( calibrate_btn.setup("calibrate") );
+  gui.add( save_calib_btn.setup("save calibration") );
+  gui.add( reset_calib_btn.setup("reset calibration") );
 }
 
 
 void ofApp::exit() 
 {
+  calibrate_btn.removeListener(this,&ofApp::calibrate);
+  save_calib_btn.removeListener(this,&ofApp::save_calib);
+  reset_calib_btn.removeListener(this,&ofApp::reset_calib);
   kinect.close();
+}
+
+
+void ofApp::calibrate()
+{
+  calibration.calibrate();
+}
+
+void ofApp::save_calib()
+{
+  calibration.save_all( "calib" );
+}
+
+void ofApp::reset_calib()
+{
+  calibration.reset();
 }
 
 
@@ -82,17 +108,17 @@ void ofApp::keyReleased(int key)
 
   else if ( key == 'c' )
   {
-    calibration.calibrate();
+    calibrate();
   }
 
   else if ( key == 's' )
   {
-    calibration.save_all( "calib" );
+    save_calib();
   }
 
   else if ( key == 'r' )
   {
-    calibration.reset();
+    reset_calib();
   }
 }
 
