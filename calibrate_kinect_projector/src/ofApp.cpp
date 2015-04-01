@@ -11,11 +11,6 @@ void ofApp::setup()
   ofSetWindowPosition( ofGetScreenWidth() - ofGetWidth(), 0 );
   //ofSetWindowPosition( 0, 0 );
 
-  //TODO
-  //glfwWindowHint(GLFW_DECORATED, GL_FALSE);
-  //draw projector chessboard fbo: ofxReprojectionCalibration::updateChessboard
-  //gui slider for projector chessboard brightness
-
   w = 640;
   h = 480;
   chan = 3;
