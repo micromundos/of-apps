@@ -1,5 +1,6 @@
 #include "ofApp.h"
 
+int yoff = 20;
 
 void ofApp::setup()
 {
@@ -7,7 +8,8 @@ void ofApp::setup()
   ofSetFrameRate(30);
   ofSetVerticalSync(true);
   ofSetLogLevel(OF_LOG_NOTICE);
-  ofSetWindowPosition(0,0);
+  ofSetWindowPosition( ofGetScreenWidth() - ofGetWidth(), 0 );
+  //ofSetWindowPosition( 0, 0 );
 
   //TODO
   //glfwWindowHint(GLFW_DECORATED, GL_FALSE);
@@ -26,6 +28,10 @@ void ofApp::setup()
 
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
   calibration.init( pix_kinect_rgb, "calib/calib_kinect.ofxcv.yml", "kinect_rgb", "proj_lg" );
+
+	gui.setup();
+  gui.add( chessboard_brightness.setup( "chessboard_brightness", 127, 0, 255 ) );
+  gui.add( chessboard_projected.setup( "chessboard_projected", true ) );
 }
 
 
@@ -53,10 +59,13 @@ void ofApp::draw()
   ofBackground(100);
   ofSetColor(255); 
 
-  kinect.draw( 0, 0, w, h );
-  //kinect.drawDepth( 0, h, w, h );
+  kinect.draw( 0, yoff, w, h );
+  //kinect.drawDepth( 0, yoff+h, w, h );
 
-  calibration.render();
+  calibration.render( 0, yoff );
+  calibration.render_chessboard( chessboard_projected ? ofGetScreenWidth() : 0, 0, chessboard_brightness );
+
+  gui.draw();
 }
 
 

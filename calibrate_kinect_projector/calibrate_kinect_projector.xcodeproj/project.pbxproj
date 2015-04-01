@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		0F8F016776681D468C0D0949 /* audio.c in Sources */ = {isa = PBXBuildFile; fileRef = 34FC4C582EA5ED68F36013CD /* audio.c */; };
 		10B69DE456AED1288FC9316B /* Tracker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A810DF70319A10353588F5DB /* Tracker.cpp */; };
+		128952B91ACB75E0003587BD /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 128952A81ACB75E0003587BD /* ofxBaseGui.cpp */; };
+		128952BA1ACB75E0003587BD /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 128952AA1ACB75E0003587BD /* ofxButton.cpp */; };
+		128952BB1ACB75E0003587BD /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 128952AD1ACB75E0003587BD /* ofxGuiGroup.cpp */; };
+		128952BC1ACB75E0003587BD /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 128952AF1ACB75E0003587BD /* ofxLabel.cpp */; };
+		128952BD1ACB75E0003587BD /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 128952B11ACB75E0003587BD /* ofxPanel.cpp */; };
+		128952BE1ACB75E0003587BD /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 128952B31ACB75E0003587BD /* ofxSlider.cpp */; };
+		128952BF1ACB75E0003587BD /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 128952B51ACB75E0003587BD /* ofxSliderGroup.cpp */; };
+		128952C01ACB75E0003587BD /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 128952B71ACB75E0003587BD /* ofxToggle.cpp */; };
 		12B012991AC20EA5001C275C /* ProjectorCameraCalibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12B012961AC20EA5001C275C /* ProjectorCameraCalibration.cpp */; };
 		12B0129D1AC23CBC001C275C /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12B0129C1AC23CBC001C275C /* Calibration.cpp */; };
 		169D3C72FDE6C5590A1616F5 /* ofxCvFloatImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7B6A03390302D5A2C9F0E4AB /* ofxCvFloatImage.cpp */; };
@@ -104,6 +112,23 @@
 		096CB33CAD6C5A446E7026E9 /* dynamic_bitset.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = dynamic_bitset.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/dynamic_bitset.h; sourceTree = SOURCE_ROOT; };
 		0CF0AA3895D28E97D8A1E4A9 /* ground_truth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ground_truth.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/ground_truth.h; sourceTree = SOURCE_ROOT; };
 		114B872696817CC33990FC83 /* imgproc.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imgproc.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/imgproc/imgproc.hpp; sourceTree = SOURCE_ROOT; };
+		128952A81ACB75E0003587BD /* ofxBaseGui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxBaseGui.cpp; sourceTree = "<group>"; };
+		128952A91ACB75E0003587BD /* ofxBaseGui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBaseGui.h; sourceTree = "<group>"; };
+		128952AA1ACB75E0003587BD /* ofxButton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxButton.cpp; sourceTree = "<group>"; };
+		128952AB1ACB75E0003587BD /* ofxButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxButton.h; sourceTree = "<group>"; };
+		128952AC1ACB75E0003587BD /* ofxGui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGui.h; sourceTree = "<group>"; };
+		128952AD1ACB75E0003587BD /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxGuiGroup.cpp; sourceTree = "<group>"; };
+		128952AE1ACB75E0003587BD /* ofxGuiGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGuiGroup.h; sourceTree = "<group>"; };
+		128952AF1ACB75E0003587BD /* ofxLabel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxLabel.cpp; sourceTree = "<group>"; };
+		128952B01ACB75E0003587BD /* ofxLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxLabel.h; sourceTree = "<group>"; };
+		128952B11ACB75E0003587BD /* ofxPanel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxPanel.cpp; sourceTree = "<group>"; };
+		128952B21ACB75E0003587BD /* ofxPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxPanel.h; sourceTree = "<group>"; };
+		128952B31ACB75E0003587BD /* ofxSlider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSlider.cpp; sourceTree = "<group>"; };
+		128952B41ACB75E0003587BD /* ofxSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSlider.h; sourceTree = "<group>"; };
+		128952B51ACB75E0003587BD /* ofxSliderGroup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxSliderGroup.cpp; sourceTree = "<group>"; };
+		128952B61ACB75E0003587BD /* ofxSliderGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxSliderGroup.h; sourceTree = "<group>"; };
+		128952B71ACB75E0003587BD /* ofxToggle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofxToggle.cpp; sourceTree = "<group>"; };
+		128952B81ACB75E0003587BD /* ofxToggle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxToggle.h; sourceTree = "<group>"; };
 		12AA04951AC4DC020066C125 /* data_path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = data_path.h; sourceTree = "<group>"; };
 		12B012941AC20EA5001C275C /* Calibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Calibration.h; sourceTree = "<group>"; };
 		12B012951AC20EA5001C275C /* ofxCamaraLucidaCalibration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxCamaraLucidaCalibration.h; sourceTree = "<group>"; };
@@ -340,6 +365,39 @@
 				59626D03C690200AD4E8B3A6 /* ml.hpp */,
 			);
 			name = ml;
+			sourceTree = "<group>";
+		};
+		128952A61ACB75E0003587BD /* ofxGui */ = {
+			isa = PBXGroup;
+			children = (
+				128952A71ACB75E0003587BD /* src */,
+			);
+			name = ofxGui;
+			path = ../../../addons/ofxGui;
+			sourceTree = "<group>";
+		};
+		128952A71ACB75E0003587BD /* src */ = {
+			isa = PBXGroup;
+			children = (
+				128952A81ACB75E0003587BD /* ofxBaseGui.cpp */,
+				128952A91ACB75E0003587BD /* ofxBaseGui.h */,
+				128952AA1ACB75E0003587BD /* ofxButton.cpp */,
+				128952AB1ACB75E0003587BD /* ofxButton.h */,
+				128952AC1ACB75E0003587BD /* ofxGui.h */,
+				128952AD1ACB75E0003587BD /* ofxGuiGroup.cpp */,
+				128952AE1ACB75E0003587BD /* ofxGuiGroup.h */,
+				128952AF1ACB75E0003587BD /* ofxLabel.cpp */,
+				128952B01ACB75E0003587BD /* ofxLabel.h */,
+				128952B11ACB75E0003587BD /* ofxPanel.cpp */,
+				128952B21ACB75E0003587BD /* ofxPanel.h */,
+				128952B31ACB75E0003587BD /* ofxSlider.cpp */,
+				128952B41ACB75E0003587BD /* ofxSlider.h */,
+				128952B51ACB75E0003587BD /* ofxSliderGroup.cpp */,
+				128952B61ACB75E0003587BD /* ofxSliderGroup.h */,
+				128952B71ACB75E0003587BD /* ofxToggle.cpp */,
+				128952B81ACB75E0003587BD /* ofxToggle.h */,
+			);
+			path = src;
 			sourceTree = "<group>";
 		};
 		12AA04941AC4DC020066C125 /* common */ = {
@@ -685,6 +743,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
+				128952A61ACB75E0003587BD /* ofxGui */,
 				12FC56A71AC0D7CC009DD92D /* ofxCamaraLucidaCalibration */,
 				A0B90D3B0ADB9C1716816714 /* ofxOpenCv */,
 				6025FAF6414C2CA589764D26 /* ofxCv */,
@@ -994,18 +1053,23 @@
 				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
 				250A95BA26587BE85DB0A353 /* ofxCvColorImage.cpp in Sources */,
 				1D5F3298C2FA073628012944 /* ofxCvContourFinder.cpp in Sources */,
+				128952B91ACB75E0003587BD /* ofxBaseGui.cpp in Sources */,
 				169D3C72FDE6C5590A1616F5 /* ofxCvFloatImage.cpp in Sources */,
+				128952C01ACB75E0003587BD /* ofxToggle.cpp in Sources */,
 				FB09C6B2A1DA0EA217240CB8 /* ofxCvGrayscaleImage.cpp in Sources */,
 				E212C821D1064B92DD953A42 /* ofxCvHaarFinder.cpp in Sources */,
 				63020F16C7E8DED980111241 /* ofxCvImage.cpp in Sources */,
+				128952BA1ACB75E0003587BD /* ofxButton.cpp in Sources */,
 				D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */,
 				B6840996567E78436F7ECFAB /* ETF.cpp in Sources */,
 				F76B4A79BD8DE4854141CB47 /* fdog.cpp in Sources */,
 				EBCDE831EFAE08274E799C97 /* Calibration.cpp in Sources */,
 				12B012991AC20EA5001C275C /* ProjectorCameraCalibration.cpp in Sources */,
 				6AABAB39E82AF5CFEA23A205 /* ContourFinder.cpp in Sources */,
+				128952BF1ACB75E0003587BD /* ofxSliderGroup.cpp in Sources */,
 				45CC483A999BF1065A6B926C /* Distance.cpp in Sources */,
 				5CC34D433F5806179935B89D /* Flow.cpp in Sources */,
+				128952BD1ACB75E0003587BD /* ofxPanel.cpp in Sources */,
 				2023EF517ED2D8B397511D4B /* Helpers.cpp in Sources */,
 				311DF864378748129984EA1D /* Kalman.cpp in Sources */,
 				12B0129D1AC23CBC001C275C /* Calibration.cpp in Sources */,
@@ -1015,10 +1079,13 @@
 				A6668C5B1272D7FCD5B5A16F /* Utilities.cpp in Sources */,
 				DBCB84A37F9AECC254870D79 /* Wrappers.cpp in Sources */,
 				7ADB04AF67C568EAFAEBA546 /* ofxKinectExtras.cpp in Sources */,
+				128952BC1ACB75E0003587BD /* ofxLabel.cpp in Sources */,
 				686B0DF6249B52E1A85B39EC /* ofxKinect.cpp in Sources */,
 				0F8F016776681D468C0D0949 /* audio.c in Sources */,
+				128952BB1ACB75E0003587BD /* ofxGuiGroup.cpp in Sources */,
 				ACE7DC9A3223ED5EE1B80074 /* cameras.c in Sources */,
 				F4135EEFC911E9ED211FB6F9 /* core.c in Sources */,
+				128952BE1ACB75E0003587BD /* ofxSlider.cpp in Sources */,
 				E55DEEF784A10419E444669E /* flags.c in Sources */,
 				21A059755481CC0BF969FD2D /* keep_alive.c in Sources */,
 				FCC16AB16073FF0581F50ED7 /* loader.c in Sources */,

@@ -4,6 +4,7 @@
 #include "ofxCv.h"
 #include "ofxKinect.h"
 #include "ofxCamaraLucidaCalibration.h"
+#include "ofxGui.h"
 
 #include "data_path.h"
 
@@ -31,4 +32,9 @@ class ofApp : public ofBaseApp
     ofPixels pix_kinect_rgb;
     ofxKinect kinect;
     int w, h, chan;
+
+    ofxFloatSlider chessboard_brightness;
+    ofxToggle chessboard_projected;
+    ofxPanel gui;
 };
+
