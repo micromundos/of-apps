@@ -7,10 +7,6 @@ int send_interval;
 void ofApp::setup()
 {
   //TODO
-  //1) 
-  //load settings.xml at init
-  //save settings.xml with 's'
-  //2)
   //save settings to config/**.json with 's'
 
   ofSetDataPathRoot( __data_path__ );
@@ -35,8 +31,14 @@ void ofApp::setup()
   parse_config( motor );
   parse_config( game );
 
+
   ofxGuiSetDefaultWidth(ofGetWidth()-20);
-  gui.setup( params );
+
+  //TODO no funcionan los tags que empiezan con números! omg..
+  //hacer load/save con [config].json
+  //gui_settings = "ctrl/gui.xml";
+  //gui.setup( params, gui_settings );
+  //gui.loadFromFile( gui_settings );
 
   prev = ofGetSeconds();
 }
@@ -124,23 +126,32 @@ void ofApp::load_jsons()
 };
 
 
-void ofApp::draw(){
+void ofApp::draw()
+{
   gui.draw();
 }
 
 
-void ofApp::exit(){
+void ofApp::exit()
+{
   params.clear();
   gui.clear();
 }
 
 
-void ofApp::keyPressed(int key){
+void ofApp::keyPressed(int key)
+{
 
 }
 
 
-void ofApp::keyReleased(int key){
+void ofApp::keyReleased(int key)
+{
+
+  //if ( key == 's' )
+  //{
+    //gui.saveToFile( gui_settings );
+  //}
 
 }
 

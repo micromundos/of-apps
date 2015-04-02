@@ -30,6 +30,7 @@ class ofApp : public ofBaseApp{
     ofParameterGroup params;
     ofxOscSender sender;
     ofxPanel gui;
+    //string gui_settings;
 
     ofxJSONElement motor;
     ofxJSONElement game;
