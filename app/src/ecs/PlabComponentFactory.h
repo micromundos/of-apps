@@ -6,7 +6,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "ecs/Components.h"
+#include "Components.h"
 
 class PlabComponentFactory : ComponentFactory
 {

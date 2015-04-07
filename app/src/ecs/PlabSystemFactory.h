@@ -11,7 +11,7 @@
 #pragma once
 
 #include "ofxECS.h"
-#include "ecs/Systems.h"
+#include "Systems.h"
 
 class PlabSystemFactory
 {

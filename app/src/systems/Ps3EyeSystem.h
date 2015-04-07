@@ -2,7 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "ecs/Components.h"
+#include "Components.h"
 #include "ofxPS3EyeGrabber.h"
 
 using namespace artemis;

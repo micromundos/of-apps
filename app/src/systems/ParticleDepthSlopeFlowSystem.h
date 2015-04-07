@@ -2,8 +2,8 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "ecs/Components.h"
-#include "ecs/Systems.h"
+#include "Components.h"
+#include "Systems.h"
 #include "utils/CoordMap.h"
 
 using namespace artemis;
