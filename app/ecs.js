@@ -70,7 +70,7 @@ var comp_path = __dirname + '/src/components/'+ comp_filename;
 var comp_archive_path = __dirname + '/archive/components/'+ comp_filename;
 
 var comp_include_path = __dirname + '/src/ecs/Components.h';
-var comp_include_code = '#include "components/'+ name_pascalcase +'Component.h"' + '\n';
+var comp_include_code = '#include "'+ name_pascalcase +'Component.h"' + '\n';
 
 var comp_tpl_path = __dirname + '/src/ecs/TemplateComponent.h';
 
@@ -85,7 +85,7 @@ var sys_path = __dirname + '/src/systems/'+ sys_filename;
 var sys_archive_path = __dirname + '/archive/systems/'+ sys_filename;
 
 var sys_include_path = __dirname + '/src/ecs/Systems.h';
-var sys_include_code = '#include "systems/'+ name_pascalcase +'System.h"' + '\n';
+var sys_include_code = '#include "'+ name_pascalcase +'System.h"' + '\n';
 
 var sys_tpl_path = __dirname + '/src/ecs/TemplateSystem.h';
 
@@ -101,7 +101,7 @@ var sys_factory_code = 'ecs.add_system(new '+ name_pascalcase +'System("'+name_s
 //var sys_render_archive_path = __dirname + '/archive/systems/'+ sys_render_filename;
 
 //var sys_render_include_path = sys_include_path; //__dirname + '/src/ecs/Systems.h';
-//var sys_render_include_code = '#include "systems/'+ name_pascalcase +'RenderSystem.h"' + '\n';
+//var sys_render_include_code = '#include "'+ name_pascalcase +'RenderSystem.h"' + '\n';
 
 //var sys_render_tpl_path = sys_tpl_path; //__dirname + '/src/ecs/TemplateSystem.h';
 

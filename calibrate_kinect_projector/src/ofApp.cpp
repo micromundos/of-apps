@@ -13,7 +13,6 @@ void ofApp::setup()
 
   w = 640;
   h = 480;
-  chan = 3;
 
   kinect.setRegistration(true);
   // ir, rgb, texture

@@ -31,7 +31,7 @@ class ofApp : public ofBaseApp
 
     ofPixels pix_kinect_rgb;
     ofxKinect kinect;
-    int w, h, chan;
+    int w, h;
 
     ofxFloatSlider chessboard_brightness;
     ofxToggle chessboard_projected;

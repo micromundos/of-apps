@@ -2,8 +2,8 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "ecs/Components.h"
-#include "bloqs/Bloq.h"
+#include "Components.h"
+#include "Bloq.h"
 #include "ofxAruco.h"
 #include "ofxCv.h"
 

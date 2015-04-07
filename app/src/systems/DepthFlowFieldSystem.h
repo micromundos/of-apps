@@ -2,7 +2,7 @@
 
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "ecs/Components.h"
+#include "Components.h"
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
 #include "ofxGPGPU.h"
