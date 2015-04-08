@@ -15,6 +15,7 @@ void ofApp::setup()
   ofSetFrameRate( 30 ); 
 	ofSetVerticalSync(true); 
 
+    
   load_jsons();
 
   string host = "localhost";
@@ -104,7 +105,7 @@ void ofApp::parse_config( ofxJSONElement& config )
             << "\n" << "\t\t\t\t\t\t" 
             << "param_id " << param_id;
 
-          params_sender.add( param_id, value, params ); 
+          params_sender.add( param_id, value, params );
 
         }
       }
@@ -128,7 +129,7 @@ void ofApp::load_jsons()
 
 void ofApp::draw()
 {
-  gui.draw();
+    gui.draw();
 }
 
 
