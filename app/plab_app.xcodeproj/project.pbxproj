@@ -328,7 +328,6 @@
 		1291F2BE1ABE05190075BE0D /* b2VoronoiDiagram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2VoronoiDiagram.h; sourceTree = "<group>"; };
 		1291F2C01ABE05190075BE0D /* b2Rope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2Rope.cpp; sourceTree = "<group>"; };
 		1291F2C11ABE05190075BE0D /* b2Rope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = b2Rope.h; sourceTree = "<group>"; };
-		1291F2C21ABE05190075BE0D /* version */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = version; sourceTree = "<group>"; };
 		12AA20B11A8D01C500B8479B /* addon_config.mk */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = addon_config.mk; path = ../../../addons/ofxPS3EyeGrabber/addon_config.mk; sourceTree = "<group>"; };
 		12AA20B51A8D01C500B8479B /* ps3eye.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ps3eye.cpp; sourceTree = "<group>"; };
 		12AA20B61A8D01C500B8479B /* ps3eye.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ps3eye.h; sourceTree = "<group>"; };
@@ -743,16 +742,6 @@
 			path = shaders;
 			sourceTree = "<group>";
 		};
-		1291F2451ABE05190075BE0D /* liquidfun */ = {
-			isa = PBXGroup;
-			children = (
-				1291F2461ABE05190075BE0D /* Box2D */,
-				1291F2C21ABE05190075BE0D /* version */,
-			);
-			name = liquidfun;
-			path = lib/liquidfun;
-			sourceTree = "<group>";
-		};
 		1291F2461ABE05190075BE0D /* Box2D */ = {
 			isa = PBXGroup;
 			children = (
@@ -763,7 +752,8 @@
 				1291F2B21ABE05190075BE0D /* Particle */,
 				1291F2BF1ABE05190075BE0D /* Rope */,
 			);
-			path = Box2D;
+			name = Box2D;
+			path = ../lib/liquidfun/Box2D;
 			sourceTree = "<group>";
 		};
 		1291F2481ABE05190075BE0D /* Collision */ = {
@@ -936,14 +926,6 @@
 				1291F2C11ABE05190075BE0D /* b2Rope.h */,
 			);
 			path = Rope;
-			sourceTree = "<group>";
-		};
-		1292CADE1ABE017C00F27DCC /* lib */ = {
-			isa = PBXGroup;
-			children = (
-				1291F2451ABE05190075BE0D /* liquidfun */,
-			);
-			name = lib;
 			sourceTree = "<group>";
 		};
 		12AA20B01A8D01A600B8479B /* ofxPS3EyeGrabber */ = {
@@ -1744,7 +1726,6 @@
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
-				1292CADE1ABE017C00F27DCC /* lib */,
 				12AEE4041AB1005F00A246E4 /* common */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
@@ -1756,6 +1737,7 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				1291F2461ABE05190075BE0D /* Box2D */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
