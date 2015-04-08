@@ -32,14 +32,23 @@ class ofApp : public ofBaseApp{
     ofxPanel gui;
     //string gui_settings;
 
-    ofxJSONElement motor;
-    ofxJSONElement game;
-    ofxJSONElement settings;
+    ofxJSONElement motor, game, settings;
+    string settings_json, game_json, motor_json;
 
     ECSparamsSender params_sender;
 
-    void load_jsons();
+    void load_all_config();
+    void parse_all_config();
+    void save_all_config();
+    void load_and_parse_all_config();
+
     void parse_config( ofxJSONElement& config );
+    void update_config( ofxJSONElement& config );
+    void save_config( ofxJSONElement& config, string filename );
+
+    Json::Value* get_entity( ofxJSONElement& config, string _entity_id );
+    Json::Value* get_component( Json::Value& entity, string _component_id );
+    void set_data( ofAbstractParameter& param, Json::Value& data );
 
 };
 
