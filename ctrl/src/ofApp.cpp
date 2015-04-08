@@ -35,6 +35,8 @@ void ofApp::setup()
 
   ofxGuiSetDefaultWidth(ofGetWidth()-20);
 
+  gui.setup( params );
+
   //TODO no funcionan los tags que empiezan con números! omg..
   //hacer load/save con [config].json
   //gui_settings = "ctrl/gui.xml";

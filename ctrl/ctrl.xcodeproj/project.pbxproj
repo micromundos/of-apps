@@ -103,6 +103,7 @@
 		08544B8D61EC43682B49D156 /* ECSparams.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ECSparams.h; path = ../../../addons/ofxECS/src/params/ECSparams.h; sourceTree = SOURCE_ROOT; };
 		0A1DAC09F322AE313A40706D /* ofxToggle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxToggle.h; path = ../../../addons/ofxGui/src/ofxToggle.h; sourceTree = SOURCE_ROOT; };
 		0AED834CE4DEC5260AF302A2 /* ofxOscParameterSync.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscParameterSync.cpp; path = ../../../addons/ofxOsc/src/ofxOscParameterSync.cpp; sourceTree = SOURCE_ROOT; };
+		12D316441AD4B12B00BAB8C5 /* data_path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = data_path.h; sourceTree = "<group>"; };
 		1586732FE45F7F867B631177 /* SystemBitManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = SystemBitManager.h; path = ../../../addons/ofxECS/libs/Artemis/SystemBitManager.h; sourceTree = SOURCE_ROOT; };
 		15F2C6477A769C03A56D1401 /* ofxSlider.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxSlider.cpp; path = ../../../addons/ofxGui/src/ofxSlider.cpp; sourceTree = SOURCE_ROOT; };
 		1645F56257269CD0356320BD /* ofxJSON.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxJSON.h; path = ../../../addons/ofxJSON/src/ofxJSON.h; sourceTree = SOURCE_ROOT; };
@@ -190,7 +191,6 @@
 		DE308BACCCE727FAD7816D12 /* oscParamSender.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = oscParamSender.h; path = ../../../addons/ofxKeyValueOSC/src/oscParamSender.h; sourceTree = SOURCE_ROOT; };
 		DF49D76C45D5DB505A234880 /* ofxOscMessage.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscMessage.cpp; path = ../../../addons/ofxOsc/src/ofxOscMessage.cpp; sourceTree = SOURCE_ROOT; };
 		E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxPanel.cpp; path = ../../../addons/ofxGui/src/ofxPanel.cpp; sourceTree = SOURCE_ROOT; };
-		E11874EF1AD4A49800328F89 /* data_path.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = data_path.h; sourceTree = "<group>"; };
 		E39053A347C6DF0B5A9DC076 /* ComponentFactory.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ComponentFactory.h; path = ../../../addons/ofxECS/src/ComponentFactory.h; sourceTree = SOURCE_ROOT; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -274,6 +274,15 @@
 				3484E0F57EB216F8CC5D7954 /* libs */,
 			);
 			name = ofxECS;
+			sourceTree = "<group>";
+		};
+		12D316431AD4B12B00BAB8C5 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				12D316441AD4B12B00BAB8C5 /* data_path.h */,
+			);
+			name = common;
+			path = ../common;
 			sourceTree = "<group>";
 		};
 		2865DAEF86B1907A704CA70B /* ofxJSON */ = {
@@ -518,15 +527,6 @@
 			name = include;
 			sourceTree = "<group>";
 		};
-		E11874EE1AD4A49800328F89 /* common */ = {
-			isa = PBXGroup;
-			children = (
-				E11874EF1AD4A49800328F89 /* data_path.h */,
-			);
-			name = common;
-			path = ../common;
-			sourceTree = "<group>";
-		};
 		E4328144138ABC890047C5CB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -547,9 +547,9 @@
 		E4B69B4A0A3A1720003C02F2 = {
 			isa = PBXGroup;
 			children = (
-				E11874EE1AD4A49800328F89 /* common */,
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
+				12D316431AD4B12B00BAB8C5 /* common */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
