@@ -77,13 +77,13 @@ void ofApp::calibrate()
 
 void ofApp::save_calib()
 {
-  ofLog() << "save";
+  ofLog() << "save calib";
   calibration.save_all( "calib" );
 }
 
 void ofApp::reset_calib()
 {
-  ofLog() << "reset";
+  ofLog() << "reset calib";
   calibration.reset();
 }
 
@@ -112,22 +112,36 @@ void ofApp::update_osc()
 
     //log_osc_msg( m );
 
-    if ( ofIsStringInString( m.getAddress(), "/msaremote/trigger/1" ) 
+    if ( ofIsStringInString( m.getAddress(), "/fader" ) )
+    {
+      chessboard_brightness = m.getArgAsFloat(0) * 255;
+    } 
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/1" ) 
         && m.getArgAsFloat(0) == 1 )
     {
       capture();
     }
-    else if ( ofIsStringInString( m.getAddress(), "/msaremote/trigger/2" ) 
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/2" ) 
         && m.getArgAsFloat(0) == 1 )
     {
       calibrate();
     }
-    else if ( ofIsStringInString( m.getAddress(), "/msaremote/trigger/3" ) 
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/3" ) 
         && m.getArgAsFloat(0) == 1 )
     {
       save_calib();
     }
-    else if ( ofIsStringInString( m.getAddress(), "/msaremote/trigger/4" ) 
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/4" )
+        && m.getArgAsFloat(0) == 1 )
+    {
+      chessboard_projected = !chessboard_projected;
+    }
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/5" ) 
         && m.getArgAsFloat(0) == 1 )
     {
       reset_calib();
