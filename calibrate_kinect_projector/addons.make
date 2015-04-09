@@ -3,4 +3,6 @@ ofxOpenCv
 ofxCv
 ofxCamaraLucidaCalibration
 ofxKinect
+ofxOsc
+ofxJSON
 addons

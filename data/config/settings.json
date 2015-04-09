@@ -3,6 +3,7 @@
       "host": "localhost",
       "ctrl_port": 6666,
       "app_port": 6667,
+      "calib_kinect_projector_port": 6668,
       "ctrl_send_interval": 3
   }
 }

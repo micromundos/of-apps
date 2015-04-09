@@ -5,6 +5,8 @@
 #include "ofxKinect.h"
 #include "ofxCamaraLucidaCalibration.h"
 #include "ofxGui.h"
+#include "ofxOsc.h"
+#include "ofxJSON.h"
 
 #include "data_path.h"
 
@@ -33,10 +35,16 @@ class ofApp : public ofBaseApp
     ofxKinect kinect;
     int w, h;
 
+    ofxJSONElement settings;
+    ofxOscReceiver receiver;
+
+    ofxPanel gui;
     ofxFloatSlider chessboard_brightness;
     ofxToggle chessboard_projected;
     ofxButton calibrate_btn, save_calib_btn, reset_calib_btn, capture_btn;
-    ofxPanel gui;
+
+    void update_osc();
+    void log_osc_msg( ofxOscMessage& m );
 
     void capture();
     void calibrate();
