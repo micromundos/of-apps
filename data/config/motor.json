@@ -1,91 +1,87 @@
 {
-
-  //listas de entidades tagueadas (prefabs)
-  //TODO motor = una entidad sola
-
-  "motor": [
-
-    {
-      "id": "core",
-      "components": [
-        { "id": "config" },
-        { "id": "bloq_events" },
-        { "id": "bloq_maker" }
-      ]
-    },
-
-    {
-      "id": "output",
-      "components": [
-        { 
-          "id": "render" 
-        },
-        { 
-          "id": "screen" 
-        },
-        { 
-          "id": "camara_lucida",
-          "data": {
-            "render_hue_tex": false,
-            "render_background": false,
-            "enabled": false,
-            //2048, 1536, 1152
-            "tex_width": 1536,
-            "tex_height": 1152,
-            "mesh_res": 2
-          }
-        }
-      ]
-    },
-
-    {
-      "id": "input",
-      "components": [
-        { 
-          "id": "rgb",
-          "data": {
-            "render": false,
-            "width": 640,
-            "height": 480,
-            "calibration": "calib/calib_ps3eye.aruco.yml",
-            "calibration_stereo": "calib/calib_RT_ps3eye_to_kinect.yml"
-          }
-        },
-        { 
-          "id": "depth", 
-          "data": {
-            "render": true,
-            "ir": false,
-            "calibration": "calib/calib_kinect.aruco.yml"
-          }
-        },
-
-        //input process components
-        { 
-          "id": "aruco", 
-          "data": {
-            "render": true
-          }
-        },
-        { 
-          "id": "blobs",
-          "data": {
-            "threshold_near": [ 255, 0, 255 ],
-            "threshold_far": [ 100, 0, 255 ],
-            "render_depth_filtered": false,
-            "render_contour_finder": false
-
-          }
-        }
-        ,{ 
-          "id": "flow_field",
-          "data": {
-            "width": 160,
-            "height": 120,
-            "render": false
-          }
-        }
-      ] //end of input components
-    } //end of input entity
-  ]
+   "motor" : [
+      {
+         "components" : [
+            {
+               "id" : "config"
+            },
+            {
+               "id" : "bloq_events"
+            },
+            {
+               "id" : "bloq_maker"
+            }
+         ],
+         "id" : "core"
+      },
+      {
+         "components" : [
+            {
+               "id" : "render"
+            },
+            {
+               "id" : "screen"
+            },
+            {
+               "data" : {
+                  "enabled" : false,
+                  "mesh_res" : 2,
+                  "render_background" : false,
+                  "render_hue_tex" : false,
+                  "tex_height" : 1152,
+                  "tex_width" : 1536
+               },
+               "id" : "camara_lucida"
+            }
+         ],
+         "id" : "output"
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                  "calibration" : "calib/calib_ps3eye.aruco.yml",
+                  "calibration_stereo" : "calib/calib_RT_ps3eye_to_kinect.yml",
+                  "height" : 480,
+                  "render" : false,
+                  "width" : 640
+               },
+               "id" : "rgb"
+            },
+            {
+               "data" : {
+                  "calibration" : "calib/calib_kinect.aruco.yml",
+                  "ir" : false,
+                  "render" : true
+               },
+               "id" : "depth"
+            },
+            {
+               "data" : {
+                  "render" : true
+               },
+               "id" : "aruco"
+            },
+            {
+               "data" : {
+                  "render_contour_finder" : false,
+                  "render_depth_filtered" : false,
+                  "threshold_far" : [ 100, 0, 255 ],
+                  "threshold_near" : [ 255, 0, 255 ]
+               },
+               "id" : "blobs"
+            },
+            {
+               "data" : {
+                  "height" : 120,
+                  "render" : false,
+                  "width" : 160
+               },
+               "id" : "flow_field"
+            }
+         ],
+         "id" : "input"
+      }
+   ]
 }
+

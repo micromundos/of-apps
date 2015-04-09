@@ -11,6 +11,12 @@ void ofApp::setup()
   ofSetWindowPosition( ofGetScreenWidth() - ofGetWidth(), 0 );
   //ofSetWindowPosition( 0, 0 );
 
+  if ( !settings.open( "config/settings.json" ) ) 
+  {
+    ofLogError() << "error opening settings.json";
+    return;
+  }
+
   w = 640;
   h = 480;
 
@@ -42,6 +48,8 @@ void ofApp::setup()
     ofGetScreenHeight() - gui.getHeight() - 10 
   );
   gui.loadFromFile( gui_settings );
+
+  receiver.setup( settings["params"]["calib_kinect_projector_port"].asInt() );
 }
 
 
@@ -57,21 +65,25 @@ void ofApp::exit()
 
 void ofApp::capture()
 {
+  ofLog() << "capture";
   calibration.toggle_capture();
 }
 
 void ofApp::calibrate()
 {
+  ofLog() << "calibrate";
   calibration.calibrate();
 }
 
 void ofApp::save_calib()
 {
+  ofLog() << "save calib";
   calibration.save_all( "calib" );
 }
 
 void ofApp::reset_calib()
 {
+  ofLog() << "reset calib";
   calibration.reset();
 }
 
@@ -80,12 +92,79 @@ void ofApp::update()
 {
   ofSetWindowTitle(ofToString(ofGetFrameRate(),2));
 
+  update_osc();
+
   kinect.update();
 
   if ( !kinect.isFrameNew() ) return;
 
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
   calibration.update( pix_kinect_rgb );
+}
+
+
+void ofApp::update_osc()
+{
+  while( receiver.hasWaitingMessages() )
+  {
+    ofxOscMessage m;
+    receiver.getNextMessage(&m);
+
+    //log_osc_msg( m );
+
+    if ( ofIsStringInString( m.getAddress(), "/fader" ) )
+    {
+      chessboard_brightness = m.getArgAsFloat(0) * 255;
+    } 
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/1" ) 
+        && m.getArgAsFloat(0) == 1 )
+    {
+      capture();
+    }
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/2" ) 
+        && m.getArgAsFloat(0) == 1 )
+    {
+      calibrate();
+    }
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/3" ) 
+        && m.getArgAsFloat(0) == 1 )
+    {
+      save_calib();
+    }
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/4" )
+        && m.getArgAsFloat(0) == 1 )
+    {
+      chessboard_projected = !chessboard_projected;
+    }
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/5" ) 
+        && m.getArgAsFloat(0) == 1 )
+    {
+      reset_calib();
+    }
+  }
+}
+
+void ofApp::log_osc_msg( ofxOscMessage& m )
+{
+  ofLog() << "osc msg";
+  ofLog() << "addr: " << m.getAddress();
+  for ( int i = 0; i < m.getNumArgs(); i++)
+  {
+    ofLog() << "\t arg type: " << m.getArgTypeName(i);
+    if ( m.getArgType(i) == OFXOSC_TYPE_INT32 )
+      ofLog() << "\t\t" << ofToString( m.getArgAsInt32(i) );
+    else if ( m.getArgType(i) == OFXOSC_TYPE_FLOAT )
+      ofLog() << "\t\t" << ofToString( m.getArgAsFloat(i) );
+    else if ( m.getArgType(i) == OFXOSC_TYPE_STRING )
+      ofLog() << "\t\t" << m.getArgAsString(i);
+    else
+      ofLog() << "\t\t unknown";
+  }
 }
 
 

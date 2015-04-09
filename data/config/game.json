@@ -1,62 +1,53 @@
 {
-
-  //listas de entidades tagueadas (prefabs)
-
-  "game": [
-
-    {
-      "id": "particles",
-      "components": [
-        { "id": "fisica" },
-        { "id": "particle_system" },
-        //TODO blobs containers: 
-        //no funcionan con box2d blob-bodies
-        //baja la performance y la física no anda
-        //reemplazar por glsl masks
-        { 
-          "id": "particle_blobs_containers",
-          "data": {
-            "render": true
-          }
-        },
-        { "id": "particle_flow_field" }
-        //{ "id": "particle_depth_slope_flow" }
-      ]
-    }
-  ],
-
-  //bloq = operador
-  //lista de entidades/prefabs con bloq
-  //reciben componente 'bloq' por default
-  //para correr logica con interaccion bloq-bloq usar sistemas con <BloqComponent>
-  "bloqs": [
-
-    {
-      "id": "760",
-      "components": [ 
-        {
-          "id": "particle_emitter",
-          "data": {
-            "rate": [ 5, 0, 100 ], //particulas x seg
-            "force": [ 1.5, 0, 100 ] //emitter force multiplier (bloq ang)
-          }
-        }
-      ]
-    },
-
-    {
-      "id": "838",
-      "components": [ 
-        { "id": "knob" },
-        { 
-          "id": "time_bender",
-          "data": {
-            "coef": [ 20, 1, 100 ]
-          }
-        }
-      ]
-    }
-
-  ]
-
+   "bloqs" : [
+      {
+         "components" : [
+            {
+               "data" : {
+                  "force" : [ 1.5, 0, 100 ],
+                  "rate" : [ 5, 0, 100 ]
+               },
+               "id" : "particle_emitter"
+            }
+         ],
+         "id" : "760"
+      },
+      {
+         "components" : [
+            {
+               "id" : "knob"
+            },
+            {
+               "data" : {
+                  "coef" : [ 21.32105255126953, 1, 100 ]
+               },
+               "id" : "time_bender"
+            }
+         ],
+         "id" : "838"
+      }
+   ],
+   "game" : [
+      {
+         "components" : [
+            {
+               "id" : "fisica"
+            },
+            {
+               "id" : "particle_system"
+            },
+            {
+               "data" : {
+                  "render" : true
+               },
+               "id" : "particle_blobs_containers"
+            },
+            {
+               "id" : "particle_flow_field"
+            }
+         ],
+         "id" : "particles"
+      }
+   ]
 }
+

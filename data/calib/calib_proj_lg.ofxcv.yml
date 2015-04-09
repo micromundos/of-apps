@@ -14,3 +14,12 @@ distCoeffs: !!opencv-matrix
    dt: u
    data: []
 reprojectionError: 0.
+undistorted_cameraMatrix: !!opencv-matrix
+   rows: 0
+   cols: 0
+   dt: u
+   data: []
+undistorted_imageSize_width: 0
+undistorted_imageSize_height: 0
+undistorted_sensorSize_width: 0
+undistorted_sensorSize_height: 0
