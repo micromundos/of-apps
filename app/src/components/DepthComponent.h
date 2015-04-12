@@ -12,6 +12,9 @@ class DepthComponent : public ECScomponent
     uint16_t* depth_pix_mm;
     uint8_t* depth_pix_grey;
     float* f_depth_pix_mm;
+    ofPixels* depth_ofpix_grey;
+    ofShortPixels* depth_ofpix_mm;
+    ofFloatPixels* f_depth_ofpix_mm;
     //ofTexture depth_tex;
 
     int width, height;

@@ -7,9 +7,7 @@ void ofApp::setup()
   ofSetDataPathRoot( __data_path__ );
   ofSetFrameRate(30);
   ofSetVerticalSync(true);
-  ofSetLogLevel(OF_LOG_NOTICE);
-  ofSetWindowPosition( ofGetScreenWidth() - ofGetWidth(), 0 );
-  //ofSetWindowPosition( 0, 0 );
+  ofSetLogLevel(OF_LOG_NOTICE); 
 
   if ( !settings.open( "config/settings.json" ) ) 
   {
@@ -29,6 +27,13 @@ void ofApp::setup()
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
   calibration.init( pix_kinect_rgb, "calib/calib_kinect.ofxcv.yml", "kinect_rgb", "proj_lg" );
 
+
+  //set window
+  ofSetWindowShape( calibration.cam_size().width + calibration.proj_size().width, ofGetScreenHeight() );
+  ofSetWindowPosition( ofGetScreenWidth() - calibration.cam_size().width, 0 );
+  //ofSetWindowPosition( 0, 0 );
+
+
   capture_btn.addListener(this,&ofApp::capture);
   calibrate_btn.addListener(this,&ofApp::calibrate);
   save_calib_btn.addListener(this,&ofApp::save_calib);
@@ -45,7 +50,7 @@ void ofApp::setup()
 
   gui.setPosition( 
     w - gui.getWidth() - 10, 
-    ofGetScreenHeight() - gui.getHeight() - 10 
+    calibration.cam_size().width - gui.getHeight() - 10 
   );
   gui.loadFromFile( gui_settings );
 
@@ -177,7 +182,7 @@ void ofApp::draw()
   //kinect.drawDepth( 0, yoff+h, w, h );
 
   calibration.render( 0, yoff );
-  calibration.render_chessboard( chessboard_projected ? ofGetScreenWidth() : 0, 0, chessboard_brightness );
+  calibration.render_chessboard( chessboard_projected ? calibration.cam_size().width : 0, 0, chessboard_brightness );
 
   gui.draw();
 }

@@ -3,6 +3,9 @@
 
 int main()
 { 
-  ofSetupOpenGL(640,480*2,OF_WINDOW_UNDECORATED);
+  ofSetupOpenGL(
+      100,100, //tmp
+      //OF_WINDOW_UNDECORATED );
+      OF_WINDOW );
   ofRunApp(new ofApp());
 }
