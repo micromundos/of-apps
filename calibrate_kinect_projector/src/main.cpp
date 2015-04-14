@@ -5,7 +5,7 @@ int main()
 { 
   ofSetupOpenGL(
       100,100, //tmp
-      OF_WINDOW_UNDECORATED );
-      //OF_WINDOW );
+      //OF_WINDOW_UNDECORATED );
+      OF_WINDOW );
   ofRunApp(new ofApp());
 }

@@ -37,6 +37,7 @@ class ofApp : public ofBaseApp
 
     ofxJSONElement settings;
     ofxOscReceiver receiver;
+    ofxOscSender sender;
 
     ofxPanel gui;
     ofxFloatSlider chessboard_brightness;
@@ -45,10 +46,14 @@ class ofApp : public ofBaseApp
 
     void update_osc();
     void log_osc_msg( ofxOscMessage& m );
+    void send_chessboard_brightness( float _chessboard_brightness );
+    void send_chessboard_projected( bool _chessboard_projected );
 
     void capture();
     void calibrate();
     void save_calib();
     void reset_calib();
+    void chessboard_brightness_changed( float &_chessboard_brightness );
+    void chessboard_projected_changed( bool &_chessboard_projected );
 };
 
