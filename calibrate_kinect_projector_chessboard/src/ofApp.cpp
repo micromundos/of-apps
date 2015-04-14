@@ -15,7 +15,7 @@ void ofApp::setup()
 
   ofPixels dummy;
   calibration.init( dummy, 
-      settings["params"]["calib_kinect_projector"]["calib_kinect_path"].asString(), 
+      settings["params"]["calib_kinect_projector"]["calib_cam_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["cam_name"].asString(), 
       settings["params"]["calib_kinect_projector"]["proj_name"].asString() );
 
@@ -25,7 +25,7 @@ void ofApp::setup()
   ofLog() << "chessboard window init";
   ofLog() << "width: " << calibration.proj_size().width;
   ofLog() << "height: " << calibration.proj_size().height;
-  ofLog() << "calib_kinect_path: " << settings["params"]["calib_kinect_projector"]["calib_kinect_path"].asString();
+  ofLog() << "calib_cam_path: " << settings["params"]["calib_kinect_projector"]["calib_cam_path"].asString();
   ofLog() << "cam_name: " << settings["params"]["calib_kinect_projector"]["cam_name"].asString();
   ofLog() << "proj_name: " << settings["params"]["calib_kinect_projector"]["proj_name"].asString();
 

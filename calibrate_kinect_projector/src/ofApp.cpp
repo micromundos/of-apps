@@ -27,7 +27,7 @@ void ofApp::setup()
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
   calibration.init( 
       pix_kinect_rgb, 
-      settings["params"]["calib_kinect_projector"]["calib_kinect_path"].asString(), 
+      settings["params"]["calib_kinect_projector"]["calib_cam_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["cam_name"].asString(), 
       settings["params"]["calib_kinect_projector"]["proj_name"].asString() );
 
