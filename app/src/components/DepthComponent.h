@@ -8,13 +8,18 @@ class DepthComponent : public ECScomponent
 {
   public:
 
-    //TODO move all pixels to ofXXXPixels, see KinectSystem
-    uint16_t* depth_pix_mm;
-    uint8_t* depth_pix_grey;
-    float* f_depth_pix_mm;
-    ofPixels* depth_ofpix_grey;
+    //ofXXXPixels ptrs
     ofShortPixels* depth_ofpix_mm;
     ofFloatPixels* f_depth_ofpix_mm;
+    ofPixels* depth_ofpix_grey;
+
+    //TODO deprecate
+    //data buffers ptrs
+    uint16_t* depth_pix_mm;
+    float* f_depth_pix_mm;
+    uint8_t* depth_pix_grey;
+
+    //textures copies
     //ofTexture depth_tex;
 
     int width, height;
@@ -44,21 +49,6 @@ class DepthComponent : public ECScomponent
     {
       this->width = w;
       this->height = h;
-    };
-
-    void update( uint16_t *depth_pix_mm )
-    {
-      this->depth_pix_mm = depth_pix_mm;
-    };
-
-    void update( float *f_depth_pix_mm )
-    {
-      this->f_depth_pix_mm = f_depth_pix_mm;
-    };
-
-    void update( uint8_t *depth_pix_grey )
-    {
-      this->depth_pix_grey = depth_pix_grey;
     };
 
     //void update( ofTexture& depth_tex )
