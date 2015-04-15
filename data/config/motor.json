@@ -25,7 +25,7 @@
             {
                "data" : {
                   "enabled" : false,
-                  "mesh_res" : 2,
+                  "mesh_res" : 1,
                   "render_background" : false,
                   "render_hue_tex" : false,
                   "tex_height" : 1152,

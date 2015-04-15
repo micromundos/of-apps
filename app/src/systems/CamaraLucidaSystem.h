@@ -81,8 +81,7 @@ class CamaraLucidaSystem : public ECSsystem
 
       if ( depth->dirty )
       {
-        //cml_data->cml->update( depth->depth_pix_mm );
-        cml_data->cml->update( *(depth->f_depth_ofpix_mm) );
+        cml_data->cml->update( depth->depth_pix_mm );
       }
     };
 
