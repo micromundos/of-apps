@@ -42,7 +42,9 @@ class ofApp : public ofBaseApp
     ofxPanel gui;
     ofxFloatSlider chessboard_brightness;
     ofxToggle chessboard_projected;
-    ofxButton calibrate_btn, save_calib_btn, reset_calib_btn, capture_btn;
+    ofxButton calibrate_btn, save_calib_btn, load_images_btn, reset_calib_btn, capture_btn;
+
+    string calibrate_osc_num, save_calib_osc_num, load_images_osc_num, reset_calib_osc_num, capture_osc_num, chessboard_projected_osc_num; 
 
     void update_osc();
     void log_osc_msg( ofxOscMessage& m );
@@ -52,6 +54,7 @@ class ofApp : public ofBaseApp
     void capture();
     void calibrate();
     void save_calib();
+    void load_images();
     void reset_calib();
     void chessboard_brightness_changed( float &_chessboard_brightness );
     void chessboard_projected_changed( bool &_chessboard_projected );
