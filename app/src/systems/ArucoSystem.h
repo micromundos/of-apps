@@ -109,7 +109,6 @@ class ArucoSystem : public ECSsystem
         }
       }
 
-      //FIXME
       remove_bloqs_missing( events );
     }; 
 
@@ -119,6 +118,7 @@ class ArucoSystem : public ECSsystem
       ArucoComponent* aruco_data = aruco_m.get(e);
       RgbComponent* rgb_data = rgb_m.get(e);
 
+      //debug
       if ( !aruco_data->render )
         return;
 
@@ -261,13 +261,18 @@ class ArucoSystem : public ECSsystem
 
     void project( const ofxCv::Intrinsics& intrinsics, const ofVec3f& p3, ofVec2f& p2 )
     {
-      cv::Mat cameraMatrix = intrinsics.getCameraMatrix();
-      cv::Point2d principalPoint = intrinsics.getPrincipalPoint();
+      cv::Mat& cameraMatrix = intrinsics.getCameraMatrix();
 
       float fx = cameraMatrix.at<double>(0, 0);
       float fy = cameraMatrix.at<double>(1, 1);
-      float cx = principalPoint.x;
-      float cy = principalPoint.y;
+      float cx = cameraMatrix.at<double>(0, 2);
+      float cy = cameraMatrix.at<double>(1, 2);
+
+      //TODO wtf ??? 
+      //cy => principalPoint.y != cameraMatrix.at<double>(1, 2) 
+      //cv::Point2d principalPoint = intrinsics.getPrincipalPoint();
+      //float cx = principalPoint.x;
+      //float cy = principalPoint.y;
 
       p2.x = (p3.x * fx / p3.z) + cx;
       p2.y = (p3.y * fy / p3.z) + cy;
