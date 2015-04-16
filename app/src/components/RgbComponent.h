@@ -11,9 +11,7 @@ class RgbComponent : public ECScomponent
     uint8_t* color_pix;
 
     int width, height;
-    bool dirty;
-    string calibration;
-    string calibration_stereo;
+    bool dirty; 
 
     ofParameter<bool> render;
 
@@ -28,9 +26,7 @@ class RgbComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
       width = d.get("width",640).asInt();
-      height = d.get("height",480).asInt();
-      calibration = d.get("calibration","").asString();
-      calibration_stereo = d.get("calibration_stereo","").asString();
+      height = d.get("height",480).asInt(); 
     };
 
     void setup( int w, int h )

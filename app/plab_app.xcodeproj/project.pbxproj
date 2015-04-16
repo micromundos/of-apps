@@ -152,7 +152,6 @@
 		EEB647DC83F0B13C5E3C4D84 /* boarddetector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3837B61B308D4F8225746A4F /* boarddetector.cpp */; };
 		F4135EEFC911E9ED211FB6F9 /* core.c in Sources */ = {isa = PBXBuildFile; fileRef = CF528C0E8DBFF5C31E8D6529 /* core.c */; };
 		F76B4A79BD8DE4854141CB47 /* fdog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A2D8249D46647E3C51769CDE /* fdog.cpp */; };
-		F96C8372BA6118C06FE6EEBA /* Calibration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0B77E88EE3F0FD62F3D1A3B2 /* Calibration.cpp */; };
 		FB09C6B2A1DA0EA217240CB8 /* ofxCvGrayscaleImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 057122A817D12571F8C0C7A4 /* ofxCvGrayscaleImage.cpp */; };
 		FB84AAF8D1B7A95266DB5C09 /* jsoncpp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 21BDE665988474F1B1F4D302 /* jsoncpp.cpp */; };
 		FCC16AB16073FF0581F50ED7 /* loader.c in Sources */ = {isa = PBXBuildFile; fileRef = FE25F20F363BC625B852BFBC /* loader.c */; };
@@ -206,7 +205,6 @@
 		093C9EBFCAB5D2649ACF4D0C /* loader.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = loader.h; path = ../../../addons/ofxKinect/libs/libfreenect/src/loader.h; sourceTree = SOURCE_ROOT; };
 		096CB33CAD6C5A446E7026E9 /* dynamic_bitset.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = dynamic_bitset.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/dynamic_bitset.h; sourceTree = SOURCE_ROOT; };
 		0AED834CE4DEC5260AF302A2 /* ofxOscParameterSync.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscParameterSync.cpp; path = ../../../addons/ofxOsc/src/ofxOscParameterSync.cpp; sourceTree = SOURCE_ROOT; };
-		0B77E88EE3F0FD62F3D1A3B2 /* Calibration.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = Calibration.cpp; path = ../../../addons/ofxCamaraLucida/src/cml/Calibration.cpp; sourceTree = SOURCE_ROOT; };
 		0CF0AA3895D28E97D8A1E4A9 /* ground_truth.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ground_truth.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/ground_truth.h; sourceTree = SOURCE_ROOT; };
 		114B872696817CC33990FC83 /* imgproc.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = imgproc.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/imgproc/imgproc.hpp; sourceTree = SOURCE_ROOT; };
 		1206713A1AB26AB100235F89 /* ofxGPGPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxGPGPU.h; sourceTree = "<group>"; };
@@ -342,6 +340,7 @@
 		12AA20C31A8E8F3D00B8479B /* TemplateSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemplateSystem.h; sourceTree = "<group>"; };
 		12AA20C41A8FD6F500B8479B /* ECSgetter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ECSgetter.h; path = ../../../addons/ofxECS/src/ECSgetter.h; sourceTree = "<group>"; };
 		12AEE4051AB1005F00A246E4 /* data_path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = data_path.h; sourceTree = "<group>"; };
+		12B4DACF1ADF542D009AE39C /* CalibrationParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalibrationParser.h; path = ../../../addons/ofxCamaraLucida/src/cml/CalibrationParser.h; sourceTree = "<group>"; };
 		1586732FE45F7F867B631177 /* SystemBitManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = SystemBitManager.h; path = ../../../addons/ofxECS/libs/Artemis/SystemBitManager.h; sourceTree = SOURCE_ROOT; };
 		1645F56257269CD0356320BD /* ofxJSON.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxJSON.h; path = ../../../addons/ofxJSON/src/ofxJSON.h; sourceTree = SOURCE_ROOT; };
 		16A4AE238493FFCE90D1ED03 /* DelayedEntityProcessingSystem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = DelayedEntityProcessingSystem.cpp; path = ../../../addons/ofxECS/libs/Artemis/DelayedEntityProcessingSystem.cpp; sourceTree = SOURCE_ROOT; };
@@ -357,7 +356,6 @@
 		241AAF7769D555E4ECD57E17 /* cameras.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cameras.h; path = ../../../addons/ofxKinect/libs/libfreenect/src/cameras.h; sourceTree = SOURCE_ROOT; };
 		26A541233BC6F736E758F718 /* ofxJSONElement.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxJSONElement.h; path = ../../../addons/ofxJSON/src/ofxJSONElement.h; sourceTree = SOURCE_ROOT; };
 		28F9707464BA3FF98E05096C /* usb_libusb10.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = usb_libusb10.c; path = ../../../addons/ofxKinect/libs/libfreenect/src/usb_libusb10.c; sourceTree = SOURCE_ROOT; };
-		2A4964E0B14F0AEF322B2C32 /* Calibration.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = Calibration.h; path = ../../../addons/ofxCamaraLucida/src/cml/Calibration.h; sourceTree = SOURCE_ROOT; };
 		2A5B1FAD3F30C8065C396ACB /* NetworkingUtilsWin.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = NetworkingUtilsWin.cpp; path = ../../../addons/ofxOsc/libs/oscpack/src/ip/win32/NetworkingUtilsWin.cpp; sourceTree = SOURCE_ROOT; };
 		2B7C02B0F0D198F7749788BA /* ECS.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ECS.h; path = ../../../addons/ofxECS/src/ECS.h; sourceTree = SOURCE_ROOT; };
 		2C7CF000B7B4F782C187C353 /* json.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = json.h; path = ../../../addons/ofxJSON/libs/jsoncpp/include/json/json.h; sourceTree = SOURCE_ROOT; };
@@ -1183,8 +1181,7 @@
 		4D3CF3FA31C30E147812A856 /* cml */ = {
 			isa = PBXGroup;
 			children = (
-				0B77E88EE3F0FD62F3D1A3B2 /* Calibration.cpp */,
-				2A4964E0B14F0AEF322B2C32 /* Calibration.h */,
+				12B4DACF1ADF542D009AE39C /* CalibrationParser.h */,
 				E7BC4E3860AC873EF6B0E618 /* CamaraLucida.cpp */,
 				3A0D8EF1A5E56D2BF5714E59 /* CamaraLucida.h */,
 				1D558F16E64B05B0F71564CA /* Config.h */,
@@ -2039,7 +2036,6 @@
 				1291F2C61ABE05190075BE0D /* b2CollidePolygon.cpp in Sources */,
 				1291F2D61ABE051A0075BE0D /* b2Timer.cpp in Sources */,
 				1291F2E71ABE051A0075BE0D /* b2DistanceJoint.cpp in Sources */,
-				F96C8372BA6118C06FE6EEBA /* Calibration.cpp in Sources */,
 				1291F2E61ABE051A0075BE0D /* b2PolygonContact.cpp in Sources */,
 				C4F9E7AC0E2A8DC9F3509D32 /* CamaraLucida.cpp in Sources */,
 				71E49F19B568C23821627D75 /* DepthCamera.cpp in Sources */,

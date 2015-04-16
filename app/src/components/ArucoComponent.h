@@ -9,6 +9,9 @@ class ArucoComponent : public ECScomponent
   public:
 
     ofParameter<bool> render;
+    string calib_rgb_file;
+    string calib_depth_file;
+    string calib_stereo_file;
 
     ArucoComponent(string _id) : ECScomponent(_id) {};
 
@@ -16,6 +19,10 @@ class ArucoComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
+
+      calib_rgb_file = d["calibration"]["rgb"].asString();
+      calib_depth_file = d["calibration"]["depth"].asString();
+      calib_stereo_file = d["calibration"]["stereo"].asString();
     };
 };
 
