@@ -10,7 +10,7 @@ void ofApp::setup()
   ofSetWindowPosition( ofGetScreenWidth()-ofGetWidth(), 0 );
 
   ofSetFrameRate( 30 ); 
-	ofSetVerticalSync(true); 
+  ofSetVerticalSync(true); 
 
   load_all_config();
 
@@ -261,7 +261,7 @@ Json::Value* ofApp::get_component( Json::Value& entity, string _component_id )
 
 void ofApp::draw()
 {
-  gui.draw();
+    gui.draw();
 }
 
 
