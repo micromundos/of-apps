@@ -69,7 +69,6 @@ class CamaraLucidaComponent : public ECScomponent
       cfg.key_help = keys::cml_key_help;
       cfg.key_scene_zoom = keys::cml_key_scene_zoom;
       cfg.key_scene_reset = keys::cml_key_scene_reset;
-      cfg.key_view_prev = keys::cml_key_view_prev;
       cfg.key_view_next = keys::cml_key_view_next;
 
       cfg.tex_width = tex_width;

@@ -24,7 +24,7 @@
             },
             {
                "data" : {
-                  "enabled" : false,
+                  "enabled" : true,
                   "mesh_res" : 1,
                   "render_background" : false,
                   "render_hue_tex" : false,
