@@ -261,7 +261,7 @@ class ArucoSystem : public ECSsystem
 
     void project( const ofxCv::Intrinsics& intrinsics, const ofVec3f& p3, ofVec2f& p2 )
     {
-      cv::Mat& cameraMatrix = intrinsics.getCameraMatrix();
+      cv::Mat cameraMatrix = intrinsics.getCameraMatrix();
 
       float fx = cameraMatrix.at<double>(0, 0);
       float fy = cameraMatrix.at<double>(1, 1);
