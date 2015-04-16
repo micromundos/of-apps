@@ -29,9 +29,14 @@ void ofApp::setup()
   calibration.init( 
       pix_kinect_rgb, 
       settings["params"]["calib_kinect_projector"]["calib_cam_path"].asString(), 
+      settings["params"]["calib_kinect_projector"]["pattern_settings_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["cam_name"].asString(), 
       settings["params"]["calib_kinect_projector"]["proj_name"].asString() );
 
+  ofLog() 
+    << "calib config" 
+    << "\n" 
+    << calibration.log_config();
 
   //window setup
   ofSetWindowShape( 
@@ -53,13 +58,15 @@ void ofApp::setup()
   capture_osc_num = "1";
   calibrate_osc_num = "2"; 
   save_calib_osc_num = "3";
-  load_images_osc_num = "4";
-  chessboard_projected_osc_num = "5";
-  reset_calib_osc_num = "6";
+  save_images_osc_num = "4";
+  load_images_osc_num = "5";
+  chessboard_projected_osc_num = "6";
+  reset_calib_osc_num = "7";
 
   capture_btn.addListener(this,&ofApp::capture);
   calibrate_btn.addListener(this,&ofApp::calibrate);
   save_calib_btn.addListener(this,&ofApp::save_calib);
+  save_images_btn.addListener(this,&ofApp::save_images);
   load_images_btn.addListener(this,&ofApp::load_images);
   reset_calib_btn.addListener(this,&ofApp::reset_calib);
   chessboard_brightness.addListener(this,&ofApp::chessboard_brightness_changed);
@@ -68,13 +75,14 @@ void ofApp::setup()
   ofxBaseGui::setDefaultWidth( 400 );
   string gui_settings_file = "calib/kinect_projector_gui.xml";
 	gui.setup( "", gui_settings_file );
-  gui.add( chessboard_brightness.setup( "chessboard_brightness (osc: any fader)", 127, 0, 255 ) );
-  gui.add( chessboard_projected.setup( "chessboard_projected (osc:"+chessboard_projected_osc_num+")", true ) );
-  gui.add( capture_btn.setup("capture (spacebar) (osc:"+capture_osc_num+")") );
-  gui.add( calibrate_btn.setup("calibrate (c) (osc:"+calibrate_osc_num+")") );
-  gui.add( save_calib_btn.setup("save calibration (s) (osc:"+save_calib_osc_num+")") );
-  gui.add( load_images_btn.setup("load images (l) (osc:"+load_images_osc_num+")") );
-  gui.add( reset_calib_btn.setup("reset calibration (r) (osc:"+reset_calib_osc_num+")") );
+  gui.add( chessboard_brightness.setup( "chessboard_brightness (osc_ any fader)", 127, 0, 255 ) );
+  gui.add( chessboard_projected.setup( "chessboard_projected (osc_"+chessboard_projected_osc_num+")", true ) );
+  gui.add( capture_btn.setup("capture (spacebar) (osc_"+capture_osc_num+")") );
+  gui.add( calibrate_btn.setup("calibrate (c) (osc_"+calibrate_osc_num+")") );
+  gui.add( save_calib_btn.setup("save calibration (s) (osc_"+save_calib_osc_num+")") );
+  gui.add( save_images_btn.setup("save images (i) (osc_"+save_images_osc_num+")") );
+  gui.add( load_images_btn.setup("load images (l) (osc_"+load_images_osc_num+")") );
+  gui.add( reset_calib_btn.setup("reset calibration (r) (osc_"+reset_calib_osc_num+")") );
 
   gui.setPosition( 
     calibration.cam_size().width - gui.getWidth() - 10, 
@@ -90,6 +98,7 @@ void ofApp::exit()
   capture_btn.removeListener(this,&ofApp::capture);
   calibrate_btn.removeListener(this,&ofApp::calibrate);
   save_calib_btn.removeListener(this,&ofApp::save_calib);
+  save_images_btn.removeListener(this,&ofApp::save_images);
   load_images_btn.removeListener(this,&ofApp::load_images);
   reset_calib_btn.removeListener(this,&ofApp::reset_calib);
 
@@ -154,7 +163,12 @@ void ofApp::save_calib()
 {
   ofLog() << "save calib";
   calibration.save_all( "calib" );
-  calibration.save_images( "calib/imgs" );
+}
+
+void ofApp::save_images()
+{
+  ofLog() << "save images";
+  calibration.save_images("calib/imgs");
 }
 
 void ofApp::load_images()
@@ -216,6 +230,12 @@ void ofApp::update_osc()
         && m.getArgAsFloat(0) == 1 )
     {
       save_calib();
+    }
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+save_images_osc_num ) 
+        && m.getArgAsFloat(0) == 1 )
+    {
+      save_images();
     }
 
     else if ( ofIsStringInString( m.getAddress(), "/trigger/"+load_images_osc_num ) 
@@ -281,6 +301,11 @@ void ofApp::keyReleased(int key)
   else if ( key == 's' )
   {
     save_calib();
+  }
+
+  else if ( key == 'i' )
+  {
+    save_images();
   }
 
   else if ( key == 'l' )
