@@ -1,0 +1,29 @@
+%YAML:1.0
+cameraMatrix: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 5.3135382734196867e+02, 0., 3.1125939994152634e+02, 0.,
+       5.3338970581246008e+02, 2.5524671992607387e+02, 0., 0., 1. ]
+imageSize_width: 640
+imageSize_height: 480
+sensorSize_width: 0
+sensorSize_height: 0
+distCoeffs: !!opencv-matrix
+   rows: 5
+   cols: 1
+   dt: d
+   data: [ 4.0546849338927121e-01, -2.2481724481132490e+00,
+       1.3930758447862302e-03, -1.8173411487922279e-02,
+       4.8922971944795064e+00 ]
+reprojectionError: 2.8406614065170288e-01
+undistorted_cameraMatrix: !!opencv-matrix
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 6.9240203857421875e+02, 0., 3.1993844945103774e+02, 0.,
+       6.9058489990234375e+02, 2.4254892427599771e+02, 0., 0., 1. ]
+undistorted_imageSize_width: 640
+undistorted_imageSize_height: 480
+undistorted_sensorSize_width: 0
+undistorted_sensorSize_height: 0

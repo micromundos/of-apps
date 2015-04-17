@@ -31,9 +31,9 @@
                   "tex_height" : 1152,
                   "tex_width" : 1536,
                   "calibration": {
-                      "kinect_intrinsics_file": "calib/calib_kinect.ofxcv.yml",
-                      "projector_intrinsics_file": "calib/calib_proj_lg.ofxcv.yml",
-                      "projector_kinect_extrinsics_file": "calib/calib_RT_proj_lg_to_kinect_rgb.yml"
+                      "kinect_intrinsics_file": "calib/intrinsics_kinect.ofxcv.yml",
+                      "projector_intrinsics_file": "calib/intrinsics_proj_lg.ofxcv.yml",
+                      "projector_kinect_extrinsics_file": "calib/extrinsics_proj_lg_to_kinect_rgb.yml"
                   }
                },
                "id" : "camara_lucida"
@@ -62,9 +62,9 @@
                "data" : {
                   "render" : true,
                   "calibration": {
-                      "rgb" : "calib/calib_ps3eye.aruco.yml",
-                      "depth" : "calib/calib_kinect.aruco.yml",
-                      "stereo" : "calib/calib_RT_ps3eye_to_kinect.yml"
+                      "rgb" : "calib/intrinsics_ps3eye.aruco.yml",
+                      "depth" : "calib/intrinsics_kinect.aruco.yml",
+                      "stereo" : "calib/extrinsics_ps3eye_to_kinect.yml"
                   }
                },
                "id" : "aruco"
