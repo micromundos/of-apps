@@ -90,7 +90,6 @@ void ofApp::draw()
     p3_k.y = mk_T.at<float>(1,0) - m.ssize * 0.5;
     p3_k.z = mk_T.at<float>(2,0);
 
-
     ofVec2f p2_k; 
     project_on_kinect( p3_k, p2_k ); 
 
