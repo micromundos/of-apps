@@ -79,7 +79,8 @@ class Ps3EyeSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      if ( !rgb_m.get(e)->render )
+      RgbComponent* rgb_data = rgb_m.get(e);
+      if ( !rgb_data->render )
         return;
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
@@ -89,7 +90,10 @@ class Ps3EyeSystem : public ECSsystem
 
       ps3_tex.loadData( ps3.getPixelsRef() );
       ps3_tex.draw( 0, 0,
-          render_data->width, render_data->height );
+          rgb_data->width, 
+          rgb_data->height );
+          //render_data->width, 
+          //render_data->height );
 
       ofPopStyle();
     };

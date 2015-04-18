@@ -2,7 +2,7 @@
 # plab
 #########################
 data/settings.xml
-data/calib/calib_proj_imgs
+data/calib/imgs_proj
 
 #########################
 # openFrameworks patterns

@@ -168,13 +168,13 @@ void ofApp::save_calib()
 void ofApp::save_images()
 {
   ofLog() << "save images";
-  calibration.save_images("calib/proj_imgs");
+  calibration.save_images("calib/imgs_proj");
 }
 
 void ofApp::load_images()
 {
   ofLog() << "load images";
-  calibration.load_images( "calib/proj_imgs/" );
+  calibration.load_images( "calib/imgs_proj/" );
 }
 
 void ofApp::reset_calib()
