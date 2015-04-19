@@ -11,6 +11,7 @@
 struct Extrinsics
 {
   cv::Mat R, T;
+  cv::Mat E, F;
   cv::Mat MV;
   float glMV[16];
   ofMatrix4x4 ofMV;
@@ -48,16 +49,19 @@ class ofApp : public ofBaseApp{
     //from ofxCv::Calibration::load
     ofxCv::Intrinsics int_k;
     ofxCv::Calibration calib_kinect;
-    void load_aruco_kinect_calib(string filename);
+    void load_aruco_kinect_intrinsics(string filename);
 
     ofxCv::Intrinsics int_ps3;
     ofxCv::Calibration calib_ps3;
-    void load_aruco_ps3_calib(string filename);
+    void load_aruco_ps3_intrinsics(string filename);
 
-    Extrinsics calib_stereo;
-    void load_stereo_calib(string filename);
+    Extrinsics extrinsics;
+    vector<cv::Vec3f> epilines;
+    void load_extrinsics(string filename);
 
     void drawMarker( float size, const ofColor& color );
+
+    void draw_epilines();
 
     bool draw_ps3eye;
 

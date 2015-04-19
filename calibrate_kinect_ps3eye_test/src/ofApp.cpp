@@ -24,9 +24,9 @@ void ofApp::setup()
 
 	aruco.setupXML( "calib/intrinsics_ps3eye.aruco.yml", ofGetWidth(), ofGetHeight() );
 
-  load_aruco_kinect_calib("calib/intrinsics_kinect.aruco.yml");
-  load_aruco_ps3_calib("calib/intrinsics_ps3eye.aruco.yml");
-  load_stereo_calib("calib/extrinsics_ps3eye_to_kinect.yml"); //"extrinsics_kinect_to_ps3eye.yml"
+  load_aruco_kinect_intrinsics("calib/intrinsics_kinect.aruco.yml");
+  load_aruco_ps3_intrinsics("calib/intrinsics_ps3eye.aruco.yml");
+  load_extrinsics("calib/extrinsics_ps3eye_to_kinect.yml"); //"extrinsics_kinect_to_ps3eye.yml"
 }
 
 void ofApp::update()
@@ -81,10 +81,10 @@ void ofApp::draw()
     mT.y = m.Tvec.at<float>(1,0);
     mT.z = m.Tvec.at<float>(2,0);
 
-    //ofMatrix4x4 mk_MV = calib_stereo.ofMV * mMV;
+    //ofMatrix4x4 mk_MV = extrinsics.ofMV * mMV;
     //ofVec3f p3_k = mk_MV.getTranslation();
 
-    cv::Mat mk_T = calib_stereo.R * m.Tvec + calib_stereo.T; 
+    cv::Mat mk_T = extrinsics.R * m.Tvec + extrinsics.T; 
     ofVec3f p3_k;
     p3_k.x = mk_T.at<float>(0,0) - m.ssize * 0.5;
     p3_k.y = mk_T.at<float>(1,0) - m.ssize * 0.5;
@@ -109,7 +109,7 @@ void ofApp::draw()
       << "T= " << mT << "\n"
       //<< "MV= \n" << mMV << "\n"
       //<< "MV kinect= \n" << mk_MV << "\n"
-      //<< "MV calib stereo= \n" << calib_stereo.ofMV << "\n"
+      //<< "MV calib stereo= \n" << extrinsics.ofMV << "\n"
       //<< "mR= \n" << mR << "\n" 
       << "p3 kinect= " << p3_k << "\n"
       << "p2 kinect= " << p2_k << "\n"
@@ -130,6 +130,8 @@ void ofApp::draw()
     //drawMarker( 0.15, ofColor::red );
     //aruco.end();
   }
+
+  draw_epilines();
 
   ofDrawBitmapStringHighlight(
       "axis: aruco detection",
@@ -153,6 +155,24 @@ void ofApp::draw()
       2, ofGetHeight()-10, 
       ofColor::yellow, ofColor::black);
 }
+
+void ofApp::draw_epilines()
+{
+  //ps3eye corners epilines into kinect
+
+  ofPushStyle();
+  ofSetColor( ofColor::yellow );
+  for ( int i = 0; i < epilines.size(); i++ )
+  {
+    //ax + bx + c = 0 
+    cv::Vec3f& line = epilines[i];
+    ofLine(
+        ofVec2f( 0, -line[2]/line[1]),
+        ofVec2f( w, -(line[2]+line[0]*w)/line[1])
+        );
+  }
+  ofPopStyle();
+};
 
 void ofApp::project( const ofxCv::Intrinsics& intrinsics, const ofVec3f& p3, ofVec2f& p2 )
 {
@@ -184,7 +204,7 @@ void ofApp::draw_kinect_undistorted( int x, int y )
   undistorted_kinect.draw( x, y );
 };
 
-void ofApp::load_aruco_kinect_calib(string filename) 
+void ofApp::load_aruco_kinect_intrinsics(string filename) 
 {
   bool absolute = false;
 
@@ -208,7 +228,7 @@ void ofApp::load_aruco_kinect_calib(string filename)
   calib_kinect.setIntrinsics( int_k, distCoeffs ); //fires calib_xxx.updateUndistortion();
 }
 
-void ofApp::load_aruco_ps3_calib(string filename) 
+void ofApp::load_aruco_ps3_intrinsics(string filename) 
 {
   bool absolute = false;
 
@@ -232,24 +252,45 @@ void ofApp::load_aruco_ps3_calib(string filename)
   calib_ps3.setIntrinsics( int_ps3, distCoeffs ); //fires calib_xxx.updateUndistortion();
 }
 
-void ofApp::load_stereo_calib(string filename)
+void ofApp::load_extrinsics(string filename)
 {
   bool absolute = false;
 
   cv::FileStorage fs( ofToDataPath(filename, absolute), cv::FileStorage::READ );
 
-  fs["R"] >> calib_stereo.R;
-  fs["T"] >> calib_stereo.T;
+  fs["R"] >> extrinsics.R;
+  fs["T"] >> extrinsics.T;
+  fs["E"] >> extrinsics.E;
+  fs["F"] >> extrinsics.F;
 
-  if ( calib_stereo.R.type() != CV_32FC1 ) calib_stereo.R.convertTo( calib_stereo.R, CV_32FC1 );
+  if ( extrinsics.R.type() != CV_32FC1 ) 
+    extrinsics.R.convertTo( extrinsics.R, CV_32FC1 );
 
-  if ( calib_stereo.T.type() != CV_32FC1 ) calib_stereo.T.convertTo( calib_stereo.T, CV_32FC1 );
+  if ( extrinsics.T.type() != CV_32FC1 ) 
+    extrinsics.T.convertTo( extrinsics.T, CV_32FC1 );
+
+  if ( extrinsics.E.type() != CV_32FC1 ) 
+    extrinsics.E.convertTo( extrinsics.E, CV_32FC1 );
+
+  if ( extrinsics.F.type() != CV_32FC1 ) 
+    extrinsics.F.convertTo( extrinsics.F, CV_32FC1 );
+
+
+  vector<cv::Point2f> corners;
+  corners.push_back( cv::Point2f( 0,0 ) );
+  corners.push_back( cv::Point2f( 0,w ) );
+  corners.push_back( cv::Point2f( h,w ) );
+  corners.push_back( cv::Point2f( h,0 ) );
+  cv::computeCorrespondEpilines(
+      cv::Mat(corners), 1,
+      extrinsics.F,
+      epilines );
 
 
   //@#$%ˆ& scale.....
   float scale = 0.01;
 
-  calib_stereo.T *= scale;
+  extrinsics.T *= scale;
 
 
   //ofQuaternion q;
@@ -257,22 +298,22 @@ void ofApp::load_stereo_calib(string filename)
   //float theta = sqrt(a^2 + b^2 + c^2);
   //ofVec3f axis = [a/theta, b/theta, c/theta]; 
   //q.makeRotate( theta, axis );
-  //calib_stereo.MV.setRotate(q);
+  //extrinsics.MV.setRotate(q);
 
 
   //from Aruco CameraParameters::getCameraLocation
-  calib_stereo.MV = cv::Mat::eye(4,4,CV_32FC1);
+  extrinsics.MV = cv::Mat::eye(4,4,CV_32FC1);
 
   //rotation
   for (int i=0;i<3;i++)
     for (int j=0;j<3;j++)
-      calib_stereo.MV.at<float>(i,j) = calib_stereo.R.at<float>(i,j);
+      extrinsics.MV.at<float>(i,j) = extrinsics.R.at<float>(i,j);
 
   //now, add the translation
   for (int i=0;i<3;i++)
-    calib_stereo.MV.at<float>(i,3) = calib_stereo.T.at<float>(i,0);
+    extrinsics.MV.at<float>(i,3) = extrinsics.T.at<float>(i,0);
 
-  //calib_stereo.MV.inv(); 
+  //extrinsics.MV.inv(); 
 
 
   //from Aruco Marker::glGetModelViewMatrix
@@ -281,60 +322,60 @@ void ofApp::load_stereo_calib(string filename)
   float para[3][4];
   for (int i=0;i<3;i++)
     for (int j=0;j<3;j++) 
-      para[i][j] = calib_stereo.R.at<float>(i,j);
+      para[i][j] = extrinsics.R.at<float>(i,j);
 
   //now, add the translation
-  para[0][3] = calib_stereo.T.at<float>(0,0);
-  para[1][3] = calib_stereo.T.at<float>(1,0);
-  para[2][3] = calib_stereo.T.at<float>(2,0);
+  para[0][3] = extrinsics.T.at<float>(0,0);
+  para[1][3] = extrinsics.T.at<float>(1,0);
+  para[2][3] = extrinsics.T.at<float>(2,0);
 
   // R1
-  calib_stereo.glMV[0 + 0*4] = para[0][0];
-  calib_stereo.glMV[0 + 1*4] = para[0][1];
-  calib_stereo.glMV[0 + 2*4] = para[0][2];
-  calib_stereo.glMV[0 + 3*4] = para[0][3];
+  extrinsics.glMV[0 + 0*4] = para[0][0];
+  extrinsics.glMV[0 + 1*4] = para[0][1];
+  extrinsics.glMV[0 + 2*4] = para[0][2];
+  extrinsics.glMV[0 + 3*4] = para[0][3];
   // R2
-  calib_stereo.glMV[1 + 0*4] = para[1][0];
-  calib_stereo.glMV[1 + 1*4] = para[1][1];
-  calib_stereo.glMV[1 + 2*4] = para[1][2];
-  calib_stereo.glMV[1 + 3*4] = para[1][3];
+  extrinsics.glMV[1 + 0*4] = para[1][0];
+  extrinsics.glMV[1 + 1*4] = para[1][1];
+  extrinsics.glMV[1 + 2*4] = para[1][2];
+  extrinsics.glMV[1 + 3*4] = para[1][3];
   // R3
-  calib_stereo.glMV[2 + 0*4] = -para[2][0];
-  calib_stereo.glMV[2 + 1*4] = -para[2][1];
-  calib_stereo.glMV[2 + 2*4] = -para[2][2];
-  calib_stereo.glMV[2 + 3*4] = -para[2][3];
+  extrinsics.glMV[2 + 0*4] = -para[2][0];
+  extrinsics.glMV[2 + 1*4] = -para[2][1];
+  extrinsics.glMV[2 + 2*4] = -para[2][2];
+  extrinsics.glMV[2 + 3*4] = -para[2][3];
   // R4
-  calib_stereo.glMV[3 + 0*4] = 0.0;
-  calib_stereo.glMV[3 + 1*4] = 0.0;
-  calib_stereo.glMV[3 + 2*4] = 0.0;
-  calib_stereo.glMV[3 + 3*4] = 1.0;
+  extrinsics.glMV[3 + 0*4] = 0.0;
+  extrinsics.glMV[3 + 1*4] = 0.0;
+  extrinsics.glMV[3 + 2*4] = 0.0;
+  extrinsics.glMV[3 + 3*4] = 1.0;
 
   if (scale != 0.0)
   {
-    calib_stereo.glMV[12] *= scale;
-    calib_stereo.glMV[13] *= scale;
-    calib_stereo.glMV[14] *= scale;
+    extrinsics.glMV[12] *= scale;
+    extrinsics.glMV[13] *= scale;
+    extrinsics.glMV[14] *= scale;
   }
 
 
   //copy to of mv
   //for (int i=0;i<16;i++)
-    //calib_stereo.ofMV.getptr()[i] = calib_stereo.glMV[i];
+    //extrinsics.ofMV.getptr()[i] = extrinsics.glMV[i];
 
   //copy to of MV
   for (int i=0;i<4;i++)
   for (int j=0;j<4;j++)
-    calib_stereo.ofMV(i,j) = calib_stereo.MV.at<float>(i,j);
+    extrinsics.ofMV(i,j) = extrinsics.MV.at<float>(i,j);
 
 
-  calib_stereo.ofMV = ofMatrix4x4::getTransposedOf( calib_stereo.ofMV );
-  //calib_stereo.ofMV.scale( 1, 1, -1 );
+  extrinsics.ofMV = ofMatrix4x4::getTransposedOf( extrinsics.ofMV );
+  //extrinsics.ofMV.scale( 1, 1, -1 );
 
   ofLog()
-      << "\n calib_stereo.T = \n" << calib_stereo.T
-      << "\n calib_stereo.R = \n" << calib_stereo.R
-      << "\n calib_stereo.MV = \n" << calib_stereo.MV
-      << "\n calib_stereo.ofMV = \n" << calib_stereo.ofMV
+      << "\n extrinsics.T = \n" << extrinsics.T
+      << "\n extrinsics.R = \n" << extrinsics.R
+      << "\n extrinsics.MV = \n" << extrinsics.MV
+      << "\n extrinsics.ofMV = \n" << extrinsics.ofMV
       << "\n";
 };
 

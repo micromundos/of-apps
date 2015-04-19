@@ -150,12 +150,32 @@ class BlobsSystem : public ECSsystem
       dpix_orig_size.setFromPixels( depth_pix_grey, depth_w, depth_h, channels );
 
       ofxCv::resize( dpix_orig_size, dpix, img_scale, img_scale );
+
+      //TODO sacar el threshold (está segmentando objetos con respecto al plano de la cámara y tiene segmentar con respecto al plano de la mesa)
+      //que la imagen para los blobs ya venga sin el plano de la mesa, solo con los objetos que tiene encima
       ofxCv::copy( dpix, dpix_near );
       ofxCv::copy( dpix, dpix_far );
       ofxCv::threshold( dpix_far, blobs_data->threshold_far );
       ofxCv::threshold( dpix_near, blobs_data->threshold_near );
       ofxCv::add(dpix_near, dpix_far, dpix);
+
+      //smooth gaussian opencv
       ofxCv::blur( dpix, blur_size );
+
+      //TODO la imagen ya viene smootheada con gaussian en GPU
+
+      //TODO smooth con opencv:
+      //1)
+      //cv::dilate(image,result,cv::Mat());
+      //cv::erode(result,result,cv::Mat());
+      //cv::dilate(result,result,cv::Mat());
+      //2)
+      //cv::Mat element5(5,5,CV_8U,cv::Scalar(1));
+      //cv::Mat closed;
+      //cv::morphologyEx(image,closed,cv::MORPH_CLOSE,element5);
+      //cv::Mat opened;
+      //cv::morphologyEx(image,opened,cv::MORPH_OPEN,element5);
+
 
       if ( blobs_data->render_depth_filtered )
       {
