@@ -13,8 +13,7 @@ void ofApp::setup()
     return;
   }
 
-  ofPixels dummy;
-  calibration.init( dummy, 
+  calibration.init(
       settings["params"]["calib_kinect_projector"]["calib_cam_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["pattern_settings_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["cam_name"].asString(), 

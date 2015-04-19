@@ -40,8 +40,7 @@ class ofApp : public ofBaseApp{
     ofxPS3EyeGrabber ps3;
     ofTexture ps3_tex;
 
-    void project_on_kinect( const ofVec3f& p3, ofVec2f& p2 );
-    void project_on_ps3( const ofVec3f& p3, ofVec2f& p2 );
+    void project(const ofxCv::Intrinsics& intrinsics, const ofVec3f& p3, ofVec2f& p2);
 
     ofMatrix4x4 get_marker_mv(aruco::Marker& m);
     void draw_kinect_undistorted( int x, int y );

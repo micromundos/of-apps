@@ -25,9 +25,7 @@ void ofApp::setup()
   kinect.update(); 
 
 
-  pix_kinect_rgb = kinect.getPixelsRef(); //copy
   calibration.init( 
-      pix_kinect_rgb, 
       settings["params"]["calib_kinect_projector"]["calib_cam_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["pattern_settings_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["cam_name"].asString(), 
@@ -130,7 +128,7 @@ void ofApp::draw()
   kinect.draw( 0, yoff, w, h );
   //kinect.drawDepth( 0, yoff+h, w, h );
 
-  calibration.render( 0, yoff );
+  calibration.render( 0, yoff, 0, h, w/2, h/2 );
   //calibration.render_chessboard( chessboard_projected ? calibration.cam_size().width : 0, 0, chessboard_brightness );
 
   gui.draw();

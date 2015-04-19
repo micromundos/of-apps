@@ -91,11 +91,13 @@ void ofApp::draw()
     p3_k.z = mk_T.at<float>(2,0);
 
     ofVec2f p2_k; 
-    project_on_kinect( p3_k, p2_k ); 
+    project( calib_kinect.getDistortedIntrinsics(), p3_k, p2_k );
+    //project( calib_kinect.getUndistortedIntrinsics(), p3_k, p2_k );
 
     // test projection back on ps3eye 
     ofVec2f p2_ps3eye; 
-    project_on_ps3( mT, p2_ps3eye );
+    project( calib_ps3.getDistortedIntrinsics(), mT, p2_ps3eye );
+    //project( calib_ps3.getUndistortedIntrinsics(), mT, p2_ps3eye );
 
 
     cv::Point2f ctr = m.getCenter();
@@ -152,39 +154,16 @@ void ofApp::draw()
       ofColor::yellow, ofColor::black);
 }
 
-void ofApp::project_on_kinect( const ofVec3f& p3, ofVec2f& p2 )
+void ofApp::project( const ofxCv::Intrinsics& intrinsics, const ofVec3f& p3, ofVec2f& p2 )
 {
-  const ofxCv::Intrinsics& _int = calib_kinect.getDistortedIntrinsics();
-  //const ofxCv::Intrinsics& _int = calib_kinect.getUndistortedIntrinsics();
-
-  cv::Mat cameraMatrix = _int.getCameraMatrix();
+  cv::Mat cameraMatrix = intrinsics.getCameraMatrix();
 
   float fx = cameraMatrix.at<double>(0, 0);
   float fy = cameraMatrix.at<double>(1, 1);
   float cx = cameraMatrix.at<double>(0, 2);
   float cy = cameraMatrix.at<double>(1, 2);
 
-  //cv::Point2d principalPoint = _int.getPrincipalPoint();
-  //float cx = principalPoint.x;
-  //float cy = principalPoint.y;
-
-  p2.x = (p3.x * fx / p3.z) + cx;
-  p2.y = (p3.y * fy / p3.z) + cy;
-};
-
-void ofApp::project_on_ps3( const ofVec3f& p3, ofVec2f& p2 )
-{
-  const ofxCv::Intrinsics& _int = calib_ps3.getDistortedIntrinsics();
-  //const ofxCv::Intrinsics& _int = calib_ps3.getUndistortedIntrinsics();
-
-  cv::Mat cameraMatrix = _int.getCameraMatrix();
-
-  float fx = cameraMatrix.at<double>(0, 0);
-  float fy = cameraMatrix.at<double>(1, 1);
-  float cx = cameraMatrix.at<double>(0, 2);
-  float cy = cameraMatrix.at<double>(1, 2);
-
-  //cv::Point2d principalPoint = _int.getPrincipalPoint();
+  //cv::Point2d principalPoint = intrinsics.getPrincipalPoint();
   //float cx = principalPoint.x;
   //float cy = principalPoint.y;
 

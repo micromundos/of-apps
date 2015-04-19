@@ -268,8 +268,6 @@ class ArucoSystem : public ECSsystem
       float cx = cameraMatrix.at<double>(0, 2);
       float cy = cameraMatrix.at<double>(1, 2);
 
-      //TODO wtf ??? 
-      //cy => principalPoint.y != cameraMatrix.at<double>(1, 2) 
       //cv::Point2d principalPoint = intrinsics.getPrincipalPoint();
       //float cx = principalPoint.x;
       //float cy = principalPoint.y;
