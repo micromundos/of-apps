@@ -254,7 +254,7 @@ class ArucoSystem : public ECSsystem
     void transform_to_depth( const cv::Mat& marker_T, float marker_size, ofVec3f& p3 )
     {
       cv::Mat mT = calib_stereo.R * marker_T + calib_stereo.T; 
-      p3.x = mT.at<float>(0,0) - marker_size * 0.5;
+      p3.x = mT.at<float>(0,0) - marker_size;// * 0.5;
       p3.y = mT.at<float>(1,0) - marker_size * 0.5;
       p3.z = mT.at<float>(2,0);
     };

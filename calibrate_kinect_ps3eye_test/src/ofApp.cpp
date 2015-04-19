@@ -86,7 +86,7 @@ void ofApp::draw()
 
     cv::Mat mk_T = extrinsics.R * m.Tvec + extrinsics.T; 
     ofVec3f p3_k;
-    p3_k.x = mk_T.at<float>(0,0) - m.ssize * 0.5;
+    p3_k.x = mk_T.at<float>(0,0) - m.ssize;// * 0.5;
     p3_k.y = mk_T.at<float>(1,0) - m.ssize * 0.5;
     p3_k.z = mk_T.at<float>(2,0);
 
