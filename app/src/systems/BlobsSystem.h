@@ -15,118 +15,32 @@ class BlobsSystem : public ECSsystem
 
     BlobsSystem(string _id) : ECSsystem(_id)
     {
-      addComponentType<DepthComponent>();
       addComponentType<BlobsComponent>();
+      addComponentType<DepthSmoothingComponent>();
+      addComponentType<DepthComponent>();
     };
 
     virtual void initialize() 
     {
       blobs_m.init( *world );
+      smooth_m.init( *world );
       depth_m.init( *world ); 
       inited = false; 
     };
 
     virtual void added(Entity &e) 
     {
-      init(depth_m.get(e),blobs_m.get(e));
-    };
-
-    virtual void processEntity(Entity &e) 
-    {
-      //ofLogNotice("BlobsSystem") << "process entity " << e.getId();
-
-      DepthComponent* depth = depth_m.get(e);
-      BlobsComponent* blobs_data = blobs_m.get(e);
-
-      if ( depth->dirty )
-        update( depth->depth_pix_grey, depth->width, depth->height, blobs_data );
-
-    };
-
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      for (int i=0;i<bag.getCount();i++)
-        processEntity( *bag.get(i) );
-    };
-
-    virtual void renderEntity(Entity &e)
-    {
-      BlobsComponent* blobs_data = blobs_m.get(e);
-
-      if ( blobs_data->render_depth_filtered )
-      {
-        RenderComponent* render_data = component<RenderComponent>("output");
-
-        ofPushStyle();
-        ofSetColor(255);
-        blobs_data->depth_filtered_img.draw( 0, 0, render_data->width, render_data->height );
-        ofPopStyle();
-      }
-
-      if ( blobs_data->render_contour_finder )
-      {
-        ofPushStyle();
-        ofSetLineWidth(1);
-        blobs_data->contourFinder.draw();
-        ofPopStyle();
-      }
-    };
-
-  private:
-
-    ComponentMapper<DepthComponent> depth_m;
-    ComponentMapper<BlobsComponent> blobs_m;
-
-    ofPixels dpix; 
-    ofPixels dpix_orig_size; 
-    ofPixels dpix_near; 
-    ofPixels dpix_far; 
-		map<unsigned int, ofPolyline> ofblobs_prev;
-
-    float resampled_len;
-    float interpolation_coef;
-    float img_scale;
-    int blur_size;
-    int channels;
-    float blobs_threshold;
-
-    bool inited;
-
-    void init( DepthComponent* depth, BlobsComponent* blobs_data )
-    {
       if (inited) return;
+      inited = true;
 
-      ofxCv::ContourFinder& contourFinder = blobs_data->contourFinder; 
-      ofImage& depth_filtered_img = blobs_data->depth_filtered_img; 
-
-      int depth_w = depth->width;
-      int depth_h = depth->height;
+      ofPixels& input = get_input(e);
 
       resampled_len = 100.0f;
       interpolation_coef = 0.06f;
-      blur_size = 5;
-      img_scale = 0.15;
       blobs_threshold = 15;
-      channels = 1;
 
-      //[0,255]
-      //threshold_near = 255;
-      //threshold_far = 209; 
-
-      int w = (float)depth_w * img_scale;
-      int h = (float)depth_h * img_scale;
-
-      dpix_orig_size.allocate( depth_w, depth_h, channels );
-      dpix.allocate( w, h, channels );
-      dpix_near.allocate( w, h, channels );
-      dpix_far.allocate( w, h, channels );
-
-      dpix_orig_size.set(0);
-      dpix.set(0);
-      dpix_near.set(0);
-      dpix_far.set(0);
-
-      depth_filtered_img.allocate(w, h, OF_IMAGE_GRAYSCALE);
+      int w = input.getWidth();
+      int h = input.getHeight();
 
       contourFinder.setMinAreaRadius( 10 );
       contourFinder.setMaxAreaRadius( (w*h)/3 );
@@ -139,51 +53,21 @@ class BlobsSystem : public ECSsystem
       inited = true;
     };
 
-    void update( uint8_t *depth_pix_grey, int depth_w, int depth_h, BlobsComponent* blobs_data )
+    virtual void processEntity(Entity &e) 
     {
+      DepthComponent* depth_data = depth_m.get(e);
+      BlobsComponent* blobs_data = blobs_m.get(e);
 
-      ofxCv::ContourFinder& contourFinder = blobs_data->contourFinder; 
+      if ( !depth_data->dirty )
+        return;
 
-      int w = (float)depth_w * img_scale;
-      int h = (float)depth_h * img_scale;
+      ofPixels& input = get_input(e);
 
-      dpix_orig_size.setFromPixels( depth_pix_grey, depth_w, depth_h, channels );
-
-      ofxCv::resize( dpix_orig_size, dpix, img_scale, img_scale );
-
-      //TODO sacar el threshold (está segmentando objetos con respecto al plano de la cámara y tiene segmentar con respecto al plano de la mesa)
-      //que la imagen para los blobs ya venga sin el plano de la mesa, solo con los objetos que tiene encima
-      ofxCv::copy( dpix, dpix_near );
-      ofxCv::copy( dpix, dpix_far );
-      ofxCv::threshold( dpix_far, blobs_data->threshold_far );
-      ofxCv::threshold( dpix_near, blobs_data->threshold_near );
-      ofxCv::add(dpix_near, dpix_far, dpix);
-
-      //smooth gaussian opencv
-      ofxCv::blur( dpix, blur_size );
-
-      //TODO la imagen ya viene smootheada con gaussian en GPU
-
-      //TODO smooth con opencv:
-      //1)
-      //cv::dilate(image,result,cv::Mat());
-      //cv::erode(result,result,cv::Mat());
-      //cv::dilate(result,result,cv::Mat());
-      //2)
-      //cv::Mat element5(5,5,CV_8U,cv::Scalar(1));
-      //cv::Mat closed;
-      //cv::morphologyEx(image,closed,cv::MORPH_CLOSE,element5);
-      //cv::Mat opened;
-      //cv::morphologyEx(image,opened,cv::MORPH_OPEN,element5);
-
-
-      if ( blobs_data->render_depth_filtered )
-      {
-        blobs_data->depth_filtered_img.setFromPixels( dpix );
-      }
+      int w = input.getWidth();
+      int h = input.getHeight();
 
       contourFinder.setThreshold( blobs_threshold );
-      contourFinder.findContours( dpix );
+      contourFinder.findContours( input );
 
       vector<ofPolyline>& blobs = blobs_data->blobs;
       const vector<ofPolyline>& ofblobs = contourFinder.getPolylines();
@@ -216,7 +100,40 @@ class BlobsSystem : public ECSsystem
         normalize_blob( w, h, blobs[i] );
       }
 
-    }; 
+    };
+
+    virtual void renderEntity(Entity &e)
+    {
+      BlobsComponent* blobs_data = blobs_m.get(e);
+
+      if ( blobs_data->render )
+      {
+        ofPushStyle();
+        ofSetLineWidth(1);
+        contourFinder.draw();
+        ofPopStyle();
+      }
+    };
+
+  private:
+
+    ofxCv::ContourFinder contourFinder; 
+		map<unsigned int, ofPolyline> ofblobs_prev;
+
+    float blobs_threshold;
+    float resampled_len;
+    float interpolation_coef;
+
+    bool inited;
+
+    ComponentMapper<BlobsComponent> blobs_m;
+    ComponentMapper<DepthSmoothingComponent> smooth_m;
+    ComponentMapper<DepthComponent> depth_m;
+
+    ofPixels& get_input(Entity &e)
+    {
+      return smooth_m.get(e)->output;
+    };
 
     void normalize_blob( int w, int h, ofPolyline& blob )
     {

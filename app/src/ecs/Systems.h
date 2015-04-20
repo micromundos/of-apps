@@ -17,4 +17,6 @@
 #include "BlobsSystem.h"
 #include "TimeBenderSystem.h"
 #include "KnobSystem.h"
+#include "DepthSmoothingSystem.h"
+#include "DepthSegmentationSystem.h"
 //dont remove this line

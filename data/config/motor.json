@@ -71,10 +71,21 @@
             },
             {
                "data" : {
-                  "render_contour_finder" : false,
-                  "render_depth_filtered" : false,
+                  "render" : false,
                   "threshold_far" : [ 100, 0, 255 ],
                   "threshold_near" : [ 255, 0, 255 ]
+               },
+               "id" : "depth_segmentation"
+            },
+            {
+               "data" : {
+                  "render" : false
+               },
+               "id" : "depth_smoothing"
+            },
+            {
+               "data" : {
+                  "render" : false
                },
                "id" : "blobs"
             },

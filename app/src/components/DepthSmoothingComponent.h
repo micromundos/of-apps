@@ -3,18 +3,16 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "ofxCv.h"
 
-class BlobsComponent : public ECScomponent 
+class DepthSmoothingComponent : public ECScomponent 
 {
   public:
 
-    vector<ofPolyline> blobs;
+    ofPixels output;
 
     ofParameter<bool> render;
 
-    BlobsComponent(string _id) : ECScomponent(_id) 
-    {};
+    DepthSmoothingComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
