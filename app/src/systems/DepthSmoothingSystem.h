@@ -24,10 +24,7 @@ class DepthSmoothingSystem : public ECSsystem
       segmentation_m.init( *world );
       depth_m.init( *world ); 
       inited = false;
-
       channels = 1;
-      blur_size = 5;
-      img_scale = 0.15;
     };
 
     //virtual void processEntities( ImmutableBag<Entity*>& bag ) 
@@ -51,10 +48,10 @@ class DepthSmoothingSystem : public ECSsystem
       ofPixels& input = get_input(e);
       ofPixels& output = get_output(e);
 
-      int input_w = input.getWidth();
-      int input_h = input.getHeight();
-      int w = (float)input_w * img_scale;
-      int h = (float)input_h * img_scale;
+      DepthSmoothingComponent* smooth_data = smooth_m.get(e);
+
+      int w = (float)input.getWidth() * smooth_data->img_scale;
+      int h = (float)input.getHeight() * smooth_data->img_scale;
 
       output.allocate( w, h, channels );
       output.set(0);
@@ -64,6 +61,7 @@ class DepthSmoothingSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
       DepthComponent* depth_data = depth_m.get(e);
+      DepthSmoothingComponent* smooth_data = smooth_m.get(e);
 
       if ( !depth_data->dirty )
         return;
@@ -71,23 +69,13 @@ class DepthSmoothingSystem : public ECSsystem
       ofPixels& input = get_input(e);
       ofPixels& output = get_output(e);
 
-      ofxCv::resize( input, output, img_scale, img_scale );
+      ofxCv::resize( input, output, smooth_data->img_scale, smooth_data->img_scale );
 
-      //TODO gpu
-      ofxCv::blur( output, blur_size );
-
-      //TODO smooth con opencv:
-      //1)
-      //cv::dilate(image,result,cv::Mat());
-      //cv::erode(result,result,cv::Mat());
-      //cv::dilate(result,result,cv::Mat());
-      //2)
-      //cv::Mat element5(5,5,CV_8U,cv::Scalar(1));
-      //cv::Mat closed;
-      //cv::morphologyEx(image,closed,cv::MORPH_CLOSE,element5);
-      //cv::Mat opened;
-      //cv::morphologyEx(image,opened,cv::MORPH_OPEN,element5);
-
+      //TODO gpu blur
+      ofxCv::blur( output, smooth_data->blur_size );
+      ofxCv::dilate( output, 1 );
+      ofxCv::erode( output, 2 );
+      ofxCv::dilate( output, 1 );
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -112,8 +100,6 @@ class DepthSmoothingSystem : public ECSsystem
 
   private:
 
-    float img_scale;
-    int blur_size;
     ofImage output_img; 
     int channels;
 

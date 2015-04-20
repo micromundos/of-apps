@@ -79,7 +79,9 @@
             },
             {
                "data" : {
-                  "render" : false
+                  "render" : false,
+                  "blur_size" : [ 5, 0, 10 ],
+                  "img_scale" : 0.2
                },
                "id" : "depth_smoothing"
             },
