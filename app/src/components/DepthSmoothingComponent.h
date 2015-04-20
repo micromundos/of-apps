@@ -11,7 +11,7 @@ class DepthSmoothingComponent : public ECScomponent
     ofPixels output;
 
     ofParameter<bool> render;
-    ofParameter<int> blur_size;
+    ofParameter<float> blur_size;
     float img_scale;
 
     DepthSmoothingComponent(string _id) : ECScomponent(_id) {};
