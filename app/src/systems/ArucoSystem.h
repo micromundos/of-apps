@@ -254,22 +254,20 @@ class ArucoSystem : public ECSsystem
     void transform_to_depth( const cv::Mat& marker_T, float marker_size, ofVec3f& p3 )
     {
       cv::Mat mT = calib_stereo.R * marker_T + calib_stereo.T; 
-      p3.x = mT.at<float>(0,0) - marker_size * 0.5;
+      p3.x = mT.at<float>(0,0) - marker_size;// * 0.5;
       p3.y = mT.at<float>(1,0) - marker_size * 0.5;
       p3.z = mT.at<float>(2,0);
     };
 
     void project( const ofxCv::Intrinsics& intrinsics, const ofVec3f& p3, ofVec2f& p2 )
     {
-      cv::Mat& cameraMatrix = intrinsics.getCameraMatrix();
+      cv::Mat cameraMatrix = intrinsics.getCameraMatrix();
 
       float fx = cameraMatrix.at<double>(0, 0);
       float fy = cameraMatrix.at<double>(1, 1);
       float cx = cameraMatrix.at<double>(0, 2);
       float cy = cameraMatrix.at<double>(1, 2);
 
-      //TODO wtf ??? 
-      //cy => principalPoint.y != cameraMatrix.at<double>(1, 2) 
       //cv::Point2d principalPoint = intrinsics.getPrincipalPoint();
       //float cx = principalPoint.x;
       //float cy = principalPoint.y;

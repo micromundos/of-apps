@@ -82,6 +82,11 @@ void ofApp::draw()
   ps3_tex.draw( w, 0 );
 
   calibration.render();
+
+  ofDrawBitmapStringHighlight(
+      " capture: spacebar \n save: \'s\' \n reset: \'r\' \n", 
+      0, ofGetHeight()-40, 
+      ofColor::yellow, ofColor::black);
 }
 
 
