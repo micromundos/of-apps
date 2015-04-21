@@ -31,6 +31,8 @@ data/calib/imgs_proj
 #########################
 
 # XCode
+*.xcodeproj
+*.pbxproj
 *.pbxuser
 *.perspective
 *.perspectivev3
