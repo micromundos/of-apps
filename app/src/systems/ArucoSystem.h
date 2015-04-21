@@ -45,15 +45,16 @@ class ArucoSystem : public ECSsystem
       }
       inited = true;
 
+      ArucoComponent* aruco_data = aruco_m.get(e);
       RgbComponent* rgb_data = rgb_m.get(e);
       DepthComponent* depth_data = depth_m.get(e);
 
       int w = rgb_data->width;
       int h = rgb_data->height;
 
-      load_calib_stereo( rgb_data->calibration_stereo, calib_stereo );
-      load_calib( depth_data->calibration, calib_depth );
-      load_calib( rgb_data->calibration, calib_rgb );
+      load_calib_stereo( aruco_data->calib_stereo_file, calib_stereo );
+      load_calib( aruco_data->calib_rgb_file, calib_rgb );
+      load_calib( aruco_data->calib_depth_file, calib_depth );
 
       //this->channels = rgb_data->ir ?1:3;
       this->channels = 3;
@@ -62,7 +63,7 @@ class ArucoSystem : public ECSsystem
       rgb_pix.set(0); 
 
       //aruco.setup2d( w, h ); //no calibration, no board config
-      aruco.setupXML( rgb_data->calibration, w, h );
+      aruco.setupXML( aruco_data->calib_rgb_file, w, h );
       //aruco.setThresholdMethod(aruco::MarkerDetector::CANNY);
     };
 
@@ -108,7 +109,6 @@ class ArucoSystem : public ECSsystem
         }
       }
 
-      //FIXME
       remove_bloqs_missing( events );
     }; 
 
@@ -118,6 +118,7 @@ class ArucoSystem : public ECSsystem
       ArucoComponent* aruco_data = aruco_m.get(e);
       RgbComponent* rgb_data = rgb_m.get(e);
 
+      //debug
       if ( !aruco_data->render )
         return;
 
@@ -164,8 +165,8 @@ class ArucoSystem : public ECSsystem
     bool inited;
 
     Extrinsics calib_stereo;
-    ofxCv::Calibration calib_depth;
     ofxCv::Calibration calib_rgb;
+    ofxCv::Calibration calib_depth;
 
     ofVec2f up2;
     ofVec3f up3;
@@ -260,13 +261,18 @@ class ArucoSystem : public ECSsystem
 
     void project( const ofxCv::Intrinsics& intrinsics, const ofVec3f& p3, ofVec2f& p2 )
     {
-      cv::Mat cameraMatrix = intrinsics.getCameraMatrix();
-      cv::Point2d principalPoint = intrinsics.getPrincipalPoint();
+      cv::Mat& cameraMatrix = intrinsics.getCameraMatrix();
 
       float fx = cameraMatrix.at<double>(0, 0);
       float fy = cameraMatrix.at<double>(1, 1);
-      float cx = principalPoint.x;
-      float cy = principalPoint.y;
+      float cx = cameraMatrix.at<double>(0, 2);
+      float cy = cameraMatrix.at<double>(1, 2);
+
+      //TODO wtf ??? 
+      //cy => principalPoint.y != cameraMatrix.at<double>(1, 2) 
+      //cv::Point2d principalPoint = intrinsics.getPrincipalPoint();
+      //float cx = principalPoint.x;
+      //float cy = principalPoint.y;
 
       p2.x = (p3.x * fx / p3.z) + cx;
       p2.y = (p3.y * fy / p3.z) + cy;
@@ -429,10 +435,10 @@ class ArucoSystem : public ECSsystem
 
       calib_stereo.T *= scale;
 
-      ofLog()
-        << "ArucoSystem load_calib_stereo"
-        << "\n calib_stereo.T = \n" << calib_stereo.T
-        << "\n calib_stereo.R = \n" << calib_stereo.R
+      ofLogNotice("ArucoSystem")
+        << "load_calib_stereo:"
+        << "\n" << "T: \n" << calib_stereo.T
+        << "\n" << "R: \n" << calib_stereo.R
         << "\n";
     };
 

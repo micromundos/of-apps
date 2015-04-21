@@ -1,9 +1,17 @@
 {
-  "params": {
-      "host": "localhost",
-      "ctrl_port": 6666,
-      "app_port": 6667,
-      "calib_kinect_projector_port": 6668,
-      "ctrl_send_interval": 3
-  }
+    "params": {
+        "host": "localhost",
+        "ctrl_port": 6666,
+        "app_port": 6667,
+        "calib_kinect_projector": {
+            "port": 6668,
+            "chessboard_port": 6669,
+            "chessboard_host": "localhost",
+            "calib_cam_path": "calib/calib_kinect.ofxcv.yml",
+            "pattern_settings_path": "calib/kinect_projector_pattern.yml",
+            "cam_name": "kinect_rgb",
+            "proj_name": "proj_lg"
+        },
+        "ctrl_send_interval": 3
+    }
 }

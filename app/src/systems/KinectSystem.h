@@ -77,10 +77,18 @@ class KinectSystem : public ECSsystem
 
       if ( !dirty ) return;
 
-      //TODO move all getXXXPixels() to ofXXXPixelsRef(), see DepthComponent
-      depth_data->update( kinect.getRawDepthPixels() );
-      depth_data->update( kinect.getDistancePixels() );
-      depth_data->update( kinect.getDepthPixels() );
+      //pass ofXXXPixels ptrs
+      depth_data->depth_ofpix_mm = &(kinect.getRawDepthPixelsRef());
+      depth_data->f_depth_ofpix_mm = &(kinect.getDistancePixelsRef());
+      depth_data->depth_ofpix_grey = &(kinect.getDepthPixelsRef());
+
+      //TODO deprecate
+      //pass data buffers ptrs
+      depth_data->depth_pix_mm = kinect.getRawDepthPixels();
+      depth_data->f_depth_pix_mm = kinect.getDistancePixels();
+      depth_data->depth_pix_grey = kinect.getDepthPixels();
+
+      //pass textures
       //depth_data->update( kinect.getDepthTextureReference() );
       //rgb_data->update( kinect.getPixels() );
     };

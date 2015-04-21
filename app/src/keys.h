@@ -16,7 +16,6 @@ namespace keys
   const char cml_key_help = 'h';
   const char cml_key_scene_zoom = 'z';
   const char cml_key_scene_reset = 'x';
-  const char cml_key_view_prev = 'c';
   const char cml_key_view_next = 'v';
 };
 

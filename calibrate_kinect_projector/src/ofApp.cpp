@@ -1,15 +1,13 @@
 #include "ofApp.h"
 
-int yoff = 20; //window undecorated yoffset
+int yoff = 0; //window undecorated yoffset
 
 void ofApp::setup()
 {
   ofSetDataPathRoot( __data_path__ );
   ofSetFrameRate(30);
   ofSetVerticalSync(true);
-  ofSetLogLevel(OF_LOG_NOTICE);
-  ofSetWindowPosition( ofGetScreenWidth() - ofGetWidth(), 0 );
-  //ofSetWindowPosition( 0, 0 );
+  ofSetLogLevel(OF_LOG_NOTICE); 
 
   if ( !settings.open( "config/settings.json" ) ) 
   {
@@ -26,30 +24,72 @@ void ofApp::setup()
   kinect.open();
   kinect.update(); 
 
+
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
-  calibration.init( pix_kinect_rgb, "calib/calib_kinect.ofxcv.yml", "kinect_rgb", "proj_lg" );
+  calibration.init( 
+      pix_kinect_rgb, 
+      settings["params"]["calib_kinect_projector"]["calib_cam_path"].asString(), 
+      settings["params"]["calib_kinect_projector"]["pattern_settings_path"].asString(), 
+      settings["params"]["calib_kinect_projector"]["cam_name"].asString(), 
+      settings["params"]["calib_kinect_projector"]["proj_name"].asString() );
+
+  ofLog() 
+    << "calib config" 
+    << "\n" 
+    << calibration.log_config();
+
+  //window setup
+  ofSetWindowShape( 
+      calibration.cam_size().width,
+      //+ calibration.proj_size().width, 
+      ofGetScreenHeight() );
+  //ofSetWindowPosition( ofGetScreenWidth() - calibration.cam_size().width, 0 );
+  ofSetWindowPosition( 0, 0 );
+
+
+  receiver.setup( 
+      settings["params"]["calib_kinect_projector"]["port"].asInt() );
+
+  sender.setup( 
+      settings["params"]["calib_kinect_projector"]["chessboard_host"].asString(), 
+      settings["params"]["calib_kinect_projector"]["chessboard_port"].asInt() );
+
+
+  capture_osc_num = "1";
+  calibrate_osc_num = "2"; 
+  save_calib_osc_num = "3";
+  save_images_osc_num = "4";
+  load_images_osc_num = "5";
+  chessboard_projected_osc_num = "6";
+  reset_calib_osc_num = "7";
 
   capture_btn.addListener(this,&ofApp::capture);
   calibrate_btn.addListener(this,&ofApp::calibrate);
   save_calib_btn.addListener(this,&ofApp::save_calib);
+  save_images_btn.addListener(this,&ofApp::save_images);
+  load_images_btn.addListener(this,&ofApp::load_images);
   reset_calib_btn.addListener(this,&ofApp::reset_calib);
+  chessboard_brightness.addListener(this,&ofApp::chessboard_brightness_changed);
+  chessboard_projected.addListener(this,&ofApp::chessboard_projected_changed);
 
-  string gui_settings = "calib/kinect_projector_gui.xml";
-	gui.setup( "", gui_settings );
-  gui.add( chessboard_brightness.setup( "chessboard_brightness", 127, 0, 255 ) );
-  gui.add( chessboard_projected.setup( "chessboard_projected", true ) );
-  gui.add( capture_btn.setup("capture (spacebar)") );
-  gui.add( calibrate_btn.setup("calibrate (c)") );
-  gui.add( save_calib_btn.setup("save calibration (s)") );
-  gui.add( reset_calib_btn.setup("reset calibration (r)") );
+  ofxBaseGui::setDefaultWidth( 400 );
+  string gui_settings_file = "calib/kinect_projector_gui.xml";
+	gui.setup( "", gui_settings_file );
+  gui.add( chessboard_brightness.setup( "chessboard_brightness (osc_ any fader)", 127, 0, 255 ) );
+  gui.add( chessboard_projected.setup( "chessboard_projected (osc_"+chessboard_projected_osc_num+")", true ) );
+  gui.add( capture_btn.setup("capture (spacebar) (osc_"+capture_osc_num+")") );
+  gui.add( calibrate_btn.setup("calibrate (c) (osc_"+calibrate_osc_num+")") );
+  gui.add( save_calib_btn.setup("save calibration (s) (osc_"+save_calib_osc_num+")") );
+  gui.add( save_images_btn.setup("save images (i) (osc_"+save_images_osc_num+")") );
+  gui.add( load_images_btn.setup("load images (l) (osc_"+load_images_osc_num+")") );
+  gui.add( reset_calib_btn.setup("reset calibration (r) (osc_"+reset_calib_osc_num+")") );
 
   gui.setPosition( 
-    w - gui.getWidth() - 10, 
-    ofGetScreenHeight() - gui.getHeight() - 10 
+    calibration.cam_size().width - gui.getWidth() - 10, 
+    calibration.cam_size().height + 10 + yoff 
   );
-  gui.loadFromFile( gui_settings );
-
-  receiver.setup( settings["params"]["calib_kinect_projector_port"].asInt() );
+  gui.loadFromFile( gui_settings_file );
+ 
 }
 
 
@@ -58,10 +98,54 @@ void ofApp::exit()
   capture_btn.removeListener(this,&ofApp::capture);
   calibrate_btn.removeListener(this,&ofApp::calibrate);
   save_calib_btn.removeListener(this,&ofApp::save_calib);
+  save_images_btn.removeListener(this,&ofApp::save_images);
+  load_images_btn.removeListener(this,&ofApp::load_images);
   reset_calib_btn.removeListener(this,&ofApp::reset_calib);
+
+  chessboard_brightness.removeListener(this,&ofApp::chessboard_brightness_changed);
+  chessboard_projected.removeListener(this,&ofApp::chessboard_projected_changed);
+
   kinect.close();
 }
 
+void ofApp::update()
+{
+  ofSetWindowTitle(ofToString(ofGetFrameRate(),2));
+
+  update_osc();
+
+  kinect.update();
+
+  if ( !kinect.isFrameNew() ) return;
+
+  pix_kinect_rgb = kinect.getPixelsRef(); //copy
+  calibration.update( pix_kinect_rgb );
+}
+
+void ofApp::draw()
+{
+  ofBackground(100);
+  ofSetColor(255); 
+
+  kinect.draw( 0, yoff, w, h );
+  //kinect.drawDepth( 0, yoff+h, w, h );
+
+  calibration.render( 0, yoff );
+  //calibration.render_chessboard( chessboard_projected ? calibration.cam_size().width : 0, 0, chessboard_brightness );
+
+  gui.draw();
+}
+
+
+void ofApp::chessboard_brightness_changed(float &_chessboard_brightness)
+{
+  send_chessboard_brightness( _chessboard_brightness );
+}
+
+void ofApp::chessboard_projected_changed(bool &_chessboard_projected)
+{
+  send_chessboard_projected( _chessboard_projected );
+}
 
 void ofApp::capture()
 {
@@ -81,6 +165,18 @@ void ofApp::save_calib()
   calibration.save_all( "calib" );
 }
 
+void ofApp::save_images()
+{
+  ofLog() << "save images";
+  calibration.save_images("calib/imgs");
+}
+
+void ofApp::load_images()
+{
+  ofLog() << "load images";
+  calibration.load_images( "calib/imgs/" );
+}
+
 void ofApp::reset_calib()
 {
   ofLog() << "reset calib";
@@ -88,20 +184,21 @@ void ofApp::reset_calib()
 }
 
 
-void ofApp::update()
+void ofApp::send_chessboard_brightness( float _chessboard_brightness )
 {
-  ofSetWindowTitle(ofToString(ofGetFrameRate(),2));
-
-  update_osc();
-
-  kinect.update();
-
-  if ( !kinect.isFrameNew() ) return;
-
-  pix_kinect_rgb = kinect.getPixelsRef(); //copy
-  calibration.update( pix_kinect_rgb );
+  ofxOscMessage m;
+  m.setAddress("/chessboard_brightness");
+  m.addFloatArg(_chessboard_brightness);
+  sender.sendMessage(m);
 }
 
+void ofApp::send_chessboard_projected( bool _chessboard_projected )
+{
+  ofxOscMessage m;
+  m.setAddress("/chessboard_projected");
+  m.addIntArg(_chessboard_projected?1:0);
+  sender.sendMessage(m);
+}
 
 void ofApp::update_osc()
 {
@@ -117,31 +214,43 @@ void ofApp::update_osc()
       chessboard_brightness = m.getArgAsFloat(0) * 255;
     } 
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/1" ) 
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+capture_osc_num ) 
         && m.getArgAsFloat(0) == 1 )
     {
       capture();
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/2" ) 
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+calibrate_osc_num ) 
         && m.getArgAsFloat(0) == 1 )
     {
       calibrate();
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/3" ) 
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+save_calib_osc_num ) 
         && m.getArgAsFloat(0) == 1 )
     {
       save_calib();
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/4" )
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+save_images_osc_num ) 
+        && m.getArgAsFloat(0) == 1 )
+    {
+      save_images();
+    }
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+load_images_osc_num ) 
+        && m.getArgAsFloat(0) == 1 )
+    {
+      load_images();
+    }
+
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+chessboard_projected_osc_num )
         && m.getArgAsFloat(0) == 1 )
     {
       chessboard_projected = !chessboard_projected;
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/5" ) 
+    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+reset_calib_osc_num ) 
         && m.getArgAsFloat(0) == 1 )
     {
       reset_calib();
@@ -165,21 +274,6 @@ void ofApp::log_osc_msg( ofxOscMessage& m )
     else
       ofLog() << "\t\t unknown";
   }
-}
-
-
-void ofApp::draw()
-{
-  ofBackground(100);
-  ofSetColor(255); 
-
-  kinect.draw( 0, yoff, w, h );
-  //kinect.drawDepth( 0, yoff+h, w, h );
-
-  calibration.render( 0, yoff );
-  calibration.render_chessboard( chessboard_projected ? ofGetScreenWidth() : 0, 0, chessboard_brightness );
-
-  gui.draw();
 }
 
 
@@ -207,6 +301,16 @@ void ofApp::keyReleased(int key)
   else if ( key == 's' )
   {
     save_calib();
+  }
+
+  else if ( key == 'i' )
+  {
+    save_images();
+  }
+
+  else if ( key == 'l' )
+  {
+    load_images();
   }
 
   else if ( key == 'r' )

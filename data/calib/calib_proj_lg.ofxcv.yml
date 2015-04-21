@@ -1,25 +1,27 @@
 %YAML:1.0
 cameraMatrix: !!opencv-matrix
-   rows: 0
-   cols: 0
-   dt: u
-   data: []
-imageSize_width: 0
-imageSize_height: 0
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 1.6394819961575079e+03, 0., 5.4701964682511777e+02, 0.,
+       1.5466381202786638e+03, 6.0131677912432826e+02, 0., 0., 1. ]
+imageSize_width: 1024
+imageSize_height: 768
 sensorSize_width: 0
 sensorSize_height: 0
 distCoeffs: !!opencv-matrix
-   rows: 0
-   cols: 0
-   dt: u
-   data: []
+   rows: 1
+   cols: 5
+   dt: d
+   data: [ 0., 0., 0., 0., 0. ]
 reprojectionError: 0.
 undistorted_cameraMatrix: !!opencv-matrix
-   rows: 0
-   cols: 0
-   dt: u
-   data: []
-undistorted_imageSize_width: 0
-undistorted_imageSize_height: 0
+   rows: 3
+   cols: 3
+   dt: d
+   data: [ 1.6378808593750000e+03, 0., 5.4648542925453512e+02, 0.,
+       1.5446242675781250e+03, 6.0053379610874254e+02, 0., 0., 1. ]
+undistorted_imageSize_width: 1024
+undistorted_imageSize_height: 768
 undistorted_sensorSize_width: 0
 undistorted_sensorSize_height: 0

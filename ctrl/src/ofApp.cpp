@@ -10,14 +10,18 @@ void ofApp::setup()
   ofSetWindowPosition( ofGetScreenWidth()-ofGetWidth(), 0 );
 
   ofSetFrameRate( 30 ); 
-	ofSetVerticalSync(true); 
+  ofSetVerticalSync(true); 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     
   load_jsons();
 =======
   load_all_config();
 >>>>>>> 245786ce61482e68bb134fbed904386a3d791b96
+=======
+  load_all_config();
+>>>>>>> 15852af9278e5b6cea68eee1ed7e5f502c712537
 
   string host = "localhost";
   int app_port = settings["params"]["app_port"].asInt();
@@ -145,11 +149,15 @@ void ofApp::parse_config( ofxJSONElement& config )
             << "param_id " << param_id;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
           params_sender.add( param_id, value, params );
 
 =======
           params_sender.add( param_id, value, params ); 
 >>>>>>> 245786ce61482e68bb134fbed904386a3d791b96
+=======
+          params_sender.add( param_id, value, params ); 
+>>>>>>> 15852af9278e5b6cea68eee1ed7e5f502c712537
         }
       }
     }
