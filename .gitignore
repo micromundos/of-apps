@@ -7,8 +7,8 @@ data/calib/**
 #########################
 # xcode proj files
 #########################
-*.xcconfig
 *.xcodeproj
+*.xcconfig
 openFrameworks-Info.plist
 
 #########################
