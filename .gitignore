@@ -5,6 +5,13 @@ data/settings.xml
 data/calib/**
 
 #########################
+# xcode proj files
+#########################
+*.xcconfig
+openFrameworks-Info.plist
+*.xcodeproj
+
+#########################
 # openFrameworks patterns
 #########################
 
