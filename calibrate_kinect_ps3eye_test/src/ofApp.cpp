@@ -8,7 +8,7 @@ void ofApp::setup()
   ofSetVerticalSync(true);
   ofSetLogLevel(OF_LOG_NOTICE);
 
-  draw_ps3eye = true;
+  draw_ps3eye = false;
 
   w = 640;
   h = 480;
@@ -84,10 +84,14 @@ void ofApp::draw()
     //ofMatrix4x4 mk_MV = extrinsics.ofMV * mMV;
     //ofVec3f p3_k = mk_MV.getTranslation();
 
-    cv::Mat mk_T = extrinsics.R * m.Tvec + extrinsics.T; 
+    cv::Mat mTvec = m.Tvec.clone();
+    mTvec.at<float>(0,0) = mTvec.at<float>(0,0) - m.ssize;
+    mTvec.at<float>(1,0) = mTvec.at<float>(1,0) + m.ssize * 0.5;
+
+    cv::Mat mk_T = extrinsics.R * mTvec + extrinsics.T; 
     ofVec3f p3_k;
-    p3_k.x = mk_T.at<float>(0,0) - m.ssize;// * 0.5;
-    p3_k.y = mk_T.at<float>(1,0) - m.ssize * 0.5;
+    p3_k.x = mk_T.at<float>(0,0);
+    p3_k.y = mk_T.at<float>(1,0);
     p3_k.z = mk_T.at<float>(2,0);
 
     ofVec2f p2_k; 

@@ -253,9 +253,13 @@ class ArucoSystem : public ECSsystem
 
     void transform_to_depth( const cv::Mat& marker_T, float marker_size, ofVec3f& p3 )
     {
-      cv::Mat mT = calib_stereo.R * marker_T + calib_stereo.T; 
-      p3.x = mT.at<float>(0,0) - marker_size;// * 0.5;
-      p3.y = mT.at<float>(1,0) - marker_size * 0.5;
+      cv::Mat mTt = marker_T.clone();
+      mTt.at<float>(0,0) = mTt.at<float>(0,0) - marker_size;
+      mTt.at<float>(1,0) = mTt.at<float>(1,0) + marker_size * 0.5;
+
+      cv::Mat mT = calib_stereo.R * mTt + calib_stereo.T; 
+      p3.x = mT.at<float>(0,0);
+      p3.y = mT.at<float>(1,0);
       p3.z = mT.at<float>(2,0);
     };
 
@@ -375,7 +379,7 @@ class ArucoSystem : public ECSsystem
       ofVec2f mloc, mdir;
 
       //3d loc
-      marker_loc_on_depth( m.Tvec.clone(), m.ssize, w, h, mloc );
+      marker_loc_on_depth( m.Tvec, m.ssize, w, h, mloc );
       //debug: project back on rgb
       //ofVec2f mloc_rgb;
       //debug_marker_loc_on_rgb(m, mloc_rgb);
