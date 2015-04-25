@@ -52,9 +52,9 @@ class ArucoSystem : public ECSsystem
       int w = rgb_data->width;
       int h = rgb_data->height;
 
-      load_calib_stereo( aruco_data->calib_stereo_file, calib_stereo );
-      load_calib( aruco_data->calib_rgb_file, calib_rgb );
-      load_calib( aruco_data->calib_depth_file, calib_depth );
+      load_extrinsics( aruco_data->calib_stereo_file, calib_stereo );
+      load_intrinsics( aruco_data->calib_rgb_file, calib_rgb );
+      load_intrinsics( aruco_data->calib_depth_file, calib_depth );
 
       //this->channels = rgb_data->ir ?1:3;
       this->channels = 3;
@@ -417,7 +417,7 @@ class ArucoSystem : public ECSsystem
     }; 
 
 
-    void load_calib_stereo( string filename, Extrinsics& calib_stereo )
+    void load_extrinsics( string filename, Extrinsics& calib_stereo )
     {
       bool absolute = false;
 
@@ -432,19 +432,19 @@ class ArucoSystem : public ECSsystem
       if ( calib_stereo.T.type() != CV_32FC1 ) 
         calib_stereo.T.convertTo( calib_stereo.T, CV_32FC1 );
 
-      //@#$%ˆ& scale.....
+      //@#$%ˆ& scale..... TODO
       float scale = 0.01;
 
       calib_stereo.T *= scale;
 
       ofLogNotice("ArucoSystem")
-        << "load_calib_stereo:"
+        << "load_extrinsics:"
         << "\n" << "T: \n" << calib_stereo.T
         << "\n" << "R: \n" << calib_stereo.R
         << "\n";
     };
 
-    void load_calib( string filename, ofxCv::Calibration& calib ) 
+    void load_intrinsics( string filename, ofxCv::Calibration& calib ) 
     {
       bool absolute = false;
 
