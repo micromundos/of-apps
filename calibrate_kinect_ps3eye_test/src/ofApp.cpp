@@ -291,7 +291,7 @@ void ofApp::load_extrinsics(string filename)
       epilines );
 
 
-  //@#$%ˆ& scale.....
+  //@#$%ˆ& scale..... TODO
   float scale = 0.01;
 
   extrinsics.T *= scale;

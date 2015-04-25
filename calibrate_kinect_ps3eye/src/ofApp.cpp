@@ -36,13 +36,18 @@ void ofApp::setup()
   pix_ps3eye = ps3.getPixelsRef(); //copy
   pix_ps3eye.setNumChannels( chan );
 
-  calibration.init( "kinect", pix_kinect_rgb, "ps3eye", pix_ps3eye );
+  calibration.init( 
+      "calib/cam_pattern.yml",
+      "kinect", pix_kinect_rgb, 
+      "ps3eye", pix_ps3eye, 
+      //load calibrated kinect intrinsics
+      "calib/intrinsics_kinect.ofxcv.yml" );
 }
 
 
 void ofApp::exit() 
 {
-	kinect.close();
+  kinect.close();
   ps3.close();
 }
 
@@ -96,6 +101,10 @@ void ofApp::keyPressed(int key)
   {
     calibration.toggle_capture(); 
   }
+  else if ( key == 'b' )
+  {
+    calibration.removeLast();
+  }
 }
 
 
@@ -108,7 +117,17 @@ void ofApp::keyReleased(int key)
 
   else if ( key == 's' )
   {
-    calibration.save_all( "calib" );
+    //save ps3 intrinsics & stereo
+    //DONT save kinect intrinsics
+    string folder = "calib";
+
+    calibration.save_intrinsics( "ps3eye", folder, "ofxcv" );
+    calibration.save_intrinsics( "ps3eye", folder, "aruco" );
+
+    calibration.save_extrinsics( "kinect", "ps3eye", folder );
+    calibration.save_extrinsics( "ps3eye", "kinect", folder );
+
+    //calibration.save_all( "calib" );
   }
 
   else if ( key == 'r' )
