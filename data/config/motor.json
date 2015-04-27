@@ -26,6 +26,7 @@
                "data" : {
                   "enabled" : true,
                   "mesh_res" : 1,
+                  "xoff" : [ 8, -10, 10 ],
                   "render_background" : false,
                   "render_hue_tex" : false,
                   "tex_height" : 1152,
@@ -53,7 +54,6 @@
             },
             {
                "data" : { 
-                  "ir" : false,
                   "render" : true
                },
                "id" : "depth"

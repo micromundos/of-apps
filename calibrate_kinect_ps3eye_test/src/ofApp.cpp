@@ -84,11 +84,11 @@ void ofApp::draw()
     //ofMatrix4x4 mk_MV = extrinsics.ofMV * mMV;
     //ofVec3f p3_k = mk_MV.getTranslation();
 
-    cv::Mat mTvec = m.Tvec.clone();
-    mTvec.at<float>(0,0) = mTvec.at<float>(0,0) - m.ssize;
-    mTvec.at<float>(1,0) = mTvec.at<float>(1,0) + m.ssize * 0.5;
+    //cv::Mat mTvec = m.Tvec.clone();
+    //mTvec.at<float>(0,0) = mTvec.at<float>(0,0) - m.ssize;
+    //mTvec.at<float>(1,0) = mTvec.at<float>(1,0) + m.ssize * 0.5;
 
-    cv::Mat mk_T = extrinsics.R * mTvec + extrinsics.T; 
+    cv::Mat mk_T = extrinsics.R * m.Tvec + extrinsics.T; 
     ofVec3f p3_k;
     p3_k.x = mk_T.at<float>(0,0);
     p3_k.y = mk_T.at<float>(1,0);
@@ -291,8 +291,8 @@ void ofApp::load_extrinsics(string filename)
       epilines );
 
 
-  //@#$%ˆ& scale..... TODO
-  float scale = 0.01;
+  //@#$%ˆ& scale.....
+  float scale = 0.02;
 
   extrinsics.T *= scale;
 

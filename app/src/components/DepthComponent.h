@@ -24,7 +24,6 @@ class DepthComponent : public ECScomponent
 
     int width, height;
     bool dirty;
-    bool ir;
 
     ofParameter<bool> render;
 
@@ -39,8 +38,7 @@ class DepthComponent : public ECScomponent
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
       ECScomponent::init(e_id,d,p);
-      param( render, "render" );
-      ir = d.get("ir", false).asBool();
+      param(render, "render");
     };
 
     void setup( int w, int h )

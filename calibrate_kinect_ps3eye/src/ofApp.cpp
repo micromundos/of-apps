@@ -8,6 +8,13 @@ void ofApp::setup()
   ofSetVerticalSync(true);
   ofSetLogLevel(OF_LOG_NOTICE);
 
+  if ( !settings.open( "config/settings.json" ) ) 
+  {
+    ofLogFatalError() << "error opening settings.json";
+    ofExit();
+    return;
+  }
+
   w = 640;
   h = 480;
   chan = 3;
@@ -37,11 +44,11 @@ void ofApp::setup()
   pix_ps3eye.setNumChannels( chan );
 
   calibration.init( 
-      "calib/cam_pattern.yml",
+      settings["params"]["calib_kinect_p3eye"]["cam_pattern_path"].asString(),
       "kinect", pix_kinect_rgb, 
       "ps3eye", pix_ps3eye, 
       //load calibrated kinect intrinsics
-      "calib/intrinsics_kinect.ofxcv.yml" );
+      settings["params"]["calib_kinect_p3eye"]["calib_kinect_path"].asString() );
 }
 
 
@@ -89,8 +96,8 @@ void ofApp::draw()
   calibration.render();
 
   ofDrawBitmapStringHighlight(
-      " capture: spacebar \n save: \'s\' \n reset: \'r\' \n", 
-      0, ofGetHeight()-40, 
+      " capture: spacebar \n save: \'s\' \n reset: \'r\' \n remove last: \'b\' \n", 
+      0, ofGetHeight()-50, 
       ofColor::yellow, ofColor::black);
 }
 

@@ -48,12 +48,10 @@ class KinectSystem : public ECSsystem
       //rgb_data->setup( w, h );
       depth_data->setup( w, h );
 
-      //TODO check this out with CamaraLucida
-      //registration transforms rgb pixels to match depth pixels, not the other way around, right? then we're fine!
-      kinect.setRegistration(true);
+      kinect.setRegistration(false);
       kinect.enableDepthNearValueWhite(true);
       // ir, rgb, texture
-      kinect.init( depth_data->ir, false, true );
+      kinect.init( false, false, true );
       kinect.open();
 
     };

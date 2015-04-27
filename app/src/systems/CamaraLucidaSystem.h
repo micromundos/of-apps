@@ -79,10 +79,12 @@ class CamaraLucidaSystem : public ECSsystem
 
       DepthComponent* depth = require_component<DepthComponent>("input");
 
-      if ( depth->dirty )
-      {
-        cml_data->cml->update( depth->depth_pix_mm );
-      }
+      cml_data->cml->depth_camera()->xoff = cml_data->xoff;
+
+      if ( !depth->dirty )
+        return;
+
+      cml_data->cml->update( depth->depth_pix_mm );
     };
 
     void update_render_data(bool& enabled)

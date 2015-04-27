@@ -7,8 +7,6 @@ namespace keys
 
   //app
   const char cml_gpu = 'g';
-  const char cml_depth_xoff_inc = 's';
-  const char cml_depth_xoff_dec = 'a';
   const char cml_wireframe = 'w';
 
   //cml

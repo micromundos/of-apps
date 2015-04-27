@@ -39,7 +39,7 @@ void ofApp::setup()
 
   //window setup
   ofSetWindowShape( 
-      calibration.cam_size().width,
+      calibration.cam_size().width * 2,
       //+ calibration.proj_size().width, 
       ofGetScreenHeight() );
   //ofSetWindowPosition( ofGetScreenWidth() - calibration.cam_size().width, 0 );
@@ -72,7 +72,8 @@ void ofApp::setup()
   chessboard_projected.addListener(this,&ofApp::chessboard_projected_changed);
 
   ofxBaseGui::setDefaultWidth( 400 );
-  string gui_settings_file = "calib/kinect_projector_gui.xml";
+  string gui_settings_file = settings["params"]["calib_kinect_projector"]["gui_settings_path"].asString();
+;
 	gui.setup( "", gui_settings_file );
   gui.add( chessboard_brightness.setup( "chessboard_brightness (osc_ any fader)", 127, 0, 255 ) );
   gui.add( chessboard_projected.setup( "chessboard_projected (osc_"+chessboard_projected_osc_num+")", true ) );
@@ -84,8 +85,9 @@ void ofApp::setup()
   gui.add( reset_calib_btn.setup("reset calibration (r) (osc_"+reset_calib_osc_num+")") );
 
   gui.setPosition( 
-    calibration.cam_size().width - gui.getWidth() - 10, 
-    calibration.cam_size().height + 10 + yoff 
+    10, calibration.cam_size().height + 90
+    //calibration.cam_size().width - gui.getWidth() - 10, 
+    //calibration.cam_size().height + yoff + 10
   );
   gui.loadFromFile( gui_settings_file );
  
@@ -129,7 +131,8 @@ void ofApp::draw()
   kinect.draw( 0, yoff, w, h );
   //kinect.drawDepth( 0, yoff+h, w, h );
 
-  calibration.render( 0, yoff, 0, h, w/2, h/2 );
+  calibration.render( 0,h ); 
+  calibration.render_capture( w,yoff, w,h );
   //calibration.render_chessboard( chessboard_projected ? calibration.cam_size().width : 0, 0, chessboard_brightness );
 
   gui.draw();

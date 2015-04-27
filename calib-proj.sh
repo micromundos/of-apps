@@ -1,3 +1,4 @@
 #!/bin/bash
-open calibrate_kinect_projector_chessboard/bin/calibrate_kinect_projector_chessboardDebug.app;
-open calibrate_kinect_projector/bin/calibrate_kinect_projectorDebug.app;
+open calibrate_kinect_projector_chessboard/bin/calibrate_kinect_projector_chessboard.app;
+open calibrate_kinect_projector/calibrate_kinect_projector.xcodeproj;
+#open calibrate_kinect_projector/bin/calibrate_kinect_projector.app;

@@ -5,6 +5,7 @@
 #include "ofxKinect.h"
 #include "ofxCamaraLucidaCalibration.h"
 #include "ofxPS3EyeGrabber.h"
+#include "ofxJSON.h"
 
 #include "data_path.h"
 
@@ -34,5 +35,6 @@ class ofApp : public ofBaseApp
     ofxPS3EyeGrabber ps3;
     ofTexture ps3_tex;
 
+    ofxJSONElement settings;
     int w, h, chan;
 };

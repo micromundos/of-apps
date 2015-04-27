@@ -78,16 +78,9 @@ void ofApp::keyReleased(int key)
       cml->wireframe( !cml->wireframe() );
       break;
 
-    case keys::cml_depth_xoff_inc:
-      cml->depth_camera()->xoff++;
-      break;
-    case keys::cml_depth_xoff_dec:
-      cml->depth_camera()->xoff--;
-      break;
-
 
     case keys::projector:
-      ofSetWindowPosition( ofGetWindowPositionX() == 0 ? ofGetScreenWidth()+1 : 0, 0 );
+      ofSetWindowPosition( ofGetWindowPositionX() == 0 ? ofGetScreenWidth() : 0, 0 );
       break;
 
     case keys::fullscreen:

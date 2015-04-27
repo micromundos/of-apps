@@ -2,9 +2,9 @@
 
 using namespace ofxCv;
 
-const float timeThreshold = 1; // minimum time between snapshots
+const float timeThreshold = 3; // minimum time between snapshots
 const int startCleaning = 10; // start cleaning outliers after this many samples
-
+const float min_reprojection_error = 1.f;
 
 void ofApp::setup() 
 {
@@ -12,6 +12,13 @@ void ofApp::setup()
   ofSetFrameRate(30);
   ofSetVerticalSync(true);
   ofSetLogLevel(OF_LOG_NOTICE);
+
+  if ( !settings.open( "config/settings.json" ) ) 
+  {
+    ofLogFatalError() << "error opening settings.json";
+    ofExit();
+    return;
+  }
 
   kinect.setRegistration(true);
   // ir, rgb, texture
@@ -22,7 +29,7 @@ void ofApp::setup()
   w = kinect.getWidth();
   h = kinect.getHeight();
 
-  load_pattern_settings("calib/cam_pattern.yml");
+  load_pattern_settings( settings["params"]["calib_kinect_rgb"]["cam_pattern_path"].asString() );
 
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
 
@@ -31,8 +38,7 @@ void ofApp::setup()
   ofxCv::imitate(diff, pix_kinect_rgb);
 
   lastTime = 0;
-
-  active = true;
+  active = false;
 }
 
 void ofApp::exit() 
@@ -48,44 +54,30 @@ void ofApp::update()
   if ( !kinect.isFrameNew() ) 
     return;
 
-  return;
-
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
 
   cv::Mat camMat;
-  bool updated = calibration_cml.update_cam( camMat, pix_kinect_rgb, previous, diff, &diffMean );
-
-  //cv::Mat camMat = toCv(pix_kinect_rgb);
-  //cv::Mat prevMat = toCv(previous);
-  //cv::Mat diffMat = toCv(diff);
-  //ofxCv::absdiff(prevMat, camMat, diffMat);	
-  //camMat.copyTo(prevMat);
-  //diffMean = ofxCv::mean( cv::Mat( ofxCv::mean(diffMat) ) )[0];
+  bool updated = calib_cml.update_cam( camMat, pix_kinect_rgb, previous, diff, &diffMean );
 
   float curTime = ofGetElapsedTimef();
   if ( active && curTime - lastTime > timeThreshold && updated )
-  //if ( active && curTime - lastTime > timeThreshold && diffMean < diffThreshold )
   {
     if ( calibration.add(camMat) ) 
     {
-      ofLog() << "re-calibrating";
       calibration.calibrate();
       if ( calibration.size() > startCleaning )
       {
-        calibration.clean();
+        calibration.clean(min_reprojection_error);
       }
 
-      save_all();
+      //let users save
+      //save_all();
 
       lastTime = curTime;
     }
   }
 
-  if ( calibration.size() > 0 )
-  {
-    calibration.undistort(toCv(pix_kinect_rgb), toCv(undistorted));
-    undistorted.update();
-  }
+  calib_cml.undistort( calibration, pix_kinect_rgb, undistorted );
 }
 
 void ofApp::draw() 
@@ -107,6 +99,11 @@ void ofApp::draw()
   {
     drawHighlightString(ofToString(i) + ": " + ofToString(calibration.getReprojectionError(i)), 10, 80 + 16 * i, magentaPrint);
   }
+
+  ofDrawBitmapStringHighlight(
+      " toggle capture: spacebar \n save: \'s\' \n reset: \'r\' \n", 
+      ofGetWidth()-220,ofGetHeight()-40, 
+      ofColor::yellow, ofColor::black);
 }
 
 void ofApp::keyPressed(int key) 
@@ -114,6 +111,16 @@ void ofApp::keyPressed(int key)
   if (key == ' ') 
   {
     active = !active;
+  }
+
+  if (key == 's') 
+  {
+    save_all();
+  }
+
+  if (key == 'r') 
+  {
+    calibration.reset();
   }
 }
 
@@ -129,10 +136,8 @@ void ofApp::save_all()
 {
   string name = "kinect";
   string folder = "calib";
-
-  calibration_cml.save_intrinsics( calibration, name, folder, "ofxcv" );
-
-  calibration_cml.save_intrinsics( calibration, name, folder, "aruco" );
+  calib_cml.save_intrinsics( calibration, name, folder, "ofxcv" );
+  calib_cml.save_intrinsics( calibration, name, folder, "aruco" );
 }
 
 bool ofApp::load_pattern_settings( string pattern_settings_file )

@@ -9,7 +9,8 @@ void ofApp::setup()
 
   if ( !settings.open( "config/settings.json" ) ) 
   {
-    ofLogError() << "error opening settings.json";
+    ofLogFatalError() << "error opening settings.json";
+    ofExit();
     return;
   }
 

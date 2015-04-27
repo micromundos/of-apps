@@ -4,6 +4,7 @@
 #include "ofxCv.h"
 #include "ofxKinect.h"
 #include "ofxCamaraLucidaCalibration.h"
+#include "ofxJSON.h"
 
 #include "data_path.h"
 
@@ -31,8 +32,9 @@ class ofApp : public ofBaseApp
     bool active;
 
     ofxCv::Calibration calibration;
-    cml::Calibration calibration_cml;
+    cml::Calibration calib_cml;
 
+    ofxJSONElement settings;
     int w, h;
 
     void save_all();
