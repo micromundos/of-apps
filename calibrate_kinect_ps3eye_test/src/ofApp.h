@@ -46,14 +46,13 @@ class ofApp : public ofBaseApp{
     ofMatrix4x4 get_marker_mv(aruco::Marker& m);
     void draw_kinect_undistorted( int x, int y );
 
-    //from ofxCv::Calibration::load
     ofxCv::Intrinsics int_k;
     ofxCv::Calibration calib_kinect;
-    void load_aruco_kinect_intrinsics(string filename);
 
     ofxCv::Intrinsics int_ps3;
     ofxCv::Calibration calib_ps3;
-    void load_aruco_ps3_intrinsics(string filename);
+
+    void load_intrinsics( ofxCv::Calibration& calib, ofxCv::Intrinsics& intrinsics, string filename );
 
     Extrinsics extrinsics;
     vector<cv::Vec3f> epilines;

@@ -24,8 +24,8 @@ void ofApp::setup()
 
 	aruco.setupXML( "calib/intrinsics_ps3eye.aruco.yml", ofGetWidth(), ofGetHeight() );
 
-  load_aruco_kinect_intrinsics("calib/intrinsics_kinect.aruco.yml");
-  load_aruco_ps3_intrinsics("calib/intrinsics_ps3eye.aruco.yml");
+  load_intrinsics( calib_kinect, int_k, "calib/intrinsics_kinect.aruco.yml" );
+  load_intrinsics( calib_ps3, int_ps3, "calib/intrinsics_ps3eye.aruco.yml" );
   load_extrinsics("calib/extrinsics_ps3eye_to_kinect.yml"); //"extrinsics_kinect_to_ps3eye.yml"
 }
 
@@ -84,10 +84,10 @@ void ofApp::draw()
     //ofMatrix4x4 mk_MV = extrinsics.ofMV * mMV;
     //ofVec3f p3_k = mk_MV.getTranslation();
 
+    //transform_to_depth
     //cv::Mat mTvec = m.Tvec.clone();
     //mTvec.at<float>(0,0) = mTvec.at<float>(0,0) - m.ssize;
     //mTvec.at<float>(1,0) = mTvec.at<float>(1,0) + m.ssize * 0.5;
-
     cv::Mat mk_T = extrinsics.R * m.Tvec + extrinsics.T; 
     ofVec3f p3_k;
     p3_k.x = mk_T.at<float>(0,0);
@@ -208,7 +208,8 @@ void ofApp::draw_kinect_undistorted( int x, int y )
   undistorted_kinect.draw( x, y );
 };
 
-void ofApp::load_aruco_kinect_intrinsics(string filename) 
+
+void ofApp::load_intrinsics( ofxCv::Calibration& calib, ofxCv::Intrinsics& intrinsics, string filename )
 {
   bool absolute = false;
 
@@ -228,33 +229,9 @@ void ofApp::load_aruco_kinect_intrinsics(string filename)
   fs["distortion_coefficients"] >> distCoeffs;
   fs["reprojection_error"] >> reprojectionError;
 
-  int_k.setup( cameraMatrix, imageSize, sensorSize ); 
-  calib_kinect.setIntrinsics( int_k, distCoeffs ); //fires calib_xxx.updateUndistortion();
-}
-
-void ofApp::load_aruco_ps3_intrinsics(string filename) 
-{
-  bool absolute = false;
-
-  cv::FileStorage fs( ofToDataPath(filename, absolute), cv::FileStorage::READ );
-
-  cv::Size imageSize, sensorSize;
-  cv::Mat cameraMatrix;
-
-  cv::Mat distCoeffs;
-  float reprojectionError;
-
-  fs["camera_matrix"] >> cameraMatrix;
-  fs["image_width"] >> imageSize.width;
-  fs["image_height"] >> imageSize.height;
-  fs["sensor_width"] >> sensorSize.width;
-  fs["sensor_height"] >> sensorSize.height;
-  fs["distortion_coefficients"] >> distCoeffs;
-  fs["reprojection_error"] >> reprojectionError;
-
-  int_ps3.setup( cameraMatrix, imageSize, sensorSize );
-  calib_ps3.setIntrinsics( int_ps3, distCoeffs ); //fires calib_xxx.updateUndistortion();
-}
+  intrinsics.setup( cameraMatrix, imageSize, sensorSize ); 
+  calib.setIntrinsics( intrinsics, distCoeffs ); //fires calib_xxx.updateUndistortion();
+};
 
 void ofApp::load_extrinsics(string filename)
 {
@@ -292,7 +269,7 @@ void ofApp::load_extrinsics(string filename)
 
 
   //@#$%ˆ& scale.....
-  float scale = 0.02;
+  float scale = 2.;
 
   extrinsics.T *= scale;
 

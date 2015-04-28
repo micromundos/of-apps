@@ -8,7 +8,7 @@ void ofApp::setup()
   ofSetLogLevel(OF_LOG_NOTICE);
 
   //ofSetFrameRate(60.0f); 
-  ofSetVerticalSync(true);
+  ofSetVerticalSync(false);
 
   config.init();
   ecs.init();
