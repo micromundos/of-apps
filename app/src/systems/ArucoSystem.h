@@ -63,8 +63,6 @@ class ArucoSystem : public ECSsystem
       load_intrinsics( aruco_data->calib_rgb_file, calib_rgb );
       load_intrinsics( aruco_data->calib_depth_file, calib_depth );
 
-      make_frustum( calib_rgb, rgb_frustum );
-
       //this->channels = rgb_data->ir ?1:3;
       this->channels = 3;
 
@@ -131,12 +129,6 @@ class ArucoSystem : public ECSsystem
       if ( !aruco_data->render )
         return;
 
-      ofPushStyle();
-      ofSetLineWidth( 1 ); 
-      ofSetColor( ofColor::orange );
-      render_frustum( rgb_frustum );
-      ofPopStyle();
-
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
       //aruco.draw2d();
@@ -185,8 +177,6 @@ class ArucoSystem : public ECSsystem
 
     ofVec2f up2;
     ofVec3f up3;
-
-    Frustum rgb_frustum;
 
     Bloq* get_bloq( string id )
     {
@@ -484,33 +474,7 @@ class ArucoSystem : public ECSsystem
       ofxCv::Intrinsics intrinsics;
       intrinsics.setup( cameraMatrix, imageSize, sensorSize ); 
       calib.setIntrinsics( intrinsics, distCoeffs ); //fires calib.updateUndistortion();
-    };
-
-    //TODO move to some kind of utils or refactor camara lucida to use it
-    void make_frustum( ofxCv::Calibration& calib, Frustum& F )
-    {
-      const ofxCv::Intrinsics& intrinsics = calib.getUndistortedIntrinsics();
-      cv::Mat cameraMatrix = intrinsics.getCameraMatrix();
-      cv::Size size = intrinsics.getImageSize();
-
-      float w = size.width;
-      float h = size.height;
-      float near = 200.;
-      float far = 6000.; 
-      float fx = cameraMatrix.at<double>(0, 0);
-      float fy = cameraMatrix.at<double>(1, 1);
-      float cx = cameraMatrix.at<double>(0, 2);
-      float cy = cameraMatrix.at<double>(1, 2);
-
-      F.left = near * (-cx) / fx;
-      F.right = near * (w - cx) / fx;
-
-      F.bottom = near * (cy - h) / fy; 
-      F.top = near * (cy) / fy;
-
-      F.near = near;
-      F.far = far; 
-    };
+    }; 
 
     void render_frustum( Frustum& F )
     {
