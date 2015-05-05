@@ -20,6 +20,7 @@ class KinectSystem : public ECSsystem
 
     ~KinectSystem()
     {
+      ofLogNotice("KinectSystem") << "kinect.close()";
       kinect.close();
     };
 

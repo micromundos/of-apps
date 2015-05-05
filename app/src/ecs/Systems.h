@@ -19,4 +19,5 @@
 #include "KnobSystem.h"
 #include "DepthSmoothingSystem.h"
 #include "DepthSegmentationSystem.h"
+#include "PlaneCalibSystem.h"
 //dont remove this line

@@ -71,9 +71,20 @@
             },
             {
                "data" : {
+                  "calibrate" : false,
+                  "planes_num" : [ 20, 0, 100 ],
+                  "radius_step" : [ 6, 0, 30 ],
+                  "angle_step" : [ 30, 0, 360 ],
+                  "render_plane" : false,
+                  "render_planes_list" : false
+               },
+               "id" : "plane_calib"
+            },
+            {
+               "data" : {
                   "render" : false,
                   "threshold_far" : [ 100, 0, 255 ],
-                  "threshold_near" : [ 255, 0, 255 ]
+                  "threshold_near" : [ 10, 0, 1000 ]
                },
                "id" : "depth_segmentation"
             },
@@ -81,7 +92,7 @@
                "data" : {
                   "render" : false,
                   "blur_size" : [ 5, 0, 10 ],
-                  "img_scale" : 0.2
+                  "img_scale" : 0.5
                },
                "id" : "depth_smoothing"
             },

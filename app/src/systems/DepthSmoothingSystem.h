@@ -71,10 +71,9 @@ class DepthSmoothingSystem : public ECSsystem
 
       ofxCv::resize( input, output, smooth_data->img_scale, smooth_data->img_scale );
 
-      //TODO gpu blur
       ofxCv::blur( output, smooth_data->blur_size );
       ofxCv::dilate( output, 1 );
-      ofxCv::erode( output, 2 );
+      ofxCv::erode( output, 1 );
       ofxCv::dilate( output, 1 );
     }; 
 

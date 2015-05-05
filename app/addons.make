@@ -10,3 +10,4 @@ ofxCv
 ofxAruco
 ofxPS3EyeGrabber
 ofxGPGPU
+ofxGeom

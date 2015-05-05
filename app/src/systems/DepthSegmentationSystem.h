@@ -15,12 +15,15 @@ class DepthSegmentationSystem : public ECSsystem
     {
       addComponentType<DepthSegmentationComponent>();
       addComponentType<DepthComponent>();
+      addComponentType<PlaneCalibComponent>();
     };
 
     virtual void initialize() 
     {
       segmentation_m.init( *world );
       depth_m.init( *world );
+      plane_calib_m.init( *world );
+
       inited = false;
       channels = 1;
     };
@@ -52,26 +55,56 @@ class DepthSegmentationSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      DepthSegmentationComponent* seg_data = segmentation_m.get(e);
       DepthComponent* depth_data = depth_m.get(e);
 
       if ( !depth_data->dirty )
         return;
+
+      DepthSegmentationComponent* seg_data = segmentation_m.get(e);
+      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+      cml::CamaraLucida* cml = require_component<CamaraLucidaComponent>("output")->cml;
 
       ofPixels& output = get_output(e);
 
       int w = depth_data->width;
       int h = depth_data->height;
 
+      uint16_t* depth_pix_mm = depth_data->depth_pix_mm;
       uint8_t *depth_pix_grey = depth_data->depth_pix_grey;
 
       input.setFromPixels( depth_pix_grey, w, h, channels );
 
-      ofxCv::copy( input, pix_near );
-      ofxCv::copy( input, pix_far );
-      ofxCv::threshold( pix_far, seg_data->threshold_far );
-      ofxCv::threshold( pix_near, seg_data->threshold_near );
-      ofxCv::add( pix_near, pix_far, output );
+      //TODO usar ofxGPGPU
+
+      float scale = 0.5;
+      ofxCv::resize( input, output, scale, scale );
+
+      int ws = w*scale;
+      int hs = h*scale;
+      for ( int y = 0; y < hs; y++ )
+      for ( int x = 0; x < ws; x++ )
+      {
+        int xd = x/scale;
+        int yd = y/scale;
+        int id = yd * w + xd;
+        uint16_t mm = depth_pix_mm[id];
+        mm = mm > cml->depth_camera()->far_clamp ? 0 : mm;
+        float _x,_y;
+        cml->depth_camera()->unproject( x, y, mm, &_x, &_y );
+        ofVec3f p3( _x, _y, mm );
+
+        ofxPlane& p = plane_calib_data->plane;
+        float d = p.distance( p3 );
+
+        int i = y * ws + x;
+        output[i] = /*d < seg_data->threshold_far &&*/ d > seg_data->threshold_near ? 255 : 0;
+      }
+
+      //ofxCv::copy( input, pix_near );
+      //ofxCv::copy( input, pix_far );
+      //ofxCv::threshold( pix_far, seg_data->threshold_far );
+      //ofxCv::threshold( pix_near, seg_data->threshold_near );
+      //ofxCv::add( pix_near, pix_far, output );
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -111,6 +144,7 @@ class DepthSegmentationSystem : public ECSsystem
 
     ComponentMapper<DepthSegmentationComponent> segmentation_m;
     ComponentMapper<DepthComponent> depth_m;
+    ComponentMapper<PlaneCalibComponent> plane_calib_m;
 
 };
 
