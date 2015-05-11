@@ -54,7 +54,7 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
 
       b2ParticleSystem* b2ps = ps->b2_particles();  
 
-      uint16_t *depth_pix_mm = depth_data->depth_pix_mm; 
+      uint16_t *depth_pix_mm = depth_data->depth_ofpix_mm->getPixels();
 
       //particle loc
       ofVec2f depth_loc, screen_loc;

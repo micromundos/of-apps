@@ -77,14 +77,14 @@ class CamaraLucidaSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
 
-      DepthComponent* depth = require_component<DepthComponent>("input");
+      DepthComponent* depth_data = require_component<DepthComponent>("input");
 
       cml_data->cml->depth_camera()->xoff = cml_data->xoff;
 
-      if ( !depth->dirty )
+      if ( !depth_data->dirty )
         return;
 
-      cml_data->cml->update( depth->depth_pix_mm );
+      cml_data->cml->update( depth_data->depth_ofpix_mm->getPixels() );
     };
 
     void update_render_data(bool& enabled)
@@ -129,17 +129,45 @@ class CamaraLucidaSystem : public ECSsystem
       }
     };
 
+    void depth_to_p3( const ofVec2f& p2, ofVec3f& p3 )
+    {
+      if (cml_data == NULL) return;
+
+      DepthComponent* depth_data = require_component<DepthComponent>("input");
+
+      float far_clamp = cml_data->cml->depth_camera()->far_clamp;
+      float epsilon = std::numeric_limits<float>::epsilon();
+
+      uint16_t* depth_pix_mm = depth_data->depth_ofpix_mm->getPixels();
+      int i = (int)p2.y * depth_data->width + (int)p2.x;
+      uint16_t mm = depth_pix_mm[i];
+
+      mm = CLAMP( ( mm < epsilon ? far_clamp : mm ), 0.0, far_clamp );
+
+      float x,y;
+      cml_data->cml->depth_camera()->unproject( p2.x, p2.y, mm, &x, &y );
+      p3.set( x, y, mm ); //XXX ofScale(-1,-1,1);
+
+      if ( !depth_data->flip )
+      {
+        p3.x *= -1;
+        p3.y *= -1;
+      }
+    };
+
   private:
 
     void render_hue_tex()
     {
-      DepthComponent* depth = component<DepthComponent>("input");
+      if (cml_data == NULL) return;
+
+      DepthComponent* depth_data = component<DepthComponent>("input");
 
       int w = render_data->width;
       int h = render_data->height;
 
       ofSetColor(255);
-      cml_data->cml->depth_camera()->get_hue_tex_ref( depth->depth_pix_mm ).draw( 0, 0, w, h );
+      cml_data->cml->depth_camera()->get_hue_tex_ref( depth_data->depth_ofpix_mm->getPixels() ).draw( 0, 0, w, h );
     };
 
     //single entity

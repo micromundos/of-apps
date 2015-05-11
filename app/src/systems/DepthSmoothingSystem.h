@@ -27,19 +27,6 @@ class DepthSmoothingSystem : public ECSsystem
       channels = 1;
     };
 
-    //virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::processEntities(bag);
-      //int len = bag.getCount();
-      //for ( int i = 0; i < len; i++ )
-        //processEntity( *bag.get(i) );
-    //};
-
-    //virtual void renderEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::renderEntities(bag);
-    //};
-
     virtual void added(Entity &e) 
     {
       if (inited) return;

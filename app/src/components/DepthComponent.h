@@ -8,30 +8,21 @@ class DepthComponent : public ECScomponent
 {
   public:
 
-    //ofXXXPixels ptrs
-    ofShortPixels* depth_ofpix_mm;
-    ofFloatPixels* f_depth_ofpix_mm;
-    ofPixels* depth_ofpix_grey;
-
-    //TODO deprecate
-    //data buffers ptrs
-    uint16_t* depth_pix_mm;
-    float* f_depth_pix_mm;
-    uint8_t* depth_pix_grey;
-
-    //textures copies
-    //ofTexture depth_tex;
+    ofShortPixels* depth_ofpix_mm;//uint16_t
+    ofFloatPixels* f_depth_ofpix_mm;//float
+    ofPixels* depth_ofpix_grey;//uint8_t
 
     int width, height;
     bool dirty;
 
     ofParameter<bool> render;
+    ofParameter<bool> flip;
 
     DepthComponent(string _id) : ECScomponent(_id)
     {
-      depth_pix_mm = NULL; 
-      depth_pix_grey = NULL;
-      f_depth_pix_mm = NULL;
+      depth_ofpix_mm = NULL;
+      f_depth_ofpix_mm = NULL;
+      depth_ofpix_grey = NULL;
       dirty = false;
     };
 
@@ -39,13 +30,14 @@ class DepthComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param(render, "render");
+      param(flip, "flip");
     };
 
     void setup( int w, int h )
     {
       this->width = w;
       this->height = h;
-    };
+    }; 
 
     //void update( ofTexture& depth_tex )
     //{

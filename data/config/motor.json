@@ -54,7 +54,8 @@
             },
             {
                "data" : { 
-                  "render" : true
+                  "render" : true,
+                  "flip" : false
                },
                "id" : "depth"
             },
@@ -83,8 +84,8 @@
             {
                "data" : {
                   "render" : false,
-                  "threshold_far" : [ 100, 0, 255 ],
-                  "threshold_near" : [ 10, 0, 1000 ]
+                  "threshold_far" : [ 2000, -2000, 2000 ],
+                  "threshold_near" : [ 0, -200, 200 ]
                },
                "id" : "depth_segmentation"
             },

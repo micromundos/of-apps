@@ -9,7 +9,9 @@ class PlaneCalibComponent : public ECScomponent
 {
   public:
 
-    ofxPlane plane; //processing output
+    //output
+    ofxPlane plane; 
+    ofxTriangle triangle; 
 
     ofParameter<bool> calibrate;
     ofParameter<float> planes_num;

@@ -30,8 +30,10 @@ class DepthSegmentationSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      if (inited) return;
+      if ( inited ) return;
       inited = true; 
+
+      ofAddListener( require_component<CamaraLucidaComponent>("output")->cml->render_3d, this, &DepthSegmentationSystem::render_3d );
 
       ofPixels& output = get_output(e);
 
@@ -43,8 +45,8 @@ class DepthSegmentationSystem : public ECSsystem
       output.set(0);
       output_img.allocate(w, h, OF_IMAGE_GRAYSCALE);
 
-      input.allocate( w, h, channels );
-      input.set(0);
+      //input.allocate( w, h, channels );
+      //input.set(0);
 
       pix_near.allocate(w, h, channels);
       pix_near.set(0);
@@ -53,51 +55,76 @@ class DepthSegmentationSystem : public ECSsystem
       pix_far.set(0);
     }; 
 
+    virtual void removed(Entity &e) 
+    {
+      ofRemoveListener( require_component<CamaraLucidaComponent>("output")->cml->render_3d, this, &DepthSegmentationSystem::render_3d );
+    };
+
     virtual void processEntity(Entity &e) 
     {
       DepthComponent* depth_data = depth_m.get(e);
 
+      seg_data = segmentation_m.get(e);
+      plane_calib_data = plane_calib_m.get(e);
+
       if ( !depth_data->dirty )
-        return;
+        return; 
 
-      DepthSegmentationComponent* seg_data = segmentation_m.get(e);
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
-      cml::CamaraLucida* cml = require_component<CamaraLucidaComponent>("output")->cml;
+      CamaraLucidaSystem* cml_sys = require_system<CamaraLucidaSystem>();
 
+      //CamaraLucidaComponent* cml_data = require_component<CamaraLucidaComponent>("output");
+
+      //keep goin
       ofPixels& output = get_output(e);
 
       int w = depth_data->width;
       int h = depth_data->height;
 
-      uint16_t* depth_pix_mm = depth_data->depth_pix_mm;
-      uint8_t *depth_pix_grey = depth_data->depth_pix_grey;
+      //uint16_t* depth_pix_mm = depth_data->depth_ofpix_mm->getPixels();
+      //uint8_t *depth_pix_grey = depth_data->depth_pix_grey;
 
-      input.setFromPixels( depth_pix_grey, w, h, channels );
+      ofPixels* input = depth_data->depth_ofpix_grey;
+      //input.setFromPixels( depth_pix_grey, w, h, channels );
 
       //TODO usar ofxGPGPU
 
-      float scale = 0.5;
-      ofxCv::resize( input, output, scale, scale );
+      //float far_clamp = cml_data->cml->depth_camera()->far_clamp;
+      //float epsilon = std::numeric_limits<float>::epsilon();
+
+      float scale = 0.2;
+      ofxCv::resize( *input, output, scale, scale );
+
+      ofVec2f p2;
+      ofVec3f p3;
 
       int ws = w*scale;
       int hs = h*scale;
       for ( int y = 0; y < hs; y++ )
       for ( int x = 0; x < ws; x++ )
       {
-        int xd = x/scale;
-        int yd = y/scale;
-        int id = yd * w + xd;
-        uint16_t mm = depth_pix_mm[id];
-        mm = mm > cml->depth_camera()->far_clamp ? 0 : mm;
-        float _x,_y;
-        cml->depth_camera()->unproject( x, y, mm, &_x, &_y );
-        ofVec3f p3( _x, _y, mm );
+        p2.set( x/scale, y/scale );
 
-        ofxPlane& p = plane_calib_data->plane;
-        float d = p.distance( p3 );
+        cml_sys->depth_to_p3( p2, p3 );
+
+        //int id = (int)p2.y * w + (int)p2.x;
+        //uint16_t mm = depth_pix_mm[id];
+
+        //mm = CLAMP( ( mm < epsilon ? far_clamp : mm ), 0.0, far_clamp );
+
+        //float _x,_y;
+        //cml_data->cml->depth_camera()->unproject( p2.x, p2.y, mm, &_x, &_y );
+        //p3.set( _x, _y, mm );
+
+        //if ( depth_data->flip )
+        //{
+          //p3.x *= -1;
+          //p3.y *= -1;
+        //}
+
+        float d = plane_calib_data->plane.distance( p3 );
 
         int i = y * ws + x;
-        output[i] = /*d < seg_data->threshold_far &&*/ d > seg_data->threshold_near ? 255 : 0;
+        output[i] = d < seg_data->threshold_far && d > seg_data->threshold_near ? 255 : 0;
       }
 
       //ofxCv::copy( input, pix_near );
@@ -109,10 +136,10 @@ class DepthSegmentationSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      DepthSegmentationComponent* seg_data = segmentation_m.get(e);
+      //seg_data = segmentation_m.get(e);
+      //plane_calib_data = plane_calib_m.get(e);
 
-      if ( !seg_data->render )
-        return;
+      if ( !seg_data->render ) return;
 
       RenderComponent* render_data = component<RenderComponent>("output");
       int w = render_data->width;
@@ -124,23 +151,43 @@ class DepthSegmentationSystem : public ECSsystem
       ofPushStyle();
       ofSetColor(255);
       output_img.draw( 0, 0, w, h );
-      ofPopStyle();
+      ofPopStyle(); 
     };
 
   private:
 
-    ofPixels input; 
+    //ofPixels input; 
     ofPixels pix_near; 
     ofPixels pix_far;
     ofImage output_img; 
     int channels;
+
+    //ugly singleton entity stuff
+    bool inited;
+    DepthSegmentationComponent* seg_data;
+    PlaneCalibComponent* plane_calib_data;
 
     ofPixels& get_output(Entity &e)
     {
       return segmentation_m.get(e)->output;
     };
 
-    bool inited;
+    void render_3d(ofEventArgs &args)
+    {
+      if ( !inited ) return;
+      if ( !seg_data->render ) return;
+
+      ofVec3f n = plane_calib_data->plane.normal();
+      ofVec3f ctr = plane_calib_data->triangle.centroid();
+
+      ofPushStyle();
+      ofSetColor( ofColor::cyan );
+      ofSetLineWidth( 3 );
+      ofLine( ctr, ctr + n * seg_data->threshold_near );
+      ofSetLineWidth( 1 );
+      ofLine( ctr, ctr + n * seg_data->threshold_far );
+      ofPopStyle();
+    };
 
     ComponentMapper<DepthSegmentationComponent> segmentation_m;
     ComponentMapper<DepthComponent> depth_m;

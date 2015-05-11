@@ -5,7 +5,7 @@
 int main()
 {
   ofSetDataPathRoot( __data_path__ );
-	ofSetupOpenGL(400,1000,OF_WINDOW);
+	ofSetupOpenGL(500,1000,OF_WINDOW);
 	ofRunApp(new ofApp());
 }
 
