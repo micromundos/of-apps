@@ -10,6 +10,7 @@ https://github.com/chparsons/ofxECS
 https://github.com/chparsons/ofxKeyValueOSC  
 https://github.com/chparsons/ofxCamaraLucida  
 https://github.com/chparsons/ofxAruco  
+https://bitbucket.org/chparsons/ofxplab  
 https://bitbucket.org/chparsons/ofxgpgpu  
 https://bitbucket.org/chparsons/ofxcamaralucidacalibration  
   
