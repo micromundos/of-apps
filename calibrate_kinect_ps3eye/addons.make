@@ -1,3 +1,4 @@
+ofxPlab
 ofxOpenCv
 ofxCv
 ofxKinect

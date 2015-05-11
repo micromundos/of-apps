@@ -1,3 +1,4 @@
+ofxPlab
 ofxGui
 ofxOpenCv
 ofxCv

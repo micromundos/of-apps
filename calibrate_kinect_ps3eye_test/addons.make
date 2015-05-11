@@ -1,3 +1,4 @@
+ofxPlab
 ofxKinect
 ofxOpenCv
 ofxAruco
