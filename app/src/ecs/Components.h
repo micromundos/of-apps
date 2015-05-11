@@ -21,4 +21,7 @@
 #include "ParticleBlobsContainersComponent.h"
 #include "TimeBenderComponent.h"
 #include "KnobComponent.h"
+#include "DepthSmoothingComponent.h"
+#include "DepthSegmentationComponent.h"
+#include "PlaneCalibComponent.h"
 //dont remove this line

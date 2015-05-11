@@ -1,7 +1,4 @@
-addons
-ofxECS
-ofxJSON
-ofxOsc
+ofxPlab
 ofxKeyValueOSC
 ofxCamaraLucida
 ofxKinect
@@ -10,3 +7,8 @@ ofxCv
 ofxAruco
 ofxPS3EyeGrabber
 ofxGPGPU
+ofxGeom
+ofxECS
+ofxJSON
+ofxOsc
+addons

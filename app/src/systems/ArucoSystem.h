@@ -14,6 +14,13 @@ struct Extrinsics
   cv::Mat R, T;
 };
 
+struct Frustum
+{
+  float left, right;
+  float bottom, top;
+  float near, far;
+};
+
 class ArucoSystem : public ECSsystem 
 { 
 
@@ -52,9 +59,9 @@ class ArucoSystem : public ECSsystem
       int w = rgb_data->width;
       int h = rgb_data->height;
 
-      load_calib_stereo( aruco_data->calib_stereo_file, calib_stereo );
-      load_calib( aruco_data->calib_rgb_file, calib_rgb );
-      load_calib( aruco_data->calib_depth_file, calib_depth );
+      load_extrinsics( aruco_data->calib_stereo_file, calib_stereo );
+      load_intrinsics( aruco_data->calib_rgb_file, calib_rgb );
+      load_intrinsics( aruco_data->calib_depth_file, calib_depth );
 
       //this->channels = rgb_data->ir ?1:3;
       this->channels = 3;
@@ -253,9 +260,13 @@ class ArucoSystem : public ECSsystem
 
     void transform_to_depth( const cv::Mat& marker_T, float marker_size, ofVec3f& p3 )
     {
+      //cv::Mat mTt = marker_T.clone();
+      //mTt.at<float>(0,0) = mTt.at<float>(0,0) - marker_size;
+      //mTt.at<float>(1,0) = mTt.at<float>(1,0) + marker_size * 0.5;
+
       cv::Mat mT = calib_stereo.R * marker_T + calib_stereo.T; 
-      p3.x = mT.at<float>(0,0) - marker_size * 0.5;
-      p3.y = mT.at<float>(1,0) - marker_size * 0.5;
+      p3.x = mT.at<float>(0,0);
+      p3.y = mT.at<float>(1,0);
       p3.z = mT.at<float>(2,0);
     };
 
@@ -268,8 +279,6 @@ class ArucoSystem : public ECSsystem
       float cx = cameraMatrix.at<double>(0, 2);
       float cy = cameraMatrix.at<double>(1, 2);
 
-      //TODO wtf ??? 
-      //cy => principalPoint.y != cameraMatrix.at<double>(1, 2) 
       //cv::Point2d principalPoint = intrinsics.getPrincipalPoint();
       //float cx = principalPoint.x;
       //float cy = principalPoint.y;
@@ -377,7 +386,7 @@ class ArucoSystem : public ECSsystem
       ofVec2f mloc, mdir;
 
       //3d loc
-      marker_loc_on_depth( m.Tvec.clone(), m.ssize, w, h, mloc );
+      marker_loc_on_depth( m.Tvec, m.ssize, w, h, mloc );
       //debug: project back on rgb
       //ofVec2f mloc_rgb;
       //debug_marker_loc_on_rgb(m, mloc_rgb);
@@ -415,7 +424,7 @@ class ArucoSystem : public ECSsystem
     }; 
 
 
-    void load_calib_stereo( string filename, Extrinsics& calib_stereo )
+    void load_extrinsics( string filename, Extrinsics& calib_stereo )
     {
       bool absolute = false;
 
@@ -431,18 +440,18 @@ class ArucoSystem : public ECSsystem
         calib_stereo.T.convertTo( calib_stereo.T, CV_32FC1 );
 
       //@#$%ˆ& scale.....
-      float scale = 0.01;
+      float scale = 2.;
 
       calib_stereo.T *= scale;
 
       ofLogNotice("ArucoSystem")
-        << "load_calib_stereo:"
+        << "load_extrinsics:"
         << "\n" << "T: \n" << calib_stereo.T
         << "\n" << "R: \n" << calib_stereo.R
         << "\n";
     };
 
-    void load_calib( string filename, ofxCv::Calibration& calib ) 
+    void load_intrinsics( string filename, ofxCv::Calibration& calib ) 
     {
       bool absolute = false;
 
@@ -465,6 +474,35 @@ class ArucoSystem : public ECSsystem
       ofxCv::Intrinsics intrinsics;
       intrinsics.setup( cameraMatrix, imageSize, sensorSize ); 
       calib.setIntrinsics( intrinsics, distCoeffs ); //fires calib.updateUndistortion();
+    }; 
+
+    void render_frustum( Frustum& F )
+    {
+      float plane = F.near;
+
+      //pyramid
+      ofLine( 0,0,0, 
+          F.left, F.top, plane );
+      ofLine( 0,0,0, 
+          F.right, F.top, plane );
+      ofLine( 0,0,0, 
+          F.left, F.bottom, plane );
+      ofLine( 0,0,0, 
+          F.right, F.bottom, plane );
+
+      //plane
+      ofLine( 
+          F.left, F.bottom, plane, 
+          F.left, F.top, plane );
+      ofLine( 
+          F.left, F.top, plane, 
+          F.right, F.top, plane );
+      ofLine( 
+          F.right, F.top, plane, 
+          F.right, F.bottom, plane );
+      ofLine( 
+          F.right, F.bottom, plane, 
+          F.left, F.bottom, plane );
     };
 
 };

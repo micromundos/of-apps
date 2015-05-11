@@ -83,7 +83,7 @@ class ParticleFlowFieldSystem : public ECSsystem
     {
       fisica->world2screen(loc,screen_loc);
       screen2ff.dst(screen_loc,ff_loc);
-      int i = (ff_loc.x + ff_loc.y * ff_data->width) * 4; //chann:rgba
+      int i = ((int)ff_loc.x + (int)ff_loc.y * ff_data->width) * 4; //chann:rgba
       force.Set( field[i], field[i+1] );
     };
 

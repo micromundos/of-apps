@@ -4,6 +4,7 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "ofxKinect.h"
+#include "ofxCv.h"
 
 using namespace artemis;
 
@@ -20,6 +21,7 @@ class KinectSystem : public ECSsystem
 
     ~KinectSystem()
     {
+      ofLogNotice("KinectSystem") << "kinect.close()";
       kinect.close();
     };
 
@@ -28,6 +30,7 @@ class KinectSystem : public ECSsystem
       rgb_m.init( *world );
       depth_m.init( *world );
       inited = false; 
+      prev = 0;
     };
 
     virtual void added(Entity &e) 
@@ -48,25 +51,19 @@ class KinectSystem : public ECSsystem
       //rgb_data->setup( w, h );
       depth_data->setup( w, h );
 
-      //TODO check this out with CamaraLucida
-      //registration transforms rgb pixels to match depth pixels, not the other way around, right? then we're fine!
-      kinect.setRegistration(true);
+      kinect.setRegistration(false);
       kinect.enableDepthNearValueWhite(true);
       // ir, rgb, texture
-      kinect.init( depth_data->ir, false, true );
+      kinect.init( false, false, true );
       kinect.open();
 
-    };
-
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      kinect.update();
-      artemis::EntityProcessingSystem::processEntities( bag );
     };
 
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("KinectSystem") << "process entity " << e.getId();
+
+      kinect.update();
 
       DepthComponent* depth_data = depth_m.get(e);
       //RgbComponent* rgb_data = rgb_m.get(e);
@@ -77,24 +74,32 @@ class KinectSystem : public ECSsystem
 
       if ( !dirty ) return;
 
-      //pass ofXXXPixels ptrs
-      depth_data->depth_ofpix_mm = &(kinect.getRawDepthPixelsRef());
-      depth_data->f_depth_ofpix_mm = &(kinect.getDistancePixelsRef());
-      depth_data->depth_ofpix_grey = &(kinect.getDepthPixelsRef());
+      //calc_fps();
 
-      //TODO deprecate
-      //pass data buffers ptrs
-      depth_data->depth_pix_mm = kinect.getRawDepthPixels();
-      depth_data->f_depth_pix_mm = kinect.getDistancePixels();
-      depth_data->depth_pix_grey = kinect.getDepthPixels();
+      if ( !depth_data->flip )
+      {
+        depth_data->depth_ofpix_mm = &(kinect.getRawDepthPixelsRef());
+        depth_data->f_depth_ofpix_mm = &(kinect.getDistancePixelsRef());
+        depth_data->depth_ofpix_grey = &(kinect.getDepthPixelsRef());
+      }
 
-      //pass textures
-      //depth_data->update( kinect.getDepthTextureReference() );
-      //rgb_data->update( kinect.getPixels() );
+      else
+      {
+        int mode = -1;
+        ofxCv::flip( kinect.getRawDepthPixelsRef(), depth_ofpix_mm, mode );
+        ofxCv::flip( kinect.getDistancePixelsRef(), f_depth_ofpix_mm, mode );
+        ofxCv::flip( kinect.getDepthPixelsRef(), depth_ofpix_grey, mode );
+        depth_data->depth_ofpix_mm = &(depth_ofpix_mm);
+        depth_data->f_depth_ofpix_mm = &(f_depth_ofpix_mm);
+        depth_data->depth_ofpix_grey = &(depth_ofpix_grey);
+      }
     };
 
     virtual void renderEntity(Entity &e)
     {
+      DepthComponent* depth_data = depth_m.get(e);
+
+      CamaraLucidaComponent* cml_data = require_component<CamaraLucidaComponent>("output");
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
       int w = render_data->width;
@@ -106,8 +111,13 @@ class KinectSystem : public ECSsystem
       if ( rgb_m.get(e)->render )
         kinect.draw( 0, 0, w, h );
 
-      if ( depth_m.get(e)->render )
-        kinect.drawDepth( 0, 0, w, h ); 
+      if ( depth_data->render )
+      {
+        if ( depth_data->flip && cml_data->enabled )
+          kinect.drawDepth( w, h, -w, -h ); 
+        else
+          kinect.drawDepth( 0, 0, w, h ); 
+      }
 
       ofPopStyle();
 
@@ -120,6 +130,22 @@ class KinectSystem : public ECSsystem
 
     ofxKinect kinect; 
     bool inited;
+    float fps, prev;
+
+    //flip
+    ofShortPixels depth_ofpix_mm;//uint16_t
+    ofFloatPixels f_depth_ofpix_mm;//float
+    ofPixels depth_ofpix_grey;//uint8_t
+
+    void calc_fps()
+    {
+      float now = ofGetElapsedTimeMillis();
+      float FR = 1000.0/(now - prev);
+      float fA = 0.95; 
+      float fB = 1.0-fA;
+      fps = (fA*fps) + (fB*FR); 
+      prev = now;
+    };
 
 };
 

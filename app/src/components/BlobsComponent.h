@@ -8,14 +8,10 @@
 class BlobsComponent : public ECScomponent 
 {
   public:
-    vector<ofPolyline> blobs;
-    ofImage depth_filtered_img; 
-    ofxCv::ContourFinder contourFinder; 
 
-    ofParameter<float> threshold_near;
-    ofParameter<float> threshold_far;
-    ofParameter<bool> render_depth_filtered;
-    ofParameter<bool> render_contour_finder;
+    vector<ofPolyline> blobs;
+
+    ofParameter<bool> render;
 
     BlobsComponent(string _id) : ECScomponent(_id) 
     {};
@@ -24,10 +20,7 @@ class BlobsComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
 
-      param(threshold_near, "threshold_near");
-      param(threshold_far, "threshold_far");
-      param(render_depth_filtered, "render_depth_filtered");
-      param(render_contour_finder, "render_contour_finder");
+      param(render, "render");
     };
 
 };

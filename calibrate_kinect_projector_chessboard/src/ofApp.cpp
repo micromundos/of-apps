@@ -9,12 +9,12 @@ void ofApp::setup()
 
   if ( !settings.open( "config/settings.json" ) ) 
   {
-    ofLogError() << "error opening settings.json";
+    ofLogFatalError() << "error opening settings.json";
+    ofExit();
     return;
   }
 
-  ofPixels dummy;
-  calibration.init( dummy, 
+  calibration.init(
       settings["params"]["calib_kinect_projector"]["calib_cam_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["pattern_settings_path"].asString(), 
       settings["params"]["calib_kinect_projector"]["cam_name"].asString(), 

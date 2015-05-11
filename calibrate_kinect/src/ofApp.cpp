@@ -22,7 +22,10 @@ void ofApp::setup()
   pix_ir = kinect.getIRPixelsRef(); //copy
   pix_rgb = kinect.getPixelsRef(); //copy
 
-  calibration.init( "kinect_ir", pix_ir, "kinect_rgb", pix_rgb );
+  calibration.init( 
+      "calib/cam_pattern.yml",
+      "kinect_ir", pix_ir, 
+      "kinect_rgb", pix_rgb );
 }
 
 

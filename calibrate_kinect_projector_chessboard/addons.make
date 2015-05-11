@@ -1,3 +1,4 @@
+ofxPlab
 ofxCamaraLucidaCalibration
 ofxCv
 ofxOpenCv

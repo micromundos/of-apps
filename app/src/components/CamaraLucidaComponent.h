@@ -13,6 +13,7 @@ class CamaraLucidaComponent : public ECScomponent
     cml::CamaraLucida* cml;
 
     ofParameter<bool> enabled;
+    ofParameter<float> xoff;
     ofParameter<bool> render_background;
     ofParameter<bool> render_hue_tex;
 
@@ -31,6 +32,7 @@ class CamaraLucidaComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
 
       param( enabled, "enabled" );
+      param( xoff, "xoff" );
       param( render_background, "render_background" );
       param( render_hue_tex, "render_hue_tex" );
 
@@ -41,10 +43,10 @@ class CamaraLucidaComponent : public ECScomponent
         d["calibration"]["kinect_intrinsics_file"].asString(),
         d["calibration"]["projector_intrinsics_file"].asString(),
         d["calibration"]["projector_kinect_extrinsics_file"].asString() );
-    };
+    }; 
 
   private:
-    
+
     void init_cml( 
         int tex_width, 
         int tex_height, 

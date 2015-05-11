@@ -2,7 +2,14 @@
 # plab
 #########################
 data/settings.xml
-data/calib/imgs
+data/calib/**
+
+#########################
+# xcode proj files
+#########################
+*.xcodeproj
+*.xcconfig
+openFrameworks-Info.plist
 
 #########################
 # openFrameworks patterns

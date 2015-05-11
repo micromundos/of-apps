@@ -35,22 +35,10 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
 
       fisica = require_system<FisicaSystem>();
       ps = require_system<ParticleSystem>();
-
-      mesh.setMode(OF_PRIMITIVE_LINES);
     };
 
     virtual void added(Entity &e) 
     {};
-
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      //pudo haber cambiado el screen size
-      update_screen2depth();
-      mesh.clear();
-      int len = bag.getCount();
-      for ( int i = 0; i < len; i++ )
-        processEntity( *bag.get(i) );
-    };
 
     virtual void processEntity(Entity &e) 
     {
@@ -59,9 +47,14 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
       DepthComponent* depth_data = require_component<DepthComponent>("input");
       if ( ! depth_data->dirty ) return;
 
+      update_coordmap();
+
+      mesh.setMode(OF_PRIMITIVE_LINES);
+      mesh.clear();
+
       b2ParticleSystem* b2ps = ps->b2_particles();  
 
-      uint16_t *depth_pix_mm = depth_data->depth_pix_mm; 
+      uint16_t *depth_pix_mm = depth_data->depth_ofpix_mm->getPixels();
 
       //particle loc
       ofVec2f depth_loc, screen_loc;
@@ -196,10 +189,9 @@ class ParticleDepthSlopeFlowSystem : public ECSsystem
     ParticleSystem* ps;
 
     CoordMap screen2depth;
-
     ofVboMesh mesh;
 
-    void update_screen2depth()
+    void update_coordmap()
     {
       DepthComponent* depth_data = require_component<DepthComponent>("input");
       RenderComponent* render_data = require_component<RenderComponent>("output");

@@ -54,7 +54,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       FlowFieldComponent* ff_data = flowfield_m.get(e); 
 
-      f_depth_pix_mm.setFromPixels( depth_data->f_depth_pix_mm, depth_data->width, depth_data->height, channels );
+      f_depth_pix_mm.setFromPixels( depth_data->f_depth_ofpix_mm->getPixels(), depth_data->width, depth_data->height, channels );
 
       float xscale = (float)ff_data->width / depth_data->width; 
       float yscale = (float)ff_data->height / depth_data->height; 

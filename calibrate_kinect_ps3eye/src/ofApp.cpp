@@ -8,6 +8,13 @@ void ofApp::setup()
   ofSetVerticalSync(true);
   ofSetLogLevel(OF_LOG_NOTICE);
 
+  if ( !settings.open( "config/settings.json" ) ) 
+  {
+    ofLogFatalError() << "error opening settings.json";
+    ofExit();
+    return;
+  }
+
   w = 640;
   h = 480;
   chan = 3;
@@ -36,13 +43,18 @@ void ofApp::setup()
   pix_ps3eye = ps3.getPixelsRef(); //copy
   pix_ps3eye.setNumChannels( chan );
 
-  calibration.init( "kinect", pix_kinect_rgb, "ps3eye", pix_ps3eye );
+  calibration.init( 
+      settings["params"]["calib_kinect_p3eye"]["cam_pattern_path"].asString(),
+      "kinect", pix_kinect_rgb, 
+      "ps3eye", pix_ps3eye, 
+      //load calibrated kinect intrinsics
+      settings["params"]["calib_kinect_p3eye"]["calib_kinect_path"].asString() );
 }
 
 
 void ofApp::exit() 
 {
-	kinect.close();
+  kinect.close();
   ps3.close();
 }
 
@@ -82,6 +94,11 @@ void ofApp::draw()
   ps3_tex.draw( w, 0 );
 
   calibration.render();
+
+  ofDrawBitmapStringHighlight(
+      " capture: spacebar \n save: \'s\' \n reset: \'r\' \n remove last: \'b\' \n", 
+      0, ofGetHeight()-50, 
+      ofColor::yellow, ofColor::black);
 }
 
 
@@ -90,6 +107,10 @@ void ofApp::keyPressed(int key)
   if ( key == ' ' ) 
   {
     calibration.toggle_capture(); 
+  }
+  else if ( key == 'b' )
+  {
+    calibration.removeLast();
   }
 }
 
@@ -103,7 +124,17 @@ void ofApp::keyReleased(int key)
 
   else if ( key == 's' )
   {
-    calibration.save_all( "calib" );
+    //save ps3 intrinsics & stereo
+    //DONT save kinect intrinsics
+    string folder = "calib";
+
+    calibration.save_intrinsics( "ps3eye", folder, "ofxcv" );
+    calibration.save_intrinsics( "ps3eye", folder, "aruco" );
+
+    calibration.save_extrinsics( "kinect", "ps3eye", folder );
+    calibration.save_extrinsics( "ps3eye", "kinect", folder );
+
+    //calibration.save_all( "calib" );
   }
 
   else if ( key == 'r' )
