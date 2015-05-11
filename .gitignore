@@ -38,6 +38,8 @@ openFrameworks-Info.plist
 #########################
 
 # XCode
+*.xcodeproj
+*.pbxproj
 *.pbxuser
 *.perspective
 *.perspectivev3

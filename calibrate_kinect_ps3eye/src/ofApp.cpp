@@ -107,6 +107,9 @@ void ofApp::keyPressed(int key)
   if ( key == ' ' ) 
   {
     calibration.toggle_capture(); 
+  }else if(key == 'b')
+  {
+    calibration.removeLast();
   }
   else if ( key == 'b' )
   {
