@@ -72,24 +72,16 @@ class DepthSegmentationSystem : public ECSsystem
 
       CamaraLucidaSystem* cml_sys = require_system<CamaraLucidaSystem>();
 
-      //CamaraLucidaComponent* cml_data = require_component<CamaraLucidaComponent>("output");
-
       //keep goin
       ofPixels& output = get_output(e);
 
       int w = depth_data->width;
       int h = depth_data->height;
 
-      //uint16_t* depth_pix_mm = depth_data->depth_ofpix_mm->getPixels();
-      //uint8_t *depth_pix_grey = depth_data->depth_pix_grey;
-
       ofPixels* input = depth_data->depth_ofpix_grey;
       //input.setFromPixels( depth_pix_grey, w, h, channels );
 
       //TODO usar ofxGPGPU
-
-      //float far_clamp = cml_data->cml->depth_camera()->far_clamp;
-      //float epsilon = std::numeric_limits<float>::epsilon();
 
       float scale = 0.2;
       ofxCv::resize( *input, output, scale, scale );
@@ -103,26 +95,8 @@ class DepthSegmentationSystem : public ECSsystem
       for ( int x = 0; x < ws; x++ )
       {
         p2.set( x/scale, y/scale );
-
         cml_sys->depth_to_p3( p2, p3 );
-
-        //int id = (int)p2.y * w + (int)p2.x;
-        //uint16_t mm = depth_pix_mm[id];
-
-        //mm = CLAMP( ( mm < epsilon ? far_clamp : mm ), 0.0, far_clamp );
-
-        //float _x,_y;
-        //cml_data->cml->depth_camera()->unproject( p2.x, p2.y, mm, &_x, &_y );
-        //p3.set( _x, _y, mm );
-
-        //if ( depth_data->flip )
-        //{
-          //p3.x *= -1;
-          //p3.y *= -1;
-        //}
-
         float d = plane_calib_data->plane.distance( p3 );
-
         int i = y * ws + x;
         output[i] = d < seg_data->threshold_far && d > seg_data->threshold_near ? 255 : 0;
       }

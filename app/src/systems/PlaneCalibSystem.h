@@ -221,23 +221,6 @@ class PlaneCalibSystem : public ECSsystem
       return ofxPlane( ctr, normal );
     };
 
-    //void depth_to_p3( const ofVec2f& p2, DepthComponent* depth_data, ofVec3f& p3 )
-    //{
-      //int w = depth_data->width;
-      //uint16_t* depth_pix_mm = depth_data->depth_ofpix_mm->getPixels();
-      //int i = (int)p2.y * w + (int)p2.x;
-      //uint16_t mm = depth_pix_mm[i];
-      //float x,y;
-      //cml_data->cml->depth_camera()->unproject( p2.x, p2.y, mm, &x, &y );
-      //p3.set( x, y, mm ); //XXX ofScale(-1,-1,1);
-
-      //if ( depth_data->flip )
-      //{
-        //p3.x *= -1;
-        //p3.y *= -1;
-      //}
-    //};
-
     void update_coordmap()
     {
       DepthComponent* depth_data = require_component<DepthComponent>("input");
@@ -275,7 +258,7 @@ class PlaneCalibSystem : public ECSsystem
       for ( int i = 0; i < 3; i++ )
       {
         tris3d_mesh.addColor( ofColor::orange );
-        //tris3d_mesh.addVertex( triangle.vertex(i) );
+        //tris3d_mesh.addVertex(triangle.vertex(i));
         tris3d_mesh.addVertex( tri[i] );
       } 
 
