@@ -1,5 +1,3 @@
-ofxPlab
-ofxKeyValueOSC
 ofxCamaraLucida
 ofxKinect
 ofxOpenCv
@@ -12,3 +10,5 @@ ofxECS
 ofxJSON
 ofxOsc
 addons
+ofxPlab
+ofxKeyValueOSC
