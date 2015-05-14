@@ -96,13 +96,13 @@
                   "img_scale" : 0.5
                },
                "id" : "depth_smoothing"
-            },
+            }/*,
             {
                "data" : {
                   "render" : false
                },
                "id" : "blobs"
-            },
+            }*/,
             {
                "data" : {
                   "height" : 120,
