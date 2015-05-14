@@ -8,7 +8,8 @@ class DepthSegmentationComponent : public ECScomponent
 {
   public:
 
-    ofPixels output;
+    ofFloatPixels output;
+    //ofTexture output; //TODO
 
     ofParameter<bool> render;
     ofParameter<float> threshold_near;

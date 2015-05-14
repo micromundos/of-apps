@@ -32,7 +32,7 @@ class DepthSmoothingSystem : public ECSsystem
       if (inited) return;
       inited = true;
 
-      ofPixels& input = get_input(e);
+      ofFloatPixels& input = get_input(e);
       ofPixels& output = get_output(e);
 
       DepthSmoothingComponent* smooth_data = smooth_m.get(e);
@@ -53,7 +53,7 @@ class DepthSmoothingSystem : public ECSsystem
       if ( !depth_data->dirty )
         return;
 
-      ofPixels& input = get_input(e);
+      ofFloatPixels& input = get_input(e);
       ofPixels& output = get_output(e);
 
       ofxCv::resize( input, output, smooth_data->img_scale, smooth_data->img_scale );
@@ -89,7 +89,7 @@ class DepthSmoothingSystem : public ECSsystem
     ofImage output_img; 
     int channels;
 
-    ofPixels& get_input(Entity &e)
+    ofFloatPixels& get_input(Entity &e)
     {
       return segmentation_m.get(e)->output;
     };
