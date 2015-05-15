@@ -9,7 +9,6 @@
  *
  * in: data 
  *  3d points in metric space
- *  proccessed by depth_to_p3d.frag
  * out: 
  *  normals
  */
