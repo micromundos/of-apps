@@ -8,8 +8,10 @@ class FlowFieldComponent : public ECScomponent
 {
   public:
 
+    //gpgpu::Process process;
     float* field;
     //ofTexture* field;
+
     int width, height;
     ofParameter<bool> render;
 

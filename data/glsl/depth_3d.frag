@@ -1,4 +1,5 @@
 #version 120
+#extension GL_ARB_texture_rectangle : enable
 
 /*
  * unproject depth to 3d points
@@ -18,12 +19,9 @@ void main( void )
 {
   vec2 p2 = gl_TexCoord[0].st;
   float depth_mm = texture2DRect(depth_map,p2).r;
-  vec3 p3 = depth_to_p3( p2, depth_mm );
-  if ( !depth_flip )
-  {
-    p3.x *= -1;
-    p3.y *= -1;
-  }
+
+  vec3 p3 = depth_to_p3( p2, depth_mm, depth_flip );
+
   gl_FragColor = vec4( p3, 1. );
 
   /*float r = 500.;*/

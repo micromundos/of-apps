@@ -5,6 +5,7 @@
 #include "Components.h"
 #include "systems/ParticleSystem.h"
 #include "ofEventUtils.h"
+#include "CoordMap.h"
 
 using namespace artemis;
 
@@ -39,6 +40,7 @@ class ParticleFlowFieldSystem : public ECSsystem
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
 
       float* field = ff_data->field;
+      //float* field = ff_data->process.get_data();
       //ofTexture* field = ff_data->field; 
       if (field == NULL) return;
 

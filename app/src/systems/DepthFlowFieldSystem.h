@@ -17,6 +17,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
     DepthFlowFieldSystem(string _id) : ECSsystem(_id)
     {
+      //addComponentType<DepthProcessingComponent>();
       addComponentType<DepthComponent>();
       addComponentType<FlowFieldComponent>();
     };
@@ -47,9 +48,11 @@ class DepthFlowFieldSystem : public ECSsystem
       if ( ! depth_data->dirty ) return;
 
       FlowFieldComponent* ff_data = flowfield_m.get(e); 
+      //DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e); 
 
       ofTexture& depth_ftex = depth_f.update( depth_data );
       ff.set( "data", depth_ftex ); 
+      //ff.set( "data", depth_proc_data->process.get() ); 
       ff.update();
 
       debug.set( "data", ff.get() ); 
@@ -73,10 +76,16 @@ class DepthFlowFieldSystem : public ECSsystem
 
   private:
 
+    //ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
 
     gpgpu::Process ff, debug;
     DepthFloatData depth_f;
+
+    //gpgpu::Process& process(Entity &e)
+    //{
+      //return flowfield_m.get(e)->process;
+    //};
 };
 

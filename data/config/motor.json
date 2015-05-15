@@ -87,22 +87,22 @@
                   "threshold_far" : [ 2000, -2000, 2000 ],
                   "threshold_near" : [ 0, -200, 200 ]
                },
-               "id" : "depth_segmentation"
+               "id" : "depth_processing"
             },
-            {
-               "data" : {
-                  "render" : false,
-                  "blur_size" : [ 5, 0, 10 ],
-                  "img_scale" : 0.5
-               },
-               "id" : "depth_smoothing"
-            },
-            {
-               "data" : {
-                  "render" : false
-               },
-               "id" : "blobs"
-            },
+            /*{*/
+               /*"data" : {*/
+                  /*"render" : false,*/
+                  /*"blur_size" : [ 5, 0, 10 ],*/
+                  /*"img_scale" : 0.5*/
+               /*},*/
+               /*"id" : "depth_smoothing"*/
+            /*},*/
+            /*{*/
+               /*"data" : {*/
+                  /*"render" : false*/
+               /*},*/
+               /*"id" : "blobs"*/
+            /*},*/
             {
                "data" : {
                   "height" : 120,

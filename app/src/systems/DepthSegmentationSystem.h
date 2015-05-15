@@ -149,10 +149,19 @@ class DepthSegmentationSystem : public ECSsystem
 
       ofPushStyle();
       ofSetColor(255);
+
       //output_img.draw( 0, 0, rw, rh );
       //debug.get().draw( 0, 0, rw, rh );
       depth_seg.get().draw( 0, 0, rw, rh );
+
       ofPopStyle(); 
+    };
+
+    void update_depth_process( ofShader& shader )
+    {
+      update_depth_3d( shader );
+      update_height_map( shader );
+      update_depth_seg( shader );
     };
 
     void update_depth_3d( ofShader& shader )
