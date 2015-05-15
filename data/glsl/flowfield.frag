@@ -57,5 +57,6 @@ void main( void )
   gl_FragColor = vec4( force, 0., 1. );
 
   /*float depth = texture2DRect(data,loc).r;*/
-  /*gl_FragColor = vec4( depth, 0., 0., 1. );*/
+  /*float vis = lerp2d( depth, 0.,200., 0.,1.);*/
+  /*gl_FragColor = vec4(vis,vis,vis,1.);*/
 }
