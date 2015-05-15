@@ -6,6 +6,7 @@
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
 #include "ofxGPGPU.h"
+#include "DepthFloatData.h"
 
 using namespace artemis;
 
@@ -16,6 +17,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
     DepthFlowFieldSystem(string _id) : ECSsystem(_id)
     {
+      //addComponentType<DepthProcessingComponent>();
       addComponentType<DepthComponent>();
       addComponentType<FlowFieldComponent>();
     };
@@ -24,7 +26,6 @@ class DepthFlowFieldSystem : public ECSsystem
     {
       depth_m.init( *world );
       flowfield_m.init( *world );
-      channels = 1;
     };
 
     virtual void added(Entity &e) 
@@ -35,16 +36,10 @@ class DepthFlowFieldSystem : public ECSsystem
       int w = ff_data->width;
       int h = ff_data->height;
 
-      f_depth_pix_mm.allocate( depth_data->width, depth_data->height, channels );
-      f_depth_pix_mm.set(0);
+      depth_f.init( depth_data, w, h );
 
-      f_depth_pix_resized.allocate( w, h, channels );
-      f_depth_pix_resized.set(0);
-
-      f_depth_tex.allocate( w, h, GL_LUMINANCE32F_ARB );
-
-      ff.init("glsl/flowfield.frag",w,h);
-      ff_debug.init("glsl/flowfield_debug.frag",w,h);
+      process(e).init("glsl/flowfield.frag",w,h);
+      debug.init("glsl/debug.frag",w,h);
     };
 
     virtual void processEntity(Entity &e) 
@@ -53,23 +48,18 @@ class DepthFlowFieldSystem : public ECSsystem
       if ( ! depth_data->dirty ) return;
 
       FlowFieldComponent* ff_data = flowfield_m.get(e); 
+      //DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e); 
 
-      f_depth_pix_mm.setFromPixels( depth_data->f_depth_ofpix_mm->getPixels(), depth_data->width, depth_data->height, channels );
+      ofTexture& depth_ftex = depth_f.update( depth_data );
 
-      float xscale = (float)ff_data->width / depth_data->width; 
-      float yscale = (float)ff_data->height / depth_data->height; 
-      ofxCv::resize( f_depth_pix_mm, f_depth_pix_resized, xscale, yscale );
+      process(e)
+        .set( "data", depth_ftex )
+        //.set( "data", depth_proc_data->process.get() ); 
+        .update();
 
-      f_depth_tex.loadData( f_depth_pix_resized );
-
-      ff.set( "data", f_depth_tex ); 
-      ff.update();
-
-      ff_debug.set( "data", ff.get() ); 
-      ff_debug.update();
-
-      ff_data->field = ff.get_data();
-      //ff_data->field = &(ff.get());
+      debug
+        .set( "data", process(e).get() )
+        .update();
     };
 
     virtual void renderEntity(Entity &e)
@@ -81,19 +71,21 @@ class DepthFlowFieldSystem : public ECSsystem
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
-      ff_debug.get().draw( 0, 0, 
-          render_data->width, render_data->height );
+      debug.get().draw( 0, 0, render_data->width, render_data->height );
     };
 
   private:
 
+    //ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
 
-    gpgpu::Process ff, ff_debug;
-    ofTexture f_depth_tex;
-    ofFloatPixels f_depth_pix_mm;
-    ofFloatPixels f_depth_pix_resized;
-    int channels;
+    gpgpu::Process debug;
+    DepthFloatData depth_f;
+
+    gpgpu::Process& process(Entity &e)
+    {
+      return flowfield_m.get(e)->process;
+    };
 };
 

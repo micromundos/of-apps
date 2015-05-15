@@ -78,9 +78,9 @@ class KinectSystem : public ECSsystem
 
       if ( !depth_data->flip )
       {
-        depth_data->depth_ofpix_mm = &(kinect.getRawDepthPixelsRef());
-        depth_data->f_depth_ofpix_mm = &(kinect.getDistancePixelsRef());
-        depth_data->depth_ofpix_grey = &(kinect.getDepthPixelsRef());
+        depth_data->update( kinect.getRawDepthPixelsRef() );
+        depth_data->update( kinect.getDistancePixelsRef() );
+        depth_data->update( kinect.getDepthPixelsRef() );
       }
 
       else
@@ -89,9 +89,10 @@ class KinectSystem : public ECSsystem
         ofxCv::flip( kinect.getRawDepthPixelsRef(), depth_ofpix_mm, mode );
         ofxCv::flip( kinect.getDistancePixelsRef(), f_depth_ofpix_mm, mode );
         ofxCv::flip( kinect.getDepthPixelsRef(), depth_ofpix_grey, mode );
-        depth_data->depth_ofpix_mm = &(depth_ofpix_mm);
-        depth_data->f_depth_ofpix_mm = &(f_depth_ofpix_mm);
-        depth_data->depth_ofpix_grey = &(depth_ofpix_grey);
+
+        depth_data->update( depth_ofpix_mm );
+        depth_data->update( f_depth_ofpix_mm );
+        depth_data->update( depth_ofpix_grey );
       }
     };
 

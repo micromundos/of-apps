@@ -3,19 +3,19 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
+#include "ofxGPGPU.h"
 
-class DepthSegmentationComponent : public ECScomponent 
+class DepthProcessingComponent : public ECScomponent 
 {
   public:
 
-    ofFloatPixels output;
-    //ofTexture output; //TODO
+    gpgpu::Process process;
 
     ofParameter<bool> render;
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;
 
-    DepthSegmentationComponent(string _id) : ECScomponent(_id) {};
+    DepthProcessingComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
