@@ -36,12 +36,12 @@
             {
                "id" : "particle_system"
             },
-            {
-               "data" : {
-                  "render" : true
-               },
-               "id" : "particle_blobs_containers"
-            },
+            /*{*/
+               /*"data" : {*/
+                  /*"render" : true*/
+               /*},*/
+               /*"id" : "particle_blobs_containers"*/
+            /*},*/
             {
                "id" : "particle_flow_field"
             }

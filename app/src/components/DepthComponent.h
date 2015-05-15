@@ -8,9 +8,9 @@ class DepthComponent : public ECScomponent
 {
   public:
 
-    ofShortPixels* depth_ofpix_mm;//uint16_t
-    ofFloatPixels* f_depth_ofpix_mm;//float
-    ofPixels* depth_ofpix_grey;//uint8_t
+    ofShortPixels* depth_ofpix_mm; //uint16_t
+    ofFloatPixels* f_depth_ofpix_mm; //float
+    ofPixels* depth_ofpix_grey; //uint8_t
 
     int width, height;
     bool dirty;
@@ -39,10 +39,19 @@ class DepthComponent : public ECScomponent
       this->height = h;
     }; 
 
-    //void update( ofTexture& depth_tex )
-    //{
-      ////copy texture
-      //this->depth_tex = depth_tex;
-    //};
+    void update( ofShortPixels& depth_ofpix_mm )
+    {
+      this->depth_ofpix_mm = &depth_ofpix_mm;
+    };
+
+    void update( ofFloatPixels& f_depth_ofpix_mm )
+    {
+      this->f_depth_ofpix_mm = &f_depth_ofpix_mm;
+    };
+
+    void update( ofPixels& depth_ofpix_grey )
+    {
+      this->depth_ofpix_grey = &depth_ofpix_grey;
+    };
 };
 
