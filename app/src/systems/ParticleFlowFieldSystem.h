@@ -39,9 +39,8 @@ class ParticleFlowFieldSystem : public ECSsystem
 
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
 
-      float* field = ff_data->field;
-      //float* field = ff_data->process.get_data();
-      //ofTexture* field = ff_data->field; 
+      //XXX gpu -> cpu
+      float* field = ff_data->process.get_data();
       if (field == NULL) return;
 
       //if ((ofGetFrameNum()%(60*3))<10) log(field,ff_data->width,ff_data->height);

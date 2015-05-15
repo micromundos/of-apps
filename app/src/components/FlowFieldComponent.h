@@ -3,14 +3,13 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
+#include "ofxGPGPU.h"
 
 class FlowFieldComponent : public ECScomponent
 {
   public:
 
-    //gpgpu::Process process;
-    float* field;
-    //ofTexture* field;
+    gpgpu::Process process;
 
     int width, height;
     ofParameter<bool> render;
@@ -23,7 +22,6 @@ class FlowFieldComponent : public ECScomponent
       param( render, "render" );
       width = d.get("width",640).asInt();
       height = d.get("height",480).asInt();
-      field = NULL;
     };
 };
 

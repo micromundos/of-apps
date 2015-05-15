@@ -10,7 +10,6 @@ class DepthProcessingComponent : public ECScomponent
   public:
 
     gpgpu::Process process;
-    //ofFloatPixels output;
 
     ofParameter<bool> render;
     ofParameter<float> threshold_near;

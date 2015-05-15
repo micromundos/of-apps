@@ -38,7 +38,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       depth_f.init( depth_data, w, h );
 
-      ff.init("glsl/flowfield.frag",w,h);
+      process(e).init("glsl/flowfield.frag",w,h);
       debug.init("glsl/debug.frag",w,h);
     };
 
@@ -51,15 +51,15 @@ class DepthFlowFieldSystem : public ECSsystem
       //DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e); 
 
       ofTexture& depth_ftex = depth_f.update( depth_data );
-      ff.set( "data", depth_ftex ); 
-      //ff.set( "data", depth_proc_data->process.get() ); 
-      ff.update();
 
-      debug.set( "data", ff.get() ); 
-      debug.update();
+      process(e)
+        .set( "data", depth_ftex )
+        //.set( "data", depth_proc_data->process.get() ); 
+        .update();
 
-      ff_data->field = ff.get_data();
-      //ff_data->field = &(ff.get());
+      debug
+        .set( "data", process(e).get() )
+        .update();
     };
 
     virtual void renderEntity(Entity &e)
@@ -80,12 +80,12 @@ class DepthFlowFieldSystem : public ECSsystem
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
 
-    gpgpu::Process ff, debug;
+    gpgpu::Process debug;
     DepthFloatData depth_f;
 
-    //gpgpu::Process& process(Entity &e)
-    //{
-      //return flowfield_m.get(e)->process;
-    //};
+    gpgpu::Process& process(Entity &e)
+    {
+      return flowfield_m.get(e)->process;
+    };
 };
 

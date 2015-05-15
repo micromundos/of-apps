@@ -37,19 +37,19 @@ class DepthProcessingSystem : public ECSsystem
 
       cml_data = require_component<CamaraLucidaComponent>("output");
 
-      ofAddListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
-
       depth_data = depth_m.get(e);
       int w = depth_data->width;
       int h = depth_data->height;
 
       depth_f.init( depth_data, w, h );
-      //debug.init("glsl/debug.frag",w,h);
 
+      debug.init("glsl/depth_process_debug.frag",w,h);
       process(e).init("glsl/depth_process.frag",w,h);
       //depth_3d.init("glsl/depth_3d.frag",w,h);
       //height_map.init("glsl/height_map.frag",w,h);
       //process(e).init("glsl/depth_segmentation.frag",w,h);
+
+      ofAddListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
       ofAddListener( process(e).on_update, this, &DepthProcessingSystem::update_depth_process );
       //ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
@@ -93,6 +93,11 @@ class DepthProcessingSystem : public ECSsystem
         .set( "depth_map", depth_ftex )
         .update();
 
+      if ( depth_proc_data->render ) 
+        debug
+          .set( "data", process(e).get() )
+          .update();
+
       //depth_3d
         //.set( "depth_map", depth_ftex )
         //.update();
@@ -101,11 +106,7 @@ class DepthProcessingSystem : public ECSsystem
         //.update();
       //process(e)
         //.set( "height_map", height_map.get() )
-        //.update();
-
-      //debug
-        //.set( "data", depth_3d.get() )
-        //.update();
+        //.update(); 
 
       //ofFloatPixels& output = get_output(e);
       //output.setFromPixels( depth_proc.get_data(), w, h, channels );
@@ -123,8 +124,8 @@ class DepthProcessingSystem : public ECSsystem
       ofPushStyle();
       ofSetColor(255);
 
-      //debug.get().draw( 0, 0, rw, rh );
-      process(e).get().draw( 0, 0, rw, rh );
+      debug.get().draw( 0, 0, rw, rh );
+      //process(e).get().draw( 0, 0, rw, rh );
 
       ofPopStyle();
     };
@@ -173,8 +174,8 @@ class DepthProcessingSystem : public ECSsystem
   private:
 
     DepthFloatData depth_f;
+    gpgpu::Process debug;
     //gpgpu::Process depth_3d,height_map;
-    //gpgpu::Process debug;
 
     int channels;
 
