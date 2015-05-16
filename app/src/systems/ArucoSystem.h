@@ -85,11 +85,14 @@ class ArucoSystem : public ECSsystem
 
       BloqEventsComponent* events = require_component<BloqEventsComponent>("core");
 
-      uint8_t *pixels = rgb_data->color_pix;
       int w = rgb_data->width;
       int h = rgb_data->height;
 
-      rgb_pix.setFromPixels( pixels, w, h, channels );
+      //copy & convert rgba -> rgb
+      rgb_pix = *(rgb_data->pixels);
+      rgb_pix.setNumChannels(3);
+      //rgb_pix.setFromPixels( rgb_data->pixels, w, h, channels );
+
       aruco.detectMarkers( rgb_pix );
       vector<aruco::Marker>& markers = aruco.getMarkers();
 

@@ -69,10 +69,11 @@ class Ps3EyeSystem : public ECSsystem
       rgb_data->dirty = dirty;
       if ( dirty )
       {
-        //copy
-        ps3_pix = ps3.getPixelsRef();
-        ps3_pix.setNumChannels(3);
-        rgb_data->update( ps3_pix.getPixels() );
+        rgb_data->update( ps3.getPixelsRef() );
+        //copy & convert rgba -> rgb
+        //ps3_pix = ps3.getPixelsRef();
+        //ps3_pix.setNumChannels(3);
+        //rgb_data->update( ps3_pix.getPixels() );
       }
     }; 
 
@@ -102,7 +103,7 @@ class Ps3EyeSystem : public ECSsystem
     ComponentMapper<RgbComponent> rgb_m;
 
     ofxPS3EyeGrabber ps3;
-    ofPixels ps3_pix;
+    //ofPixels ps3_pix;
     ofTexture ps3_tex; //render
     bool inited;
 
