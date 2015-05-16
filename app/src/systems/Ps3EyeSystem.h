@@ -44,6 +44,7 @@ class Ps3EyeSystem : public ECSsystem
 
       rgb_data->setup( w, h );
 
+      ps3.setDesiredFrameRate(30);
       ps3.initGrabber(w, h);
       ps3.setAutogain(true);
       ps3.setAutoWhiteBalance(true);
@@ -57,14 +58,12 @@ class Ps3EyeSystem : public ECSsystem
       //ps3.setBlueBalance(uint8_t val);
     };
 
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      ps3.update();
-      artemis::EntityProcessingSystem::processEntities( bag );
-    };
-
     virtual void processEntity(Entity &e) 
     {
+      if (!inited) return;
+
+      ps3.update();
+
       RgbComponent* rgb_data = rgb_m.get(e);
       bool dirty = ps3.isFrameNew();
       rgb_data->dirty = dirty;
