@@ -4,6 +4,7 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "ofxGeom.h"
+#include "ofxOpenCv.h"
 
 using namespace artemis;
 
@@ -22,18 +23,17 @@ class PlaneCalibSystem : public ECSsystem
     {
       plane_calib_m.init( *world );
       depth_m.init( *world );
-      inited = false;
-      render_plane = false;
+      entity = NULL;
     };
 
     virtual void added(Entity &e) 
     {
-      if (inited)
+      if ( entity != NULL )
       {
-        ofLogWarning("PlaneCalibSystem") << "already inited";
+        ofLogWarning("PlaneCalibSystem") << "singleton entity already added";
         return;
       }
-      inited = true;
+      entity = &e;
 
       cml_data = require_component<CamaraLucidaComponent>("output");
       ofAddListener( cml_data->cml->render_3d, this, &PlaneCalibSystem::render_3d );
@@ -48,33 +48,16 @@ class PlaneCalibSystem : public ECSsystem
         ofRemoveListener( cml_data->cml->render_3d, this, &PlaneCalibSystem::render_3d );
         cml_data = NULL;
       }
+      entity = NULL;
       //ofRemoveListener( ofEvents().mousePressed, this, &PlaneCalibSystem::mousePressed );
     };
 
     virtual void processEntity(Entity &e) 
     {
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
-
-      //save singleton entity stuff
-      depth_data = depth_m.get(e);
-      render_plane = plane_calib_data->render_plane;
-
-      if (!plane_calib_data->calibrate)
-        return;
-
-      if ( !depth_data->dirty )
-        return;
-
-      //run once
-      plane_calib_data->calibrate = !plane_calib_data->calibrate;  
-
-      find_triangles(e);
-      triangle = calc_avg_tri();
-      plane = triangle.plane();
-      //plane = calc_avg_plane();
-
-      plane_calib_data->triangle = triangle;
-      plane_calib_data->plane = plane;
+      entity = &e; //save singleton entity
+      if (calibrate(e)) return;
+      if (save(e)) return;
+      if (load(e)) return;
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -89,7 +72,7 @@ class PlaneCalibSystem : public ECSsystem
         update_coordmap(); 
       }
 
-      if (plane_calib_data->render_plane)
+      if ( plane_calib_data->render_plane )
       {
         ofPushStyle();
         ofSetColor( ofColor::magenta );
@@ -104,7 +87,7 @@ class PlaneCalibSystem : public ECSsystem
         ofPopStyle();
       }
 
-      if (plane_calib_data->render_planes_list)
+      if ( plane_calib_data->render_planes_list )
       {
         tris2d_mesh.setMode(OF_PRIMITIVE_TRIANGLES);
         tris2d_mesh.clear();
@@ -131,7 +114,9 @@ class PlaneCalibSystem : public ECSsystem
 
   private:
 
+    Entity* entity; //singleton entity
     CamaraLucidaComponent* cml_data;
+
     ofxTriangle triangle; 
     ofxPlane plane;
     vector<ofxTriangle> tris3d;
@@ -140,14 +125,31 @@ class PlaneCalibSystem : public ECSsystem
     vector<ofxTriangle> tris2d;
     ofVboMesh tris2d_mesh;
     ofVboMesh tris3d_mesh;
-    CoordMap depth2screen; 
+    CoordMap depth2screen;  
 
-    //ugly hack: save singleton entity data
-    bool inited;
-    DepthComponent* depth_data;
-    bool render_plane;
+    bool calibrate(Entity &e)
+    {
+      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+      DepthComponent* depth_data = depth_m.get(e);
 
-    void find_triangles( Entity &e )
+      if ( !plane_calib_data->calibrate 
+          || !depth_data->dirty )
+        return false;
+
+      //run once
+      plane_calib_data->calibrate = !plane_calib_data->calibrate;  
+
+      find_triangles(e);
+      triangle = calc_avg_tri();
+      plane = triangle.plane();
+      //plane = calc_avg_plane();
+
+      plane_calib_data->triangle = triangle;
+      plane_calib_data->plane = plane;
+      return true;
+    };
+
+    void find_triangles(Entity &e)
     {
       CamaraLucidaSystem* cml_sys = require_system<CamaraLucidaSystem>();
 
@@ -231,9 +233,88 @@ class PlaneCalibSystem : public ECSsystem
       );
     };
 
+    bool load(Entity &e)
+    {
+      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+      if ( !plane_calib_data->load )
+        return false;
+
+      plane_calib_data->load = false; //once
+
+      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename, false), cv::FileStorage::READ ); 
+
+      if ( !fs.isOpened() )
+      {
+        ofLogError("PlaneCalibSystem") << "failed to load plane calib file " << plane_calib_data->filename;
+        return false;
+      }
+
+      ofVec3f v0 = ofVec3f( fs["vertex_0_x"], fs["vertex_0_y"], fs["vertex_0_z"] );
+      ofVec3f v1 = ofVec3f( fs["vertex_1_x"], fs["vertex_1_y"], fs["vertex_1_z"] );
+      ofVec3f v2 = ofVec3f( fs["vertex_2_x"], fs["vertex_2_y"], fs["vertex_2_z"] );
+
+      ofLogNotice("PlaneCalibSystem")
+        << "load plane calib from " << plane_calib_data->filename << "\n"
+        << "v0 " << v0 << "\n"
+        << "v1 " << v1 << "\n"
+        << "v2 " << v2 << "\n";
+
+      triangle = ofxTriangle(v0,v1,v2);
+      plane = triangle.plane();
+
+      plane_calib_data->triangle = triangle;
+      plane_calib_data->plane = plane;
+      return true;
+    };
+
+    bool save(Entity &e)
+    {
+      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+      if ( !plane_calib_data->save )
+        return false;
+
+      plane_calib_data->save = false; //once
+
+      ofxTriangle& tri = plane_calib_data->triangle;
+      ofVec3f v0 = tri.b;
+      ofVec3f v1 = tri.b + tri.e0;
+      ofVec3f v2 = tri.b + tri.e1;
+
+      ofLogNotice("PlaneCalibSystem") 
+        << "save plane calib to " << plane_calib_data->filename << "\n"
+        << "v0 " << v0 << "\n"
+        << "v1 " << v1 << "\n"
+        << "v2 " << v2 << "\n";
+
+      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename, false), cv::FileStorage::WRITE ); 
+
+      fs << "vertex_0_x" << v0.x;
+      fs << "vertex_0_y" << v0.y;
+      fs << "vertex_0_z" << v0.z;
+
+      fs << "vertex_1_x" << v1.x;
+      fs << "vertex_1_y" << v1.y;
+      fs << "vertex_1_z" << v1.z;
+
+      fs << "vertex_2_x" << v2.x;
+      fs << "vertex_2_y" << v2.y;
+      fs << "vertex_2_z" << v2.z;
+
+      return true;
+    };
+
     void render_3d(ofEventArgs &args)
     {
-      if (!inited || !render_plane)
+      if ( entity == NULL )
+        return;
+      _render_3d( *entity );
+    };
+
+    void _render_3d(Entity &e)
+    {
+      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+
+      if ( !plane_calib_data->render_plane )
         return;
 
       ofPushMatrix();
@@ -315,8 +396,13 @@ class PlaneCalibSystem : public ECSsystem
 
     //void mousePressed(ofMouseEventArgs &args)
     //{
+      //if ( entity == NULL )
+        //return;
+
       ////mpts[midx] = ofVec2f(args.x, args.y);
       ////midx = (midx+1)%3;
+
+      //DepthComponent* depth_data = depth_m.get( entity );
 
       //mpt.set(args.x, args.y);
       //ofVec3f m3; ofVec2f m2;

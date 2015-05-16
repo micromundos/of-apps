@@ -73,11 +73,14 @@
             {
                "data" : {
                   "calibrate" : false,
+                  "save": false,
+                  "load": false,
                   "planes_num" : [ 20, 0, 100 ],
                   "radius_step" : [ 6, 0, 30 ],
                   "angle_step" : [ 30, 0, 360 ],
                   "render_plane" : false,
-                  "render_planes_list" : false
+                  "render_planes_list" : false,
+                  "filename" : "calib/plane.yml"
                },
                "id" : "plane_calib"
             },
