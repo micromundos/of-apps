@@ -45,7 +45,6 @@ class Ps3EyeSystem : public ECSsystem
       rgb_data->setup( w, h );
 
       ps3.setDesiredFrameRate(30);
-      ps3.initGrabber(w, h);
       ps3.setAutogain(true);
       ps3.setAutoWhiteBalance(true);
       //ps3.setGain(uint8_t val);
@@ -56,6 +55,7 @@ class Ps3EyeSystem : public ECSsystem
       //ps3.setHue(uint8_t val);
       //ps3.setRedBalance(uint8_t val);
       //ps3.setBlueBalance(uint8_t val);
+      ps3.initGrabber(w, h);
     };
 
     virtual void processEntity(Entity &e) 
