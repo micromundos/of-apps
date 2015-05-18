@@ -10,7 +10,7 @@
                "id" : "particle_emitter"
             }
          ],
-         "id" : "428"
+         "id" : "882"
       },
       {
          "components" : [
@@ -35,9 +35,6 @@
             },
             {
                "id" : "particle_system"
-            },
-            {
-               "id" : "particle_flow_field"
             }
          ],
          "id" : "particles"

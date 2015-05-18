@@ -20,6 +20,7 @@ class DepthFlowFieldSystem : public ECSsystem
       addComponentType<DepthProcessingComponent>();
       addComponentType<DepthComponent>();
       addComponentType<FlowFieldComponent>();
+      addComponentType<FlowfieldDebugComponent>();
     };
 
     virtual void initialize() 
@@ -27,6 +28,7 @@ class DepthFlowFieldSystem : public ECSsystem
       depth_m.init( *world );
       flowfield_m.init( *world );
       depth_processing_m.init( *world );
+      flowfield_debug_m.init( *world );
     };
 
     virtual void added(Entity &e) 
@@ -39,7 +41,7 @@ class DepthFlowFieldSystem : public ECSsystem
       int w = input.width();
       int h = input.height();
 
-      process(e).init("glsl/flowfield.frag",w,h);
+      process(e).init("glsl/flowfield.frag",w,h,true);
       debug.init("glsl/debug.frag",w,h);
     };
 
@@ -49,7 +51,7 @@ class DepthFlowFieldSystem : public ECSsystem
       if ( ! depth_data->dirty ) return;
 
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e); 
-
+      FlowfieldDebugComponent*  flowfield_debug = flowfield_debug_m.get(e);
       //ofTexture& depth_ftex = depth_f.update( depth_data );
 
       process(e)
@@ -60,6 +62,10 @@ class DepthFlowFieldSystem : public ECSsystem
       debug
         .set( "data", process(e).get() )
         .update();
+      
+      flowfield_debug->flowfield_data = &debug.get();
+      
+      
     };
 
     virtual void renderEntity(Entity &e)
@@ -72,6 +78,8 @@ class DepthFlowFieldSystem : public ECSsystem
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
       debug.get().draw( 0, 0, render_data->width, render_data->height );
+      
+      
       //process(e).get().draw( 0, 0, render_data->width, render_data->height );
       //get_input(e).get().draw( 0, 0, render_data->width, render_data->height );
     };
@@ -81,6 +89,7 @@ class DepthFlowFieldSystem : public ECSsystem
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
+    ComponentMapper<FlowfieldDebugComponent>  flowfield_debug_m;
 
     gpgpu::Process debug;
     //DepthFloatData depth_f;

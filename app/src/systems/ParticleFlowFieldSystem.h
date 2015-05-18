@@ -52,6 +52,7 @@ class ParticleFlowFieldSystem : public ECSsystem
 
       b2Vec2 force;
       ofVec2f ff_loc, screen_loc;
+      
       for (int i = 0; i < n; i++)
       {
         b2Vec2& loc = locs[i]; 

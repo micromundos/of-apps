@@ -13,6 +13,7 @@ class FlowFieldComponent : public ECScomponent
 
     int width, height;
     ofParameter<bool> render;
+    ofParameter<float> force_amplifier;
 
     FlowFieldComponent(string _id) : ECScomponent(_id) {};
 
@@ -20,6 +21,7 @@ class FlowFieldComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
+      param( force_amplifier, "force_amplifier");
       width = d.get("width",640).asInt();
       height = d.get("height",480).asInt();
     };

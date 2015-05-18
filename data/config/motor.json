@@ -24,18 +24,18 @@
             },
             {
                "data" : {
+                  "calibration" : {
+                     "kinect_intrinsics_file" : "calib/intrinsics_kinect.ofxcv.yml",
+                     "projector_intrinsics_file" : "calib/intrinsics_proj_lg.ofxcv.yml",
+                     "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_lg_to_kinect_rgb.yml"
+                  },
                   "enabled" : true,
                   "mesh_res" : 1,
-                  "xoff" : [ 8, -10, 10 ],
                   "render_background" : false,
                   "render_hue_tex" : false,
                   "tex_height" : 1152,
                   "tex_width" : 1536,
-                  "calibration": {
-                      "kinect_intrinsics_file": "calib/intrinsics_kinect.ofxcv.yml",
-                      "projector_intrinsics_file": "calib/intrinsics_proj_lg.ofxcv.yml",
-                      "projector_kinect_extrinsics_file": "calib/extrinsics_proj_lg_to_kinect_rgb.yml"
-                  }
+                  "xoff" : [ 8, -10, 10 ]
                },
                "id" : "camara_lucida"
             }
@@ -45,7 +45,7 @@
       {
          "components" : [
             {
-               "data" : { 
+               "data" : {
                   "height" : 480,
                   "render" : false,
                   "width" : 640
@@ -53,29 +53,29 @@
                "id" : "rgb"
             },
             {
-               "data" : { 
-                  "render" : true,
-                  "flip" : false
+               "data" : {
+                  "flip" : false,
+                  "render" : true
                },
                "id" : "depth"
             },
             {
                "data" : {
-                  "render" : true,
-                  "calibration": {
-                      "rgb" : "calib/intrinsics_ps3eye.aruco.yml",
-                      "depth" : "calib/intrinsics_kinect.aruco.yml",
-                      "stereo" : "calib/extrinsics_ps3eye_to_kinect.yml"
-                  }
+                  "calibration" : {
+                     "depth" : "calib/intrinsics_kinect.aruco.yml",
+                     "rgb" : "calib/intrinsics_ps3eye.aruco.yml",
+                     "stereo" : "calib/extrinsics_ps3eye_to_kinect.yml"
+                  },
+                  "render" : true
                },
                "id" : "aruco"
             },
             {
                "data" : {
+                  "angle_step" : [ 30, 0, 360 ],
                   "calibrate" : false,
                   "planes_num" : [ 20, 0, 100 ],
                   "radius_step" : [ 6, 0, 30 ],
-                  "angle_step" : [ 30, 0, 360 ],
                   "render_plane" : false,
                   "render_planes_list" : false
                },
@@ -91,9 +91,16 @@
             },
             {
                "data" : {
-                  "render" : false
+                  "force_amplifier" : [ 1.307894706726074, 1, 10 ],
+                  "render" : true
                },
                "id" : "flow_field"
+            },
+            {
+               "data" : {
+                  "render" : false
+               },
+               "id" : "flowfield_debug"
             }
          ],
          "id" : "input"

@@ -20,4 +20,5 @@
 #include "KnobComponent.h"
 #include "PlaneCalibComponent.h"
 #include "DepthProcessingComponent.h"
+#include "FlowfieldDebugComponent.h"
 //dont remove this line

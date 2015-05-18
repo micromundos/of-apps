@@ -35,6 +35,7 @@ else if (id == "time_bender") return new TimeBenderComponent(id);
 else if (id == "knob") return new KnobComponent(id);
 else if (id == "plane_calib") return new PlaneCalibComponent(id);
 else if (id == "depth_processing") return new DepthProcessingComponent(id);
+else if (id == "flowfield_debug") return new FlowfieldDebugComponent(id);
 //dont remove this line
 
 return NULL;

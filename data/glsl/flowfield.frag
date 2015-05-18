@@ -15,6 +15,7 @@
  */
 
 uniform sampler2DRect data;
+uniform float force_amplifier;
 
 const int kernel = 6;
 
@@ -51,7 +52,7 @@ void main( void )
   if (n > 0 && force.x != 0 && force.y != 0) 
   {
     force /= n; 
-    force = normalize(force) * 1.;
+    force = normalize(force) * 1.0;
   }
 
   gl_FragColor = vec4( force, 0., 1. );
