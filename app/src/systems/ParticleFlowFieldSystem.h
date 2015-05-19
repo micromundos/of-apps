@@ -36,10 +36,11 @@ class ParticleFlowFieldSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
       //ofLogNotice("ParticleFlowFieldSystem") << "update";
-
+      
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
 
       //XXX gpu -> cpu
+      
       float* field = ff_data->process.get_data();
       if (field == NULL) return;
 
@@ -74,6 +75,7 @@ class ParticleFlowFieldSystem : public ECSsystem
 
     CoordMap screen2ff;
 
+
     void update_screen2ff()
     {
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
@@ -85,6 +87,7 @@ class ParticleFlowFieldSystem : public ECSsystem
     {
       fisica->world2screen(loc,screen_loc);
       screen2ff.dst(screen_loc,ff_loc);
+      
       int i = ((int)ff_loc.x + (int)ff_loc.y * ff_data->width) * 4; //chann:rgba
       force.Set( field[i], field[i+1] );
     };

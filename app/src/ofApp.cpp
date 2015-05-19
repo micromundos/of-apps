@@ -5,9 +5,9 @@ void ofApp::setup()
   ofSetDataPathRoot( __data_path__ );
   ofSetWindowPosition(0,0);
   
-  ofSetLogLevel(OF_LOG_NOTICE);
+  ofSetLogLevel(OF_LOG_SILENT);
   
-  //ofSetFrameRate(60.0f); 
+  ofSetFrameRate(60.0f); 
   ofSetVerticalSync(false);
 
   config.init();

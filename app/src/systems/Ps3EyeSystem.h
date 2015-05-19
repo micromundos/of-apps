@@ -43,7 +43,6 @@ class Ps3EyeSystem : public ECSsystem
       int h = rgb_data->height;
 
       rgb_data->setup( w, h );
-
       ps3.initGrabber(w, h);
       ps3.setAutogain(true);
       ps3.setAutoWhiteBalance(true);

@@ -29,7 +29,7 @@
                      "projector_intrinsics_file" : "calib/intrinsics_proj_lg.ofxcv.yml",
                      "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_lg_to_kinect_rgb.yml"
                   },
-                  "enabled" : true,
+                  "enabled" : false,
                   "mesh_res" : 1,
                   "render_background" : false,
                   "render_hue_tex" : false,
@@ -75,7 +75,7 @@
                   "angle_step" : [ 30, 0, 360 ],
                   "calibrate" : false,
                   "planes_num" : [ 20, 0, 100 ],
-                  "radius_step" : [ 6, 0, 30 ],
+                  "radius_step" : [ 10.65789413452148, 0, 30 ],
                   "render_plane" : false,
                   "render_planes_list" : false
                },
@@ -85,14 +85,15 @@
                "data" : {
                   "render" : false,
                   "threshold_far" : [ 2000, -2000, 2000 ],
-                  "threshold_near" : [ 0, -200, 200 ]
+                  "threshold_near" : [ 32.631591796875, -200, 200 ]
                },
                "id" : "depth_processing"
             },
             {
                "data" : {
-                  "force_amplifier" : [ 1.307894706726074, 1, 10 ],
-                  "render" : true
+                  "force_amplifier" : [ 4.505263328552246, 1, 10 ],
+                  "ramp_margin" : [ 90.78947448730469, 0, 500 ],
+                  "render" : false
                },
                "id" : "flow_field"
             },

@@ -16,7 +16,7 @@
 
 uniform sampler2DRect data;
 uniform float force_amplifier;
-
+uniform float ramp_margin;
 const int kernel = 6;
 
 void main( void ) 
@@ -25,12 +25,19 @@ void main( void )
   vec2 size = vec2(textureSize2DRect(data,0));
 
   float ndepth;
+  float	current_depth = texture2DRect( data, loc ).r;
+
   vec2 nloc = vec2(0.,0.);
   vec2 force = vec2(0.,0.);
 
   int n = 0;
   int ini = -kernel / 2;
   int end = -ini;
+  int black = 0;
+  int noblack = 0;
+  float dif = 0.0;
+  float h = current_depth;
+  int neg = 0;
 
   for ( int i = ini; i <= end; i++ )
   for ( int j = ini; j <= end; j++ )
@@ -47,17 +54,45 @@ void main( void )
     // * -ndepth: drives towards the plane
     force += vec2(i,j) * ndepth;
     n++;
+    if(ndepth >= 500.0)
+    {
+    	neg++;
+    }
+    if(abs(ndepth) > h)
+    {
+    	h = ndepth;
+    }
+
   }
+
+   float m = 1.0;
+  if(h != current_depth)
+  {
+  	if(abs(h-ndepth) > ramp_margin && n == 0.0)
+  	{
+  		m = -1.0;
+  	}
+
+  }else if(h == current_depth)
+  {
+  	m = -1.0;
+  }
+
+  
 
   if (n > 0 && force.x != 0 && force.y != 0) 
   {
     force /= n; 
-    force = normalize(force) * 1.0;
+    force = normalize(force) * (force_amplifier);
   }
 
-  gl_FragColor = vec4( force, 0., 1. );
+ // force*=m;
+
+
+  gl_FragColor = vec4( force, 0.0, 1. );
 
   /*float depth = texture2DRect(data,loc).r;*/
   /*float vis = lerp2d( depth, 0.,200., 0.,1.);*/
   /*gl_FragColor = vec4(vis,vis,vis,1.);*/
 }
+	
