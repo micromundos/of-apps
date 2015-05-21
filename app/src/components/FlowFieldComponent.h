@@ -11,7 +11,6 @@ class FlowFieldComponent : public ECScomponent
 
     gpgpu::Process output;
 
-    int width, height;
     ofParameter<bool> render;
 
     FlowFieldComponent(string _id) : ECScomponent(_id) {};
@@ -20,8 +19,6 @@ class FlowFieldComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
-      width = d.get("width",640).asInt();
-      height = d.get("height",480).asInt();
     };
 };
 

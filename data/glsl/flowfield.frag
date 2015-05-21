@@ -11,7 +11,6 @@
  *  height map in mm
  * out: 
  *  2d vector field, rgb = xyz
- *
  */
 
 uniform sampler2DRect data;
@@ -25,8 +24,6 @@ void main( void )
 
   float height = texture2DRect(data,loc).r;
 
-  float nheight;
-  vec2 nloc = vec2(0.,0.);
   vec2 force = vec2(0.,0.);
 
   int n = 0;
@@ -39,29 +36,32 @@ void main( void )
     if ( i == 0 && j == 0 )
       continue;
 
-    nloc = loc + vec2(i,j);
+    vec2 ndir = vec2(i,j);
+    vec2 nloc = loc + ndir;
+
     if ( nloc.x < 0 || nloc.x >= size.x || nloc.y < 0 || nloc.y >= size.y )
       continue;
 
-    nheight = texture2DRect( data, nloc ).r;
+    float nheight = texture2DRect( data, nloc ).r;
+    float slope = height - nheight;
+
     // nheight: drives away from plane
     // -nheight: drives towards plane
-    force += vec2(i,j) * nheight;
+    force += normalize(ndir) * slope;
     n++;
   }
 
   if (n > 0) 
   {
     force /= n; 
-    force = normalize(force);
   }
 
-  /*if (height < EPSILON) //on the floor*/
-  /*{*/
-    /*force *= -1.0;*/
-  /*}*/
+  if (height < EPSILON) //on the floor
+  {
+    force *= -1.0;
+  }
 
-  gl_FragColor = vec4( force, 0., 1. );
+  gl_FragColor = vec4( force, 0.,1.);
 
   /*float height = texture2DRect(data,loc).r;*/
   /*float vis = lerp2d( height, 0.,200., 0.,1.);*/

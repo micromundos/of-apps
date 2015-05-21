@@ -37,6 +37,7 @@ class ParticleFlowFieldSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
+      int ff_width = ff_data->output.width();
 
       float* field = NULL;
       //XXX gpu -> cpu
@@ -62,7 +63,7 @@ class ParticleFlowFieldSystem : public ECSsystem
       for (int i = 0; i < n; i++)
       {
         b2Vec2& loc = locs[i]; 
-        get_force( field, loc, ff_data, ff_loc, screen_loc, force );
+        get_force( field, loc, ff_data, ff_width, ff_loc, screen_loc, force );
         b2ps->ParticleApplyForce( i, force );
       }
 
@@ -84,15 +85,17 @@ class ParticleFlowFieldSystem : public ECSsystem
     void update_screen2ff()
     {
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
+      int ff_width = ff_data->output.width();
+      int ff_height = ff_data->output.height();
       RenderComponent* render_data = require_component<RenderComponent>("output");
-      screen2ff.set( render_data->width, render_data->height, ff_data->width, ff_data->height );
+      screen2ff.set( render_data->width, render_data->height, ff_width, ff_height ); 
     };
 
-    void get_force( float* field, const b2Vec2& loc, FlowFieldComponent* ff_data, ofVec2f& ff_loc, ofVec2f& screen_loc, b2Vec2& force )
+    void get_force( float* field, const b2Vec2& loc, FlowFieldComponent* ff_data, int ff_width, ofVec2f& ff_loc, ofVec2f& screen_loc, b2Vec2& force )
     {
       fisica->world2screen(loc,screen_loc);
       screen2ff.dst(screen_loc,ff_loc);
-      int i = ((int)ff_loc.x + (int)ff_loc.y * ff_data->width) * 4; //chann:rgba
+      int i = ((int)ff_loc.x + (int)ff_loc.y * ff_width) * 4; //chann:rgba
       force.Set( field[i], field[i+1] );
     };
 

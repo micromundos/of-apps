@@ -57,7 +57,6 @@ class KinectSystem : public ECSsystem
       // ir, rgb, texture
       kinect.init( false, false, true );
       kinect.open();
-
     };
 
     virtual void processEntity(Entity &e) 

@@ -41,7 +41,7 @@ class DepthFlowFieldSystem : public ECSsystem
       int h = _input.height();
 
       output(e).init("glsl/flowfield.frag",w,h);
-      debug.init("glsl/debug.frag",w,h);
+      debug.init("glsl/flowfield_debug.frag",w,h);
     };
 
     virtual void processEntity(Entity &e) 

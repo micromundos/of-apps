@@ -39,8 +39,11 @@ class DepthProcessingSystem : public ECSsystem
       cml_data = require_component<CamaraLucidaComponent>("output");
 
       depth_data = depth_m.get(e);
-      int w = depth_data->width;
-      int h = depth_data->height;
+
+      float scale = 1.;
+
+      int w = depth_data->width * scale;
+      int h = depth_data->height * scale;
 
       depth_f.init( depth_data, w, h );
 
@@ -86,19 +89,20 @@ class DepthProcessingSystem : public ECSsystem
       if ( !depth_data->dirty )
         return; 
 
+      ofTexture* depth_ftex = NULL;
+
+      TS_START("DepthProcessingSystem update depth data");
+      depth_ftex = &(depth_f.update( depth_data ));
+      TS_STOP("DepthProcessingSystem update depth data");
+
       TS_START("DepthProcessingSystem");
 
-      int w = depth_data->width;
-      int h = depth_data->height; 
-
-      ofTexture& depth_ftex = depth_f.update( depth_data );
-
       //output(e)
-        //.set( "depth_map", depth_ftex )
+        //.set( "depth_map", *depth_ftex )
         //.update(); 
 
       depth_3d
-        .set( "depth_map", depth_ftex )
+        .set( "depth_map", *depth_ftex )
         .update();
 
       //normals
