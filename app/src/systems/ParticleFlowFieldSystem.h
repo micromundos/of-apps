@@ -40,10 +40,13 @@ class ParticleFlowFieldSystem : public ECSsystem
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
 
       //XXX gpu -> cpu
-      float* field = ff_data->process.get_data();
-      if (field == NULL) return;
-
-      //if ((ofGetFrameNum()%(60*3))<10) log(field,ff_data->width,ff_data->height);
+      float* field = input(e).get_data();
+      if (field == NULL) 
+      {
+        ofLogWarning("ParticleFlowFieldSystem")
+          << "flow field input process has no data";
+        return;
+      }
 
       b2ParticleSystem* b2ps = ps->b2_particles();
 
@@ -72,6 +75,11 @@ class ParticleFlowFieldSystem : public ECSsystem
     FisicaSystem* fisica;
 
     CoordMap screen2ff;
+
+    gpgpu::Process& input(Entity &e)
+    {
+      return require_component<FlowFieldComponent>("input")->output;
+    };
 
     void update_screen2ff()
     {

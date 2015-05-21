@@ -43,18 +43,19 @@ class DepthProcessingSystem : public ECSsystem
 
       depth_f.init( depth_data, w, h );
 
-      debug.init("glsl/depth_process_debug.frag",w,h);
-      process(e).init("glsl/depth_process.frag",w,h);
-      //depth_3d.init("glsl/depth_3d.frag",w,h);
-      //height_map.init("glsl/height_map.frag",w,h);
-      //process(e).init("glsl/depth_segmentation.frag",w,h);
+      //output(e).init("glsl/depth_process.frag",w,h);
+      normals.init("glsl/normals.frag",w,h);
+      depth_3d.init("glsl/depth_3d.frag",w,h);
+      height_map.init("glsl/height_map.frag",w,h);
+      output(e).init("glsl/depth_segmentation.frag",w,h);
+      debug.init("glsl/depth_segmentation_debug.frag",w,h);
 
       ofAddListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
-      ofAddListener( process(e).on_update, this, &DepthProcessingSystem::update_depth_process );
-      //ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
-      //ofAddListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
-      //ofAddListener( process(e).on_update, this, &DepthProcessingSystem::update_depth_seg );
+      //ofAddListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_process );
+      ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
+      ofAddListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
+      ofAddListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_seg );
 
       //ofFloatPixels& output = get_output(e);
       //output.allocate( w, h, channels );
@@ -65,10 +66,10 @@ class DepthProcessingSystem : public ECSsystem
     {
       ofRemoveListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
-      ofRemoveListener( process(e).on_update, this, &DepthProcessingSystem::update_depth_process );
-      //ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
-      //ofRemoveListener( process(e).on_update, this, &DepthProcessingSystem::update_height_map );
-      //ofRemoveListener( process(e).on_update, this, &DepthProcessingSystem::update_depth_seg );
+      //ofRemoveListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_process );
+      ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
+      ofRemoveListener( output(e).on_update, this, &DepthProcessingSystem::update_height_map );
+      ofRemoveListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_seg );
 
       depth_proc_data = NULL;
       plane_calib_data = NULL;
@@ -89,24 +90,31 @@ class DepthProcessingSystem : public ECSsystem
 
       ofTexture& depth_ftex = depth_f.update( depth_data );
 
-      process(e)
+      //output(e)
+        //.set( "depth_map", depth_ftex )
+        //.update(); 
+
+      depth_3d
         .set( "depth_map", depth_ftex )
         .update();
 
-      if ( depth_proc_data->render ) 
-        debug
-          .set( "data", process(e).get() )
-          .update();
-
-      //depth_3d
-        //.set( "depth_map", depth_ftex )
-        //.update();
-      //height_map
+      //normals
         //.set( "depth_3d", depth_3d.get() )
         //.update();
-      //process(e)
-        //.set( "height_map", height_map.get() )
-        //.update(); 
+
+      height_map
+        .set( "depth_3d", depth_3d.get() )
+        .update();
+
+      output(e)
+        .set( "height_map", height_map.get() )
+        //.set( "normals", normals.get() )
+        .update(); 
+
+      if ( depth_proc_data->render ) 
+        debug
+          .set( "data", output(e).get() )
+          .update();
 
       //ofFloatPixels& output = get_output(e);
       //output.setFromPixels( depth_proc.get_data(), w, h, channels );
@@ -125,7 +133,7 @@ class DepthProcessingSystem : public ECSsystem
       ofSetColor(255);
 
       debug.get().draw( 0, 0, rw, rh );
-      //process(e).get().draw( 0, 0, rw, rh );
+      //output(e).get().draw( 0, 0, rw, rh );
 
       ofPopStyle();
     };
@@ -167,6 +175,12 @@ class DepthProcessingSystem : public ECSsystem
     void update_depth_seg( ofShader& shader )
     {
       if ( !depth_proc_data ) return;
+      if ( !plane_calib_data ) return;
+
+      ofxPlane& p = plane_calib_data->plane;
+      shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
+      shader.setUniform1f("threshold_plane", depth_proc_data->threshold_plane);
+
       shader.setUniform1f("threshold_near", depth_proc_data->threshold_near);
       shader.setUniform1f("threshold_far", depth_proc_data->threshold_far);
     };
@@ -174,8 +188,10 @@ class DepthProcessingSystem : public ECSsystem
   private:
 
     DepthFloatData depth_f;
+    gpgpu::Process normals;
+    gpgpu::Process depth_3d;
+    gpgpu::Process height_map;
     gpgpu::Process debug;
-    //gpgpu::Process depth_3d,height_map;
 
     int channels;
 
@@ -186,9 +202,9 @@ class DepthProcessingSystem : public ECSsystem
     CamaraLucidaComponent* cml_data;
     DepthComponent* depth_data;
 
-    gpgpu::Process& process(Entity &e)
+    gpgpu::Process& output(Entity &e)
     {
-      return depth_processing_m.get(e)->process;
+      return depth_processing_m.get(e)->output;
     };
 
     //ofFloatPixels& get_output(Entity &e)

@@ -9,7 +9,7 @@ class FlowFieldComponent : public ECScomponent
 {
   public:
 
-    gpgpu::Process process;
+    gpgpu::Process output;
 
     int width, height;
     ofParameter<bool> render;

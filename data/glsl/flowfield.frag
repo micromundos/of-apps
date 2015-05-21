@@ -8,7 +8,7 @@
  * flowfield
  *
  * in: data
- *  float depth texture
+ *  height map in mm
  * out: 
  *  2d vector field, rgb = xyz
  *
@@ -23,7 +23,9 @@ void main( void )
   vec2 loc = gl_TexCoord[0].st;
   vec2 size = vec2(textureSize2DRect(data,0));
 
-  float ndepth;
+  float height = texture2DRect(data,loc).r;
+
+  float nheight;
   vec2 nloc = vec2(0.,0.);
   vec2 force = vec2(0.,0.);
 
@@ -41,22 +43,27 @@ void main( void )
     if ( nloc.x < 0 || nloc.x >= size.x || nloc.y < 0 || nloc.y >= size.y )
       continue;
 
-    ndepth = texture2DRect( data, nloc ).r;
-    // * ndepth: drives far away from the plane
-    // * -ndepth: drives towards the plane
-    force += vec2(i,j) * ndepth;
+    nheight = texture2DRect( data, nloc ).r;
+    // nheight: drives away from plane
+    // -nheight: drives towards plane
+    force += vec2(i,j) * nheight;
     n++;
   }
 
-  if (n > 0 && force.x != 0 && force.y != 0) 
+  if (n > 0) 
   {
     force /= n; 
-    force = normalize(force) * 1.;
+    force = normalize(force);
   }
+
+  /*if (height < EPSILON) //on the floor*/
+  /*{*/
+    /*force *= -1.0;*/
+  /*}*/
 
   gl_FragColor = vec4( force, 0., 1. );
 
-  /*float depth = texture2DRect(data,loc).r;*/
-  /*float vis = lerp2d( depth, 0.,200., 0.,1.);*/
+  /*float height = texture2DRect(data,loc).r;*/
+  /*float vis = lerp2d( height, 0.,200., 0.,1.);*/
   /*gl_FragColor = vec4(vis,vis,vis,1.);*/
 }

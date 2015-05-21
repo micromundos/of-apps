@@ -35,11 +35,11 @@ class DepthFlowFieldSystem : public ECSsystem
 
       //depth_f.init( depth_data, w, h );
 
-      gpgpu::Process& input = get_input(e);
-      int w = input.width();
-      int h = input.height();
+      gpgpu::Process& _input = input(e);
+      int w = _input.width();
+      int h = _input.height();
 
-      process(e).init("glsl/flowfield.frag",w,h);
+      output(e).init("glsl/flowfield.frag",w,h);
       debug.init("glsl/debug.frag",w,h);
     };
 
@@ -48,17 +48,17 @@ class DepthFlowFieldSystem : public ECSsystem
       DepthComponent* depth_data = depth_m.get(e);
       if ( ! depth_data->dirty ) return;
 
-      DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e); 
+      //DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e); 
 
       //ofTexture& depth_ftex = depth_f.update( depth_data );
 
-      process(e)
+      output(e)
         //.set( "data", depth_ftex )
-        .set( "data", depth_proc_data->process.get() )
+        .set( "data", input(e).get() )
         .update();
 
       debug
-        .set( "data", process(e).get() )
+        .set( "data", output(e).get() )
         .update();
     };
 
@@ -72,8 +72,8 @@ class DepthFlowFieldSystem : public ECSsystem
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
       debug.get().draw( 0, 0, render_data->width, render_data->height );
-      //process(e).get().draw( 0, 0, render_data->width, render_data->height );
-      //get_input(e).get().draw( 0, 0, render_data->width, render_data->height );
+      //output(e).get().draw( 0, 0, render_data->width, render_data->height );
+      //input(e).get().draw( 0, 0, render_data->width, render_data->height );
     };
 
   private:
@@ -85,14 +85,14 @@ class DepthFlowFieldSystem : public ECSsystem
     gpgpu::Process debug;
     //DepthFloatData depth_f;
 
-    gpgpu::Process& process(Entity &e)
+    gpgpu::Process& output(Entity &e)
     {
-      return flowfield_m.get(e)->process;
+      return flowfield_m.get(e)->output;
     };
 
-    gpgpu::Process& get_input(Entity &e)
+    gpgpu::Process& input(Entity &e)
     {
-      return depth_processing_m.get(e)->process;
+      return depth_processing_m.get(e)->output;
     };
 };
 

@@ -87,6 +87,7 @@
             {
                "data" : {
                   "render" : false,
+                  "threshold_plane" : [ 0, 360, 45 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
                   "threshold_near" : [ 0, -200, 200 ]
                },
