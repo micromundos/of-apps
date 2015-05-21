@@ -4,6 +4,7 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "ofxPS3EyeGrabber.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -62,18 +63,22 @@ class Ps3EyeSystem : public ECSsystem
     {
       if (!inited) return;
 
+      TS_START("Ps3EyeSystem update ps3");
       ps3.update();
+      TS_STOP("Ps3EyeSystem update ps3");
 
       RgbComponent* rgb_data = rgb_m.get(e);
       bool dirty = ps3.isFrameNew();
       rgb_data->dirty = dirty;
       if ( dirty )
       {
-        rgb_data->update( ps3.getPixelsRef() );
+        //rgb_data->update( ps3.getPixelsRef() );
+        TS_START("Ps3EyeSystem copy pixels");
         //copy & convert rgba -> rgb
-        //ps3_pix = ps3.getPixelsRef();
-        //ps3_pix.setNumChannels(3);
-        //rgb_data->update( ps3_pix.getPixels() );
+        ps3_pix = ps3.getPixelsRef();
+        ps3_pix.setNumChannels(3);
+        rgb_data->update( ps3_pix );
+        TS_STOP("Ps3EyeSystem copy pixels");
       }
     }; 
 
@@ -103,7 +108,7 @@ class Ps3EyeSystem : public ECSsystem
     ComponentMapper<RgbComponent> rgb_m;
 
     ofxPS3EyeGrabber ps3;
-    //ofPixels ps3_pix;
+    ofPixels ps3_pix;
     ofTexture ps3_tex; //render
     bool inited;
 

@@ -5,6 +5,7 @@
 #include "Components.h"
 #include "ofxGPGPU.h"
 #include "DepthFloatData.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -85,6 +86,8 @@ class DepthProcessingSystem : public ECSsystem
       if ( !depth_data->dirty )
         return; 
 
+      TS_START("DepthProcessingSystem");
+
       int w = depth_data->width;
       int h = depth_data->height; 
 
@@ -118,6 +121,8 @@ class DepthProcessingSystem : public ECSsystem
 
       //ofFloatPixels& output = get_output(e);
       //output.setFromPixels( depth_proc.get_data(), w, h, channels );
+
+			TS_STOP("DepthProcessingSystem");
     }; 
 
     virtual void renderEntity(Entity &e)

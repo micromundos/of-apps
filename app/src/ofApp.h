@@ -9,6 +9,7 @@
 #include "keys.h"
 
 #include "data_path.h"
+#include "ofxTimeMeasurements.h"
 
 class ofApp : public ofBaseApp
 {
@@ -37,6 +38,8 @@ class ofApp : public ofBaseApp
 
     CamaraLucidaComponent* cml_data;
     void render_texture(ofEventArgs &args);
+
+    void init_time_measurements();
 
 };
 
