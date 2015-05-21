@@ -41,7 +41,7 @@ class ParticleFlowFieldSystem : public ECSsystem
       float* field = NULL;
       //XXX gpu -> cpu
       TS_START("ParticleFlowFieldSystem get data gpu->cpu");
-      field = ff_data->process.get_data();
+      field = ff_data->output.get_data();
       TS_STOP("ParticleFlowFieldSystem get data gpu->cpu");
       if (field == NULL) 
       {
@@ -80,11 +80,6 @@ class ParticleFlowFieldSystem : public ECSsystem
     FisicaSystem* fisica;
 
     CoordMap screen2ff;
-
-    gpgpu::Process& input(Entity &e)
-    {
-      return require_component<FlowFieldComponent>("input")->output;
-    };
 
     void update_screen2ff()
     {
