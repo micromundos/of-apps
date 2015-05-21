@@ -66,9 +66,6 @@ class ArucoSystem : public ECSsystem
       //this->channels = rgb_data->ir ?1:3;
       this->channels = 3;
 
-      rgb_pix.allocate( w, h, channels );
-      rgb_pix.set(0); 
-
       //aruco.setup2d( w, h ); //no calibration, no board config
       aruco.setupXML( aruco_data->calib_rgb_file, w, h );
       //aruco.setThresholdMethod(aruco::MarkerDetector::CANNY);
@@ -88,12 +85,7 @@ class ArucoSystem : public ECSsystem
       int w = rgb_data->width;
       int h = rgb_data->height;
 
-      //copy & convert rgba -> rgb
-      rgb_pix = *(rgb_data->pixels);
-      rgb_pix.setNumChannels(3);
-      //rgb_pix.setFromPixels( rgb_data->pixels, w, h, channels );
-
-      aruco.detectMarkers( rgb_pix );
+      aruco.detectMarkers( *(rgb_data->pixels) );
       vector<aruco::Marker>& markers = aruco.getMarkers();
 
       //ofLog() << "aruco update" 
@@ -170,7 +162,6 @@ class ArucoSystem : public ECSsystem
     vector< shared_ptr<Bloq> > bloqs; //move to ArucoComponent?
 
     ofxAruco aruco;
-    ofPixels rgb_pix; 
     int channels;
     bool inited;
 

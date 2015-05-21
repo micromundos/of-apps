@@ -4,6 +4,7 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "ofxCamaraLucida.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -84,7 +85,9 @@ class CamaraLucidaSystem : public ECSsystem
       if ( !depth_data->dirty )
         return;
 
+      TS_START("CamaraLucidaSystem");
       cml_data->cml->update( depth_data->depth_ofpix_mm->getPixels() );
+      TS_STOP("CamaraLucidaSystem");
     };
 
     void update_render_data(bool& enabled)

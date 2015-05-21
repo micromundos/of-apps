@@ -7,6 +7,7 @@
 #include "ofxCv.h"
 #include "ofxGPGPU.h"
 #include "DepthFloatData.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -48,6 +49,8 @@ class DepthFlowFieldSystem : public ECSsystem
       DepthComponent* depth_data = depth_m.get(e);
       if ( ! depth_data->dirty ) return;
 
+      TS_START("DepthFlowFieldSystem");
+
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e); 
 
       //ofTexture& depth_ftex = depth_f.update( depth_data );
@@ -60,6 +63,8 @@ class DepthFlowFieldSystem : public ECSsystem
       debug
         .set( "data", process(e).get() )
         .update();
+
+      TS_STOP("DepthFlowFieldSystem");
     };
 
     virtual void renderEntity(Entity &e)

@@ -6,6 +6,7 @@
 #include "systems/ParticleSystem.h"
 #include "ofEventUtils.h"
 #include "CoordMap.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -35,15 +36,18 @@ class ParticleFlowFieldSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      //ofLogNotice("ParticleFlowFieldSystem") << "update";
-
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
 
+      float* field = NULL;
       //XXX gpu -> cpu
-      float* field = ff_data->process.get_data();
+      TS_START("ParticleFlowFieldSystem get data gpu->cpu");
+      field = ff_data->process.get_data();
+      TS_STOP("ParticleFlowFieldSystem get data gpu->cpu");
       if (field == NULL) return;
 
       //if ((ofGetFrameNum()%(60*3))<10) log(field,ff_data->width,ff_data->height);
+
+      TS_START("ParticleFlowFieldSystem");
 
       b2ParticleSystem* b2ps = ps->b2_particles();
 
@@ -59,6 +63,7 @@ class ParticleFlowFieldSystem : public ECSsystem
         b2ps->ParticleApplyForce( i, force );
       }
 
+      TS_STOP("ParticleFlowFieldSystem");
     };
 
     virtual void renderEntity(Entity &e)

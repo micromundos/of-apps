@@ -5,6 +5,7 @@
 #include "Components.h"
 #include "ofxKinect.h"
 #include "ofxCv.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -61,9 +62,9 @@ class KinectSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      //ofLogNotice("KinectSystem") << "process entity " << e.getId();
-
+      TS_START("KinectSystem update kinect");
       kinect.update();
+      TS_STOP("KinectSystem update kinect");
 
       DepthComponent* depth_data = depth_m.get(e);
       //RgbComponent* rgb_data = rgb_m.get(e);
@@ -75,6 +76,8 @@ class KinectSystem : public ECSsystem
       if ( !dirty ) return;
 
       //calc_fps();
+
+      TS_START("KinectSystem flip");
 
       if ( !depth_data->flip )
       {
@@ -94,6 +97,8 @@ class KinectSystem : public ECSsystem
         depth_data->update( f_depth_ofpix_mm );
         depth_data->update( depth_ofpix_grey );
       }
+
+      TS_STOP("KinectSystem flip");
     };
 
     virtual void renderEntity(Entity &e)

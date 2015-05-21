@@ -15,5 +15,10 @@ namespace keys
   const char cml_key_scene_zoom = 'z';
   const char cml_key_scene_reset = 'x';
   const char cml_key_view_next = 'v';
+
+  //time measurements
+  const char tm_toggle = 'Y';
+  //const char tm_avg = 'A';
+  //const char tm_edit = 'T';
 };
 
