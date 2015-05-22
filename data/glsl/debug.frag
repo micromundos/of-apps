@@ -16,13 +16,12 @@ void main( void )
     vec2 p2 = gl_TexCoord[0].st;
     vec4 _in = texture2DRect(data, p2);
 
-    /*vec3 _out = 0.5 + 0.5 * normalize(_in.rgb);*/
-    vec3 _out = vec3(
-      lerp2d( _in.x, -1.,1., 0.,1.),
-      lerp2d( _in.y, -1.,1., 0.,1.),
-      lerp2d( _in.z, -1.,1., 0.,1.)
+    /*gl_FragColor = 0.5 + 0.5 * normalize(_in.rgba);*/
+    gl_FragColor = vec4(
+      lerp2d( _in.r, -1.,1., 0.,1.),
+      lerp2d( _in.g, -1.,1., 0.,1.),
+      lerp2d( _in.b, -1.,1., 0.,1.),
+      lerp2d( _in.a, -1.,1., 0.,1.)
     );
-
-    gl_FragColor = vec4( _out, 1. );
 }
 

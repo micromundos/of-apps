@@ -18,12 +18,22 @@ void main( void )
 
     /*_in = normalize(_in);*/
 
-    float r = 1.;
-    vec3 _out = vec3(
-      lerp2d( _in.x, -r,r, 0.,1.),
-      lerp2d( _in.y, -r,r, 0.,1.),
-      lerp2d( _in.z, -r,r, 0.,1.)
-    );
+    vec3 _out;
+
+    /*if ( _in.x == 0. && _in.y == 0. )*/
+    /*{*/
+      /*_out = vec3(0.5,0.5,0.5);//gris*/
+    /*}*/
+    /*else*/
+    /*{*/
+      float r = 1.;
+      _out = vec3(
+        lerp2d( _in.x, -r,r, 0.,1.),
+        lerp2d( _in.y, -r,r, 0.,1.),
+        lerp2d( _in.z, -r,r, 0.,1.)
+        /*0.0 //sin azul*/
+      );
+    /*}*/
 
     gl_FragColor = vec4( _out, 1.);
 }

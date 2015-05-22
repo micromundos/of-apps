@@ -107,7 +107,7 @@ void ofApp::init_time_measurements()
   //1.0 gets you no averaging at all
   //use lower values to get steadier readings
   TIME_SAMPLE_SET_AVERAGE_RATE(0.1);
-  TIME_SAMPLE_DISABLE_AVERAGE();
+  //TIME_SAMPLE_DISABLE_AVERAGE();
 
   //inactive threads will be dropped from the table
   TIME_SAMPLE_SET_REMOVE_EXPIRED_THREADS(true);

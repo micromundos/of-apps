@@ -33,10 +33,10 @@ void main( void )
     vec3 n = vec3(texture2DRect(depth_3d,vec2( p2.x, p2.y - i )));
 
     /* east */
-    vec3 e = vec3(texture2DRect(depth_3d,vec2( p2.x - i, p2.y )));
+    vec3 e = vec3(texture2DRect(depth_3d,vec2( p2.x + i, p2.y )));
 
     /* west */
-    vec3 w = vec3(texture2DRect(depth_3d,vec2( p2.x + i, p2.y ))); 
+    vec3 w = vec3(texture2DRect(depth_3d,vec2( p2.x - i, p2.y ))); 
 
     /* edges */
     vec3 xe = p3 - e;

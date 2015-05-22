@@ -78,7 +78,7 @@
                   "planes_num" : [ 20, 0, 100 ],
                   "radius_step" : [ 6, 0, 30 ],
                   "angle_step" : [ 30, 0, 360 ],
-                  "render_plane" : false,
+                  "render_plane" : true,
                   "render_planes_list" : false,
                   "filename" : "calib/plane.yml"
                },
@@ -87,7 +87,8 @@
             {
                "data" : {
                   "render" : false,
-                  "threshold_plane" : [ 0, 360, 45 ],
+                  "render_normals" : false,
+                  "threshold_plane" : [ 45, 0, 360 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
                   "threshold_near" : [ 0, -200, 200 ]
                },

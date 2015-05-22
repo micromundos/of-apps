@@ -32,10 +32,20 @@ class DepthFloatData
     ofTexture& update( DepthComponent* depth_data )
     {
       pix_mm.setFromPixels( depth_data->f_depth_ofpix_mm->getPixels(), depth_data->width, depth_data->height, channels );
-      ofxCv::resize( pix_mm, pix_resized, xscale, yscale );
-      tex.loadData( pix_resized );
+
+      if ( xscale != 1.0 || yscale != 1.0 )
+      {
+        ofxCv::resize( pix_mm, pix_resized, xscale, yscale );
+        tex.loadData( pix_resized );
+      }
+      else 
+        tex.loadData( pix_mm );
+
       return tex;
     };
+
+    int width() { return w; };
+    int height() { return h; };
 
     void dispose()
     {

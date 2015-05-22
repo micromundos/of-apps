@@ -1,10 +1,3 @@
-
-/* DEPRECATED */
-/* DEPRECATED */
-/* DEPRECATED */
-/* DEPRECATED */
-/* DEPRECATED */
-
 #pragma once
 
 #include <Artemis/Artemis.h>

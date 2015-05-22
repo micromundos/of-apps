@@ -12,6 +12,7 @@ class DepthProcessingComponent : public ECScomponent
     gpgpu::Process output;
 
     ofParameter<bool> render;
+    ofParameter<bool> render_normals;
     ofParameter<float> threshold_plane;
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;
@@ -26,6 +27,7 @@ class DepthProcessingComponent : public ECScomponent
       param(threshold_near, "threshold_near");
       param(threshold_far, "threshold_far");
       param(render, "render");
+      param(render_normals, "render_normals");
     };
 
 };
