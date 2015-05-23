@@ -49,7 +49,7 @@ class DepthProcessingSystem : public ECSsystem
       depth_f.init( depth_data, dw, dh );
       depth_3d.init("glsl/depth_3d.frag",dw,dh);
 
-      height_map.init("glsl/height_map.frag",w,h);
+      height_map.init("glsl/height_map.frag",w,h); 
 
       //depth_bilateral.init("glsl/bilateral.frag",dw,dh);
       //depth_bilateral_debug.init("glsl/depth_debug.frag",dw,dh);
@@ -60,6 +60,9 @@ class DepthProcessingSystem : public ECSsystem
       normals_bilateral.init("glsl/bilateral.frag",w,h);
       normals_bilateral_debug.init("glsl/debug.frag",w,h);
 
+      plane_angles.init("glsl/plane_angles.frag",w,h);
+      plane_angles_debug.init("glsl/plane_angles_debug.frag",w,h);
+
       output(e).init("glsl/depth_segmentation.frag",w,h);
       output_debug.init("glsl/depth_segmentation_debug.frag",w,h);
 
@@ -67,6 +70,7 @@ class DepthProcessingSystem : public ECSsystem
 
       ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
       ofAddListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
+      ofAddListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
       ofAddListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_seg );
     }; 
 
@@ -75,7 +79,8 @@ class DepthProcessingSystem : public ECSsystem
       ofRemoveListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
       ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
-      ofRemoveListener( output(e).on_update, this, &DepthProcessingSystem::update_height_map );
+      ofRemoveListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
+      ofRemoveListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
       ofRemoveListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_seg );
 
       depth_proc_data = NULL;
@@ -123,9 +128,14 @@ class DepthProcessingSystem : public ECSsystem
         .set( "depth_3d", depth_3d_scaled )
         .update();
 
+      plane_angles
+        .set( "normals", normals_bilateral.get() )
+        .update();
+
       output(e)
         .set( "height_map", height_map.get() )
-        .set( "normals", normals_bilateral.get() )
+        .set( "plane_angles", plane_angles.get() )
+        //.set( "normals", normals_bilateral.get() )
         .update(); 
 
       if ( depth_proc_data->render ) 
@@ -136,6 +146,11 @@ class DepthProcessingSystem : public ECSsystem
       if ( depth_proc_data->render_normals ) 
         normals_debug
           .set( "data", normals.get() )
+          .update();
+
+      if ( depth_proc_data->render_plane_angles ) 
+        plane_angles_debug
+          .set( "data", plane_angles.get() )
           .update();
 
       if ( depth_proc_data->render_smooth ) 
@@ -154,6 +169,7 @@ class DepthProcessingSystem : public ECSsystem
       if ( !depth_proc_data->render
           && !depth_proc_data->render_normals
           && !depth_proc_data->render_smooth
+          && !depth_proc_data->render_plane_angles
        ) return;
 
       TS_START("DepthProcessingSystem render");
@@ -170,6 +186,9 @@ class DepthProcessingSystem : public ECSsystem
 
       if (depth_proc_data->render_normals)
         normals_debug.get().draw( 0, 0, rw, rh );
+
+      if (depth_proc_data->render_plane_angles)
+        plane_angles_debug.get().draw( 0, 0, rw, rh );
 
       if (depth_proc_data->render_smooth)
         //depth_bilateral_debug.get().draw( 0, 0, rw, rh );
@@ -208,13 +227,20 @@ class DepthProcessingSystem : public ECSsystem
       shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
     };
 
+    void update_plane_angles( ofShader& shader )
+    {
+      if ( !plane_calib_data ) return;
+      ofxPlane& p = plane_calib_data->plane;
+      shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
+    };
+
     void update_depth_seg( ofShader& shader )
     {
       if ( !depth_proc_data ) return;
       if ( !plane_calib_data ) return;
 
-      ofxPlane& p = plane_calib_data->plane;
-      shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
+      //ofxPlane& p = plane_calib_data->plane;
+      //shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
       shader.setUniform1f("threshold_plane", depth_proc_data->threshold_plane);
 
       shader.setUniform1f("threshold_near", depth_proc_data->threshold_near);
@@ -223,6 +249,7 @@ class DepthProcessingSystem : public ECSsystem
 
   private:
 
+    gpgpu::Process height_map;
     gpgpu::Process output_debug;
 
     DepthFloatData depth_f;
@@ -237,7 +264,8 @@ class DepthProcessingSystem : public ECSsystem
     //gpgpu::Process depth_bilateral;
     //gpgpu::Process depth_bilateral_debug;
 
-    gpgpu::Process height_map;
+    gpgpu::Process plane_angles;
+    gpgpu::Process plane_angles_debug;
 
     float scale;
     int channels;

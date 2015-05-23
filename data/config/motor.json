@@ -89,7 +89,8 @@
                   "render" : false,
                   "render_normals" : false,
                   "render_smooth" : false,
-                  "threshold_plane" : [ 120, 0, 360 ],
+                  "render_plane_angles" : false,
+                  "threshold_plane" : [ 45, 0, 360 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
                   "threshold_near" : [ 0, -200, 200 ]
                },

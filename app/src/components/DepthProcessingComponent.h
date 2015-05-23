@@ -14,6 +14,7 @@ class DepthProcessingComponent : public ECScomponent
     ofParameter<bool> render;
     ofParameter<bool> render_normals;
     ofParameter<bool> render_smooth;
+    ofParameter<bool> render_plane_angles;
 
     ofParameter<float> threshold_plane;
     ofParameter<float> threshold_near;
@@ -31,6 +32,7 @@ class DepthProcessingComponent : public ECScomponent
       param(render, "render");
       param(render_normals, "render_normals");
       param(render_smooth, "render_smooth");
+      param(render_plane_angles, "render_plane_angles");
     };
 
 };

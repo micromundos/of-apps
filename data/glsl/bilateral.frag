@@ -5,7 +5,7 @@
  * bilateral filter
  * code by
  * Nicolas Seiller 
- * http://image.inha.ac.kr/oopgpu/index.php?page=glsl
+ * http://image.inha.ac.kr/oopgpu/documentation/_g_l_s_l_bilateral_processor_8h_source.html
  */
 
 uniform sampler2DRect data;  
