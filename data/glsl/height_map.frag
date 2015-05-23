@@ -16,7 +16,7 @@ uniform vec4 plane;
 
 void main( void ) 
 {
-  vec3 p3 = texture2DRect( depth_3d, gl_TexCoord[0].st ).xyz;
+  vec3 p3 = texture2DRect( depth_3d, gl_TexCoord[0].xy ).xyz;
   float height = plane_distance( plane, p3 );
   gl_FragColor = vec4( height, height, height, 1. );
 

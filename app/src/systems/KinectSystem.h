@@ -76,8 +76,6 @@ class KinectSystem : public ECSsystem
 
       //calc_fps();
 
-      TS_START("KinectSystem flip");
-
       if ( !depth_data->flip )
       {
         depth_data->update( kinect.getRawDepthPixelsRef() );
@@ -87,6 +85,8 @@ class KinectSystem : public ECSsystem
 
       else
       {
+        TS_START("KinectSystem flip");
+
         int mode = -1;
         ofxCv::flip( kinect.getRawDepthPixelsRef(), depth_ofpix_mm, mode );
         ofxCv::flip( kinect.getDistancePixelsRef(), f_depth_ofpix_mm, mode );
@@ -95,9 +95,10 @@ class KinectSystem : public ECSsystem
         depth_data->update( depth_ofpix_mm );
         depth_data->update( f_depth_ofpix_mm );
         depth_data->update( depth_ofpix_grey );
+
+        TS_STOP("KinectSystem flip");
       }
 
-      TS_STOP("KinectSystem flip");
     };
 
     virtual void renderEntity(Entity &e)
@@ -125,7 +126,6 @@ class KinectSystem : public ECSsystem
       }
 
       ofPopStyle();
-
     };
 
   private: 

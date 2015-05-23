@@ -47,6 +47,8 @@ class DepthFlowFieldSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     { 
       DepthComponent* depth_data = depth_m.get(e);
+      FlowFieldComponent* ff_data = flowfield_m.get(e); 
+
       if ( ! depth_data->dirty ) return;
 
       TS_START("DepthFlowFieldSystem");
@@ -59,9 +61,10 @@ class DepthFlowFieldSystem : public ECSsystem
         .set( "data", input(e).get() )
         .update();
 
-      debug
-        .set( "data", output(e).get() )
-        .update();
+      if ( ff_data->render )
+        debug
+          .set( "data", output(e).get() )
+          .update();
 
       TS_STOP("DepthFlowFieldSystem");
     };
@@ -73,11 +76,15 @@ class DepthFlowFieldSystem : public ECSsystem
       if ( !ff_data->render )
         return;
 
+      TS_START("DepthFlowFieldSystem render");
+
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
       debug.get().draw( 0, 0, render_data->width, render_data->height );
       //output(e).get().draw( 0, 0, render_data->width, render_data->height );
       //input(e).get().draw( 0, 0, render_data->width, render_data->height );
+
+      TS_STOP("DepthFlowFieldSystem render");
     };
 
   private:

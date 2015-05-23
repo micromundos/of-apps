@@ -49,13 +49,19 @@ class DepthProcessingSystem : public ECSsystem
       depth_f.init( depth_data, dw, dh );
       depth_3d.init("glsl/depth_3d.frag",dw,dh);
 
-      normals.init("glsl/normals.frag",w,h);
-      normals_bilateral.init("glsl/bilateral.frag",w,h);
       height_map.init("glsl/height_map.frag",w,h);
-      output(e).init("glsl/depth_segmentation.frag",w,h);
 
-      debug.init("glsl/depth_segmentation_debug.frag",w,h);
-      debug_normals.init("glsl/debug.frag",w,h);
+      //depth_bilateral.init("glsl/bilateral.frag",dw,dh);
+      //depth_bilateral_debug.init("glsl/depth_debug.frag",dw,dh);
+
+      normals.init("glsl/normals.frag",w,h);
+      normals_debug.init("glsl/debug.frag",w,h);
+
+      normals_bilateral.init("glsl/bilateral.frag",w,h);
+      normals_bilateral_debug.init("glsl/debug.frag",w,h);
+
+      output(e).init("glsl/depth_segmentation.frag",w,h);
+      output_debug.init("glsl/depth_segmentation_debug.frag",w,h);
 
       ofAddListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
@@ -94,18 +100,20 @@ class DepthProcessingSystem : public ECSsystem
 
       TS_START("DepthProcessingSystem");
 
+      //depth_bilateral
+        //.set( "data", *depth_ftex )
+        //.update();
+
       depth_3d
         .set( "depth_map", *depth_ftex )
+        //.set( "depth_map", depth_bilateral.get() )
         .update();
 
-      if ( scale != 1.0 )
-      {
-        depth_3d.get_scaled(scale,depth_3d_scaled);
-      }
+      ofTexture depth_3d_scaled = depth_3d.get_scaled( scale );
 
       normals
         .set( "depth_3d", depth_3d_scaled )
-        .update();
+        .update(); 
 
       normals_bilateral
         .set( "data", normals.get() )
@@ -121,23 +129,34 @@ class DepthProcessingSystem : public ECSsystem
         .update(); 
 
       if ( depth_proc_data->render ) 
-        debug
+        output_debug
           .set( "data", output(e).get() )
           .update();
 
       if ( depth_proc_data->render_normals ) 
-        debug_normals
+        normals_debug
+          .set( "data", normals.get() )
+          .update();
+
+      if ( depth_proc_data->render_smooth ) 
+        //depth_bilateral_debug
+          //.set( "data", depth_bilateral.get() )
+          //.update();
+        normals_bilateral_debug
           .set( "data", normals_bilateral.get() )
           .update();
 
-			TS_STOP("DepthProcessingSystem");
+      TS_STOP("DepthProcessingSystem");
     }; 
 
     virtual void renderEntity(Entity &e)
     {
       if ( !depth_proc_data->render
-          && !depth_proc_data->render_normals) 
-        return;
+          && !depth_proc_data->render_normals
+          && !depth_proc_data->render_smooth
+       ) return;
+
+      TS_START("DepthProcessingSystem render");
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
       int rw = render_data->width;
@@ -147,13 +166,18 @@ class DepthProcessingSystem : public ECSsystem
       ofSetColor(255);
 
       if (depth_proc_data->render)
-        debug.get().draw( 0, 0, rw, rh );
-        //output(e).get().draw( 0, 0, rw, rh );
+        output_debug.get().draw( 0, 0, rw, rh );
 
       if (depth_proc_data->render_normals)
-        debug_normals.get().draw( 0, 0, rw, rh );
+        normals_debug.get().draw( 0, 0, rw, rh );
+
+      if (depth_proc_data->render_smooth)
+        //depth_bilateral_debug.get().draw( 0, 0, rw, rh );
+        normals_bilateral_debug.get().draw( 0, 0, rw, rh );
 
       ofPopStyle();
+
+      TS_STOP("DepthProcessingSystem render");
     };
 
     void update_depth_3d( ofShader& shader )
@@ -199,15 +223,21 @@ class DepthProcessingSystem : public ECSsystem
 
   private:
 
+    gpgpu::Process output_debug;
+
     DepthFloatData depth_f;
     gpgpu::Process depth_3d;
-    gpgpu::Process normals;
-    gpgpu::Process normals_bilateral;
-    gpgpu::Process height_map;
-    gpgpu::Process debug;
-    gpgpu::Process debug_normals;
 
-    ofTexture depth_3d_scaled;
+    gpgpu::Process normals;
+    gpgpu::Process normals_debug;
+
+    gpgpu::Process normals_bilateral;
+    gpgpu::Process normals_bilateral_debug;
+
+    //gpgpu::Process depth_bilateral;
+    //gpgpu::Process depth_bilateral_debug;
+
+    gpgpu::Process height_map;
 
     float scale;
     int channels;

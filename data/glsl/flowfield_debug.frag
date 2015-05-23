@@ -13,7 +13,7 @@ uniform sampler2DRect data;
 
 void main( void ) 
 {
-    vec2 p2 = gl_TexCoord[0].st;
+    vec2 p2 = gl_TexCoord[0].xy;
     vec3 _in = texture2DRect(data, p2).xyz;
 
     /*_in = normalize(_in);*/

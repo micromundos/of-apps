@@ -41,9 +41,9 @@ class ParticleFlowFieldSystem : public ECSsystem
 
       float* field = NULL;
       //XXX gpu -> cpu
-      TS_START("ParticleFlowFieldSystem get data gpu->cpu");
+      TS_START("ParticleFlowFieldSystem #gpu->cpu");
       field = ff_data->output.get_data();
-      TS_STOP("ParticleFlowFieldSystem get data gpu->cpu");
+      TS_STOP("ParticleFlowFieldSystem #gpu->cpu");
       if (field == NULL) 
       {
         ofLogWarning("ParticleFlowFieldSystem")

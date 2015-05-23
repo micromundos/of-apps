@@ -21,7 +21,7 @@ uniform float threshold_far;
 
 void main( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].st;
+  vec2 p2 = gl_TexCoord[0].xy;
 
   float height = texture2DRect( height_map , p2 ).r;
 

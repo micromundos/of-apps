@@ -6,6 +6,7 @@
 #include "Bloq.h"
 #include "ofxAruco.h"
 #include "ofxCv.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -80,6 +81,8 @@ class ArucoSystem : public ECSsystem
       if ( !rgb_data->dirty )
         return;
 
+      TS_START("ArucoSystem");
+
       BloqEventsComponent* events = require_component<BloqEventsComponent>("core");
 
       int w = rgb_data->width;
@@ -112,6 +115,8 @@ class ArucoSystem : public ECSsystem
       }
 
       remove_bloqs_missing( events );
+
+      TS_STOP("ArucoSystem");
     }; 
 
     virtual void renderEntity(Entity &e)

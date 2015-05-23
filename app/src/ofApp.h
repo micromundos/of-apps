@@ -10,6 +10,7 @@
 
 #include "data_path.h"
 #include "ofxTimeMeasurements.h"
+#include "ofxGPGPU.h"
 
 class ofApp : public ofBaseApp
 {

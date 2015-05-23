@@ -13,6 +13,8 @@ class DepthProcessingComponent : public ECScomponent
 
     ofParameter<bool> render;
     ofParameter<bool> render_normals;
+    ofParameter<bool> render_smooth;
+
     ofParameter<float> threshold_plane;
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;
@@ -28,6 +30,7 @@ class DepthProcessingComponent : public ECScomponent
       param(threshold_far, "threshold_far");
       param(render, "render");
       param(render_normals, "render_normals");
+      param(render_smooth, "render_smooth");
     };
 
 };

@@ -5,7 +5,7 @@
 
 /*
  * process debug
- * in: data [-1,1]
+ * in: normalized vectors data [-1,1]
  * out: visible data [0,1]
  */
 
@@ -13,7 +13,7 @@ uniform sampler2DRect data;
 
 void main( void ) 
 {
-    vec2 p2 = gl_TexCoord[0].st;
+    vec2 p2 = gl_TexCoord[0].xy;
     vec4 _in = texture2DRect(data, p2);
 
     /*gl_FragColor = 0.5 + 0.5 * normalize(_in.rgba);*/

@@ -15,7 +15,7 @@ void main( void )
 {
     vec2 p2 = gl_TexCoord[0].xy;
     float _in = texture2DRect(data, p2).r;
-    float _out = _in == 0. ? 0. : lerp2d( _in, 0., 500., 0.2, 1. );
+    float _out = lerp2d( _in, 0., 4000., 1., 0. );
     gl_FragColor = vec4( _out, _out, _out, 1. );
 }
 

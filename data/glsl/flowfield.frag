@@ -19,7 +19,7 @@ const int kernel = 6;
 
 void main( void ) 
 {
-  vec2 loc = gl_TexCoord[0].st;
+  vec2 loc = gl_TexCoord[0].xy;
   vec2 size = vec2(textureSize2DRect(data,0));
 
   float height = texture2DRect(data,loc).r;

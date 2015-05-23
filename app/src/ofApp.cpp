@@ -10,6 +10,7 @@ void ofApp::setup()
   //ofSetFrameRate(60.0f); 
   ofSetVerticalSync(false);
 
+  gpgpu::Process::watch("all");
   init_time_measurements();
 
   config.init();

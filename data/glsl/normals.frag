@@ -19,7 +19,7 @@ const int kernel = 1;
 
 void main( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].st;
+  vec2 p2 = gl_TexCoord[0].xy;
   vec3 p3 = texture2DRect( depth_3d, p2 ).xyz;
 
   vec3 normal = vec3(0.);

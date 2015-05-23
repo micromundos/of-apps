@@ -41,6 +41,8 @@ class FisicaSystem : public ECSsystem
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
+      TS_START("FisicaSystem");
+
       _world->SetAllowSleeping(true);
       //debugging
       _world->SetWarmStarting(false);
@@ -54,6 +56,8 @@ class FisicaSystem : public ECSsystem
           vel_iterations,
           pos_iterations,
           particle_iterations);
+
+      TS_STOP("FisicaSystem");
     };
 
     virtual void added(Entity &e) 
