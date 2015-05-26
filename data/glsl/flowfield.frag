@@ -36,8 +36,10 @@ void main( void )
   int black = 0;
   int noblack = 0;
   float dif = 0.0;
-  float h = current_depth;
+  float h = -999.0;
   int neg = 0;
+  vec2 mas_alto = loc;
+
 
   for ( int i = ini; i <= end; i++ )
   for ( int j = ini; j <= end; j++ )
@@ -49,45 +51,62 @@ void main( void )
     if ( nloc.x < 0 || nloc.x >= size.x || nloc.y < 0 || nloc.y >= size.y )
       continue;
 
-    ndepth = texture2DRect( data, nloc ).r;
+ //   ndepth = texture2DRect( data, nloc ).r;
+    // * ndepth: drives far away from the plane
+    // * -ndepth: drives towards the plane
+/*
+    float slope = (ndepth-current_depth);
+
+    if(abs(slope) >= h)
+    {
+
+    	h = slope;
+    	mas_alto = vec2(i,j);
+    }
+
+
+	//force += normalize(vec2(i,j)) * slope;
+    if(slope <= 0.0)
+    {
+    	force -= normalize(vec2(i,j)) * abs(slope);
+    }else{
+    	force += normalize(vec2(i,j)) * abs(slope);
+    }
+
+    */
+
+     ndepth = texture2DRect( data, nloc ).r;
     // * ndepth: drives far away from the plane
     // * -ndepth: drives towards the plane
     force += vec2(i,j) * ndepth;
+
     n++;
-    if(ndepth >= 500.0)
-    {
-    	neg++;
-    }
-    if(abs(ndepth) > h)
-    {
-    	h = ndepth;
-    }
-
   }
+  	
 
-   float m = 1.0;
-  if(h != current_depth)
-  {
-  	if(abs(h-ndepth) > ramp_margin && n == 0.0)
-  	{
-  		m = -1.0;
-  	}
 
-  }else if(h == current_depth)
-  {
-  	m = -1.0;
-  }
-
-  
-
-  if (n > 0 && force.x != 0 && force.y != 0) 
+  if (n > 0) 
   {
     force /= n; 
-    force = normalize(force) * (force_amplifier);
+    force = normalize(force) * force_amplifier;
   }
 
- // force*=m;
+  if (current_depth <= 0.0)
+  	force *= -1.0;
 
+
+/*
+  	h/=n;
+  float a = atan(mas_alto.y-loc.y,mas_alto.x-loc.x);
+  mas_alto = normalize(mas_alto);
+  //force = vec2(cos(a)*h,sin(a)*h);
+
+
+  force = -mas_alto*force_amplifier;
+   if(h <= 0.0)
+  {
+  	force*=0.0;	
+  }*/
 
   gl_FragColor = vec4( force, 0.0, 1. );
 

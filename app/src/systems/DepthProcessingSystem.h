@@ -45,6 +45,9 @@ class DepthProcessingSystem : public ECSsystem
 
       debug.init("glsl/depth_process_debug.frag",w,h);
       process(e).init("glsl/depth_process.frag",w,h);
+      
+      bilateral.init("glsl/bilateral.frag",w,h,true);
+      
       //depth_3d.init("glsl/depth_3d.frag",w,h);
       //height_map.init("glsl/height_map.frag",w,h);
       //process(e).init("glsl/depth_segmentation.frag",w,h);
@@ -88,11 +91,15 @@ class DepthProcessingSystem : public ECSsystem
       int h = depth_data->height; 
 
       ofTexture& depth_ftex = depth_f.update( depth_data );
-
+      
+      
+     // bilateral.set("data", depth_ftex);
+      
       process(e)
-        .set( "depth_map", depth_ftex )
+        .set( "depth_map", depth_ftex)
         .update();
 
+      
       if ( depth_proc_data->render ) 
         debug
           .set( "data", process(e).get() )
@@ -175,6 +182,7 @@ class DepthProcessingSystem : public ECSsystem
 
     DepthFloatData depth_f;
     gpgpu::Process debug;
+    gpgpu::Process bilateral;
     //gpgpu::Process depth_3d,height_map;
 
     int channels;

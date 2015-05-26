@@ -8,7 +8,7 @@ class RgbComponent : public ECScomponent
 {
   public:
 
-    uint8_t* color_pix;
+    ofPixels* pixels;
 
     int width, height;
     bool dirty; 
@@ -17,7 +17,7 @@ class RgbComponent : public ECScomponent
 
     RgbComponent(string _id) : ECScomponent(_id)
     {
-      color_pix = NULL;
+      pixels = NULL;
       dirty = false;
     };
 
@@ -35,9 +35,10 @@ class RgbComponent : public ECScomponent
       this->height = h;
     };
 
-    void update( uint8_t *color_pix )
+    void update( ofPixels& pixels )
     {
-      this->color_pix = color_pix;
+      this->pixels = &pixels;
     };
+
 };
 

@@ -13,7 +13,11 @@ class PlaneCalibComponent : public ECScomponent
     ofxPlane plane; 
     ofxTriangle triangle; 
 
+    string filename;
+
     ofParameter<bool> calibrate;
+    ofParameter<bool> save;
+    ofParameter<bool> load;
     ofParameter<float> planes_num;
     ofParameter<float> radius_step;
     ofParameter<float> angle_step;
@@ -25,12 +29,18 @@ class PlaneCalibComponent : public ECScomponent
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
       ECScomponent::init(e_id,d,p);
+
+      filename = d.get("filename","plane_calib.yml").asString();
+
       param(calibrate, "calibrate");
+      param(save, "save");
+      param(load, "load");
       param(planes_num, "planes_num");
       param(radius_step, "radius_step");
       param(angle_step, "angle_step");
       param(render_plane, "render_plane");
       param(render_planes_list, "render_planes_list");
+      
     };
 
 };

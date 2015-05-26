@@ -32,10 +32,10 @@ void main(void){
     vec3 p0 = gl_PositionIn[0].xyz*vec3(multx,multy,0.0);
     vec3 p1 = p0+(vec3(flowfield.r*line_long*2.0,flowfield.g*line_long*2.0,0.0));
 
-    float   mapr = map(flowfield.r,0.0,1.0,0.0,-1.0);
-    float   mapg = map(flowfield.g,0.0,1.0,0.0,-1.0);
-    float   force = (mapr+mapg)/2.0;
-    vec4    output_color = vec4(1.0,0.0,0.0,1.0);
+    float   mapr = map(flowfield.r,-1.0,1.0,0.0,1.0);
+    float   mapg = map(flowfield.g,-1.0,1.0,0.0,1.0);
+    float   force = length(flowfield.rg);
+    vec4    output_color = vec4(1.0,0.0,0.0,force);
 
     float   angle = atan(p0.y-p1.y,p0.x-p1.x);
 

@@ -5,7 +5,7 @@ void ofApp::setup()
   ofSetDataPathRoot( __data_path__ );
   ofSetWindowPosition(0,0);
   
-  ofSetLogLevel(OF_LOG_SILENT);
+  ofSetLogLevel(OF_LOG_NOTICE);
   
   ofSetFrameRate(60.0f); 
   ofSetVerticalSync(false);

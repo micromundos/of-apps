@@ -38,8 +38,8 @@ class DepthFlowFieldSystem : public ECSsystem
       //depth_f.init( depth_data, w, h );
 
       gpgpu::Process& input = get_input(e);
-      int w = input.width()/2;
-      int h = input.height()/2;
+      int w = input.width();
+      int h = input.height();
       
       ff_resized_input.allocate(w,h,GL_RGBA32F_ARB);
 
@@ -69,16 +69,16 @@ class DepthFlowFieldSystem : public ECSsystem
 
       ff_force_amplifier = flowfield_data->force_amplifier;
       ff_ramp_margin = flowfield_data->ramp_margin;
-      
+      /*
       ff_resized_input.begin();
       ofClear(0,255);
       ofSetColor(255);
-      depth_proc_data->process.get().draw(0,0,320,240);
+      depth_proc_data->process.get().draw(0,0,ff_resized_input.getWidth(),ff_resized_input.getHeight());
       ff_resized_input.end();
-      
+      */
       process(e)
         //.set( "data", depth_ftex )
-        .set( "data", ff_resized_input.getTextureReference())
+        .set( "data", depth_proc_data->process.get())
         .update();
 
       debug

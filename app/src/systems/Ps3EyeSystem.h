@@ -43,7 +43,8 @@ class Ps3EyeSystem : public ECSsystem
       int h = rgb_data->height;
 
       rgb_data->setup( w, h );
-      ps3.initGrabber(w, h);
+      ps3.setDesiredFrameRate(30);
+
       ps3.setAutogain(true);
       ps3.setAutoWhiteBalance(true);
       //ps3.setGain(uint8_t val);
@@ -54,25 +55,25 @@ class Ps3EyeSystem : public ECSsystem
       //ps3.setHue(uint8_t val);
       //ps3.setRedBalance(uint8_t val);
       //ps3.setBlueBalance(uint8_t val);
-    };
-
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      ps3.update();
-      artemis::EntityProcessingSystem::processEntities( bag );
+      ps3.initGrabber(w, h);
     };
 
     virtual void processEntity(Entity &e) 
     {
+      if (!inited) return;
+
+      ps3.update();
+
       RgbComponent* rgb_data = rgb_m.get(e);
       bool dirty = ps3.isFrameNew();
       rgb_data->dirty = dirty;
       if ( dirty )
       {
-        //copy
-        ps3_pix = ps3.getPixelsRef();
-        ps3_pix.setNumChannels(3);
-        rgb_data->update( ps3_pix.getPixels() );
+        rgb_data->update( ps3.getPixelsRef() );
+        //copy & convert rgba -> rgb
+        //ps3_pix = ps3.getPixelsRef();
+        //ps3_pix.setNumChannels(3);
+        //rgb_data->update( ps3_pix.getPixels() );
       }
     }; 
 
@@ -102,7 +103,7 @@ class Ps3EyeSystem : public ECSsystem
     ComponentMapper<RgbComponent> rgb_m;
 
     ofxPS3EyeGrabber ps3;
-    ofPixels ps3_pix;
+    //ofPixels ps3_pix;
     ofTexture ps3_tex; //render
     bool inited;
 

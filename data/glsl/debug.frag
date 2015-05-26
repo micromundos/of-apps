@@ -20,7 +20,7 @@ void main( void )
     vec3 _out = vec3(
       lerp2d( _in.x, -1.,1., 0.,1.),
       lerp2d( _in.y, -1.,1., 0.,1.),
-      lerp2d( _in.z, -1.,1., 0.,1.)
+      0.0
     );
 
 
