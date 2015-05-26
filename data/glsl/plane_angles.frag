@@ -8,8 +8,8 @@
  *  angles to plane [0,PI]
  */
 
-#pragma include "math.glsl"
-#pragma include "geom.glsl"
+#pragma include "lib/math.glsl"
+#pragma include "lib/geom.glsl"
 
 uniform sampler2DRect normals;
 uniform vec4 plane;

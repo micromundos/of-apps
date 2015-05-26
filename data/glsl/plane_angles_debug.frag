@@ -1,7 +1,7 @@
 #version 120
 #extension GL_ARB_texture_rectangle : enable
 
-#pragma include "math.glsl"
+#pragma include "lib/math.glsl"
 
 /*
  * plane angles process debug

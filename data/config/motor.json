@@ -88,11 +88,15 @@
                "data" : {
                   "render" : false,
                   "render_normals" : false,
-                  "render_smooth" : false,
+                  "render_normals_smoothed" : false,
+                  "render_height_smoothed" : false,
                   "render_plane_angles" : false,
+                  "render_entradas" : false,
                   "threshold_plane" : [ 45, 0, 360 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
-                  "threshold_near" : [ 0, -200, 200 ]
+                  "threshold_near" : [ 0, -200, 200 ],
+                  "threshold_entradas_far" : [ 100, -200, 200 ],
+                  "threshold_entradas_near" : [ -100, -200, 200 ]
                },
                "id" : "depth_processing"
             },

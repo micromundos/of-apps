@@ -2,7 +2,7 @@
 #extension GL_EXT_gpu_shader4 : enable
 #extension GL_ARB_texture_rectangle : enable
 
-#pragma include "math.glsl"
+#pragma include "lib/math.glsl"
 
 /*
  * flowfield

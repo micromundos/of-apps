@@ -16,9 +16,9 @@
  * 3) segment the floor plane 
  */
 
-/*#pragma include "math.glsl"*/
-#pragma include "geom.glsl"
-#pragma include "depth.glsl"
+/*#pragma include "lib/math.glsl"*/
+#pragma include "lib/geom.glsl"
+#pragma include "lib/depth.glsl"
 
 uniform sampler2DRect depth_map;
 uniform bool depth_flip;

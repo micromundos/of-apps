@@ -11,7 +11,7 @@
 uniform sampler2DRect data;  
 
 const float domain_sigma = 10.0; //10.0;
-const float range_sigma = 2.0; //0.2;    
+const float range_sigma = 2.0; //0.2;
 const int kernel = 6;
 
 const float PI = 3.14159265f;

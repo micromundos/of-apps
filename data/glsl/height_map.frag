@@ -8,8 +8,8 @@
  *  height map in mm
  */
 
-#pragma include "math.glsl"
-#pragma include "geom.glsl"
+#pragma include "lib/math.glsl"
+#pragma include "lib/geom.glsl"
 
 uniform sampler2DRect depth_3d;
 uniform vec4 plane;

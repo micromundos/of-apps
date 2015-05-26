@@ -1,4 +1,4 @@
-#pragma include "math.glsl"
+#pragma include "lib/math.glsl"
 
 //see cml::RenderShader
 
