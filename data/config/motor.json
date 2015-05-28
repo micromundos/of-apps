@@ -89,17 +89,28 @@
                   "render" : false,
                   "render_normals" : false,
                   "render_normals_smoothed" : false,
-                  "render_height_smoothed" : false,
-                  "render_plane_angles" : false,
-                  "render_entradas" : false,
+                  "render_plane_angles" : false, 
                   "threshold_plane" : [ 45, 0, 360 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
-                  "threshold_near" : [ 0, -200, 200 ],
-                  "threshold_entradas_far" : [ 100, -200, 200 ],
-                  "threshold_entradas_near" : [ -100, -200, 200 ]
+                  "threshold_near" : [ 0, -200, 200 ], 
+                  "normals_bilateral_domain" : [ 10, 0, 100 ],
+                  "normals_bilateral_range" : [ 2, 0, 20 ],
+                  "normals_bilateral_kernel" : [ 6, 0, 10 ] 
                },
                "id" : "depth_processing"
             },
+            {
+               "data" : {
+                  "render" : false,
+                  "render_smoothed" : false,
+                  "threshold_far" : [ 100, -200, 200 ],
+                  "threshold_near" : [ -100, -200, 200 ],
+                  "bilateral_domain" : [ 10, 0, 100 ],
+                  "bilateral_range" : [ 2, 0, 20 ],
+                  "bilateral_kernel" : [ 6, 0, 10 ]
+               },
+               "id" : "entradas"
+            }
             {
                "data" : {
                   "render" : false

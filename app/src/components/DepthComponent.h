@@ -13,6 +13,7 @@ class DepthComponent : public ECScomponent
     ofPixels* depth_ofpix_grey; //uint8_t
 
     int width, height;
+    int channels;
     bool dirty;
 
     ofParameter<bool> render;
@@ -37,6 +38,7 @@ class DepthComponent : public ECScomponent
     {
       this->width = w;
       this->height = h;
+      this->channels = 1;
     }; 
 
     void update( ofShortPixels& depth_ofpix_mm )

@@ -20,4 +20,5 @@
 #include "KnobComponent.h"
 #include "PlaneCalibComponent.h"
 #include "DepthProcessingComponent.h"
+#include "EntradasComponent.h"
 //dont remove this line

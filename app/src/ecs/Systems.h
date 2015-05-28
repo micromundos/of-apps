@@ -16,4 +16,5 @@
 #include "KnobSystem.h"
 #include "PlaneCalibSystem.h"
 #include "DepthProcessingSystem.h"
+#include "EntradasSystem.h"
 //dont remove this line
