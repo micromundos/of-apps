@@ -80,7 +80,8 @@
                   "angle_step" : [ 30, 0, 360 ],
                   "render_plane" : true,
                   "render_planes_list" : false,
-                  "filename" : "calib/plane.yml"
+                  "filename_plane" : "calib/table_plane.yml",
+                  "filename_background" : "calib/table_background.yml"
                },
                "id" : "plane_calib"
             },
@@ -110,7 +111,7 @@
                   "bilateral_kernel" : [ 6, 0, 10 ]
                },
                "id" : "entradas"
-            }
+            },
             {
                "data" : {
                   "render" : false

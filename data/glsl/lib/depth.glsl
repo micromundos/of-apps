@@ -1,8 +1,6 @@
-#pragma include "lib/math.glsl"
+#pragma include "math.glsl"
 
 //see cml::RenderShader
-
-const float epsilon = 1e-30;
 
 uniform float near;
 uniform float far;
@@ -25,7 +23,7 @@ vec3 unproject( vec2 p2, float z )
 
 vec3 depth_to_p3( vec2 p2, float depth_mm, bool flip )
 {
-  float zmm = clamp( (depth_mm < epsilon ? far_clamp : depth_mm), 0.0, far_clamp );
+  float zmm = clamp( (depth_mm < EPSILON ? far_clamp : depth_mm), 0.0, far_clamp );
   vec3 p3 = unproject( p2, zmm );
   if ( !flip )
   {

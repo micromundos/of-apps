@@ -150,7 +150,7 @@ class PlaneCalibSystem : public ECSsystem
       plane_calib_data->triangle = triangle;
       plane_calib_data->plane = plane;
 
-      grab_background(e);
+      capture_background(e);
 
       return true;
     };
@@ -229,7 +229,7 @@ class PlaneCalibSystem : public ECSsystem
       return ofxPlane( ctr, normal );
     };
 
-    void grab_background(Entity &e)
+    void capture_background(Entity &e)
     {
       DepthComponent* depth_data = depth_m.get(e);
       PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
@@ -239,31 +239,37 @@ class PlaneCalibSystem : public ECSsystem
 
     void save_background(Entity &e)
     {
-      string file = "calib/table_bg.png";
-
-      ofLogNotice("PlaneCalibSystem") 
-        << "save background to " << file;
-
       PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
 
-      ofFloatImage img;
-      ofxCv::imitate( img, plane_calib_data->background );
-      img.saveImage( file );
+      ofLogNotice("PlaneCalibSystem") 
+        << "save background to " << plane_calib_data->filename_background;
+
+      cv::Mat background = ofxCv::toCv( plane_calib_data->background );
+
+      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename_background, false), cv::FileStorage::WRITE );
+      fs << "table_background" << background;
     };
 
-    void load_background(Entity &e)
+    bool load_background(Entity &e)
     {
-      string file = "calib/table_bg.png";
-
-      ofLogNotice("PlaneCalibSystem") 
-        << "load background from " << file;
-
-      DepthComponent* depth_data = depth_m.get(e);
       PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
 
-      ofFloatImage img;
-      img.loadImage( file );
-      plane_calib_data->background.setFromPixels( img.getPixels(), depth_data->width, depth_data->height, depth_data->channels );
+      ofLogNotice("PlaneCalibSystem") 
+        << "load background from " << plane_calib_data->filename_background;
+
+      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename_background, false), cv::FileStorage::READ );  
+
+      if ( !fs.isOpened() )
+      {
+        ofLogError("PlaneCalibSystem") << "failed to load table background file " << plane_calib_data->filename_background;
+        return false;
+      }
+
+      cv::Mat background;
+      fs["table_background"] >> background;
+      ofxCv::toOf( background, plane_calib_data->background );
+
+      return true;
     };
 
     void update_coordmap()
@@ -284,11 +290,7 @@ class PlaneCalibSystem : public ECSsystem
 
       plane_calib_data->load = false; //once
 
-      load_background(e);
-      if ( load_table_plane(e) )
-        return true;
-
-      return false;
+      return load_background(e) && load_table_plane(e);
     };
 
     bool save(Entity &e)
@@ -300,13 +302,12 @@ class PlaneCalibSystem : public ECSsystem
       plane_calib_data->save = false; //once
 
       save_background(e);
-      if ( save_table_plane(e) )
-        return true;
+      save_table_plane(e); 
 
-      return false;
+      return true;
     };
 
-    bool save_table_plane(Entity &e)
+    void save_table_plane(Entity &e)
     {
       PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
 
@@ -316,12 +317,12 @@ class PlaneCalibSystem : public ECSsystem
       ofVec3f v2 = tri.b + tri.e1;
 
       ofLogNotice("PlaneCalibSystem") 
-        << "save plane calib to " << plane_calib_data->filename << "\n"
+        << "save plane calib to " << plane_calib_data->filename_plane << "\n"
         << "v0 " << v0 << "\n"
         << "v1 " << v1 << "\n"
         << "v2 " << v2 << "\n";
 
-      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename, false), cv::FileStorage::WRITE ); 
+      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename_plane, false), cv::FileStorage::WRITE ); 
 
       fs << "vertex_0_x" << v0.x;
       fs << "vertex_0_y" << v0.y;
@@ -334,19 +335,17 @@ class PlaneCalibSystem : public ECSsystem
       fs << "vertex_2_x" << v2.x;
       fs << "vertex_2_y" << v2.y;
       fs << "vertex_2_z" << v2.z;
-
-      return true;
     };
 
     bool load_table_plane(Entity &e)
     {
       PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
 
-      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename, false), cv::FileStorage::READ ); 
+      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename_plane, false), cv::FileStorage::READ ); 
 
       if ( !fs.isOpened() )
       {
-        ofLogError("PlaneCalibSystem") << "failed to load plane calib file " << plane_calib_data->filename;
+        ofLogError("PlaneCalibSystem") << "failed to load plane calib file " << plane_calib_data->filename_plane;
         return false;
       }
 
@@ -355,7 +354,7 @@ class PlaneCalibSystem : public ECSsystem
       ofVec3f v2 = ofVec3f( fs["vertex_2_x"], fs["vertex_2_y"], fs["vertex_2_z"] );
 
       ofLogNotice("PlaneCalibSystem")
-        << "load plane calib from " << plane_calib_data->filename << "\n"
+        << "load plane calib from " << plane_calib_data->filename_plane << "\n"
         << "v0 " << v0 << "\n"
         << "v1 " << v1 << "\n"
         << "v2 " << v2 << "\n";

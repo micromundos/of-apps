@@ -14,7 +14,8 @@ class PlaneCalibComponent : public ECScomponent
     ofxTriangle triangle; 
     ofFloatPixels background;
 
-    string filename;
+    string filename_plane;
+    string filename_background;
 
     ofParameter<bool> calibrate;
     ofParameter<bool> save;
@@ -31,7 +32,8 @@ class PlaneCalibComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
 
-      filename = d.get("filename","plane_calib.yml").asString();
+      filename_plane = d.get("filename_plane","table_plane.yml").asString();
+      filename_background = d.get("filename_background","table_background.yml").asString();
 
       param(calibrate, "calibrate");
       param(save, "save");
