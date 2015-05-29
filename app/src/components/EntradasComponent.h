@@ -25,9 +25,9 @@ class EntradasComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
 
       param(render, "render");
+      param(render_smoothed, "render_smoothed");
       param(threshold_near, "threshold_near");
       param(threshold_far, "threshold_far"); 
-      param(render_smoothed, "render_smoothed");
       param(bilateral_domain, "bilateral_domain"); 
       param(bilateral_range, "bilateral_range"); 
       param(bilateral_kernel, "bilateral_kernel");

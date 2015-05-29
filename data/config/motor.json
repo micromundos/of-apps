@@ -91,6 +91,7 @@
                   "render_normals" : false,
                   "render_normals_smoothed" : false,
                   "render_plane_angles" : false, 
+                  "threshold_background" : [ 10, -300, 300 ],
                   "threshold_plane" : [ 45, 0, 360 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
                   "threshold_near" : [ 0, -200, 200 ], 
@@ -104,8 +105,8 @@
                "data" : {
                   "render" : false,
                   "render_smoothed" : false,
-                  "threshold_far" : [ 100, -200, 200 ],
-                  "threshold_near" : [ -100, -200, 200 ],
+                  "threshold_far" : [ 20, -100, 100 ],
+                  "threshold_near" : [ 0, -100, 100 ],
                   "bilateral_domain" : [ 10, 0, 100 ],
                   "bilateral_range" : [ 2, 0, 20 ],
                   "bilateral_kernel" : [ 6, 0, 10 ]

@@ -4,7 +4,6 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "ofxGPGPU.h"
-#include "DepthFloatData.h"
 #include "ofxTimeMeasurements.h"
 
 using namespace artemis;
@@ -51,8 +50,8 @@ class DepthProcessingSystem : public ECSsystem
 
       //processes at depth size
 
-      depth_f.init( depth_data, depth_w, depth_h );
       depth_3d.init("glsl/depth_3d.frag", depth_w, depth_h );
+      //background_substraction.init("glsl/cv/background_substraction.frag", depth_w, depth_h ); 
 
       //down sampled processes
 
@@ -75,6 +74,7 @@ class DepthProcessingSystem : public ECSsystem
       ofAddListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
       ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
+      ofAddListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
       ofAddListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
       ofAddListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
       ofAddListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
@@ -86,6 +86,7 @@ class DepthProcessingSystem : public ECSsystem
       ofRemoveListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
       ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
+      ofRemoveListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
       ofRemoveListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
       ofRemoveListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
       ofRemoveListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
@@ -105,26 +106,34 @@ class DepthProcessingSystem : public ECSsystem
       if ( !depth_data->dirty )
         return; 
 
-      ofTexture* depth_ftex = NULL;
-
-      TS_START("DepthProcessingSystem update depth data");
-      depth_ftex = &(depth_f.update( depth_data ));
-      TS_STOP("DepthProcessingSystem update depth data");
-
       TS_START("DepthProcessingSystem"); 
 
+      ofTexture* depth_map;
+      //if ( plane_calib_data->background.isAllocated() )
+      //{
+        //depth_map = &(background_substraction
+          //.set( "foreground", depth_data->f_depth_img.getTextureReference() )
+          //.set( "background", plane_calib_data->background.getTextureReference() )
+          //.update()
+          //.get());
+      //}
+      //else
+      //{
+        depth_map = &(depth_data->f_depth_img.getTextureReference());
+      //}
+
       depth_3d
-        .set( "depth_map", *depth_ftex )
+        .set( "depth_map", *depth_map )
         .update();
 
       ofTexture depth_3d_scaled = depth_3d.get_scaled( scale ); 
 
       height_map
-        .set( "depth_3d", depth_3d_scaled )
+        .set( "mesh_3d", depth_3d_scaled )
         .update(); 
 
       normals
-        .set( "mesh", depth_3d_scaled )
+        .set( "mesh_3d", depth_3d_scaled )
         .update(); 
 
       normals_bilateral
@@ -223,6 +232,12 @@ class DepthProcessingSystem : public ECSsystem
       shader.setUniform1f("fy", depthcam->fy);
     };
 
+    void update_background_substraction( ofShader& shader )
+    {
+      if ( !depth_proc_data ) return;
+      shader.setUniform1f( "threshold", depth_proc_data->threshold_background );
+    };
+
     void update_height_map( ofShader& shader )
     {
       if ( !plane_calib_data ) return;
@@ -262,10 +277,8 @@ class DepthProcessingSystem : public ECSsystem
 
     //component data processes debug
     gpgpu::Process output_debug;
-
     gpgpu::Process height_map;
-
-    DepthFloatData depth_f;
+    gpgpu::Process background_substraction;
     gpgpu::Process depth_3d;
 
     gpgpu::Process normals;

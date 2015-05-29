@@ -1,3 +1,9 @@
+
+//DEPRECATED
+//DEPRECATED
+//DEPRECATED
+//DEPRECATED
+
 #pragma once
 
 #include "ofxCv.h"

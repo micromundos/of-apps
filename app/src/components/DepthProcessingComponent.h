@@ -16,6 +16,7 @@ class DepthProcessingComponent : public ECScomponent
     ofParameter<bool> render_normals_smoothed;
     ofParameter<bool> render_plane_angles;
 
+    ofParameter<float> threshold_background;
     ofParameter<float> threshold_plane;
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;
@@ -30,6 +31,7 @@ class DepthProcessingComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
 
+      param(threshold_background, "threshold_background");
       param(threshold_plane, "threshold_plane");
       param(threshold_near, "threshold_near");
       param(threshold_far, "threshold_far"); 

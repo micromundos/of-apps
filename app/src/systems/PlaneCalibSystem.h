@@ -70,10 +70,8 @@ class PlaneCalibSystem : public ECSsystem
       PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
 
       if ( plane_calib_data->render_plane 
-          || plane_calib_data->render_planes_list )
-      {
-        update_coordmap(); 
-      }
+          || plane_calib_data->render_planes_list 
+        ) update_coordmap(); 
 
       if ( plane_calib_data->render_plane )
       {
@@ -150,7 +148,7 @@ class PlaneCalibSystem : public ECSsystem
       plane_calib_data->triangle = triangle;
       plane_calib_data->plane = plane;
 
-      capture_background(e);
+      plane_calib_data->background.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
 
       return true;
     };
@@ -229,14 +227,6 @@ class PlaneCalibSystem : public ECSsystem
       return ofxPlane( ctr, normal );
     };
 
-    void capture_background(Entity &e)
-    {
-      DepthComponent* depth_data = depth_m.get(e);
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
-
-      plane_calib_data->background.setFromPixels( depth_data->f_depth_ofpix_mm->getPixels(), depth_data->width, depth_data->height, depth_data->channels );
-    };
-
     void save_background(Entity &e)
     {
       PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
@@ -267,7 +257,9 @@ class PlaneCalibSystem : public ECSsystem
 
       cv::Mat background;
       fs["table_background"] >> background;
-      ofxCv::toOf( background, plane_calib_data->background );
+      ofFloatPixels bg;
+      ofxCv::toOf( background, bg );
+      plane_calib_data->background.setFromPixels( bg );
 
       return true;
     };

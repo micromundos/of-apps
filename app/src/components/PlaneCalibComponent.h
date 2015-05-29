@@ -12,7 +12,8 @@ class PlaneCalibComponent : public ECScomponent
     //output
     ofxPlane plane; 
     ofxTriangle triangle; 
-    ofFloatPixels background;
+
+    ofFloatImage background;
 
     string filename_plane;
     string filename_background;

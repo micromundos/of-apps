@@ -27,6 +27,7 @@ ecs.add_system(new KinectSystem("kinect"));
 ecs.add_system(new Ps3EyeSystem("ps_3_eye"));
 ecs.add_system(new PlaneCalibSystem("plane_calib"));
 ecs.add_system(new DepthProcessingSystem("depth_processing"));
+ecs.add_system(new EntradasSystem("entradas"));
 ecs.add_system(new ArucoSystem("aruco"));
 ecs.add_system(new DepthFlowFieldSystem("depth_flow_field"));
 ecs.add_system(new FisicaSystem("fisica"));
@@ -35,7 +36,6 @@ ecs.add_system(new ParticleEmitterSystem("particle_emitter"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new KnobSystem("knob"));
 ecs.add_system(new TimeBenderSystem("time_bender"));
-ecs.add_system(new EntradasSystem("entradas"));
 //dont remove this line
 };
 

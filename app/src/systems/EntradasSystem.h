@@ -104,7 +104,7 @@ class EntradasSystem : public ECSsystem
     virtual void renderEntity(Entity &e)
     { 
       if ( !entradas_data->render
-          || !entradas_data->render_smoothed
+          && !entradas_data->render_smoothed
         ) return;
 
       TS_START("EntradasSystem render");

@@ -13,30 +13,30 @@
  *  normals
  */
 
-uniform sampler2DRect mesh;
+uniform sampler2DRect mesh_3d;
 
 const int kernel = 1;
 
 void main( void ) 
 {
   vec2 p2 = gl_TexCoord[0].xy;
-  vec3 p3 = texture2DRect( mesh, p2 ).xyz;
+  vec3 p3 = texture2DRect( mesh_3d, p2 ).xyz;
 
   vec3 normal = vec3(0.);
 
   for ( int i = 1; i <= kernel; i++ )
   {
     /* south */
-    vec3 s = vec3(texture2DRect(mesh,vec2( p2.x, p2.y + i )));
+    vec3 s = vec3(texture2DRect(mesh_3d,vec2( p2.x, p2.y + i )));
 
     /* north */
-    vec3 n = vec3(texture2DRect(mesh,vec2( p2.x, p2.y - i )));
+    vec3 n = vec3(texture2DRect(mesh_3d,vec2( p2.x, p2.y - i )));
 
     /* east */
-    vec3 e = vec3(texture2DRect(mesh,vec2( p2.x + i, p2.y )));
+    vec3 e = vec3(texture2DRect(mesh_3d,vec2( p2.x + i, p2.y )));
 
     /* west */
-    vec3 w = vec3(texture2DRect(mesh,vec2( p2.x - i, p2.y ))); 
+    vec3 w = vec3(texture2DRect(mesh_3d,vec2( p2.x - i, p2.y ))); 
 
     /* edges */
     vec3 xe = p3 - e;

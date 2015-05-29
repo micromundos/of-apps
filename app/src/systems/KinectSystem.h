@@ -78,9 +78,10 @@ class KinectSystem : public ECSsystem
 
       if ( !depth_data->flip )
       {
-        depth_data->update( kinect.getRawDepthPixelsRef() );
-        depth_data->update( kinect.getDistancePixelsRef() );
-        depth_data->update( kinect.getDepthPixelsRef() );
+        depth_data->depth_ofpix_mm = &(kinect.getRawDepthPixelsRef());
+        depth_data->depth_ofpix_grey = &(kinect.getDepthPixelsRef());
+        depth_data->f_depth_ofpix_mm = &(kinect.getDistancePixelsRef());
+        depth_data->f_depth_img.setFromPixels( kinect.getDistancePixelsRef() );
       }
 
       else
@@ -89,12 +90,13 @@ class KinectSystem : public ECSsystem
 
         int mode = -1;
         ofxCv::flip( kinect.getRawDepthPixelsRef(), depth_ofpix_mm, mode );
-        ofxCv::flip( kinect.getDistancePixelsRef(), f_depth_ofpix_mm, mode );
         ofxCv::flip( kinect.getDepthPixelsRef(), depth_ofpix_grey, mode );
+        ofxCv::flip( kinect.getDistancePixelsRef(), f_depth_ofpix_mm, mode );
 
-        depth_data->update( depth_ofpix_mm );
-        depth_data->update( f_depth_ofpix_mm );
-        depth_data->update( depth_ofpix_grey );
+        depth_data->depth_ofpix_mm = &depth_ofpix_mm;
+        depth_data->depth_ofpix_grey = &depth_ofpix_grey;
+        depth_data->f_depth_ofpix_mm = &f_depth_ofpix_mm;
+        depth_data->f_depth_img.setFromPixels( f_depth_ofpix_mm );
 
         TS_STOP("KinectSystem flip");
       }
@@ -137,10 +139,10 @@ class KinectSystem : public ECSsystem
     bool inited;
     float fps, prev;
 
-    //flip
-    ofShortPixels depth_ofpix_mm;//uint16_t
-    ofFloatPixels f_depth_ofpix_mm;//float
-    ofPixels depth_ofpix_grey;//uint8_t
+    //flipped
+    ofShortPixels depth_ofpix_mm; //uint16_t
+    ofFloatPixels f_depth_ofpix_mm; //float
+    ofPixels depth_ofpix_grey; //uint8_t
 
     void calc_fps()
     {
