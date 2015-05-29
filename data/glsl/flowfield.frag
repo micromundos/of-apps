@@ -47,7 +47,7 @@ void main( void )
 
     // nheight: drives away from plane
     // -nheight: drives towards plane
-    force += normalize(ndir) * slope;
+    force += normalize(ndir) * -slope;
     n++;
   }
 
