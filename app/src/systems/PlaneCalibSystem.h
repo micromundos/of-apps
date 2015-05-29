@@ -9,7 +9,6 @@
 using namespace artemis;
 
 //TODO rename PlaneCalib => TableCalib
-//TODO table bg
 
 class PlaneCalibSystem : public ECSsystem 
 { 

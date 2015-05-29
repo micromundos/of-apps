@@ -2,7 +2,7 @@
 #extension GL_ARB_texture_rectangle : enable
 
 /*
- * in: foreground, background
+ * in: depth maps for foreground, background
  * out: foreground without background
  */
 
@@ -14,7 +14,7 @@ void main( void )
 {
   float F = texture2DRect( foreground, gl_TexCoord[0].xy ).x;
   float B = texture2DRect( background, gl_TexCoord[0].xy ).x;
-  float diff = F-B;
+  float diff = B-F; //depth map: distance to camera
   gl_FragColor = diff < threshold ? vec4(0.) : vec4(F,F,F,1.);
 }
 

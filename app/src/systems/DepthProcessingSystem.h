@@ -6,9 +6,9 @@
 #include "ofxGPGPU.h"
 #include "ofxTimeMeasurements.h"
 
-using namespace artemis;
+//TODO background substraction + smootheado
 
-//TODO table bg
+using namespace artemis;
 
 class DepthProcessingSystem : public ECSsystem 
 { 
@@ -51,7 +51,7 @@ class DepthProcessingSystem : public ECSsystem
       //processes at depth size
 
       depth_3d.init("glsl/depth_3d.frag", depth_w, depth_h );
-      //background_substraction.init("glsl/cv/background_substraction.frag", depth_w, depth_h ); 
+      background_substraction.init("glsl/cv/background_substraction.frag", depth_w, depth_h ); 
 
       //down sampled processes
 
@@ -109,18 +109,18 @@ class DepthProcessingSystem : public ECSsystem
       TS_START("DepthProcessingSystem"); 
 
       ofTexture* depth_map;
-      //if ( plane_calib_data->background.isAllocated() )
-      //{
-        //depth_map = &(background_substraction
-          //.set( "foreground", depth_data->f_depth_img.getTextureReference() )
-          //.set( "background", plane_calib_data->background.getTextureReference() )
-          //.update()
-          //.get());
-      //}
-      //else
-      //{
+      if ( plane_calib_data->background.isAllocated() )
+      {
+        depth_map = &(background_substraction
+          .set( "foreground", depth_data->f_depth_img.getTextureReference() )
+          .set( "background", plane_calib_data->background.getTextureReference() )
+          .update()
+          .get());
+      }
+      else
+      {
         depth_map = &(depth_data->f_depth_img.getTextureReference());
-      //}
+      }
 
       depth_3d
         .set( "depth_map", *depth_map )
@@ -144,7 +144,6 @@ class DepthProcessingSystem : public ECSsystem
         .set( "normals", normals_bilateral.get() )
         .update(); 
 
-      //TODO sacar depth segmentado + smootheado
       output(e)
         .set( "height_map", height_map.get() )
         .set( "plane_angles", plane_angles.get() )
