@@ -19,3 +19,12 @@ float plane_distance( vec4 plane, vec3 v )
   return plane.x * v.x + plane.y * v.y + plane.z * v.z + plane.w;
 }
 
+/*unsigned relative angle from 0 to PI (180deg)*/
+/*http://www.euclideanspace.com/maths/algebra/vectors/angleBetween/index.htm*/
+float angle( vec3 v0, vec3 v1, bool _normalize )
+{
+  vec3 n0 = _normalize ? normalize(v0) : v0;
+  vec3 n1 = _normalize ? normalize(v0) : v1;
+  return acos( dot( n0, n1 ) );
+}
+

@@ -6,6 +6,7 @@
 #include "systems/ParticleSystem.h"
 #include "ofEventUtils.h"
 #include "CoordMap.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -25,22 +26,6 @@ class ParticleFlowFieldSystem : public ECSsystem
       particle_flowfield_m.init( *world );
       ps = require_system<ParticleSystem>();
       fisica = require_system<FisicaSystem>();
-      
-      position_buffer.init("glsl/particles_position.frag",80,60,true);
-      texture_positions.allocate(80,60,OF_IMAGE_COLOR_ALPHA);
-      
-      for(int y=0;y<texture_positions.getHeight();y++)
-      {
-        for(int x=0;x<texture_positions.getWidth();x++)
-        {
-          texture_positions.setColor(x,y,ofColor(0.0,0.0,0.0,0.0));
-        }
-      }
-      
-      texture_positions.update();
-      
-     // texture_positions.setUseTexture(true);
-      
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
@@ -51,82 +36,22 @@ class ParticleFlowFieldSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      //ofLogNotice("ParticleFlowFieldSystem") << "update";
-      
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
+      int ff_width = ff_data->output.width();
 
+      float* field = NULL;
       //XXX gpu -> cpu
-      
-    /*  float* field = ff_data->process.get_data();
-      if (field == NULL) return;*/
-
-      //if ((ofGetFrameNum()%(60*3))<10) log(field,ff_data->width,ff_data->height);
-      
-      
-      
-      
-      b2ParticleSystem* b2ps = ps->b2_particles();
-      b2Vec2 *          b2position_buffer = b2ps->GetPositionBuffer();
-      
-      int x = 0;
-      int y = 0;
-      
- 
-      
-      for(int i=0;i<b2ps->GetParticleCount();i++)
+      TS_START("ParticleFlowFieldSystem #gpu->cpu");
+      field = ff_data->output.get_data();
+      TS_STOP("ParticleFlowFieldSystem #gpu->cpu");
+      if (field == NULL) 
       {
-        b2Vec2& loc = b2position_buffer[i];
-        ofVec2f ff_loc,screen_loc;
-        
-        fisica->world2screen(loc,screen_loc);
-        screen2ff.dst(screen_loc,ff_loc);
-        
-        texture_positions.setColor(x,y,ofColor(ff_loc.x,ff_loc.y,0.0,255.0));
-        
-        if(i == 10)
-        {
-        //  cout << " 1 = "  << screen_loc.x << " , " << ff_loc.x << "," << ff_loc.y << "\r\n";
-        }
-        
-        x++;
-        if(x > texture_positions.getWidth()-1)
-        {
-          x = 0;
-          y++;
-        }
+        ofLogWarning("ParticleFlowFieldSystem")
+          << "flow field input process has no data";
+        return;
       }
-      
-      
-      
-      texture_positions.update();
-      
-      
-     
-      position_buffer.set("positions",texture_positions.getTextureReference());
-      position_buffer.set("flowfield",ff_data->process.get());
-      position_buffer.update();
-      
-      
-      field = position_buffer.get_data();
-      
- 
-      if (field == NULL) return;
- /*
-      for(int i=0;i<b2ps->GetParticleCount();i++)
-      {
-          int index = i*4;
-          b2Vec2 force = b2Vec2(field[index],field[index+1]);
-          b2ps->ParticleApplyForce( i, force );
 
-          if(i == 10){
-         //   cout << " 2 = " << field[index] << "," << field[index+1] << "," << field[index+2] << "," << field[index+3]  << "\r\n";
-          }
-      }
-       */
-      /*
-      
-      float* field = ff_data->process.get_data();
-       if (field == NULL) return;
+      TS_START("ParticleFlowFieldSystem");
 
       b2ParticleSystem* b2ps = ps->b2_particles();
 
@@ -135,23 +60,18 @@ class ParticleFlowFieldSystem : public ECSsystem
 
       b2Vec2 force;
       ofVec2f ff_loc, screen_loc;
-      
       for (int i = 0; i < n; i++)
       {
         b2Vec2& loc = locs[i]; 
-        get_force( field, loc, ff_data, ff_loc, screen_loc, force );
+        get_force( field, loc, ff_data, ff_width, ff_loc, screen_loc, force );
         b2ps->ParticleApplyForce( i, force );
       }
-      */
 
+      TS_STOP("ParticleFlowFieldSystem");
     };
 
     virtual void renderEntity(Entity &e)
-    {
-      
-      position_buffer.get().draw(0,0);
-    
-    };
+    {};
 
   private:
 
@@ -159,26 +79,23 @@ class ParticleFlowFieldSystem : public ECSsystem
 
     ParticleSystem *ps;
     FisicaSystem* fisica;
-  
-    gpgpu::Process  position_buffer;
-    ofImage         texture_positions;
-  
+
     CoordMap screen2ff;
-  float* field;
 
     void update_screen2ff()
     {
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
+      int ff_width = ff_data->output.width();
+      int ff_height = ff_data->output.height();
       RenderComponent* render_data = require_component<RenderComponent>("output");
-      screen2ff.set( render_data->width, render_data->height, ff_data->width, ff_data->height );
+      screen2ff.set( render_data->width, render_data->height, ff_width, ff_height ); 
     };
 
-    void get_force( float* field, const b2Vec2& loc, FlowFieldComponent* ff_data, ofVec2f& ff_loc, ofVec2f& screen_loc, b2Vec2& force )
+    void get_force( float* field, const b2Vec2& loc, FlowFieldComponent* ff_data, int ff_width, ofVec2f& ff_loc, ofVec2f& screen_loc, b2Vec2& force )
     {
       fisica->world2screen(loc,screen_loc);
       screen2ff.dst(screen_loc,ff_loc);
-      
-      int i = ((int)ff_loc.x + (int)ff_loc.y * ff_data->width) * 4; //chann:rgba
+      int i = ((int)ff_loc.x + (int)ff_loc.y * ff_width) * 4; //chann:rgba
       force.Set( field[i], field[i+1] );
     };
 

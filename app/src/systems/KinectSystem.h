@@ -5,6 +5,7 @@
 #include "Components.h"
 #include "ofxKinect.h"
 #include "ofxCv.h"
+#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -56,14 +57,13 @@ class KinectSystem : public ECSsystem
       // ir, rgb, texture
       kinect.init( false, false, true );
       kinect.open();
-
     };
 
     virtual void processEntity(Entity &e) 
     {
-      //ofLogNotice("KinectSystem") << "process entity " << e.getId();
-
+      TS_START("KinectSystem update kinect");
       kinect.update();
+      TS_STOP("KinectSystem update kinect");
 
       DepthComponent* depth_data = depth_m.get(e);
       //RgbComponent* rgb_data = rgb_m.get(e);
@@ -85,6 +85,8 @@ class KinectSystem : public ECSsystem
 
       else
       {
+        TS_START("KinectSystem flip");
+
         int mode = -1;
         ofxCv::flip( kinect.getRawDepthPixelsRef(), depth_ofpix_mm, mode );
         ofxCv::flip( kinect.getDistancePixelsRef(), f_depth_ofpix_mm, mode );
@@ -93,7 +95,10 @@ class KinectSystem : public ECSsystem
         depth_data->update( depth_ofpix_mm );
         depth_data->update( f_depth_ofpix_mm );
         depth_data->update( depth_ofpix_grey );
+
+        TS_STOP("KinectSystem flip");
       }
+
     };
 
     virtual void renderEntity(Entity &e)
@@ -121,7 +126,6 @@ class KinectSystem : public ECSsystem
       }
 
       ofPopStyle();
-
     };
 
   private: 

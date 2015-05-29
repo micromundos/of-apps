@@ -9,9 +9,14 @@ class DepthProcessingComponent : public ECScomponent
 {
   public:
 
-    gpgpu::Process process;
+    gpgpu::Process output;
 
     ofParameter<bool> render;
+    ofParameter<bool> render_normals;
+    ofParameter<bool> render_smooth;
+    ofParameter<bool> render_plane_angles;
+
+    ofParameter<float> threshold_plane;
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;
 
@@ -21,9 +26,13 @@ class DepthProcessingComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
 
+      param(threshold_plane, "threshold_plane");
       param(threshold_near, "threshold_near");
       param(threshold_far, "threshold_far");
       param(render, "render");
+      param(render_normals, "render_normals");
+      param(render_smooth, "render_smooth");
+      param(render_plane_angles, "render_plane_angles");
     };
 
 };

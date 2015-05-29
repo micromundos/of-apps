@@ -5,7 +5,7 @@ uniform sampler2DRect data;
 
 void main( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].st;
+  vec2 p2 = gl_TexCoord[0].xy;
   float depth = texture2DRect(data, p2).r;
   vec4 depth_out = vec4(depth);
   if (depth < 700) 

@@ -10,6 +10,9 @@ void ofApp::setup()
   ofSetFrameRate(60.0f); 
   ofSetVerticalSync(false);
 
+  gpgpu::Process::watch("all");
+  init_time_measurements();
+
   config.init();
   ecs.init();
   system_factory.add_systems( ecs );
@@ -86,8 +89,32 @@ void ofApp::keyReleased(int key)
     case keys::fullscreen:
       ofToggleFullscreen();
       break;
+
+    case keys::tm_toggle:
+      TIME_SAMPLE_SET_ENABLED( !TIME_SAMPLE_GET_ENABLED() );
+      break;
  
   };
+}
+
+
+void ofApp::init_time_measurements()
+{
+  TIME_SAMPLE_SET_FRAMERATE( 60.0f );
+
+  TIME_SAMPLE_SET_DRAW_LOCATION( TIME_MEASUREMENTS_TOP_RIGHT );
+
+  //averaging samples, (0..1]
+  //1.0 gets you no averaging at all
+  //use lower values to get steadier readings
+  TIME_SAMPLE_SET_AVERAGE_RATE(0.1);
+  //TIME_SAMPLE_DISABLE_AVERAGE();
+
+  //inactive threads will be dropped from the table
+  TIME_SAMPLE_SET_REMOVE_EXPIRED_THREADS(true);
+
+  //customize color
+  //TIME_SAMPLE_GET_INSTANCE()->setHighlightColor(ofColor::yellow);
 }
 
 

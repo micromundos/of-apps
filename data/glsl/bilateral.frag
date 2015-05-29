@@ -5,20 +5,20 @@
  * bilateral filter
  * code by
  * Nicolas Seiller 
- * http://image.inha.ac.kr/oopgpu/index.php?page=glsl
+ * http://image.inha.ac.kr/oopgpu/documentation/_g_l_s_l_bilateral_processor_8h_source.html
  */
 
 uniform sampler2DRect data;  
 
-const float domain_sigma = 10.0;
-const float range_sigma = 0.2;    
+const float domain_sigma = 10.0; //10.0;
+const float range_sigma = 2.0; //0.2;    
 const int kernel = 6;
 
 const float PI = 3.14159265f;
 
 void main()
 {
-  vec2 loc = gl_TexCoord[0].st;
+  vec2 loc = gl_TexCoord[0].xy;
   vec3 curRGB = texture2DRect( data, loc ).rgb;
 
   vec3 graySum = vec3(0.0);

@@ -1,4 +1,3 @@
-ofxCamaraLucida
 ofxKinect
 ofxOpenCv
 ofxCv
@@ -9,6 +8,8 @@ ofxGeom
 ofxECS
 ofxJSON
 ofxOsc
-addons
 ofxPlab
 ofxKeyValueOSC
+ofxTimeMeasurements
+addons
+ofxCamaraLucida

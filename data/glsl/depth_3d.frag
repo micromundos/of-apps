@@ -17,7 +17,7 @@ uniform bool depth_flip;
 
 void main( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].st;
+  vec2 p2 = gl_TexCoord[0].xy;
   float depth_mm = texture2DRect(depth_map,p2).r;
 
   vec3 p3 = depth_to_p3( p2, depth_mm, depth_flip );

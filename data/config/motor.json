@@ -87,6 +87,10 @@
             {
                "data" : {
                   "render" : false,
+                  "render_normals" : false,
+                  "render_smooth" : false,
+                  "render_plane_angles" : false,
+                  "threshold_plane" : [ 45, 0, 360 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
                   "threshold_near" : [ 32.631591796875, -200, 200 ]
                },
@@ -95,7 +99,6 @@
             {
                "data" : {
                   "force_amplifier" : [ 4.505263328552246, 1, 10 ],
-                  "ramp_margin" : [ 90.78947448730469, 0, 500 ],
                   "render" : false
                },
                "id" : "flow_field"
