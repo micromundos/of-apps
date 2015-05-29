@@ -8,7 +8,7 @@
 
 using namespace artemis;
 
-// TODO blob detection + table bg
+// TODO blob detection
 
 class EntradasSystem : public ECSsystem 
 { 

@@ -6,7 +6,7 @@
 #include "ofxGPGPU.h"
 #include "ofxTimeMeasurements.h"
 
-//TODO background substraction + smootheado
+//TODO superficies smootheadas
 
 using namespace artemis;
 
