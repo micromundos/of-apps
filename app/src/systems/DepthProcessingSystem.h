@@ -19,14 +19,14 @@ class DepthProcessingSystem : public ECSsystem
     {
       addComponentType<DepthProcessingComponent>();
       addComponentType<DepthComponent>();
-      addComponentType<PlaneCalibComponent>();
+      addComponentType<TableCalibComponent>();
     };
 
     virtual void initialize() 
     {
       depth_processing_m.init( *world );
       depth_m.init( *world );
-      plane_calib_m.init( *world );
+      table_calib_m.init( *world );
 
       inited = false;
       scale = 0.5;
@@ -41,7 +41,7 @@ class DepthProcessingSystem : public ECSsystem
 
       depth_proc_data = depth_processing_m.get(e);
       depth_data = depth_m.get(e);
-      plane_calib_data = plane_calib_m.get(e);
+      table_calib_data = table_calib_m.get(e);
 
       int depth_w = depth_data->width;
       int depth_h = depth_data->height;
@@ -93,7 +93,7 @@ class DepthProcessingSystem : public ECSsystem
       ofRemoveListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
 
       depth_proc_data = NULL;
-      plane_calib_data = NULL;
+      table_calib_data = NULL;
       cml_data = NULL;
     };
 
@@ -101,7 +101,7 @@ class DepthProcessingSystem : public ECSsystem
     {
       depth_proc_data = depth_processing_m.get(e);
       depth_data = depth_m.get(e);
-      plane_calib_data = plane_calib_m.get(e);
+      table_calib_data = table_calib_m.get(e);
 
       if ( !depth_data->dirty )
         return; 
@@ -109,11 +109,11 @@ class DepthProcessingSystem : public ECSsystem
       TS_START("DepthProcessingSystem"); 
 
       ofTexture* depth_map;
-      if ( plane_calib_data->background.isAllocated() )
+      if ( table_calib_data->background.isAllocated() )
       {
         depth_map = &(background_substraction
           .set( "foreground", depth_data->f_depth_img.getTextureReference() )
-          .set( "background", plane_calib_data->background.getTextureReference() )
+          .set( "background", table_calib_data->background.getTextureReference() )
           .update()
           .get());
       }
@@ -239,15 +239,15 @@ class DepthProcessingSystem : public ECSsystem
 
     void update_height_map( ofShader& shader )
     {
-      if ( !plane_calib_data ) return;
-      ofxPlane& p = plane_calib_data->plane;
+      if ( !table_calib_data ) return;
+      ofxPlane& p = table_calib_data->plane;
       shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
     }; 
 
     void update_plane_angles( ofShader& shader )
     {
-      if ( !plane_calib_data ) return;
-      ofxPlane& p = plane_calib_data->plane;
+      if ( !table_calib_data ) return;
+      ofxPlane& p = table_calib_data->plane;
       shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
     };
 
@@ -262,9 +262,9 @@ class DepthProcessingSystem : public ECSsystem
     void update_depth_segmentation( ofShader& shader )
     {
       if ( !depth_proc_data ) return;
-      if ( !plane_calib_data ) return;
+      if ( !table_calib_data ) return;
 
-      //ofxPlane& p = plane_calib_data->plane;
+      //ofxPlane& p = table_calib_data->plane;
       //shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
       shader.setUniform1f("threshold_plane", depth_proc_data->threshold_plane);
 
@@ -294,7 +294,7 @@ class DepthProcessingSystem : public ECSsystem
     //ugly singleton entity stuff
     bool inited;
     DepthProcessingComponent* depth_proc_data;
-    PlaneCalibComponent* plane_calib_data;
+    TableCalibComponent* table_calib_data;
     CamaraLucidaComponent* cml_data;
     DepthComponent* depth_data;
 
@@ -308,8 +308,8 @@ class DepthProcessingSystem : public ECSsystem
       if ( !inited ) return;
       if ( !depth_proc_data->render ) return;
 
-      ofVec3f n = plane_calib_data->plane.normal();
-      ofVec3f ctr = plane_calib_data->triangle.centroid();
+      ofVec3f n = table_calib_data->plane.normal();
+      ofVec3f ctr = table_calib_data->triangle.centroid();
 
       ofPushStyle();
       ofSetColor( ofColor::cyan );
@@ -322,7 +322,7 @@ class DepthProcessingSystem : public ECSsystem
 
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
-    ComponentMapper<PlaneCalibComponent> plane_calib_m;
+    ComponentMapper<TableCalibComponent> table_calib_m;
 
 };
 

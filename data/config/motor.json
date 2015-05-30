@@ -83,7 +83,7 @@
                   "filename_plane" : "calib/table_plane.yml",
                   "filename_background" : "calib/table_background.yml"
                },
-               "id" : "plane_calib"
+               "id" : "table_calib"
             },
             {
                "data" : {

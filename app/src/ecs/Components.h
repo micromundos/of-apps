@@ -18,7 +18,7 @@
 #include "ParticleEmitterComponent.h"
 #include "TimeBenderComponent.h"
 #include "KnobComponent.h"
-#include "PlaneCalibComponent.h"
+#include "TableCalibComponent.h"
 #include "DepthProcessingComponent.h"
 #include "EntradasComponent.h"
 //dont remove this line

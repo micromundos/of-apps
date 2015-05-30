@@ -5,7 +5,7 @@
 #include "ofxECS.h"
 #include "ofxGeom.h"
 
-class PlaneCalibComponent : public ECScomponent 
+class TableCalibComponent : public ECScomponent 
 {
   public:
 
@@ -27,7 +27,7 @@ class PlaneCalibComponent : public ECScomponent
     ofParameter<bool> render_plane;
     ofParameter<bool> render_planes_list;
 
-    PlaneCalibComponent(string _id) : ECScomponent(_id) {};
+    TableCalibComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
