@@ -8,8 +8,6 @@
 
 using namespace artemis;
 
-//TODO table_calib
-
 class TableCalibSystem : public ECSsystem 
 { 
 
