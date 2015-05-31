@@ -18,8 +18,7 @@ uniform float threshold_plane;
 uniform float threshold_near;
 uniform float threshold_far;
 
-/*TODO*/
-/*uniform sampler2DRect _debug;*/
+uniform sampler2DRect debug_input;
 
 void main( void ) 
 {
@@ -37,11 +36,11 @@ void main( void )
   gl_FragColor = vec4(vec3(height),1.);
 }
 
-/*void debug() */
-/*{*/
-    /*vec2 p2 = gl_TexCoord[0].xy;*/
-    /*float _in = texture2DRect(_debug, p2).r;*/
-    /*float _out = _in == 0. ? 0. : lerp2d( _in, 0., 500., 0.2, 1. );*/
-    /*gl_FragColor = vec4( _out, _out, _out, 1. );*/
-/*}*/
+void debug() 
+{
+  vec2 p2 = gl_TexCoord[0].xy;
+  float _in = texture2DRect(debug_input, p2).r;
+  float _out = _in == 0. ? 0. : lerp2d( _in, 0., 500., 0.2, 1. );
+  gl_FragColor = vec4( _out, _out, _out, 1. );
+}
 

@@ -67,7 +67,7 @@ class DepthProcessingSystem : public ECSsystem
       plane_angles_debug.init("glsl/plane_angles_debug.frag", w, h );
 
       output(e).init("glsl/depth_segmentation.frag", w, h );
-      output_debug.init("glsl/depth_segmentation_debug.frag", w, h ); 
+      //output_debug.init("glsl/depth_segmentation_debug.frag", w, h ); 
 
       // events
 
@@ -154,9 +154,10 @@ class DepthProcessingSystem : public ECSsystem
       // update render data
 
       if ( depth_proc_data->render ) 
-        output_debug
-          .set( "data", output(e).get() )
-          .update();
+        output.debug_update();
+        //output_debug
+          //.set( "data", output(e).get() )
+          //.update();
 
       if ( depth_proc_data->render_normals ) 
         normals_debug
@@ -194,7 +195,8 @@ class DepthProcessingSystem : public ECSsystem
       ofSetColor(255);
 
       if (depth_proc_data->render)
-        output_debug.get().draw( 0, 0, rw, rh );
+        //output.debug().get().draw( 0, 0, rw, rh );
+        //output_debug.get().draw( 0, 0, rw, rh );
 
       if (depth_proc_data->render_normals)
         normals_debug.get().draw( 0, 0, rw, rh );
@@ -275,7 +277,7 @@ class DepthProcessingSystem : public ECSsystem
   private:
 
     //component data processes debug
-    gpgpu::Process output_debug;
+    //gpgpu::Process output_debug;
     gpgpu::Process height_map;
     gpgpu::Process background_substraction;
     gpgpu::Process depth_3d;
