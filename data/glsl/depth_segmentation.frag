@@ -36,7 +36,7 @@ void main( void )
   gl_FragColor = vec4(vec3(height),1.);
 }
 
-void debug() 
+void __debug__() 
 {
   vec2 p2 = gl_TexCoord[0].xy;
   float _in = texture2DRect(debug_input, p2).r;

@@ -41,11 +41,11 @@ class EntradasSystem : public ECSsystem
 
       dilate.init("glsl/cv/dilate.frag", w, h );
       erode.init("glsl/cv/erode.frag", w, h );
-      bilateral.init("glsl/cv/bilateral.frag", w, h );
-      bilateral_debug.init("glsl/depth_debug.frag", w, h );
+      bilateral
+        .init("glsl/cv/bilateral.frag", w, h )
+        .init_debug("glsl/depth_debug.frag");
 
       output(e).init("glsl/height_threshold.frag", w, h ); 
-      debug.init("glsl/depth_segmentation_debug.frag", w, h );
 
       // events
 
@@ -89,14 +89,16 @@ class EntradasSystem : public ECSsystem
         .update();
 
       if ( entradas_data->render ) 
-        debug
-          .set( "data", output(e).get() )
+        output(e)
+          .get_debug()
+          .set( "debug_input", output(e).get() )
           .update(); 
 
       if ( entradas_data->render_smoothed )
-        bilateral_debug
-            .set( "data", bilateral.get() )
-            .update();
+        bilateral
+          .get_debug()
+          .set( "data", bilateral.get() )
+          .update();
 
       TS_STOP("EntradasSystem");
     }; 
@@ -114,10 +116,10 @@ class EntradasSystem : public ECSsystem
       int rh = render_data->height;
 
       if (entradas_data->render)
-        debug.get().draw( 0, 0, rw, rh );
+        output(e).get_debug().get().draw(0,0,rw,rh);
 
       if (entradas_data->render_smoothed)
-        bilateral_debug.get().draw( 0, 0, rw, rh );
+        bilateral.get_debug().get().draw(0,0,rw,rh);
 
       TS_STOP("EntradasSystem render");
     };
@@ -137,11 +139,9 @@ class EntradasSystem : public ECSsystem
 
     EntradasComponent* entradas_data;
 
-    gpgpu::Process debug;
     gpgpu::Process dilate;
     gpgpu::Process erode;
     gpgpu::Process bilateral;
-    gpgpu::Process bilateral_debug;
 
     float scale;
 

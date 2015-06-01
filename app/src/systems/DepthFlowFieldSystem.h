@@ -38,7 +38,6 @@ class DepthFlowFieldSystem : public ECSsystem
       int h = _input.height();
 
       output(e).init("glsl/flowfield.frag",w,h);
-      debug.init("glsl/flowfield_debug.frag",w,h);
     };
 
     virtual void processEntity(Entity &e) 
@@ -55,8 +54,9 @@ class DepthFlowFieldSystem : public ECSsystem
         .update();
 
       if ( ff_data->render )
-        debug
-          .set( "data", output(e).get() )
+        output(e)
+          .get_debug()
+          .set( "debug_input", output(e).get() )
           .update();
 
       TS_STOP("DepthFlowFieldSystem");
@@ -73,7 +73,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
-      debug.get().draw( 0, 0, render_data->width, render_data->height );
+      output(e).get_debug().get().draw( 0, 0, render_data->width, render_data->height );
       //output(e).get().draw( 0, 0, render_data->width, render_data->height );
       //input(e).get().draw( 0, 0, render_data->width, render_data->height );
 
@@ -85,8 +85,6 @@ class DepthFlowFieldSystem : public ECSsystem
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
-
-    gpgpu::Process debug;
 
     gpgpu::Process& output(Entity &e)
     {

@@ -11,6 +11,7 @@
 #pragma include "lib/math.glsl"
 #pragma include "lib/geom.glsl"
 
+uniform sampler2DRect debug_input;
 uniform sampler2DRect normals;
 uniform vec4 plane;
 
@@ -24,4 +25,13 @@ void main( void )
 
   gl_FragColor = vec4(vec3(ang),1.);
 }
+
+void __debug__( void ) 
+{
+    vec2 p2 = gl_TexCoord[0].xy;
+    float _in = texture2DRect(debug_input, p2).r;
+    float _out = _in / PI;
+    gl_FragColor = vec4( _out, _out, _out, 1. );
+}
+
 

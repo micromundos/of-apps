@@ -56,18 +56,12 @@ class DepthProcessingSystem : public ECSsystem
       //down sampled processes
 
       height_map.init("glsl/height_map.frag", w, h ); 
-
       normals.init("glsl/normals.frag", w, h );
-      normals_debug.init("glsl/debug.frag", w, h );
-
-      normals_bilateral.init("glsl/cv/bilateral.frag", w, h );
-      normals_bilateral_debug.init("glsl/debug.frag", w, h );
-
+      normals_bilateral
+        .init("glsl/cv/bilateral.frag", w, h )
+        .init_debug("glsl/debug_normalized.frag");
       plane_angles.init("glsl/plane_angles.frag", w, h );
-      plane_angles_debug.init("glsl/plane_angles_debug.frag", w, h );
-
       output(e).init("glsl/depth_segmentation.frag", w, h );
-      //output_debug.init("glsl/depth_segmentation_debug.frag", w, h ); 
 
       // events
 
@@ -154,24 +148,27 @@ class DepthProcessingSystem : public ECSsystem
       // update render data
 
       if ( depth_proc_data->render ) 
-        output.debug_update();
-        //output_debug
-          //.set( "data", output(e).get() )
-          //.update();
+        output(e)
+          .get_debug()
+          .set( "debug_input", output(e).get() )
+          .update();
 
       if ( depth_proc_data->render_normals ) 
-        normals_debug
-          .set( "data", normals.get() )
+        normals
+          .get_debug()
+          .set( "debug_input", normals.get() )
           .update();
 
       if ( depth_proc_data->render_normals_smoothed )  
-        normals_bilateral_debug
-          .set( "data", normals_bilateral.get() )
+        normals_bilateral
+          .get_debug()
+          .set( "debug_input", normals_bilateral.get() )
           .update();
 
       if ( depth_proc_data->render_plane_angles ) 
-        plane_angles_debug
-          .set( "data", plane_angles.get() )
+        plane_angles
+          .get_debug()
+          .set( "debug_input", plane_angles.get() )
           .update(); 
 
       TS_STOP("DepthProcessingSystem");
@@ -195,17 +192,16 @@ class DepthProcessingSystem : public ECSsystem
       ofSetColor(255);
 
       if (depth_proc_data->render)
-        //output.debug().get().draw( 0, 0, rw, rh );
-        //output_debug.get().draw( 0, 0, rw, rh );
+        output(e).get_debug().get().draw(0,0,rw,rh);
 
       if (depth_proc_data->render_normals)
-        normals_debug.get().draw( 0, 0, rw, rh );
+        normals.get_debug().get().draw(0,0,rw,rh);
 
       if (depth_proc_data->render_plane_angles)
-        plane_angles_debug.get().draw( 0, 0, rw, rh ); 
+        plane_angles.get_debug().get().draw(0,0,rw,rh); 
 
       if (depth_proc_data->render_normals_smoothed)
-        normals_bilateral_debug.get().draw( 0, 0, rw, rh ); 
+        normals_bilateral.get_debug().get().draw(0,0,rw,rh); 
 
       ofPopStyle();
 
@@ -276,20 +272,12 @@ class DepthProcessingSystem : public ECSsystem
 
   private:
 
-    //component data processes debug
-    //gpgpu::Process output_debug;
     gpgpu::Process height_map;
     gpgpu::Process background_substraction;
     gpgpu::Process depth_3d;
-
     gpgpu::Process normals;
-    gpgpu::Process normals_debug;
-
     gpgpu::Process normals_bilateral;
-    gpgpu::Process normals_bilateral_debug;
-
     gpgpu::Process plane_angles;
-    gpgpu::Process plane_angles_debug; 
 
     float scale;
 

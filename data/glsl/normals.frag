@@ -13,7 +13,11 @@
  *  normals
  */
 
+#pragma include "lib/math.glsl"
+#pragma include "lib/debug_normalized.glsl"
+
 uniform sampler2DRect mesh_3d;
+uniform sampler2DRect debug_input;
 
 const int kernel = 1;
 
@@ -54,5 +58,12 @@ void main( void )
   normal = normalize( normal );
 
   gl_FragColor = vec4( normal, 1. );
+}
+
+void __debug__() 
+{
+  vec2 p2 = gl_TexCoord[0].xy;
+  vec4 _in = texture2DRect(debug_input, p2);
+  gl_FragColor = debug_normalized(_in);
 }
 
