@@ -59,7 +59,7 @@ class DepthProcessingSystem : public ECSsystem
       normals.init("glsl/normals.frag", w, h );
       normals_bilateral
         .init("glsl/cv/bilateral.frag", w, h )
-        .init_debug("glsl/debug_normalized.frag");
+        .set_debug("glsl/debug_normalized.frag");
       plane_angles.init("glsl/plane_angles.frag", w, h );
       output(e).init("glsl/depth_segmentation.frag", w, h );
 

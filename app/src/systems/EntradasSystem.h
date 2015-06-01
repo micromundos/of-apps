@@ -43,7 +43,7 @@ class EntradasSystem : public ECSsystem
       erode.init("glsl/cv/erode.frag", w, h );
       bilateral
         .init("glsl/cv/bilateral.frag", w, h )
-        .init_debug("glsl/depth_debug.frag");
+        .set_debug("glsl/depth_debug.frag");
 
       output(e).init("glsl/height_threshold.frag", w, h ); 
 
@@ -97,7 +97,7 @@ class EntradasSystem : public ECSsystem
       if ( entradas_data->render_smoothed )
         bilateral
           .get_debug()
-          .set( "data", bilateral.get() )
+          .set( "debug_input", bilateral.get() )
           .update();
 
       TS_STOP("EntradasSystem");
