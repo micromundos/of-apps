@@ -13,10 +13,10 @@ class EntradasComponent : public ECScomponent
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;
     ofParameter<bool> render; 
-    ofParameter<bool> render_smoothed;
-    ofParameter<float> bilateral_domain;
-    ofParameter<float> bilateral_range;
-    ofParameter<float> bilateral_kernel;
+    //ofParameter<bool> render_smoothed;
+    //ofParameter<float> bilateral_domain;
+    //ofParameter<float> bilateral_range;
+    //ofParameter<float> bilateral_kernel;
 
     EntradasComponent(string _id) : ECScomponent(_id) {};
 
@@ -25,12 +25,12 @@ class EntradasComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
 
       param(render, "render");
-      param(render_smoothed, "render_smoothed");
+      //param(render_smoothed, "render_smoothed");
       param(threshold_near, "threshold_near");
       param(threshold_far, "threshold_far"); 
-      param(bilateral_domain, "bilateral_domain"); 
-      param(bilateral_range, "bilateral_range"); 
-      param(bilateral_kernel, "bilateral_kernel");
+      //param(bilateral_domain,"bilateral_domain"); 
+      //param(bilateral_range,"bilateral_range"); 
+      //param(bilateral_kernel,"bilateral_kernel");
     };
 
 };

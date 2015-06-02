@@ -13,7 +13,8 @@ class DepthProcessingComponent : public ECScomponent
 
     ofParameter<bool> render;
     ofParameter<bool> render_normals;
-    ofParameter<bool> render_normals_smoothed;
+    ofParameter<bool> render_depth_map_smoothed;
+    //ofParameter<bool> render_normals_smoothed;
     ofParameter<bool> render_plane_angles;
 
     ofParameter<float> threshold_background;
@@ -21,9 +22,13 @@ class DepthProcessingComponent : public ECScomponent
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;
 
-    ofParameter<float> normals_bilateral_domain;
-    ofParameter<float> normals_bilateral_range;
-    ofParameter<float> normals_bilateral_kernel; 
+    ofParameter<float> depth_map_bilateral_domain;
+    ofParameter<float> depth_map_bilateral_range;
+    ofParameter<float> depth_map_bilateral_kernel;
+
+    //ofParameter<float> normals_bilateral_domain;
+    //ofParameter<float> normals_bilateral_range;
+    //ofParameter<float> normals_bilateral_kernel; 
 
     DepthProcessingComponent(string _id) : ECScomponent(_id) {};
 
@@ -36,13 +41,18 @@ class DepthProcessingComponent : public ECScomponent
       param(threshold_near, "threshold_near");
       param(threshold_far, "threshold_far"); 
 
-      param(normals_bilateral_domain, "normals_bilateral_domain"); 
-      param(normals_bilateral_range, "normals_bilateral_range"); 
-      param(normals_bilateral_kernel, "normals_bilateral_kernel"); 
+      param(depth_map_bilateral_domain, "depth_map_bilateral_domain"); 
+      param(depth_map_bilateral_range, "depth_map_bilateral_range"); 
+      param(depth_map_bilateral_kernel, "depth_map_bilateral_kernel");
+
+      //param(normals_bilateral_domain, "normals_bilateral_domain"); 
+      //param(normals_bilateral_range, "normals_bilateral_range"); 
+      //param(normals_bilateral_kernel, "normals_bilateral_kernel"); 
 
       param(render, "render");
       param(render_normals, "render_normals");
-      param(render_normals_smoothed, "render_normals_smoothed"); 
+      param(render_depth_map_smoothed, "render_depth_map_smoothed"); 
+      //param(render_normals_smoothed, "render_normals_smoothed"); 
       param(render_plane_angles, "render_plane_angles"); 
     };
 

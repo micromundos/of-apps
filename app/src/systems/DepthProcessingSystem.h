@@ -6,8 +6,6 @@
 #include "ofxGPGPU.h"
 #include "ofxTimeMeasurements.h"
 
-//TODO superficies smootheadas
-
 using namespace artemis;
 
 class DepthProcessingSystem : public ECSsystem 
@@ -50,16 +48,23 @@ class DepthProcessingSystem : public ECSsystem
 
       //processes at depth size
 
+      depth_map_bilateral
+        .init("glsl/cv/bilateral.frag", depth_w, depth_h )
+        .set_debug("glsl/depth_debug.frag");
+
       depth_3d.init("glsl/depth_3d.frag", depth_w, depth_h );
+
       background_substraction.init("glsl/cv/background_substraction.frag", depth_w, depth_h ); 
 
       //down sampled processes
 
-      height_map.init("glsl/height_map.frag", w, h ); 
-      normals.init("glsl/normals.frag", w, h );
-      normals_bilateral
-        .init("glsl/cv/bilateral.frag", w, h )
-        .set_debug("glsl/debug_normalized.frag");
+      height_map.init("glsl/height_map.frag",w,h); 
+
+      normals.init("glsl/normals.frag",w,h);
+      //normals_bilateral
+        //.init("glsl/cv/bilateral.frag", w, h )
+        //.set_debug("glsl/debug_normalized.frag");
+
       plane_angles.init("glsl/plane_angles.frag", w, h );
       output(e).init("glsl/depth_segmentation.frag", w, h );
 
@@ -67,11 +72,12 @@ class DepthProcessingSystem : public ECSsystem
 
       ofAddListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
+      ofAddListener( depth_map_bilateral.on_update, this, &DepthProcessingSystem::update_depth_map_bilateral ); 
       ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
       ofAddListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
       ofAddListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
       ofAddListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
-      ofAddListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
+      //ofAddListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
       ofAddListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
     }; 
 
@@ -79,11 +85,12 @@ class DepthProcessingSystem : public ECSsystem
     {
       ofRemoveListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
 
+      ofRemoveListener( depth_map_bilateral.on_update, this, &DepthProcessingSystem::update_depth_map_bilateral ); 
       ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
       ofRemoveListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
       ofRemoveListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
       ofRemoveListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
-      ofRemoveListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
+      //ofRemoveListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
       ofRemoveListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
 
       depth_proc_data = NULL;
@@ -116,8 +123,13 @@ class DepthProcessingSystem : public ECSsystem
         depth_map = &(depth_data->f_depth_img.getTextureReference());
       }
 
+      depth_map_bilateral
+        .set( "data", *depth_map )
+        .update();
+
       depth_3d
-        .set( "depth_map", *depth_map )
+        .set("depth_map", depth_map_bilateral.get())
+        //.set( "depth_map", *depth_map )
         .update();
 
       ofTexture depth_3d_scaled = depth_3d.get_scaled( scale ); 
@@ -130,12 +142,13 @@ class DepthProcessingSystem : public ECSsystem
         .set( "mesh_3d", depth_3d_scaled )
         .update(); 
 
-      normals_bilateral
-        .set( "data", normals.get() )
-        .update();
+      //normals_bilateral
+        //.set( "data", normals.get() )
+        //.update();
 
       plane_angles
-        .set( "normals", normals_bilateral.get() )
+        .set( "normals", normals.get() )
+        //.set( "normals", normals_bilateral.get() )
         .update(); 
 
       output(e)
@@ -153,8 +166,11 @@ class DepthProcessingSystem : public ECSsystem
       if ( depth_proc_data->render_normals ) 
         normals.update_debug();
 
-      if ( depth_proc_data->render_normals_smoothed )  
-        normals_bilateral.update_debug();
+      if ( depth_proc_data->render_depth_map_smoothed )  
+        depth_map_bilateral.update_debug();
+
+      //if ( depth_proc_data->render_normals_smoothed )  
+        //normals_bilateral.update_debug();
 
       if ( depth_proc_data->render_plane_angles ) 
         plane_angles.update_debug();
@@ -166,7 +182,8 @@ class DepthProcessingSystem : public ECSsystem
     {
       if ( !depth_proc_data->render
           && !depth_proc_data->render_normals
-          && !depth_proc_data->render_normals_smoothed
+          && !depth_proc_data->render_depth_map_smoothed
+          //&& !depth_proc_data->render_normals_smoothed
           && !depth_proc_data->render_plane_angles
        ) return;
 
@@ -188,8 +205,11 @@ class DepthProcessingSystem : public ECSsystem
       if (depth_proc_data->render_plane_angles)
         plane_angles.draw_debug(0,0,rw,rh); 
 
-      if (depth_proc_data->render_normals_smoothed)
-        normals_bilateral.draw_debug(0,0,rw,rh); 
+      if (depth_proc_data->render_depth_map_smoothed)
+        depth_map_bilateral.draw_debug(0,0,rw,rh);
+
+      //if (depth_proc_data->render_normals_smoothed)
+        //normals_bilateral.draw_debug(0,0,rw,rh); 
 
       ofPopStyle();
 
@@ -217,6 +237,14 @@ class DepthProcessingSystem : public ECSsystem
       shader.setUniform1f("fy", depthcam->fy);
     };
 
+    void update_depth_map_bilateral( ofShader& shader )
+    {
+      if ( !depth_proc_data ) return;
+      shader.setUniform1f("domain_sigma", depth_proc_data->depth_map_bilateral_domain);
+      shader.setUniform1f("range_sigma", depth_proc_data->depth_map_bilateral_range);
+      shader.setUniform1i("kernel", depth_proc_data->depth_map_bilateral_kernel);
+    };
+
     void update_background_substraction( ofShader& shader )
     {
       if ( !depth_proc_data ) return;
@@ -237,13 +265,13 @@ class DepthProcessingSystem : public ECSsystem
       shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
     };
 
-    void update_normals_bilateral( ofShader& shader )
-    {
-      if ( !depth_proc_data ) return;
-      shader.setUniform1f("domain_sigma", depth_proc_data->normals_bilateral_domain);
-      shader.setUniform1f("range_sigma", depth_proc_data->normals_bilateral_range);
-      shader.setUniform1i("kernel", depth_proc_data->normals_bilateral_kernel);
-    }; 
+    //void update_normals_bilateral( ofShader& shader )
+    //{
+      //if ( !depth_proc_data ) return;
+      //shader.setUniform1f("domain_sigma", depth_proc_data->normals_bilateral_domain);
+      //shader.setUniform1f("range_sigma", depth_proc_data->normals_bilateral_range);
+      //shader.setUniform1i("kernel", depth_proc_data->normals_bilateral_kernel);
+    //}; 
 
     void update_depth_segmentation( ofShader& shader )
     {
@@ -260,11 +288,13 @@ class DepthProcessingSystem : public ECSsystem
 
   private:
 
-    gpgpu::Process height_map;
-    gpgpu::Process background_substraction;
     gpgpu::Process depth_3d;
+    gpgpu::Process depth_map_bilateral;
+    gpgpu::Process background_substraction;
+    //downsampled
+    gpgpu::Process height_map;
     gpgpu::Process normals;
-    gpgpu::Process normals_bilateral;
+    //gpgpu::Process normals_bilateral;
     gpgpu::Process plane_angles;
 
     float scale;

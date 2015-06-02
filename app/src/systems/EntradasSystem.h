@@ -39,19 +39,20 @@ class EntradasSystem : public ECSsystem
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
-      dilate.init("glsl/cv/dilate.frag", w, h );
+      threshold.init("glsl/height_threshold.frag", w, h );
       erode.init("glsl/cv/erode.frag", w, h );
-      bilateral
-        .init("glsl/cv/bilateral.frag", w, h )
-        .set_debug("glsl/depth_debug.frag");
+      dilate.init("glsl/cv/dilate.frag", w, h );
+      //bilateral
+        //.init("glsl/cv/bilateral.frag", w, h )
+        //.set_debug("glsl/depth_debug.frag");
 
-      output(e).init("glsl/height_threshold.frag", w, h ); 
+      output(e) = dilate; 
 
       // events
 
-      ofAddListener( bilateral.on_update, this, &EntradasSystem::update_bilateral );
+      //ofAddListener( bilateral.on_update, this, &EntradasSystem::update_bilateral );
 
-      ofAddListener( output(e).on_update, this, &EntradasSystem::update_entradas );
+      ofAddListener( threshold.on_update, this, &EntradasSystem::update_threshold );
 
     }; 
 
@@ -69,30 +70,27 @@ class EntradasSystem : public ECSsystem
       int h = depth_data->height * scale;
 
       ofTexture _input = input(e).get_scaled(w,h);
-      //ofTexture _input=height_map.get_scaled(w,h);
 
-      bilateral
-        .set( "data", _input )
+      //bilateral
+        //.set( "data", _input )
+        //.update();
+
+      threshold
+        .set( "height_map", _input )
         .update();
-      dilate
-        .set( "tex", bilateral.get() )
-        //.set( "tex", _input )
-        .update( 2 );
+
       erode
-        .set( "tex", dilate.get() )
-        .update( 2 );
+        .set( "tex", threshold.get() )
+        .update( 1 );
+      dilate
+        .set( "tex", erode.get() )
+        .update( 1 ); 
 
-      output(e)
-        //.set( "height_map", height_map.get() )
-        //.set( "height_map", bilateral.get() )
-        .set( "height_map", erode.get() )
-        .update();
+      //if ( entradas_data->render ) 
+        //output(e).update_debug(); 
 
-      if ( entradas_data->render ) 
-        output(e).update_debug(); 
-
-      if ( entradas_data->render_smoothed )
-        bilateral.update_debug();
+      //if ( entradas_data->render_smoothed )
+        //bilateral.update_debug();
 
       TS_STOP("EntradasSystem");
     }; 
@@ -100,7 +98,7 @@ class EntradasSystem : public ECSsystem
     virtual void renderEntity(Entity &e)
     { 
       if ( !entradas_data->render
-          && !entradas_data->render_smoothed
+          //&& !entradas_data->render_smoothed
         ) return;
 
       TS_START("EntradasSystem render");
@@ -110,18 +108,19 @@ class EntradasSystem : public ECSsystem
       int rh = render_data->height;
 
       if (entradas_data->render)
-        output(e).draw_debug(0,0,rw,rh);
+        output(e).get().draw(0,0,rw,rh);
+        //output(e).draw_debug(0,0,rw,rh);
 
-      if (entradas_data->render_smoothed)
-        bilateral.draw_debug(0,0,rw,rh);
+      //if (entradas_data->render_smoothed)
+        //bilateral.draw_debug(0,0,rw,rh);
 
       TS_STOP("EntradasSystem render");
     };
 
     virtual void removed(Entity &e) 
     {
-      ofRemoveListener( bilateral.on_update, this, &EntradasSystem::update_bilateral );
-      ofRemoveListener( output(e).on_update, this, &EntradasSystem::update_entradas );
+      //ofRemoveListener( bilateral.on_update, this, &EntradasSystem::update_bilateral );
+      ofRemoveListener( threshold.on_update, this, &EntradasSystem::update_threshold );
       entradas_data = NULL;
     };
 
@@ -133,9 +132,10 @@ class EntradasSystem : public ECSsystem
 
     EntradasComponent* entradas_data;
 
+    gpgpu::Process threshold;
     gpgpu::Process dilate;
     gpgpu::Process erode;
-    gpgpu::Process bilateral;
+    //gpgpu::Process bilateral;
 
     float scale;
 
@@ -149,17 +149,18 @@ class EntradasSystem : public ECSsystem
       return depth_processing_m.get(e)->output;
     };
 
-    void update_bilateral( ofShader& shader )
-    {
-      if ( !entradas_data ) return;
-      shader.setUniform1f("domain_sigma", entradas_data->bilateral_domain);
-      shader.setUniform1f("range_sigma", entradas_data->bilateral_range);
-      shader.setUniform1i("kernel", entradas_data->bilateral_kernel);
-    };
+    //void update_bilateral( ofShader& shader )
+    //{
+      //if ( !entradas_data ) return;
+      //shader.setUniform1f("domain_sigma", entradas_data->bilateral_domain);
+      //shader.setUniform1f("range_sigma", entradas_data->bilateral_range);
+      //shader.setUniform1i("kernel", entradas_data->bilateral_kernel);
+    //};
 
-    void update_entradas( ofShader& shader )
+    void update_threshold( ofShader& shader )
     {
       if ( !entradas_data ) return;
+      shader.setUniform1i("binary", 1);
       shader.setUniform1f("threshold_near", entradas_data->threshold_near);
       shader.setUniform1f("threshold_far", entradas_data->threshold_far);
     };
