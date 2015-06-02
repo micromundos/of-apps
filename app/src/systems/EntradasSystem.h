@@ -27,7 +27,6 @@ class EntradasSystem : public ECSsystem
       entradas_m.init( *world );
       depth_m.init( *world );
       depth_processing_m.init( *world );
-
       scale = 0.25;
     };
 
@@ -38,15 +37,16 @@ class EntradasSystem : public ECSsystem
 
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
+      //int w = input(e).width();
+      //int h = input(e).height();
 
       threshold.init("glsl/height_threshold.frag", w, h );
       erode.init("glsl/cv/erode.frag", w, h );
-      dilate.init("glsl/cv/dilate.frag", w, h );
+      output(e) //dilate
+        .init("glsl/cv/dilate.frag", w, h );
       //bilateral
         //.init("glsl/cv/bilateral.frag", w, h )
         //.set_debug("glsl/depth_debug.frag");
-
-      output(e) = dilate; 
 
       // events
 
@@ -68,8 +68,8 @@ class EntradasSystem : public ECSsystem
 
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
-
       ofTexture _input = input(e).get_scaled(w,h);
+      //ofTexture& _input = input(e).get();
 
       //bilateral
         //.set( "data", _input )
@@ -82,7 +82,7 @@ class EntradasSystem : public ECSsystem
       erode
         .set( "tex", threshold.get() )
         .update( 1 );
-      dilate
+      output(e) //dilate
         .set( "tex", erode.get() )
         .update( 1 ); 
 
@@ -133,8 +133,8 @@ class EntradasSystem : public ECSsystem
     EntradasComponent* entradas_data;
 
     gpgpu::Process threshold;
-    gpgpu::Process dilate;
     gpgpu::Process erode;
+    //gpgpu::Process dilate;
     //gpgpu::Process bilateral;
 
     float scale;

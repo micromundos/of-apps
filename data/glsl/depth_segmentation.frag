@@ -10,6 +10,7 @@
 
 #pragma include "lib/math.glsl"
 #pragma include "lib/geom.glsl"
+#pragma include "lib/debug_height.glsl"
 
 uniform sampler2DRect height_map;
 uniform sampler2DRect plane_angles;
@@ -40,7 +41,6 @@ void __debug__()
 {
   vec2 p2 = gl_TexCoord[0].xy;
   float _in = texture2DRect(debug_input, p2).r;
-  float _out = _in == 0. ? 0. : lerp2d( _in, 0., 500., 0.2, 1. );
-  gl_FragColor = vec4( _out, _out, _out, 1. );
+  gl_FragColor = debug_height(_in);
 }
 

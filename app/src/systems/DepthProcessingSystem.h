@@ -58,7 +58,7 @@ class DepthProcessingSystem : public ECSsystem
 
       //down sampled processes
 
-      height_map.init("glsl/height_map.frag",w,h); 
+      height_map.init("glsl/height_map.frag",w,h);  
 
       normals.init("glsl/normals.frag",w,h);
       //normals_bilateral
@@ -66,7 +66,19 @@ class DepthProcessingSystem : public ECSsystem
         //.set_debug("glsl/debug_normalized.frag");
 
       plane_angles.init("glsl/plane_angles.frag", w, h );
-      output(e).init("glsl/depth_segmentation.frag", w, h );
+
+      segmentation.init("glsl/depth_segmentation.frag", w, h );
+
+      //post-processing
+      //threshold.init("glsl/height_threshold.frag", w, h );
+      erode.init("glsl/cv/erode.frag", w, h );
+      output(e) //dilate
+        .init("glsl/cv/dilate.frag", w, h )
+        .set_debug("glsl/height_debug.frag");
+      //mask
+        //.init("glsl/cv/mask.frag", w, h )
+        //.set_debug("glsl/height_debug.frag");
+
 
       // events
 
@@ -78,7 +90,8 @@ class DepthProcessingSystem : public ECSsystem
       ofAddListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
       ofAddListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
       //ofAddListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
-      ofAddListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
+      ofAddListener( segmentation.on_update, this, &DepthProcessingSystem::update_depth_segmentation );
+      //ofAddListener( threshold.on_update, this, &DepthProcessingSystem::update_threshold );
     }; 
 
     virtual void removed(Entity &e) 
@@ -91,7 +104,8 @@ class DepthProcessingSystem : public ECSsystem
       ofRemoveListener( height_map.on_update, this, &DepthProcessingSystem::update_height_map );
       ofRemoveListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
       //ofRemoveListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
-      ofRemoveListener( output(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
+      ofRemoveListener( segmentation.on_update, this, &DepthProcessingSystem::update_depth_segmentation );
+      //ofRemoveListener( threshold.on_update, this, &DepthProcessingSystem::update_threshold );
 
       depth_proc_data = NULL;
       table_calib_data = NULL;
@@ -140,7 +154,7 @@ class DepthProcessingSystem : public ECSsystem
 
       normals
         .set( "mesh_3d", depth_3d_scaled )
-        .update(); 
+        .update();  
 
       //normals_bilateral
         //.set( "data", normals.get() )
@@ -151,11 +165,32 @@ class DepthProcessingSystem : public ECSsystem
         //.set( "normals", normals_bilateral.get() )
         .update(); 
 
-      output(e)
+      segmentation
         .set( "height_map", height_map.get() )
         .set( "plane_angles", plane_angles.get() )
         //.set( "normals", normals_bilateral.get() )
         .update();  
+
+      //binarize
+      //threshold
+        //.set( "height_map", segmentation.get() )
+        //.update();
+      //open -> close = rm noise -> rm holes
+      erode
+        .set( "tex", segmentation.get() )
+        //.set( "tex", threshold.get() )
+        .update( 1 );
+      output(e) //dilate
+        .set( "tex", erode.get() )
+        .update( 4 );
+      //erode
+        //.set( "tex", dilate.get() )
+        //.update( 1 );
+      //height map hi-pass
+      //mask
+        //.set( "data", segmentation.get() )
+        //.set( "mask", dilate.get() )
+        //.update();
 
 
       // update render data
@@ -197,6 +232,7 @@ class DepthProcessingSystem : public ECSsystem
       ofSetColor(255);
 
       if (depth_proc_data->render)
+        //output(e).get().draw(0,0,rw,rh);
         output(e).draw_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_normals)
@@ -286,16 +322,29 @@ class DepthProcessingSystem : public ECSsystem
       shader.setUniform1f("threshold_far", depth_proc_data->threshold_far);
     };
 
+    void update_threshold( ofShader& shader )
+    {
+      shader.setUniform1i("binary", 1);
+      shader.setUniform1f("threshold_near", 0.);
+      shader.setUniform1f("threshold_far", 5000.);
+    };
+
   private:
 
     gpgpu::Process depth_3d;
     gpgpu::Process depth_map_bilateral;
     gpgpu::Process background_substraction;
     //downsampled
+    gpgpu::Process segmentation;
     gpgpu::Process height_map;
     gpgpu::Process normals;
     //gpgpu::Process normals_bilateral;
     gpgpu::Process plane_angles;
+    //post-processing
+    //gpgpu::Process threshold;
+    //gpgpu::Process mask;
+    gpgpu::Process erode;
+    //gpgpu::Process dilate;
 
     float scale;
 
