@@ -54,10 +54,7 @@ class DepthFlowFieldSystem : public ECSsystem
         .update();
 
       if ( ff_data->render )
-        output(e)
-          .get_debug()
-          .set( "debug_input", output(e).get() )
-          .update();
+        output(e).update_debug();
 
       TS_STOP("DepthFlowFieldSystem");
     };
@@ -73,7 +70,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
-      output(e).get_debug().get().draw( 0, 0, render_data->width, render_data->height );
+      output(e).draw_debug( 0, 0, render_data->width, render_data->height );
       //output(e).get().draw( 0, 0, render_data->width, render_data->height );
       //input(e).get().draw( 0, 0, render_data->width, render_data->height );
 

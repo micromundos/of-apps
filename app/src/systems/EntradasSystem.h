@@ -89,16 +89,10 @@ class EntradasSystem : public ECSsystem
         .update();
 
       if ( entradas_data->render ) 
-        output(e)
-          .get_debug()
-          .set( "debug_input", output(e).get() )
-          .update(); 
+        output(e).update_debug(); 
 
       if ( entradas_data->render_smoothed )
-        bilateral
-          .get_debug()
-          .set( "debug_input", bilateral.get() )
-          .update();
+        bilateral.update_debug();
 
       TS_STOP("EntradasSystem");
     }; 
@@ -116,10 +110,10 @@ class EntradasSystem : public ECSsystem
       int rh = render_data->height;
 
       if (entradas_data->render)
-        output(e).get_debug().get().draw(0,0,rw,rh);
+        output(e).draw_debug(0,0,rw,rh);
 
       if (entradas_data->render_smoothed)
-        bilateral.get_debug().get().draw(0,0,rw,rh);
+        bilateral.draw_debug(0,0,rw,rh);
 
       TS_STOP("EntradasSystem render");
     };

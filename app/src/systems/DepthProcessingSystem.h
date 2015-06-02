@@ -148,28 +148,16 @@ class DepthProcessingSystem : public ECSsystem
       // update render data
 
       if ( depth_proc_data->render ) 
-        output(e)
-          .get_debug()
-          .set( "debug_input", output(e).get() )
-          .update();
+        output(e).update_debug();
 
       if ( depth_proc_data->render_normals ) 
-        normals
-          .get_debug()
-          .set( "debug_input", normals.get() )
-          .update();
+        normals.update_debug();
 
       if ( depth_proc_data->render_normals_smoothed )  
-        normals_bilateral
-          .get_debug()
-          .set( "debug_input", normals_bilateral.get() )
-          .update();
+        normals_bilateral.update_debug();
 
       if ( depth_proc_data->render_plane_angles ) 
-        plane_angles
-          .get_debug()
-          .set( "debug_input", plane_angles.get() )
-          .update(); 
+        plane_angles.update_debug();
 
       TS_STOP("DepthProcessingSystem");
     }; 
@@ -192,16 +180,16 @@ class DepthProcessingSystem : public ECSsystem
       ofSetColor(255);
 
       if (depth_proc_data->render)
-        output(e).get_debug().get().draw(0,0,rw,rh);
+        output(e).draw_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_normals)
-        normals.get_debug().get().draw(0,0,rw,rh);
+        normals.draw_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_plane_angles)
-        plane_angles.get_debug().get().draw(0,0,rw,rh); 
+        plane_angles.draw_debug(0,0,rw,rh); 
 
       if (depth_proc_data->render_normals_smoothed)
-        normals_bilateral.get_debug().get().draw(0,0,rw,rh); 
+        normals_bilateral.draw_debug(0,0,rw,rh); 
 
       ofPopStyle();
 
