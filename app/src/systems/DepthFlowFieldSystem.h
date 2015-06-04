@@ -33,11 +33,11 @@ class DepthFlowFieldSystem : public ECSsystem
     {
       DepthComponent* depth_data = depth_m.get(e);
 
-      gpgpu::Process& _input = input(e);
-      int w = _input.width();
-      int h = _input.height();
+      gpgpu::Process& _surfaces = surfaces(e);
+      int w = _surfaces.width();
+      int h = _surfaces.height();
 
-      output(e).init("glsl/flowfield.frag",w,h);
+      flowfield(e).init("glsl/flowfield.frag",w,h);
     };
 
     virtual void processEntity(Entity &e) 
@@ -49,12 +49,12 @@ class DepthFlowFieldSystem : public ECSsystem
 
       TS_START("DepthFlowFieldSystem");
 
-      output(e)
-        .set( "data", input(e).get() )
+      flowfield(e)
+        .set( "data", surfaces(e).get() )
         .update();
 
       if ( ff_data->render )
-        output(e).update_debug();
+        flowfield(e).update_debug();
 
       TS_STOP("DepthFlowFieldSystem");
     };
@@ -70,9 +70,9 @@ class DepthFlowFieldSystem : public ECSsystem
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
-      output(e).draw_debug( 0, 0, render_data->width, render_data->height );
-      //output(e).get().draw( 0, 0, render_data->width, render_data->height );
-      //input(e).get().draw( 0, 0, render_data->width, render_data->height );
+      flowfield(e).draw_debug( 0, 0, render_data->width, render_data->height );
+      //flowfield(e).get().draw( 0, 0, render_data->width, render_data->height );
+      //surfaces(e).get().draw( 0, 0, render_data->width, render_data->height );
 
       TS_STOP("DepthFlowFieldSystem render");
     };
@@ -83,14 +83,19 @@ class DepthFlowFieldSystem : public ECSsystem
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
 
-    gpgpu::Process& output(Entity &e)
+    gpgpu::Process& flowfield(Entity &e)
     {
-      return flowfield_m.get(e)->output;
+      return flowfield_m.get(e)->flowfield();
     };
 
-    gpgpu::Process& input(Entity &e)
+    gpgpu::Process& surfaces(Entity &e)
     {
-      return depth_processing_m.get(e)->output;
+      return depth_processing_m.get(e)->surfaces();
+    };
+
+    gpgpu::Process& height_map(Entity &e)
+    {
+      return depth_processing_m.get(e)->height_map();
     };
 };
 

@@ -6,9 +6,13 @@
 
 class EntradasComponent : public ECScomponent 
 {
+  private:
+    gpgpu::Process _output; 
+
   public:
 
-    gpgpu::Process output; 
+    gpgpu::Process& output()
+    { return _output; }; 
 
     ofParameter<float> threshold_near;
     ofParameter<float> threshold_far;

@@ -141,12 +141,12 @@ class EntradasSystem : public ECSsystem
 
     gpgpu::Process& output(Entity &e)
     {
-      return entradas_m.get(e)->output;
+      return entradas_m.get(e)->output();
     };
 
     gpgpu::Process& input(Entity &e)
     {
-      return depth_processing_m.get(e)->output;
+      return depth_processing_m.get(e)->surfaces();
     };
 
     //void update_bilateral( ofShader& shader )
