@@ -1,3 +1,9 @@
+
+//DEPRECATED
+//DEPRECATED
+//DEPRECATED
+//DEPRECATED
+
 #pragma once
 
 #include "ofxCv.h"
@@ -17,10 +23,10 @@ class DepthFloatData
       this->h = h;
       int dw = depth_data->width;
       int dh = depth_data->height;
+      int channels = depth_data->channels;
 
       xscale = (float)w / dw; 
       yscale = (float)h / dh; 
-      channels = 1;
 
       pix_mm.allocate( dw, dh, channels );
       pix_mm.set(0);
@@ -31,7 +37,7 @@ class DepthFloatData
 
     ofTexture& update( DepthComponent* depth_data )
     {
-      pix_mm.setFromPixels( depth_data->f_depth_ofpix_mm->getPixels(), depth_data->width, depth_data->height, channels );
+      pix_mm.setFromPixels( depth_data->f_depth_ofpix_mm->getPixels(), depth_data->width, depth_data->height, depth_data->channels );
 
       if ( xscale != 1.0 || yscale != 1.0 )
       {
@@ -58,7 +64,6 @@ class DepthFloatData
 
     int w, h;
     float xscale, yscale;
-    int channels;
 
     ofTexture tex;
     ofFloatPixels pix_mm;

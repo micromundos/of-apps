@@ -10,9 +10,9 @@ using namespace artemis;
 //TODO try ofFloatPixels ofFloatImage
 
 //TODO refactor to 
-//plane_calib_osc
-//PlaneCalibOscSystem
-//PlaneCalibOscComponent
+//table_calib_osc
+//TableCalibOscSystem
+//TableCalibOscComponent
 //listen to calib result on osc receiver
 
 class DepthOscSenderSystem : public ECSsystem 

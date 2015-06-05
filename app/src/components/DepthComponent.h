@@ -9,10 +9,12 @@ class DepthComponent : public ECScomponent
   public:
 
     ofShortPixels* depth_ofpix_mm; //uint16_t
-    ofFloatPixels* f_depth_ofpix_mm; //float
     ofPixels* depth_ofpix_grey; //uint8_t
+    ofFloatPixels* f_depth_ofpix_mm; //float
+    ofFloatImage f_depth_img;
 
     int width, height;
+    int channels;
     bool dirty;
 
     ofParameter<bool> render;
@@ -37,21 +39,8 @@ class DepthComponent : public ECScomponent
     {
       this->width = w;
       this->height = h;
+      this->channels = 1;
     }; 
 
-    void update( ofShortPixels& depth_ofpix_mm )
-    {
-      this->depth_ofpix_mm = &depth_ofpix_mm;
-    };
-
-    void update( ofFloatPixels& f_depth_ofpix_mm )
-    {
-      this->f_depth_ofpix_mm = &f_depth_ofpix_mm;
-    };
-
-    void update( ofPixels& depth_ofpix_grey )
-    {
-      this->depth_ofpix_grey = &depth_ofpix_grey;
-    };
 };
 

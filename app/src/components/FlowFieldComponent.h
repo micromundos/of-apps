@@ -21,7 +21,7 @@ class FlowFieldComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
-      param( force_amplifier, "force_amplifier");
+    //  param( force_amplifier, "force_amplifier");
     };
 };
 

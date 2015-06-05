@@ -6,7 +6,6 @@
 #include "ofxOpenCv.h"
 #include "ofxCv.h"
 #include "ofxGPGPU.h"
-#include "DepthFloatData.h"
 #include "ofxTimeMeasurements.h"
 
 using namespace artemis;
@@ -34,14 +33,11 @@ class DepthFlowFieldSystem : public ECSsystem
     {
       DepthComponent* depth_data = depth_m.get(e);
 
-      //depth_f.init( depth_data, w, h );
-
       gpgpu::Process& _input = input(e);
       int w = _input.width();
       int h = _input.height();
 
       output(e).init("glsl/flowfield.frag",w,h);
-      debug.init("glsl/flowfield_debug.frag",w,h);
     };
 
     virtual void processEntity(Entity &e) 
@@ -53,18 +49,12 @@ class DepthFlowFieldSystem : public ECSsystem
 
       TS_START("DepthFlowFieldSystem");
 
-      //DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e); 
-      //ofTexture& depth_ftex = depth_f.update( depth_data );
-
       output(e)
-        //.set( "data", depth_ftex )
         .set( "data", input(e).get() )
         .update();
 
       if ( ff_data->render )
-        debug
-          .set( "data", output(e).get() )
-          .update();
+        output(e).update_debug();
 
       TS_STOP("DepthFlowFieldSystem");
     };
@@ -80,7 +70,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
-      debug.get().draw( 0, 0, render_data->width, render_data->height );
+      output(e).draw_debug( 0, 0, render_data->width, render_data->height );
       //output(e).get().draw( 0, 0, render_data->width, render_data->height );
       //input(e).get().draw( 0, 0, render_data->width, render_data->height );
 
@@ -92,9 +82,6 @@ class DepthFlowFieldSystem : public ECSsystem
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
-
-    gpgpu::Process debug;
-    //DepthFloatData depth_f;
 
     gpgpu::Process& output(Entity &e)
     {

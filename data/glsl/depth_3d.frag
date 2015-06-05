@@ -10,7 +10,7 @@
  *  3d points in metric space
  */
 
-#pragma include "depth.glsl"
+#pragma include "lib/depth.glsl"
 
 uniform sampler2DRect depth_map;
 uniform bool depth_flip;

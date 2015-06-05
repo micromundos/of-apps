@@ -1,5 +1,8 @@
-//geom functions
-//see ofxGeom
+
+/*
+ * geom functions
+ * https://github.com/chparsons/ofxGeom
+ */
 
 vec4 make_plane( vec3 v0, vec3 v1, vec3 v2 )
 {

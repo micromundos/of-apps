@@ -9,10 +9,14 @@
  */
 
 uniform sampler2DRect data;  
+uniform sampler2DRect debug_input;
 
-const float domain_sigma = 10.0; //10.0;
-const float range_sigma = 2.0; //0.2;    
-const int kernel = 6;
+uniform float domain_sigma;
+uniform float range_sigma;
+uniform int kernel;
+/*const float domain_sigma = 10.0; //10.0;*/
+/*const float range_sigma = 2.0; //0.2;*/
+/*const int kernel = 6;*/
 
 const float PI = 3.14159265f;
 

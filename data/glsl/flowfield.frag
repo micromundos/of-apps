@@ -2,7 +2,7 @@
 #extension GL_EXT_gpu_shader4 : enable
 #extension GL_ARB_texture_rectangle : enable
 
-#pragma include "math.glsl"
+#pragma include "lib/math.glsl"
 
 /*
  * flowfield
@@ -14,6 +14,7 @@
  */
 
 uniform sampler2DRect data;
+uniform sampler2DRect debug_input;
 
 const int kernel = 6;
 
@@ -47,7 +48,7 @@ void main( void )
 
     // nheight: drives away from plane
     // -nheight: drives towards plane
-    force += normalize(ndir) * slope;
+    force += normalize(ndir) * -slope;
     n++;
   }
 
@@ -67,3 +68,31 @@ void main( void )
   /*float vis = lerp2d( height, 0.,200., 0.,1.);*/
   /*gl_FragColor = vec4(vis,vis,vis,1.);*/
 }
+
+void __debug__( void ) 
+{
+    vec2 p2 = gl_TexCoord[0].xy;
+    vec3 _in = texture2DRect(debug_input, p2).xyz;
+
+    /*_in = normalize(_in);*/
+
+    vec3 _out;
+
+    /*if ( _in.x == 0. && _in.y == 0. )*/
+    /*{*/
+      /*_out = vec3(0.5,0.5,0.5);//gris*/
+    /*}*/
+    /*else*/
+    /*{*/
+      float r = 1.;
+      _out = vec3(
+        lerp2d( _in.x, -r,r, 0.,1.),
+        lerp2d( _in.y, -r,r, 0.,1.),
+        lerp2d( _in.z, -r,r, 0.,1.)
+        /*0.0 //sin azul*/
+      );
+    /*}*/
+
+    gl_FragColor = vec4( _out, 1.);
+}
+

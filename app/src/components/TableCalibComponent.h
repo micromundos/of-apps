@@ -5,7 +5,7 @@
 #include "ofxECS.h"
 #include "ofxGeom.h"
 
-class PlaneCalibComponent : public ECScomponent 
+class TableCalibComponent : public ECScomponent 
 {
   public:
 
@@ -13,7 +13,10 @@ class PlaneCalibComponent : public ECScomponent
     ofxPlane plane; 
     ofxTriangle triangle; 
 
-    string filename;
+    ofFloatImage background;
+
+    string filename_plane;
+    string filename_background;
 
     ofParameter<bool> calibrate;
     ofParameter<bool> save;
@@ -24,13 +27,14 @@ class PlaneCalibComponent : public ECScomponent
     ofParameter<bool> render_plane;
     ofParameter<bool> render_planes_list;
 
-    PlaneCalibComponent(string _id) : ECScomponent(_id) {};
+    TableCalibComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
       ECScomponent::init(e_id,d,p);
 
-      filename = d.get("filename","plane_calib.yml").asString();
+      filename_plane = d.get("filename_plane","table_plane.yml").asString();
+      filename_background = d.get("filename_background","table_background.yml").asString();
 
       param(calibrate, "calibrate");
       param(save, "save");

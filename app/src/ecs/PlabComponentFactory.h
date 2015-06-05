@@ -33,9 +33,9 @@ else if (id == "particle_flow_field") return new ParticleFlowFieldComponent(id);
 else if (id == "fisica") return new FisicaComponent(id);
 else if (id == "time_bender") return new TimeBenderComponent(id);
 else if (id == "knob") return new KnobComponent(id);
-else if (id == "plane_calib") return new PlaneCalibComponent(id);
+else if (id == "table_calib") return new TableCalibComponent(id);
 else if (id == "depth_processing") return new DepthProcessingComponent(id);
-else if (id == "flowfield_debug") return new FlowfieldDebugComponent(id);
+else if (id == "entradas") return new EntradasComponent(id);
 //dont remove this line
 
 return NULL;

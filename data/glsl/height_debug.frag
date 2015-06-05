@@ -2,10 +2,11 @@
 #extension GL_ARB_texture_rectangle : enable
 
 #pragma include "lib/math.glsl"
+#pragma include "lib/debug_height.glsl"
 
 /*
- * depth process debug
- * in: depth in mm
+ * height process debug
+ * in: height in mm
  * out: visible data [0,1]
  */
 
@@ -15,8 +16,6 @@ void main( void )
 {
   vec2 p2 = gl_TexCoord[0].xy;
   float _in = texture2DRect(debug_input, p2).r;
-  /*float _out = lerp2d( _in, 0., 5000., 1., 0. );*/
-  float _out = _in == 0. ? 0. : lerp2d( _in, 400., 2000., 1., 0. );
-  gl_FragColor = vec4( _out, _out, _out, 1. );
+  gl_FragColor = debug_height(_in);
 }
 

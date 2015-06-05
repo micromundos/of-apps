@@ -8,20 +8,20 @@
 
 using namespace artemis;
 
-class PlaneCalibSystem : public ECSsystem 
+class TableCalibSystem : public ECSsystem 
 { 
 
   public:
 
-    PlaneCalibSystem(string _id) : ECSsystem(_id)
+    TableCalibSystem(string _id) : ECSsystem(_id)
     {
-      addComponentType<PlaneCalibComponent>();
+      addComponentType<TableCalibComponent>();
       addComponentType<DepthComponent>();
     };
 
     virtual void initialize() 
     {
-      plane_calib_m.init( *world );
+      table_calib_m.init( *world );
       depth_m.init( *world );
       entity = NULL;
     };
@@ -30,14 +30,14 @@ class PlaneCalibSystem : public ECSsystem
     {
       if ( entity != NULL )
       {
-        ofLogWarning("PlaneCalibSystem") << "singleton entity already added";
+        ofLogWarning("TableCalibSystem") << "singleton entity already added";
         return;
       }
       entity = &e;
 
       cml_data = require_component<CamaraLucidaComponent>("output");
-      ofAddListener( cml_data->cml->render_3d, this, &PlaneCalibSystem::render_3d );
-      //ofAddListener( ofEvents().mousePressed, this, &PlaneCalibSystem::mousePressed );
+      ofAddListener( cml_data->cml->render_3d, this, &TableCalibSystem::render_3d );
+      //ofAddListener( ofEvents().mousePressed, this, &TableCalibSystem::mousePressed );
       //midx = 0;
     }; 
 
@@ -45,11 +45,11 @@ class PlaneCalibSystem : public ECSsystem
     {
       if (cml_data != NULL)
       {
-        ofRemoveListener( cml_data->cml->render_3d, this, &PlaneCalibSystem::render_3d );
+        ofRemoveListener( cml_data->cml->render_3d, this, &TableCalibSystem::render_3d );
         cml_data = NULL;
       }
       entity = NULL;
-      //ofRemoveListener( ofEvents().mousePressed, this, &PlaneCalibSystem::mousePressed );
+      //ofRemoveListener( ofEvents().mousePressed, this, &TableCalibSystem::mousePressed );
     };
 
     virtual void processEntity(Entity &e) 
@@ -64,15 +64,13 @@ class PlaneCalibSystem : public ECSsystem
     {
       //debugging
 
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
-      if ( plane_calib_data->render_plane 
-          || plane_calib_data->render_planes_list )
-      {
-        update_coordmap(); 
-      }
+      if ( table_calib_data->render_plane 
+          || table_calib_data->render_planes_list 
+        ) update_coordmap(); 
 
-      if ( plane_calib_data->render_plane )
+      if ( table_calib_data->render_plane )
       {
         ofPushStyle();
         ofSetColor( ofColor::magenta );
@@ -87,7 +85,7 @@ class PlaneCalibSystem : public ECSsystem
         ofPopStyle();
       }
 
-      if ( plane_calib_data->render_planes_list )
+      if ( table_calib_data->render_planes_list )
       {
         tris2d_mesh.setMode(OF_PRIMITIVE_TRIANGLES);
         tris2d_mesh.clear();
@@ -129,23 +127,26 @@ class PlaneCalibSystem : public ECSsystem
 
     bool calibrate(Entity &e)
     {
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
       DepthComponent* depth_data = depth_m.get(e);
 
-      if ( !plane_calib_data->calibrate 
+      if ( !table_calib_data->calibrate 
           || !depth_data->dirty )
         return false;
 
       //run once
-      plane_calib_data->calibrate = !plane_calib_data->calibrate;  
+      table_calib_data->calibrate = !table_calib_data->calibrate;  
 
       find_triangles(e);
       triangle = calc_avg_tri();
       plane = triangle.plane();
       //plane = calc_avg_plane();
 
-      plane_calib_data->triangle = triangle;
-      plane_calib_data->plane = plane;
+      table_calib_data->triangle = triangle;
+      table_calib_data->plane = plane;
+
+      table_calib_data->background.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
+
       return true;
     };
 
@@ -154,15 +155,15 @@ class PlaneCalibSystem : public ECSsystem
       CamaraLucidaSystem* cml_sys = require_system<CamaraLucidaSystem>();
 
       DepthComponent* depth_data = depth_m.get(e);
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
       int w = depth_data->width;
       int h = depth_data->height;
       uint16_t* depth_pix_mm = depth_data->depth_ofpix_mm->getPixels();
 
-      int nplanes = plane_calib_data->planes_num;
-      float rstep = plane_calib_data->radius_step;
-      float astep = plane_calib_data->angle_step;
+      int nplanes = table_calib_data->planes_num;
+      float rstep = table_calib_data->radius_step;
+      float astep = table_calib_data->angle_step;
 
       float r = rstep;
       float ang = astep;
@@ -223,6 +224,43 @@ class PlaneCalibSystem : public ECSsystem
       return ofxPlane( ctr, normal );
     };
 
+    void save_background(Entity &e)
+    {
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+
+      ofLogNotice("TableCalibSystem") 
+        << "save background to " << table_calib_data->filename_background;
+
+      cv::Mat background = ofxCv::toCv( table_calib_data->background );
+
+      cv::FileStorage fs( ofToDataPath(table_calib_data->filename_background, false), cv::FileStorage::WRITE );
+      fs << "table_background" << background;
+    };
+
+    bool load_background(Entity &e)
+    {
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+
+      ofLogNotice("TableCalibSystem") 
+        << "load background from " << table_calib_data->filename_background;
+
+      cv::FileStorage fs( ofToDataPath(table_calib_data->filename_background, false), cv::FileStorage::READ );  
+
+      if ( !fs.isOpened() )
+      {
+        ofLogError("TableCalibSystem") << "failed to load table background file " << table_calib_data->filename_background;
+        return false;
+      }
+
+      cv::Mat background;
+      fs["table_background"] >> background;
+      ofFloatPixels bg;
+      ofxCv::toOf( background, bg );
+      table_calib_data->background.setFromPixels( bg );
+
+      return true;
+    };
+
     void update_coordmap()
     {
       DepthComponent* depth_data = require_component<DepthComponent>("input");
@@ -235,58 +273,45 @@ class PlaneCalibSystem : public ECSsystem
 
     bool load(Entity &e)
     {
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
-      if ( !plane_calib_data->load )
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+      if ( !table_calib_data->load )
         return false;
 
-      plane_calib_data->load = false; //once
+      table_calib_data->load = false; //once
 
-      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename, false), cv::FileStorage::READ ); 
-
-      if ( !fs.isOpened() )
-      {
-        ofLogError("PlaneCalibSystem") << "failed to load plane calib file " << plane_calib_data->filename;
-        return false;
-      }
-
-      ofVec3f v0 = ofVec3f( fs["vertex_0_x"], fs["vertex_0_y"], fs["vertex_0_z"] );
-      ofVec3f v1 = ofVec3f( fs["vertex_1_x"], fs["vertex_1_y"], fs["vertex_1_z"] );
-      ofVec3f v2 = ofVec3f( fs["vertex_2_x"], fs["vertex_2_y"], fs["vertex_2_z"] );
-
-      ofLogNotice("PlaneCalibSystem")
-        << "load plane calib from " << plane_calib_data->filename << "\n"
-        << "v0 " << v0 << "\n"
-        << "v1 " << v1 << "\n"
-        << "v2 " << v2 << "\n";
-
-      triangle = ofxTriangle(v0,v1,v2);
-      plane = triangle.plane();
-
-      plane_calib_data->triangle = triangle;
-      plane_calib_data->plane = plane;
-      return true;
+      return load_background(e) && load_table_plane(e);
     };
 
     bool save(Entity &e)
     {
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
-      if ( !plane_calib_data->save )
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+      if ( !table_calib_data->save )
         return false;
 
-      plane_calib_data->save = false; //once
+      table_calib_data->save = false; //once
 
-      ofxTriangle& tri = plane_calib_data->triangle;
+      save_background(e);
+      save_table_plane(e); 
+
+      return true;
+    };
+
+    void save_table_plane(Entity &e)
+    {
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+
+      ofxTriangle& tri = table_calib_data->triangle;
       ofVec3f v0 = tri.b;
       ofVec3f v1 = tri.b + tri.e0;
       ofVec3f v2 = tri.b + tri.e1;
 
-      ofLogNotice("PlaneCalibSystem") 
-        << "save plane calib to " << plane_calib_data->filename << "\n"
+      ofLogNotice("TableCalibSystem") 
+        << "save plane calib to " << table_calib_data->filename_plane << "\n"
         << "v0 " << v0 << "\n"
         << "v1 " << v1 << "\n"
         << "v2 " << v2 << "\n";
 
-      cv::FileStorage fs( ofToDataPath(plane_calib_data->filename, false), cv::FileStorage::WRITE ); 
+      cv::FileStorage fs( ofToDataPath(table_calib_data->filename_plane, false), cv::FileStorage::WRITE ); 
 
       fs << "vertex_0_x" << v0.x;
       fs << "vertex_0_y" << v0.y;
@@ -299,6 +324,35 @@ class PlaneCalibSystem : public ECSsystem
       fs << "vertex_2_x" << v2.x;
       fs << "vertex_2_y" << v2.y;
       fs << "vertex_2_z" << v2.z;
+    };
+
+    bool load_table_plane(Entity &e)
+    {
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+
+      cv::FileStorage fs( ofToDataPath(table_calib_data->filename_plane, false), cv::FileStorage::READ ); 
+
+      if ( !fs.isOpened() )
+      {
+        ofLogError("TableCalibSystem") << "failed to load plane calib file " << table_calib_data->filename_plane;
+        return false;
+      }
+
+      ofVec3f v0 = ofVec3f( fs["vertex_0_x"], fs["vertex_0_y"], fs["vertex_0_z"] );
+      ofVec3f v1 = ofVec3f( fs["vertex_1_x"], fs["vertex_1_y"], fs["vertex_1_z"] );
+      ofVec3f v2 = ofVec3f( fs["vertex_2_x"], fs["vertex_2_y"], fs["vertex_2_z"] );
+
+      ofLogNotice("TableCalibSystem")
+        << "load plane calib from " << table_calib_data->filename_plane << "\n"
+        << "v0 " << v0 << "\n"
+        << "v1 " << v1 << "\n"
+        << "v2 " << v2 << "\n";
+
+      triangle = ofxTriangle(v0,v1,v2);
+      plane = triangle.plane();
+
+      table_calib_data->triangle = triangle;
+      table_calib_data->plane = plane;
 
       return true;
     };
@@ -312,9 +366,9 @@ class PlaneCalibSystem : public ECSsystem
 
     void _render_3d(Entity &e)
     {
-      PlaneCalibComponent* plane_calib_data = plane_calib_m.get(e);
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
-      if ( !plane_calib_data->render_plane )
+      if ( !table_calib_data->render_plane )
         return;
 
       ofPushMatrix();
@@ -419,7 +473,7 @@ class PlaneCalibSystem : public ECSsystem
         //<< ", dist = " << d;
     //};
 
-    ComponentMapper<PlaneCalibComponent> plane_calib_m;
+    ComponentMapper<TableCalibComponent> table_calib_m;
     ComponentMapper<DepthComponent> depth_m;
 
 };

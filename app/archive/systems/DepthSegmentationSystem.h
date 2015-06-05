@@ -17,14 +17,14 @@ class DepthSegmentationSystem : public ECSsystem
     {
       addComponentType<DepthSegmentationComponent>();
       addComponentType<DepthComponent>();
-      addComponentType<PlaneCalibComponent>();
+      addComponentType<TableCalibComponent>();
     };
 
     virtual void initialize() 
     {
       segmentation_m.init( *world );
       depth_m.init( *world );
-      plane_calib_m.init( *world );
+      table_calib_m.init( *world );
 
       inited = false;
       channels = 1;
@@ -74,7 +74,7 @@ class DepthSegmentationSystem : public ECSsystem
       ofRemoveListener( depth_seg.on_update, this, &DepthSegmentationSystem::update_depth_seg );
 
       seg_data = NULL;
-      plane_calib_data = NULL;
+      table_calib_data = NULL;
       cml_data = NULL;
     };
 
@@ -82,7 +82,7 @@ class DepthSegmentationSystem : public ECSsystem
     {
       depth_data = depth_m.get(e);
       seg_data = segmentation_m.get(e);
-      plane_calib_data = plane_calib_m.get(e);
+      table_calib_data = table_calib_m.get(e);
 
       if ( !depth_data->dirty )
         return; 
@@ -124,7 +124,7 @@ class DepthSegmentationSystem : public ECSsystem
       //{
         //p2.set( x/scale, y/scale );
         //cml_sys->depth_to_p3( p2, p3 );
-        //float d = plane_calib_data->plane.distance( p3 );
+        //float d = table_calib_data->plane.distance( p3 );
         //int i = y * ws + x;
         //output[i] = d < seg_data->threshold_far && d > seg_data->threshold_near ? 255 : 0;
       //}
@@ -185,8 +185,8 @@ class DepthSegmentationSystem : public ECSsystem
 
     void update_height_map( ofShader& shader )
     {
-      if ( !plane_calib_data ) return;
-      ofxPlane& p = plane_calib_data->plane;
+      if ( !table_calib_data ) return;
+      ofxPlane& p = table_calib_data->plane;
       shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
     };
 
@@ -211,7 +211,7 @@ class DepthSegmentationSystem : public ECSsystem
     //ugly singleton entity stuff
     bool inited;
     DepthSegmentationComponent* seg_data;
-    PlaneCalibComponent* plane_calib_data;
+    TableCalibComponent* table_calib_data;
     CamaraLucidaComponent* cml_data;
     DepthComponent* depth_data;
 
@@ -225,8 +225,8 @@ class DepthSegmentationSystem : public ECSsystem
       if ( !inited ) return;
       if ( !seg_data->render ) return;
 
-      ofVec3f n = plane_calib_data->plane.normal();
-      ofVec3f ctr = plane_calib_data->triangle.centroid();
+      ofVec3f n = table_calib_data->plane.normal();
+      ofVec3f ctr = table_calib_data->triangle.centroid();
 
       ofPushStyle();
       ofSetColor( ofColor::cyan );
@@ -239,7 +239,7 @@ class DepthSegmentationSystem : public ECSsystem
 
     ComponentMapper<DepthSegmentationComponent> segmentation_m;
     ComponentMapper<DepthComponent> depth_m;
-    ComponentMapper<PlaneCalibComponent> plane_calib_m;
+    ComponentMapper<TableCalibComponent> table_calib_m;
 
 };
 

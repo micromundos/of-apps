@@ -24,18 +24,18 @@
             },
             {
                "data" : {
-                  "calibration" : {
-                     "kinect_intrinsics_file" : "calib/intrinsics_kinect.ofxcv.yml",
-                     "projector_intrinsics_file" : "calib/intrinsics_proj_lg.ofxcv.yml",
-                     "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_lg_to_kinect_rgb.yml"
-                  },
-                  "enabled" : false,
+                  "enabled" : true,
                   "mesh_res" : 1,
+                  "xoff" : [ 8, -10, 10 ],
                   "render_background" : false,
                   "render_hue_tex" : false,
                   "tex_height" : 1152,
                   "tex_width" : 1536,
-                  "xoff" : [ 8, -10, 10 ]
+                  "calibration": {
+                      "kinect_intrinsics_file": "calib/intrinsics_kinect.ofxcv.yml",
+                      "projector_intrinsics_file": "calib/intrinsics_proj_lg.ofxcv.yml",
+                      "projector_kinect_extrinsics_file": "calib/extrinsics_proj_lg_to_kinect_rgb.yml"
+                  }
                },
                "id" : "camara_lucida"
             }
@@ -45,7 +45,7 @@
       {
          "components" : [
             {
-               "data" : {
+               "data" : { 
                   "height" : 480,
                   "render" : false,
                   "width" : 640
@@ -53,61 +53,75 @@
                "id" : "rgb"
             },
             {
-               "data" : {
-                  "flip" : false,
-                  "render" : true
+               "data" : { 
+                  "render" : true,
+                  "flip" : false
                },
                "id" : "depth"
             },
             {
                "data" : {
-                  "calibration" : {
-                     "depth" : "calib/intrinsics_kinect.aruco.yml",
-                     "rgb" : "calib/intrinsics_ps3eye.aruco.yml",
-                     "stereo" : "calib/extrinsics_ps3eye_to_kinect.yml"
-                  },
-                  "render" : true
+                  "render" : true,
+                  "calibration": {
+                      "rgb" : "calib/intrinsics_ps3eye.aruco.yml",
+                      "depth" : "calib/intrinsics_kinect.aruco.yml",
+                      "stereo" : "calib/extrinsics_ps3eye_to_kinect.yml"
+                  }
                },
                "id" : "aruco"
             },
             {
                "data" : {
-                  "angle_step" : [ 30, 0, 360 ],
-                  "calibrate" : true,
-                  "filename" : "calib/plane.yml",
-                  "load" : false,
+                  "calibrate" : false,
+                  "save": false,
+                  "load": false,
                   "planes_num" : [ 20, 0, 100 ],
-                  "radius_step" : [ 9.394736289978027, 0, 30 ],
+                  "radius_step" : [ 6, 0, 30 ],
+                  "angle_step" : [ 30, 0, 360 ],
                   "render_plane" : true,
-                  "render_planes_list" : true,
-                  "save" : false
+                  "render_planes_list" : false,
+                  "filename_plane" : "calib/table_plane.yml",
+                  "filename_background" : "calib/table_background.yml"
                },
-               "id" : "plane_calib"
+               "id" : "table_calib"
             },
             {
                "data" : {
                   "render" : false,
                   "render_normals" : false,
-                  "render_smooth" : false,
-                  "render_plane_angles" : false,
-                  "threshold_plane" : [ 45, 0, 360 ],
+                  "render_depth_map_smoothed" : false,
+                  /*"render_normals_smoothed" : false,*/
+                  "render_plane_angles" : false, 
+                  "threshold_background" : [ 20, -300, 300 ],
+                  "threshold_plane" : [ 360, 0, 360 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
-                  "threshold_near" : [ 32.631591796875, -200, 200 ]
+                  "threshold_near" : [ 0, -200, 200 ], 
+                  "depth_map_bilateral_domain" : [ 60, 0, 100 ],
+                  "depth_map_bilateral_range" : [ 12, 0, 20 ],
+                  "depth_map_bilateral_kernel" : [ 6, 0, 10 ]
+                  /*"normals_bilateral_domain" : [ 10, 0, 100 ],*/
+                  /*"normals_bilateral_range" : [ 2, 0, 20 ],*/
+                  /*"normals_bilateral_kernel" : [ 6, 0, 10 ] */
                },
                "id" : "depth_processing"
             },
             {
                "data" : {
-                  "force_amplifier" : [ 4.505263328552246, 1, 10 ],
-                  "render" : false
+                  "render" : false,
+                  /*"render_smoothed" : false,*/
+                  "threshold_far" : [ 40, -200, 200 ],
+                  "threshold_near" : [ 0, -100, 100 ]
+                  /*"bilateral_domain" : [ 10, 0, 100 ],*/
+                  /*"bilateral_range" : [ 2, 0, 20 ],*/
+                  /*"bilateral_kernel" : [ 6, 0, 10 ]*/
                },
-               "id" : "flow_field"
+               "id" : "entradas"
             },
             {
                "data" : {
                   "render" : false
                },
-               "id" : "flowfield_debug"
+               "id" : "flow_field"
             }
          ],
          "id" : "input"
