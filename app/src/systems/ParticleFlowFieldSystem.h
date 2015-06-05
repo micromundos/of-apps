@@ -37,12 +37,12 @@ class ParticleFlowFieldSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
-      int ff_width = ff_data->output.width();
+      int ff_width = ff_data->flowfield().width();
 
       float* field = NULL;
       //XXX gpu -> cpu
       TS_START("ParticleFlowFieldSystem #gpu->cpu");
-      field = ff_data->output.get_data();
+      field = ff_data->flowfield().get_data();
       TS_STOP("ParticleFlowFieldSystem #gpu->cpu");
       if (field == NULL) 
       {
@@ -85,8 +85,8 @@ class ParticleFlowFieldSystem : public ECSsystem
     void update_screen2ff()
     {
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
-      int ff_width = ff_data->output.width();
-      int ff_height = ff_data->output.height();
+      int ff_width = ff_data->flowfield().width();
+      int ff_height = ff_data->flowfield().height();
       RenderComponent* render_data = require_component<RenderComponent>("output");
       screen2ff.set( render_data->width, render_data->height, ff_width, ff_height ); 
     };

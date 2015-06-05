@@ -7,9 +7,13 @@
 
 class FlowFieldComponent : public ECScomponent
 {
+  private:
+    gpgpu::Process _flowfield;
+
   public:
 
-    gpgpu::Process output;
+    gpgpu::Process& flowfield()
+    { return _flowfield; };
 
     ofParameter<bool> render;
     ofParameter<float> force_amplifier;

@@ -7,9 +7,22 @@
 
 class DepthProcessingComponent : public ECScomponent 
 {
+
+  private:
+    gpgpu::Process _surfaces;
+    gpgpu::Process _height_map;
+    gpgpu::Process _normals;
+
   public:
 
-    gpgpu::Process output;
+    gpgpu::Process& surfaces() 
+    { return _surfaces; };
+
+    gpgpu::Process& height_map()
+    { return _height_map; };
+
+    gpgpu::Process& normals()
+    { return _normals; };
 
     ofParameter<bool> render;
     ofParameter<bool> render_normals;
