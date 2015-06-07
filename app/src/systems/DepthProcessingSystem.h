@@ -72,8 +72,9 @@ class DepthProcessingSystem : public ECSsystem
       //post-processing
       //threshold.init("glsl/height_threshold.frag", w, h );
       erode.init("glsl/cv/erode.frag", w, h );
-      surfaces(e) //dilate
-        .init("glsl/cv/dilate.frag", w, h )
+      dilate.init("glsl/cv/dilate.frag", w, h );
+      surfaces(e)
+        .init("glsl/cv/erode.frag", w, h )
         .set_debug("glsl/height_debug.frag");
       //mask
         //.init("glsl/cv/mask.frag", w, h )
@@ -158,12 +159,12 @@ class DepthProcessingSystem : public ECSsystem
         .set( "tex", segmentation.get() )
         //.set( "tex", threshold.get() )
         .update( 1 );
-      surfaces(e) //dilate
+      dilate
         .set( "tex", erode.get() )
+        .update( 1 );
+      surfaces(e)
+        .set( "tex", dilate.get() )
         .update( 4 );
-      //erode
-        //.set( "tex", dilate.get() )
-        //.update( 1 );
       //height map hi-pass
       //mask
         //.set( "data", segmentation.get() )
@@ -173,7 +174,7 @@ class DepthProcessingSystem : public ECSsystem
 
       // update render data
 
-      if ( depth_proc_data->render ) 
+      if ( depth_proc_data->render_surfaces ) 
         surfaces(e).update_debug();
 
       if ( depth_proc_data->render_normals ) 
@@ -193,7 +194,7 @@ class DepthProcessingSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      if ( !depth_proc_data->render
+      if ( !depth_proc_data->render_surfaces
           && !depth_proc_data->render_normals
           && !depth_proc_data->render_depth_map_smoothed
           //&& !depth_proc_data->render_normals_smoothed
@@ -209,7 +210,7 @@ class DepthProcessingSystem : public ECSsystem
       ofPushStyle();
       ofSetColor(255);
 
-      if (depth_proc_data->render)
+      if (depth_proc_data->render_surfaces)
         //surfaces(e).get().draw(0,0,rw,rh);
         surfaces(e).draw_debug(0,0,rw,rh);
 
@@ -352,7 +353,7 @@ class DepthProcessingSystem : public ECSsystem
     //gpgpu::Process threshold;
     //gpgpu::Process mask;
     gpgpu::Process erode;
-    //gpgpu::Process dilate;
+    gpgpu::Process dilate;
 
     float scale;
 
@@ -383,7 +384,7 @@ class DepthProcessingSystem : public ECSsystem
     void render_3d(ofEventArgs &args)
     {
       if ( !inited ) return;
-      if ( !depth_proc_data->render ) return;
+      if (!depth_proc_data->render_surfaces) return;
 
       ofVec3f n = table_calib_data->plane.normal();
       ofVec3f ctr = table_calib_data->triangle.centroid();

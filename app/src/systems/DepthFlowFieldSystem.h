@@ -27,6 +27,7 @@ class DepthFlowFieldSystem : public ECSsystem
       depth_m.init( *world );
       flowfield_m.init( *world );
       depth_processing_m.init( *world );
+      entradas_m.init(*world);
     };
 
     virtual void added(Entity &e) 
@@ -44,6 +45,7 @@ class DepthFlowFieldSystem : public ECSsystem
     { 
       DepthComponent* depth_data = depth_m.get(e);
       FlowFieldComponent* ff_data = flowfield_m.get(e); 
+      EntradasComponent*  entradas_data = entradas_m.get(e);
 
       if ( ! depth_data->dirty ) return;
 
@@ -51,6 +53,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       flowfield(e)
         .set( "data", surfaces(e).get() )
+        .set( "entradas", entradas_data->output().get() )
         .update();
 
       if ( ff_data->render )
@@ -62,6 +65,7 @@ class DepthFlowFieldSystem : public ECSsystem
     virtual void renderEntity(Entity &e)
     {
       FlowFieldComponent* ff_data = flowfield_m.get(e); 
+      EntradasComponent* entradas_data = entradas_m.get(e);
 
       if ( !ff_data->render )
         return;
@@ -69,6 +73,8 @@ class DepthFlowFieldSystem : public ECSsystem
       TS_START("DepthFlowFieldSystem render");
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
+
+      //entradas_data->output().get().draw(0,0,render_data->width, render_data->height );
 
       flowfield(e).draw_debug( 0, 0, render_data->width, render_data->height );
       //flowfield(e).get().draw( 0, 0, render_data->width, render_data->height );
@@ -82,6 +88,7 @@ class DepthFlowFieldSystem : public ECSsystem
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
+    ComponentMapper<EntradasComponent> entradas_m;
 
     gpgpu::Process& flowfield(Entity &e)
     {

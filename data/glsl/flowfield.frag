@@ -14,6 +14,8 @@
  */
 
 uniform sampler2DRect data;
+uniform sampler2DRect entradas;
+
 uniform sampler2DRect debug_input;
 
 const int kernel = 6;
@@ -23,9 +25,14 @@ void main( void )
   vec2 loc = gl_TexCoord[0].xy;
   vec2 size = vec2(textureSize2DRect(data,0));
 
+  vec2 force = vec2(0.,0.);
+
+  float entrada = texture2DRect(entradas,loc).r;
+
   float height = texture2DRect(data,loc).r;
 
-  vec2 force = vec2(0.,0.);
+  bool on_floor = height < EPSILON;
+  float mult = 1.0;
 
   int n = 0;
   int ini = -kernel / 2;
@@ -35,15 +42,24 @@ void main( void )
   for ( int j = ini; j <= end; j++ )
   {
     if ( i == 0 && j == 0 )
-      continue;
+      continue; 
 
     vec2 ndir = vec2(i,j);
     vec2 nloc = loc + ndir;
+
+    float nentrada = texture2DRect(entradas,nloc).r;
+
+    if ( on_floor && nentrada >= EPSILON || entrada >= EPSILON )
+    {
+      mult = 0.0;
+      continue;
+    }
 
     if ( nloc.x < 0 || nloc.x >= size.x || nloc.y < 0 || nloc.y >= size.y )
       continue;
 
     float nheight = texture2DRect( data, nloc ).r;
+
     float slope = height - nheight;
 
     // nheight: drives away from plane
@@ -57,9 +73,10 @@ void main( void )
     force /= n; 
   }
 
-  if (height < EPSILON) //on the floor
+  if ( on_floor )
   {
-    force *= -1.0;
+    force *= -mult;
+    /*force *= 1.0-entrada;*/
   }
 
   gl_FragColor = vec4( force, 0.,1.);

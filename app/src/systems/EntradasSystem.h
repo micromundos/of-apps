@@ -27,7 +27,7 @@ class EntradasSystem : public ECSsystem
       entradas_m.init( *world );
       depth_m.init( *world );
       depth_processing_m.init( *world );
-      scale = 0.25;
+      scale = 0.5;
     };
 
     virtual void added(Entity &e) 

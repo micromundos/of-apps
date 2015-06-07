@@ -24,7 +24,7 @@ class DepthProcessingComponent : public ECScomponent
     gpgpu::Process& normals()
     { return _normals; };
 
-    ofParameter<bool> render;
+    ofParameter<bool> render_surfaces;
     ofParameter<bool> render_normals;
     ofParameter<bool> render_depth_map_smoothed;
     //ofParameter<bool> render_normals_smoothed;
@@ -62,7 +62,7 @@ class DepthProcessingComponent : public ECScomponent
       //param(normals_bilateral_range, "normals_bilateral_range"); 
       //param(normals_bilateral_kernel, "normals_bilateral_kernel"); 
 
-      param(render, "render");
+      param(render_surfaces, "render_surfaces");
       param(render_normals, "render_normals");
       param(render_depth_map_smoothed, "render_depth_map_smoothed"); 
       //param(render_normals_smoothed, "render_normals_smoothed"); 
