@@ -45,7 +45,7 @@ class DepthFlowFieldSystem : public ECSsystem
     { 
       DepthComponent* depth_data = depth_m.get(e);
       FlowFieldComponent* ff_data = flowfield_m.get(e); 
-      EntradasComponent*  entradas_data = entradas_m.get(e);
+      EntradasComponent* entradas_data = entradas_m.get(e);
 
       if ( ! depth_data->dirty ) return;
 

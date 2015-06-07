@@ -55,7 +55,7 @@
             {
                "data" : {
                   "flip" : false,
-                  "render" : false
+                  "render" : true
                },
                "id" : "depth"
             },
@@ -94,7 +94,7 @@
                   "render_normals" : false,
                   /*"render_normals_smoothed" : false,*/
                   "render_plane_angles" : false,
-                  "render_surfaces" : true,
+                  "render_surfaces" : false,
                   "threshold_background" : [ 30, -300, 300 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
                   "threshold_near" : [ 0, -200, 200 ],
