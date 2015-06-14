@@ -1,5 +1,6 @@
 #version 120
 #extension GL_ARB_texture_rectangle : enable
+#extension GL_EXT_gpu_shader4 : enable
 
 /*
  * unproject depth to 3d points
@@ -12,12 +13,16 @@
 
 #pragma include "lib/depth.glsl"
 
+uniform vec2 size;
+
 uniform sampler2DRect depth_map;
 uniform bool depth_flip;
 
 void main( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].xy;
+  vec2 depth_map_size = vec2(textureSize2DRect(depth_map,0));
+  vec2 p2 = gl_TexCoord[0].xy / size * depth_map_size;
+
   float depth_mm = texture2DRect(depth_map,p2).r;
 
   vec3 p3 = depth_to_p3( p2, depth_mm, depth_flip );

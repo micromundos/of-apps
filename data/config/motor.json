@@ -87,22 +87,27 @@
             },
             {
                "data" : {
-                  "depth_map_bilateral_domain" : [ 100, 0, 100 ],
-                  "depth_map_bilateral_kernel" : [ 6, 0, 10 ],
-                  "depth_map_bilateral_range" : [ 20, 0, 20 ],
-                  "render_depth_map_smoothed" : false,
+                  /*"open_iter" : [ 1, 0, 6 ],*/
+                  /*"close_iter" : [ 1, 0, 6 ],*/
+                  /*"gaussian_sigma" : [ 2.5, 0, 10 ],*/
+                  /*"gaussian_kernel" : [ 3, 0, 10 ],*/
+                  /*"bilateral_domain" : [ 100, 0, 100 ],*/
+                  /*"bilateral_kernel" : [ 6, 0, 10 ],*/
+                  /*"bilateral_range" : [ 20, 0, 20 ],*/
+                  "render_height_map" : false,
+                  /*"render_smoothed" : false,*/
                   "render_normals" : false,
                   /*"render_normals_smoothed" : false,*/
                   "render_plane_angles" : false,
                   "render_surfaces" : false,
                   "threshold_background" : [ 30, -300, 300 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
-                  "threshold_near" : [ 0, -200, 200 ],
+                  "threshold_near" : [ 0, -1000, 1000 ],
                   "threshold_plane" : [ 90, 0, 360 ]
+                   /*"normals_bilateral_domain" : [ 10, 0, 100 ],*/
+                   /*"normals_bilateral_range" : [ 2, 0, 20 ],*/
+                   /*"normals_bilateral_kernel" : [ 6, 0, 10 ] */
                },
-               /*"normals_bilateral_domain" : [ 10, 0, 100 ],*/
-               /*"normals_bilateral_range" : [ 2, 0, 20 ],*/
-               /*"normals_bilateral_kernel" : [ 6, 0, 10 ] */
                "id" : "depth_processing"
             },
             {
@@ -110,11 +115,12 @@
                   "render" : false,
                   /*"render_smoothed" : false,*/
                   "threshold_far" : [ 50, -200, 200 ],
-                  "threshold_near" : [ 0, -100, 100 ]
+                  "threshold_near" : [ 0, -100, 100 ],
+                  "close_iter" : [ 1, 1, 6 ]
+                   /*"bilateral_domain" : [ 10, 0, 100 ],*/
+                   /*"bilateral_range" : [ 2, 0, 20 ],*/
+                   /*"bilateral_kernel" : [ 6, 0, 10 ]*/
                },
-               /*"bilateral_domain" : [ 10, 0, 100 ],*/
-               /*"bilateral_range" : [ 2, 0, 20 ],*/
-               /*"bilateral_kernel" : [ 6, 0, 10 ]*/
                "id" : "entradas"
             },
             {

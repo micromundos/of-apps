@@ -4,6 +4,7 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "ofxGPGPU.h"
+#include "shaders/gaussian.h"
 #include "ofxTimeMeasurements.h"
 
 using namespace artemis;
@@ -41,44 +42,53 @@ class DepthProcessingSystem : public ECSsystem
       depth_data = depth_m.get(e);
       table_calib_data = table_calib_m.get(e);
 
-      int depth_w = depth_data->width;
-      int depth_h = depth_data->height;
-      int w = depth_w * scale;
-      int h = depth_h * scale;
+      int w = depth_data->width * scale;
+      int h = depth_data->height * scale; 
 
-      //processes at depth size
+      depth_3d
+        .init("glsl/depth_3d.frag", w, h );
 
-      depth_map_bilateral
-        .init("glsl/cv/bilateral.frag", depth_w, depth_h )
-        .set_debug("glsl/depth_debug.frag");
+      //bilateral
+        //.init("glsl/cv/bilateral.frag", w, h )
+        //.set_debug("glsl/debug/depth_d.frag");
 
-      depth_3d.init("glsl/depth_3d.frag", depth_w, depth_h );
+      //gaussian
+        //.init( &gaussian_shader, w, h )
+        //.set_debug("glsl/debug/depth_d.frag");
 
-      background_substraction.init("glsl/cv/background_substraction.frag", depth_w, depth_h ); 
+      //background_substraction
+        //.init("glsl/background_substraction.frag", w, h ); 
 
-      //down sampled processes
+      height_map(e)
+        .init("glsl/height_map.frag", w, h );  
 
-      height_map(e).init("glsl/height_map.frag",w,h);  
-
-      normals(e).init("glsl/normals.frag",w,h);
+      normals(e)
+        .init("glsl/normals.frag", w, h );
       //normals_bilateral
         //.init("glsl/cv/bilateral.frag", w, h )
-        //.set_debug("glsl/debug_normalized.frag");
+        //.set_debug("glsl/debug/normalized_d.frag");
 
-      plane_angles.init("glsl/plane_angles.frag", w, h );
+      plane_angles
+        .init("glsl/plane_angles.frag", w, h );
 
-      segmentation.init("glsl/depth_segmentation.frag", w, h );
-
-      //post-processing
-      //threshold.init("glsl/height_threshold.frag", w, h );
-      erode.init("glsl/cv/erode.frag", w, h );
-      dilate.init("glsl/cv/dilate.frag", w, h );
+      //segmentation
       surfaces(e)
-        .init("glsl/cv/erode.frag", w, h )
-        .set_debug("glsl/height_debug.frag");
+        .init("glsl/segmentation.frag", w, h );
+
+      //threshold
+        //.init("glsl/height_threshold.frag", w, h );
+
+      erode
+        .add_backbuffer( "data" )
+        .init("glsl/cv/erode.frag", w, h );
+        //.set_debug("glsl/debug/height_d.frag");
+      dilate
+        .add_backbuffer( "data" )
+        .init("glsl/cv/dilate.frag", w, h );
+
       //mask
         //.init("glsl/cv/mask.frag", w, h )
-        //.set_debug("glsl/height_debug.frag");
+        //.set_debug("glsl/debug/height_d.frag");
 
       add_events(e);
     }; 
@@ -89,6 +99,7 @@ class DepthProcessingSystem : public ECSsystem
       depth_proc_data = NULL;
       table_calib_data = NULL;
       cml_data = NULL;
+      depth_data = NULL;
     };
 
     virtual void processEntity(Entity &e) 
@@ -102,37 +113,66 @@ class DepthProcessingSystem : public ECSsystem
 
       TS_START("DepthProcessingSystem"); 
 
-      ofTexture* depth_map;
-      if ( table_calib_data->background.isAllocated() )
-      {
-        depth_map = &(background_substraction
-          .set( "foreground", depth_data->f_depth_img.getTextureReference() )
-          .set( "background", table_calib_data->background.getTextureReference() )
-          .update()
-          .get());
-      }
-      else
-      {
-        depth_map = &(depth_data->f_depth_img.getTextureReference());
-      }
+      ofTexture& depth_map = depth_data->f_depth_img.getTextureReference();
 
-      depth_map_bilateral
-        .set( "data", *depth_map )
-        .update();
+      //ofTexture& depth_map_background_substracted = get_depth_map_background_substracted(e);  
+
+      //ofTexture* depth_map_clean;
+      //depth_map_clean = &depth_map_background_substracted;
+
+      //int open_iter = depth_proc_data->open_iter;
+      //if ( open_iter > 0 )
+      //{
+        ///[>depth_map_clean = cv_utils::open( *depth_map_clean, open_iter, erode, dilate );
+        //erode
+          //.set( "data", *depth_map_clean )
+          //.update( open_iter );
+        //dilate
+          //.set( "data", erode.get() )
+          //.update( open_iter );
+        //depth_map_clean = &(dilate.get());
+      //}
+
+      //int close_iter = depth_proc_data->close_iter;
+      //if ( close_iter > 0 )
+      //{
+        ///[>depth_map_clean = cv_utils::close( *depth_map_clean, close_iter, dilate, erode );
+        //dilate
+          //.set( "data", *depth_map_clean )
+          //.update( close_iter );
+        //erode
+          //.set( "data", dilate.get() )
+          //.update( close_iter );
+        //depth_map_clean = &(erode.get());
+      //}
+
+      //gaussian
+        //.set( "data", *depth_map_clean )
+        ////.set( "data", depth_3d.get() )
+        //.update( 2 ); //horiz + vert
+
+      //bilateral
+        //.set( "data", depth_map )
+        ////.set( "data", depth_3d.get() )
+        //.update();
 
       depth_3d
-        .set("depth_map", depth_map_bilateral.get())
-        //.set( "depth_map", *depth_map )
-        .update();
-
-      ofTexture depth_3d_scaled = depth_3d.get_scaled( scale ); 
+        //.set( "depth_map", bilateral.get() )
+        //.set( "depth_map", *depth_map_clean )
+        //.set( "depth_map", gaussian.get() )
+        .set( "depth_map", depth_map )
+        .update(); 
 
       height_map(e)
-        .set( "mesh_3d", depth_3d_scaled )
+        //.set( "mesh3d", gaussian.get() )
+        //.set( "mesh3d", bilateral.get() )
+        .set( "mesh3d", depth_3d.get() )
         .update(); 
 
       normals(e)
-        .set( "mesh_3d", depth_3d_scaled )
+        //.set( "mesh3d", gaussian.get() )
+        //.set( "mesh3d", bilateral.get() )
+        .set( "mesh3d", depth_3d.get() )
         .update();  
 
       //normals_bilateral
@@ -144,7 +184,8 @@ class DepthProcessingSystem : public ECSsystem
         //.set( "normals", normals_bilateral.get() )
         .update(); 
 
-      segmentation
+      //segmentation
+      surfaces(e)
         .set( "height_map", height_map(e).get() )
         .set( "plane_angles", plane_angles.get() )
         //.set( "normals", normals_bilateral.get() )
@@ -153,18 +194,8 @@ class DepthProcessingSystem : public ECSsystem
       //binarize
       //threshold
         //.set( "height_map", segmentation.get() )
-        //.update();
-      //open -> close = rm noise -> rm holes
-      erode
-        .set( "tex", segmentation.get() )
-        //.set( "tex", threshold.get() )
-        .update( 1 );
-      dilate
-        .set( "tex", erode.get() )
-        .update( 1 );
-      surfaces(e)
-        .set( "tex", dilate.get() )
-        .update( 4 );
+        //.update(); 
+
       //height map hi-pass
       //mask
         //.set( "data", segmentation.get() )
@@ -177,14 +208,15 @@ class DepthProcessingSystem : public ECSsystem
       if ( depth_proc_data->render_surfaces ) 
         surfaces(e).update_debug();
 
+      if ( depth_proc_data->render_height_map ) 
+        height_map(e).update_debug();
+
       if ( depth_proc_data->render_normals ) 
         normals(e).update_debug();
 
-      if ( depth_proc_data->render_depth_map_smoothed )  
-        depth_map_bilateral.update_debug();
-
-      //if ( depth_proc_data->render_normals_smoothed )  
-        //normals_bilateral.update_debug();
+      if ( depth_proc_data->render_smoothed )  
+        gaussian.update_debug();
+        //bilateral.update_debug();
 
       if ( depth_proc_data->render_plane_angles ) 
         plane_angles.update_debug();
@@ -196,7 +228,8 @@ class DepthProcessingSystem : public ECSsystem
     {
       if ( !depth_proc_data->render_surfaces
           && !depth_proc_data->render_normals
-          && !depth_proc_data->render_depth_map_smoothed
+          && !depth_proc_data->render_height_map
+          && !depth_proc_data->render_smoothed
           //&& !depth_proc_data->render_normals_smoothed
           && !depth_proc_data->render_plane_angles
        ) return;
@@ -208,28 +241,61 @@ class DepthProcessingSystem : public ECSsystem
       int rh = render_data->height;
 
       ofPushStyle();
-      ofSetColor(255);
+      ofSetColor(255); 
 
-      if (depth_proc_data->render_surfaces)
-        //surfaces(e).get().draw(0,0,rw,rh);
-        surfaces(e).draw_debug(0,0,rw,rh);
+      if (depth_proc_data->render_smoothed)
+        gaussian.draw_debug(0,0,rw,rh);
+        //bilateral.draw_debug(0,0,rw,rh);
+
+      if (depth_proc_data->render_height_map)
+        height_map(e).draw_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_normals)
         normals(e).draw_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_plane_angles)
-        plane_angles.draw_debug(0,0,rw,rh); 
+        plane_angles.draw_debug(0,0,rw,rh);
 
-      if (depth_proc_data->render_depth_map_smoothed)
-        depth_map_bilateral.draw_debug(0,0,rw,rh);
-
-      //if (depth_proc_data->render_normals_smoothed)
-        //normals_bilateral.draw_debug(0,0,rw,rh); 
+      if (depth_proc_data->render_surfaces)
+        surfaces(e).draw_debug(0,0,rw,rh);
 
       ofPopStyle();
 
       TS_STOP("DepthProcessingSystem render");
     };
+
+  private:
+
+    gpgpu::Process depth_3d;
+    gpgpu::Process gaussian;
+    gpgpu::Gaussian gaussian_shader;
+    gpgpu::Process bilateral;
+    gpgpu::Process background_substraction;
+    //gpgpu::Process segmentation;
+    //gpgpu::Process height_map;
+    //gpgpu::Process normals;
+    //gpgpu::Process normals_bilateral;
+    gpgpu::Process plane_angles;
+    //post-processing:
+    //gpgpu::Process threshold;
+    //gpgpu::Process mask;
+    gpgpu::Process erode;
+    gpgpu::Process dilate;
+
+    float scale;
+
+    bool inited;
+    DepthProcessingComponent* depth_proc_data;
+    DepthComponent* depth_data;
+    TableCalibComponent* table_calib_data;
+    CamaraLucidaComponent* cml_data;
+
+    ComponentMapper<DepthProcessingComponent> depth_processing_m;
+    ComponentMapper<DepthComponent> depth_m;
+    ComponentMapper<TableCalibComponent> table_calib_m;
+
+
+    // gpu processes updates
 
     void update_depth_3d( ofShader& shader )
     {
@@ -252,12 +318,19 @@ class DepthProcessingSystem : public ECSsystem
       shader.setUniform1f("fy", depthcam->fy);
     };
 
-    void update_depth_map_bilateral( ofShader& shader )
+    void update_gaussian( ofShader& shader )
     {
       if ( !depth_proc_data ) return;
-      shader.setUniform1f("domain_sigma", depth_proc_data->depth_map_bilateral_domain);
-      shader.setUniform1f("range_sigma", depth_proc_data->depth_map_bilateral_range);
-      shader.setUniform1i("kernel", depth_proc_data->depth_map_bilateral_kernel);
+      shader.setUniform1f("sigma", depth_proc_data->gaussian_sigma);
+      shader.setUniform1i("kernel", depth_proc_data->gaussian_kernel);
+    };
+
+    void update_bilateral( ofShader& shader )
+    {
+      if ( !depth_proc_data ) return;
+      shader.setUniform1f("domain_sigma", depth_proc_data->bilateral_domain);
+      shader.setUniform1f("range_sigma", depth_proc_data->bilateral_range);
+      shader.setUniform1i("kernel", depth_proc_data->bilateral_kernel);
     };
 
     void update_background_substraction( ofShader& shader )
@@ -308,79 +381,6 @@ class DepthProcessingSystem : public ECSsystem
       shader.setUniform1f("threshold_far", 5000.);
     };
 
-    void add_events(Entity &e)
-    {
-      if (cml_data != NULL)
-        ofAddListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
-
-      ofAddListener( depth_map_bilateral.on_update, this, &DepthProcessingSystem::update_depth_map_bilateral ); 
-      ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
-      ofAddListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
-      ofAddListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
-      ofAddListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
-      //ofAddListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
-      ofAddListener( segmentation.on_update, this, &DepthProcessingSystem::update_depth_segmentation );
-      //ofAddListener( threshold.on_update, this, &DepthProcessingSystem::update_threshold );
-    };
-
-    void remove_events(Entity &e)
-    {
-      if (cml_data != NULL)
-        ofRemoveListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
-
-      ofRemoveListener( depth_map_bilateral.on_update, this, &DepthProcessingSystem::update_depth_map_bilateral ); 
-      ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
-      ofRemoveListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
-      ofRemoveListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
-      ofRemoveListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
-      //ofRemoveListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
-      ofRemoveListener( segmentation.on_update, this, &DepthProcessingSystem::update_depth_segmentation );
-      //ofRemoveListener( threshold.on_update, this, &DepthProcessingSystem::update_threshold );
-    };
-
-  private:
-
-    gpgpu::Process depth_3d;
-    gpgpu::Process depth_map_bilateral;
-    gpgpu::Process background_substraction;
-    //downsampled
-    gpgpu::Process segmentation;
-    //gpgpu::Process height_map;
-    //gpgpu::Process normals;
-    //gpgpu::Process normals_bilateral;
-    gpgpu::Process plane_angles;
-    //post-processing
-    //gpgpu::Process threshold;
-    //gpgpu::Process mask;
-    gpgpu::Process erode;
-    gpgpu::Process dilate;
-
-    float scale;
-
-    //ugly singleton entity stuff
-    bool inited;
-    DepthProcessingComponent* depth_proc_data;
-    TableCalibComponent* table_calib_data;
-    CamaraLucidaComponent* cml_data;
-    DepthComponent* depth_data;
-
-    //output shortcuts
-
-    gpgpu::Process& surfaces(Entity &e)
-    {
-      return depth_processing_m.get(e)->surfaces();
-    };
-
-    gpgpu::Process& height_map(Entity &e)
-    {
-      return depth_processing_m.get(e)->height_map();
-    };
-
-    gpgpu::Process& normals(Entity &e)
-    {
-      return depth_processing_m.get(e)->normals();
-    };
-
     void render_3d(ofEventArgs &args)
     {
       if ( !inited ) return;
@@ -398,9 +398,78 @@ class DepthProcessingSystem : public ECSsystem
       ofPopStyle();
     };
 
-    ComponentMapper<DepthProcessingComponent> depth_processing_m;
-    ComponentMapper<DepthComponent> depth_m;
-    ComponentMapper<TableCalibComponent> table_calib_m;
+
+    // events
+
+    void add_events(Entity &e)
+    {
+      if (cml_data != NULL)
+        ofAddListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
+
+      ofAddListener( gaussian.on_update, this, &DepthProcessingSystem::update_gaussian ); 
+      ofAddListener( bilateral.on_update, this, &DepthProcessingSystem::update_bilateral ); 
+
+      ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
+      ofAddListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
+      ofAddListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
+      ofAddListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
+      //ofAddListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
+      ofAddListener( surfaces(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
+      //ofAddListener( threshold.on_update, this, &DepthProcessingSystem::update_threshold );
+    };
+
+    void remove_events(Entity &e)
+    {
+      if (cml_data != NULL)
+        ofRemoveListener( cml_data->cml->render_3d, this, &DepthProcessingSystem::render_3d );
+
+      ofRemoveListener( gaussian.on_update, this, &DepthProcessingSystem::update_gaussian ); 
+      ofRemoveListener( bilateral.on_update, this, &DepthProcessingSystem::update_bilateral ); 
+
+      ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
+      ofRemoveListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
+      ofRemoveListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
+      ofRemoveListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
+      //ofRemoveListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
+      ofRemoveListener( surfaces(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
+      //ofRemoveListener( threshold.on_update, this, &DepthProcessingSystem::update_threshold );
+    };
+
+
+    ofTexture& get_depth_map_background_substracted(Entity &e)
+    {
+      DepthComponent* depth_data = depth_m.get(e);
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+
+      if (table_calib_data->background.isAllocated())
+      {
+        return background_substraction
+          .set( "foreground", depth_data->f_depth_img.getTextureReference() )
+          .set( "background", table_calib_data->background.getTextureReference() )
+          .update()
+          .get();
+      }
+
+      return depth_data->f_depth_img.getTextureReference();
+    };
+
+
+    //output shortcuts
+
+    gpgpu::Process& surfaces(Entity &e)
+    {
+      return depth_processing_m.get(e)->surfaces();
+    };
+
+    gpgpu::Process& height_map(Entity &e)
+    {
+      return depth_processing_m.get(e)->height_map();
+    };
+
+    gpgpu::Process& normals(Entity &e)
+    {
+      return depth_processing_m.get(e)->normals();
+    }; 
 
 };
 

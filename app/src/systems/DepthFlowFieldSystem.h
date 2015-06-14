@@ -28,32 +28,41 @@ class DepthFlowFieldSystem : public ECSsystem
       flowfield_m.init( *world );
       depth_processing_m.init( *world );
       entradas_m.init(*world);
+      scale = 0.3;
     };
 
     virtual void added(Entity &e) 
     {
+      if ( entity != NULL )
+      {
+        ofLogWarning("DepthFlowFieldSystem")
+          << "entity already added";
+        return;
+      }
+
+      entity = &e;
+
       DepthComponent* depth_data = depth_m.get(e);
 
-      gpgpu::Process& _surfaces = surfaces(e);
-      int w = _surfaces.width();
-      int h = _surfaces.height();
+      int w = depth_data->width * scale;
+      int h = depth_data->height * scale;
 
       flowfield(e).init("glsl/flowfield.frag",w,h);
+      ofAddListener( flowfield(e).on_update, this, &DepthFlowFieldSystem::update_flowfield ); 
     };
 
     virtual void processEntity(Entity &e) 
     { 
       DepthComponent* depth_data = depth_m.get(e);
       FlowFieldComponent* ff_data = flowfield_m.get(e); 
-      EntradasComponent* entradas_data = entradas_m.get(e);
 
       if ( ! depth_data->dirty ) return;
 
       TS_START("DepthFlowFieldSystem");
 
       flowfield(e)
-        .set( "data", surfaces(e).get() )
-        .set( "entradas", entradas_data->output().get() )
+        .set( "heightmap", surfaces(e).get() )
+        .set( "entradas", entradas(e).get() )
         .update();
 
       if ( ff_data->render )
@@ -65,7 +74,6 @@ class DepthFlowFieldSystem : public ECSsystem
     virtual void renderEntity(Entity &e)
     {
       FlowFieldComponent* ff_data = flowfield_m.get(e); 
-      EntradasComponent* entradas_data = entradas_m.get(e);
 
       if ( !ff_data->render )
         return;
@@ -74,7 +82,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
-      //entradas_data->output().get().draw(0,0,render_data->width, render_data->height );
+      //entradas(e).get().draw(0,0,render_data->width, render_data->height );
 
       flowfield(e).draw_debug( 0, 0, render_data->width, render_data->height );
       //flowfield(e).get().draw( 0, 0, render_data->width, render_data->height );
@@ -83,12 +91,27 @@ class DepthFlowFieldSystem : public ECSsystem
       TS_STOP("DepthFlowFieldSystem render");
     };
 
+    virtual void removed(Entity &e) 
+    {
+      ofRemoveListener( flowfield(e).on_update, this, &DepthFlowFieldSystem::update_flowfield ); 
+      entity = NULL;
+    };
+
   private:
+
+    float scale;
+    Entity* entity;
 
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
     ComponentMapper<EntradasComponent> entradas_m;
+
+    void update_flowfield( ofShader& shader )
+    {
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
+      shader.setUniform1f( "floor_height", depth_proc_data->threshold_near );
+    };
 
     gpgpu::Process& flowfield(Entity &e)
     {
@@ -103,6 +126,11 @@ class DepthFlowFieldSystem : public ECSsystem
     gpgpu::Process& height_map(Entity &e)
     {
       return depth_processing_m.get(e)->height_map();
+    };
+
+    gpgpu::Process& entradas(Entity &e)
+    {
+      return entradas_m.get(e)->output();
     };
 };
 

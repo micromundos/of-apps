@@ -8,8 +8,6 @@
 
 using namespace artemis;
 
-// TODO blob detection
-
 class EntradasSystem : public ECSsystem 
 { 
 
@@ -37,16 +35,26 @@ class EntradasSystem : public ECSsystem
 
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
+
       //int w = input(e).width();
       //int h = input(e).height();
 
-      threshold.init("glsl/height_threshold.frag", w, h );
-      erode.init("glsl/cv/erode.frag", w, h );
-      output(e) //dilate
+      threshold
+        .init("glsl/height_threshold.frag", w, h );
+
+      //erode
+      output(e) 
+        .add_backbuffer("data")
+        .init("glsl/cv/erode.frag", w, h );
+
+      dilate
+      //output(e) 
+        .add_backbuffer("data")
         .init("glsl/cv/dilate.frag", w, h );
+
       //bilateral
         //.init("glsl/cv/bilateral.frag", w, h )
-        //.set_debug("glsl/depth_debug.frag");
+        //.set_debug("glsl/debug/depth_d.frag");
 
       // events
 
@@ -66,10 +74,10 @@ class EntradasSystem : public ECSsystem
 
       TS_START("EntradasSystem");
 
-      int w = depth_data->width * scale;
-      int h = depth_data->height * scale;
-      ofTexture _input = input(e).get_scaled(w,h);
-      //ofTexture& _input = input(e).get();
+      //int w = depth_data->width * scale;
+      //int h = depth_data->height * scale;
+      //ofTexture _input = input(e).get_scaled(w,h);
+      ofTexture& _input = input(e).get();
 
       //bilateral
         //.set( "data", _input )
@@ -79,12 +87,23 @@ class EntradasSystem : public ECSsystem
         .set( "height_map", _input )
         .update();
 
-      erode
-        .set( "tex", threshold.get() )
-        .update( 1 );
-      output(e) //dilate
-        .set( "tex", erode.get() )
-        .update( 1 ); 
+      int close_iter = entradas_data->close_iter;
+      if ( close_iter < 1 )
+      {
+        ofLogWarning("EntradasSystem")
+          << " close_iter is " << close_iter
+          << " and 1 is minimum required";
+        close_iter = 1;
+      }
+
+      //cv_utils::close( threshold.get(), close_iter, dilate, output(e) );
+      dilate
+        .set( "data", threshold.get() )
+        .update( close_iter );
+      //erode
+      output(e) 
+        .set( "data", dilate.get() )
+        .update( close_iter ); 
 
       //if ( entradas_data->render ) 
         //output(e).update_debug(); 
@@ -126,6 +145,8 @@ class EntradasSystem : public ECSsystem
 
   private:
 
+    float scale;
+
     ComponentMapper<EntradasComponent> entradas_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
@@ -134,10 +155,8 @@ class EntradasSystem : public ECSsystem
 
     gpgpu::Process threshold;
     gpgpu::Process erode;
-    //gpgpu::Process dilate;
+    gpgpu::Process dilate;
     //gpgpu::Process bilateral;
-
-    float scale;
 
     gpgpu::Process& output(Entity &e)
     {

@@ -1,5 +1,6 @@
 #version 120
 #extension GL_ARB_texture_rectangle : enable
+#extension GL_EXT_gpu_shader4 : enable
 
 /*
  * in: 
@@ -10,6 +11,8 @@
 
 #pragma include "lib/math.glsl"
 
+uniform vec2 size;
+
 uniform sampler2DRect height_map;
 uniform sampler2DRect debug_input;
 
@@ -19,8 +22,11 @@ uniform bool binary;
 
 void main( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].xy;
+  vec2 height_map_size = vec2(textureSize2DRect(height_map,0));
+  vec2 p2 = gl_TexCoord[0].xy / size * height_map_size;
+
   float height = texture2DRect( height_map , p2 ).r;
+
   height = height < threshold_far && height > threshold_near ? (binary ? 1. : height) : 0.;
   gl_FragColor = vec4(vec3(height),1.);
 }
