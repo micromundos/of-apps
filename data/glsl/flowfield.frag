@@ -13,6 +13,7 @@
  *  2d vector field, rgb = xyz
  */
 
+uniform sampler2DRect entradas;
 uniform sampler2DRect data;
 uniform sampler2DRect debug_input;
 
@@ -22,7 +23,7 @@ void main( void )
 {
   vec2 loc = gl_TexCoord[0].xy;
   vec2 size = vec2(textureSize2DRect(data,0));
-
+  float val_entrada = (1.0-texture2DRect(entradas,loc).r);
   float height = texture2DRect(data,loc).r;
 
   vec2 force = vec2(0.,0.);
@@ -59,7 +60,7 @@ void main( void )
 
   if (height < EPSILON) //on the floor
   {
-    force *= -1.0;
+    force *= val_entrada;
   }
 
   gl_FragColor = vec4( force, 0.,1.);
