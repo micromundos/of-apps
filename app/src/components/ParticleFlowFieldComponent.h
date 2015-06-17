@@ -8,14 +8,14 @@ class ParticleFlowFieldComponent : public ECScomponent
 {
   public:
 
-    // TODO parametrizar el comportamiento de las particulas sobre el flowfield
-    float param;
+    ofParameter<float> maxforce;
 
     ParticleFlowFieldComponent(string _id) : ECScomponent(_id) {};
 
-    void update( float param )
+    virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
-      this->param = param;
+      ECScomponent::init(e_id,d,p);
+      param( maxforce, "maxforce" );
     };
 };
 

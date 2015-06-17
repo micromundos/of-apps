@@ -28,6 +28,7 @@ class DepthFlowFieldSystem : public ECSsystem
       flowfield_m.init( *world );
       depth_processing_m.init( *world );
       entradas_m.init(*world);
+      entity = NULL;
       scale = 0.3;
     };
 
@@ -39,7 +40,6 @@ class DepthFlowFieldSystem : public ECSsystem
           << "entity already added";
         return;
       }
-
       entity = &e;
 
       DepthComponent* depth_data = depth_m.get(e);
@@ -110,7 +110,11 @@ class DepthFlowFieldSystem : public ECSsystem
     void update_flowfield( ofShader& shader )
     {
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
+      FlowFieldComponent* ff_data = flowfield_m.get( *entity ); 
+
       shader.setUniform1f( "floor_height", depth_proc_data->threshold_near );
+      shader.setUniform1f( "force_weight_min", ff_data->force_weight_min );
+      shader.setUniform1f( "force_weight_max", ff_data->force_weight_max );
     };
 
     gpgpu::Process& flowfield(Entity &e)

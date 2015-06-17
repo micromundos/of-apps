@@ -26,21 +26,25 @@ class DepthProcessingSystem : public ECSsystem
       depth_processing_m.init( *world );
       depth_m.init( *world );
       table_calib_m.init( *world );
-
-      inited = false;
+      entity = NULL; 
       scale = 0.5;
     };
 
     virtual void added(Entity &e) 
     {
-      if ( inited ) return;
-      inited = true; 
+      if ( entity != NULL )
+      {
+        ofLogWarning("DepthProcessingSystem")
+          << "singleton entity already added";
+        return;
+      } 
+      entity = &e;
 
       cml_data = require_component<CamaraLucidaComponent>("output");
 
-      depth_proc_data = depth_processing_m.get(e);
-      depth_data = depth_m.get(e);
-      table_calib_data = table_calib_m.get(e);
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e);
+      DepthComponent* depth_data = depth_m.get(e);
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
       int w = depth_data->width * scale;
       int h = depth_data->height * scale; 
@@ -56,8 +60,8 @@ class DepthProcessingSystem : public ECSsystem
         //.init( &gaussian_shader, w, h )
         //.set_debug("glsl/debug/depth_d.frag");
 
-      //background_substraction
-        //.init("glsl/background_substraction.frag", w, h ); 
+      bg_dif
+        .init("glsl/background_substraction.frag", w, h ); 
 
       height_map(e)
         .init("glsl/height_map.frag", w, h );  
@@ -96,17 +100,15 @@ class DepthProcessingSystem : public ECSsystem
     virtual void removed(Entity &e) 
     { 
       remove_events(e);
-      depth_proc_data = NULL;
-      table_calib_data = NULL;
       cml_data = NULL;
-      depth_data = NULL;
+      entity = NULL;
     };
 
     virtual void processEntity(Entity &e) 
     {
-      depth_proc_data = depth_processing_m.get(e);
-      depth_data = depth_m.get(e);
-      table_calib_data = table_calib_m.get(e);
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e);
+      DepthComponent* depth_data = depth_m.get(e);
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
       if ( !depth_data->dirty )
         return; 
@@ -114,11 +116,9 @@ class DepthProcessingSystem : public ECSsystem
       TS_START("DepthProcessingSystem"); 
 
       ofTexture& depth_map = depth_data->f_depth_img.getTextureReference();
+      //ofTexture& depth_map = depth_map_bg_dif(e);
 
-      //ofTexture& depth_map_background_substracted = get_depth_map_background_substracted(e);  
-
-      //ofTexture* depth_map_clean;
-      //depth_map_clean = &depth_map_background_substracted;
+      //ofTexture* depth_map_clean = &depth_map;
 
       //int open_iter = depth_proc_data->open_iter;
       //if ( open_iter > 0 )
@@ -226,6 +226,8 @@ class DepthProcessingSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e);
+
       if ( !depth_proc_data->render_surfaces
           && !depth_proc_data->render_normals
           && !depth_proc_data->render_height_map
@@ -270,7 +272,7 @@ class DepthProcessingSystem : public ECSsystem
     gpgpu::Process gaussian;
     gpgpu::Gaussian gaussian_shader;
     gpgpu::Process bilateral;
-    gpgpu::Process background_substraction;
+    gpgpu::Process bg_dif;
     //gpgpu::Process segmentation;
     //gpgpu::Process height_map;
     //gpgpu::Process normals;
@@ -284,10 +286,7 @@ class DepthProcessingSystem : public ECSsystem
 
     float scale;
 
-    bool inited;
-    DepthProcessingComponent* depth_proc_data;
-    DepthComponent* depth_data;
-    TableCalibComponent* table_calib_data;
+    Entity* entity;
     CamaraLucidaComponent* cml_data;
 
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
@@ -299,8 +298,10 @@ class DepthProcessingSystem : public ECSsystem
 
     void update_depth_3d( ofShader& shader )
     {
-      if ( !cml_data || !depth_data ) 
+      if ( cml_data == NULL || entity == NULL ) 
         return;
+
+      DepthComponent* depth_data = depth_m.get( *entity );
 
       shader.setUniform1i("depth_flip", depth_data->flip);
 
@@ -320,42 +321,42 @@ class DepthProcessingSystem : public ECSsystem
 
     void update_gaussian( ofShader& shader )
     {
-      if ( !depth_proc_data ) return;
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
       shader.setUniform1f("sigma", depth_proc_data->gaussian_sigma);
       shader.setUniform1i("kernel", depth_proc_data->gaussian_kernel);
     };
 
     void update_bilateral( ofShader& shader )
     {
-      if ( !depth_proc_data ) return;
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
       shader.setUniform1f("domain_sigma", depth_proc_data->bilateral_domain);
       shader.setUniform1f("range_sigma", depth_proc_data->bilateral_range);
       shader.setUniform1i("kernel", depth_proc_data->bilateral_kernel);
     };
 
-    void update_background_substraction( ofShader& shader )
+    void update_bg_dif( ofShader& shader )
     {
-      if ( !depth_proc_data ) return;
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
       shader.setUniform1f( "threshold", depth_proc_data->threshold_background );
     };
 
     void update_height_map( ofShader& shader )
     {
-      if ( !table_calib_data ) return;
+      TableCalibComponent* table_calib_data = table_calib_m.get( *entity );
       ofxPlane& p = table_calib_data->plane;
       shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
     }; 
 
     void update_plane_angles( ofShader& shader )
     {
-      if ( !table_calib_data ) return;
+      TableCalibComponent* table_calib_data = table_calib_m.get( *entity );
       ofxPlane& p = table_calib_data->plane;
       shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
     };
 
     //void update_normals_bilateral( ofShader& shader )
     //{
-      //if ( !depth_proc_data ) return;
+      //DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
       //shader.setUniform1f("domain_sigma", depth_proc_data->normals_bilateral_domain);
       //shader.setUniform1f("range_sigma", depth_proc_data->normals_bilateral_range);
       //shader.setUniform1i("kernel", depth_proc_data->normals_bilateral_kernel);
@@ -363,8 +364,9 @@ class DepthProcessingSystem : public ECSsystem
 
     void update_depth_segmentation( ofShader& shader )
     {
-      if ( !depth_proc_data ) return;
-      if ( !table_calib_data ) return;
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
+
+      //TableCalibComponent* table_calib_data = table_calib_m.get( *entity );
 
       //ofxPlane& p = table_calib_data->plane;
       //shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
@@ -383,8 +385,13 @@ class DepthProcessingSystem : public ECSsystem
 
     void render_3d(ofEventArgs &args)
     {
-      if ( !inited ) return;
-      if (!depth_proc_data->render_surfaces) return;
+      if ( entity == NULL ) return;
+
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
+      TableCalibComponent* table_calib_data = table_calib_m.get( *entity );
+
+      if (!depth_proc_data->render_surfaces) 
+        return;
 
       ofVec3f n = table_calib_data->plane.normal();
       ofVec3f ctr = table_calib_data->triangle.centroid();
@@ -410,7 +417,7 @@ class DepthProcessingSystem : public ECSsystem
       ofAddListener( bilateral.on_update, this, &DepthProcessingSystem::update_bilateral ); 
 
       ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
-      ofAddListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
+      ofAddListener( bg_dif.on_update, this, &DepthProcessingSystem::update_bg_dif );
       ofAddListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
       ofAddListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
       //ofAddListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
@@ -427,7 +434,7 @@ class DepthProcessingSystem : public ECSsystem
       ofRemoveListener( bilateral.on_update, this, &DepthProcessingSystem::update_bilateral ); 
 
       ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
-      ofRemoveListener( background_substraction.on_update, this, &DepthProcessingSystem::update_background_substraction );
+      ofRemoveListener( bg_dif.on_update, this, &DepthProcessingSystem::update_bg_dif );
       ofRemoveListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
       ofRemoveListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
       //ofRemoveListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
@@ -436,14 +443,14 @@ class DepthProcessingSystem : public ECSsystem
     };
 
 
-    ofTexture& get_depth_map_background_substracted(Entity &e)
+    ofTexture& depth_map_bg_dif(Entity &e)
     {
       DepthComponent* depth_data = depth_m.get(e);
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
       if (table_calib_data->background.isAllocated())
       {
-        return background_substraction
+        return bg_dif
           .set( "foreground", depth_data->f_depth_img.getTextureReference() )
           .set( "background", table_calib_data->background.getTextureReference() )
           .update()

@@ -36,6 +36,8 @@ class ParticleFlowFieldSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
+      ParticleFlowFieldComponent* pff_data = particle_flowfield_m.get(e);
+
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
       int ff_width = ff_data->flowfield().width();
 
@@ -53,6 +55,8 @@ class ParticleFlowFieldSystem : public ECSsystem
 
       TS_START("ParticleFlowFieldSystem");
 
+      float maxforce = pff_data->maxforce;
+
       b2ParticleSystem* b2ps = ps->b2_particles();
 
       int32 n = b2ps->GetParticleCount();
@@ -63,7 +67,20 @@ class ParticleFlowFieldSystem : public ECSsystem
       for (int i = 0; i < n; i++)
       {
         b2Vec2& loc = locs[i]; 
-        get_force( field, loc, ff_data, ff_width, ff_loc, screen_loc, force );
+
+        fisica->world2screen( loc, screen_loc );
+        screen2ff.dst( screen_loc, ff_loc );
+
+        int fi = ((int)ff_loc.x + (int)ff_loc.y * ff_width) * 4; //chann:rgba
+        force.Set( field[fi], field[fi+1] );
+
+        if ( maxforce > 0 )
+        {
+          float len = force.Normalize();
+          force *= len > maxforce ? maxforce : len;
+          //cout << i << ": force len " << len << ", max " << maxforce << endl;
+        }
+
         b2ps->ParticleApplyForce( i, force );
       }
 
@@ -89,14 +106,6 @@ class ParticleFlowFieldSystem : public ECSsystem
       int ff_height = ff_data->flowfield().height();
       RenderComponent* render_data = require_component<RenderComponent>("output");
       screen2ff.set( render_data->width, render_data->height, ff_width, ff_height ); 
-    };
-
-    void get_force( float* field, const b2Vec2& loc, FlowFieldComponent* ff_data, int ff_width, ofVec2f& ff_loc, ofVec2f& screen_loc, b2Vec2& force )
-    {
-      fisica->world2screen(loc,screen_loc);
-      screen2ff.dst(screen_loc,ff_loc);
-      int i = ((int)ff_loc.x + (int)ff_loc.y * ff_width) * 4; //chann:rgba
-      force.Set( field[i], field[i+1] );
     };
 
     //void log(float* data, int w, int h)

@@ -24,6 +24,31 @@ class ParticleSystem : public ECSsystem
       ps_m.init( *world ); 
       fisica = require_system<FisicaSystem>();
       init(); 
+    };  
+
+    virtual void added(Entity &e) 
+    {};
+
+    virtual void processEntity(Entity &e)
+    {
+      ParticleSystemComponent* ps_data = ps_m.get(e);
+
+      //limit particles speed
+
+      float maxspeed = ps_data->maxspeed;
+
+      if ( maxspeed == 0.0 )
+        return;
+
+      int32 n = b2particles->GetParticleCount();
+      b2Vec2 *vels = b2particles->GetVelocityBuffer(); 
+      for (int i = 0; i < n; i++)
+      {
+        b2Vec2& vel = vels[i];
+        float len = vel.Normalize();
+        vel *= len > maxspeed ? maxspeed : len;
+        //cout << i << ": vel len " << len << ", max " << maxspeed << endl;
+      }
     }; 
 
     void renderEntities(ImmutableBag<Entity*>& bag) 
@@ -53,12 +78,6 @@ class ParticleSystem : public ECSsystem
       mesh.draw();
       ofPopMatrix();
     };
-
-    virtual void added(Entity &e) 
-    {};
-
-    virtual void processEntity(Entity &e) 
-    {}; 
 
     virtual void renderEntity(Entity &e)
     {};

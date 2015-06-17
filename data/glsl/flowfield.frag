@@ -20,6 +20,8 @@ uniform sampler2DRect entradas;
 uniform sampler2DRect debug_input;
 
 uniform float floor_height;
+uniform float force_weight_min;
+uniform float force_weight_max;
 
 const int kernel = 6;
 
@@ -87,7 +89,8 @@ void main( void )
     force *= sign;
   }
 
-  float weight = lerp2d( length(force), 0., 1., 0., 0.1 );
+  /*float weight = lerp2d( height, 0., 1000., 0., 10. );*/
+  float weight = lerp2d( length(force), 0., 1., force_weight_min, force_weight_max );
   /*float weight = 1.0;*/
   force *= weight;
 

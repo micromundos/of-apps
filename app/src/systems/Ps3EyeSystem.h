@@ -26,17 +26,18 @@ class Ps3EyeSystem : public ECSsystem
     virtual void initialize() 
     {
       rgb_m.init( *world );
-      inited = false; 
+      entity = NULL; 
     };
 
     virtual void added(Entity &e) 
     {
-      if (inited)
+      if (entity != NULL)
       {
-        ofLogWarning("Ps3EyeSystem") << "ps3 already inited";
+        ofLogWarning("Ps3EyeSystem") 
+          << "ps3 singleton entity already added";
         return;
       }
-      inited = true; 
+      entity = &e; 
 
       RgbComponent* rgb_data = rgb_m.get(e);
 
@@ -45,9 +46,11 @@ class Ps3EyeSystem : public ECSsystem
 
       rgb_data->setup( w, h );
 
+      ps3.initGrabber(w, h);
       ps3.setDesiredFrameRate(30);
       ps3.setAutogain(true);
       ps3.setAutoWhiteBalance(true);
+
       //ps3.setGain(uint8_t val);
       //ps3.setExposure(uint8_t val);
       //ps3.setSharpness(uint8_t val);
@@ -56,12 +59,27 @@ class Ps3EyeSystem : public ECSsystem
       //ps3.setHue(uint8_t val);
       //ps3.setRedBalance(uint8_t val);
       //ps3.setBlueBalance(uint8_t val);
-      ps3.initGrabber(w, h);
+
+      //test.loadImage("test_aruco_markers_640x480.jpg");
+      //test.loadImage("test_aruco_markers_1280x720.jpg");
+      //test.loadImage("test_aruco_markers_1920x1080.jpg");
+    };
+
+    virtual void removed(Entity &e) 
+    {
+      entity = NULL;
     };
 
     virtual void processEntity(Entity &e) 
     {
-      if (!inited) return;
+      if ( entity == NULL ) return;
+
+      //TS_START("Ps3EyeSystem test aruco");
+      //RgbComponent* rgb_data = rgb_m.get(e);
+      //rgb_data->dirty = true;
+      //rgb_data->pixels = &(test.getPixelsRef());
+      //TS_STOP("Ps3EyeSystem test aruco");
+      //return;
 
       TS_START("Ps3EyeSystem update ps3");
       ps3.update();
@@ -77,7 +95,7 @@ class Ps3EyeSystem : public ECSsystem
         //copy & convert rgba -> rgb
         ps3_pix = ps3.getPixelsRef();
         ps3_pix.setNumChannels(3);
-        rgb_data->update( ps3_pix );
+        rgb_data->pixels = &ps3_pix;
         TS_STOP("Ps3EyeSystem copy pixels");
       }
     }; 
@@ -91,7 +109,7 @@ class Ps3EyeSystem : public ECSsystem
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
       ofPushStyle();
-      ofSetColor(255);
+      ofSetColor(255); 
 
       ps3_tex.loadData( ps3.getPixelsRef() );
       ps3_tex.draw( 0, 0,
@@ -99,6 +117,9 @@ class Ps3EyeSystem : public ECSsystem
           rgb_data->height );
           //render_data->width, 
           //render_data->height );
+
+      //test.draw( 0, 0, 640, 480 );
+      //test.draw( 0, 0, 640, 360 );
 
       ofPopStyle();
     };
@@ -110,7 +131,9 @@ class Ps3EyeSystem : public ECSsystem
     ofxPS3EyeGrabber ps3;
     ofPixels ps3_pix;
     ofTexture ps3_tex; //render
-    bool inited;
 
+    //ofImage test;
+
+    Entity* entity;
 };
 

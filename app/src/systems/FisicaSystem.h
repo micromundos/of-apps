@@ -49,7 +49,7 @@ class FisicaSystem : public ECSsystem
       _world->SetContinuousPhysics(false);
       _world->SetSubStepping(false);
 
-      //particle_iterations = ceil( ofGetFrameRate() / 30.0f );
+      //particle_iterations = ceil( ofGetFrameRate() / 30.0f ); 
 
       float	time_step = _fps > 0.0f ? (1.0f / _fps) : 0.0f;
       _world->Step( time_step,

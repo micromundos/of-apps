@@ -34,11 +34,5 @@ class RgbComponent : public ECScomponent
       this->width = w;
       this->height = h;
     };
-
-    void update( ofPixels& pixels )
-    {
-      this->pixels = &pixels;
-    };
-
 };
 

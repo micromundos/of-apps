@@ -4,13 +4,13 @@
          "components" : [
             {
                "data" : {
-                  "force" : [ 9.791666984558105, 0, 100 ],
-                  "rate" : [ 5, 0, 100 ]
+                  "force" : [ 15, 0, 100 ],
+                  "rate" : [ 10, 0, 100 ]
                },
                "id" : "particle_emitter"
             }
          ],
-         "id" : "985"
+         "id" : "428"
       },
       {
          "components" : [
@@ -30,10 +30,13 @@
    "game" : [
       {
          "components" : [
-            {
+            { 
                "id" : "fisica"
             },
             {
+               "data" : {
+                   "maxspeed" : [ 1, 0, 10 ]
+               },
                "id" : "particle_system"
             },
             /*{*/
@@ -43,6 +46,9 @@
             /*"id" : "particle_blobs_containers"*/
             /*},*/
             {
+               "data" : {
+                   "maxforce" : [ 0, 0, 20 ]
+               },
                "id" : "particle_flow_field"
             }
          ],
