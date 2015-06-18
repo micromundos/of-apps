@@ -16,7 +16,7 @@
 uniform vec2 size;
 
 uniform sampler2DRect heightmap;
-uniform sampler2DRect entradas;
+/*uniform sampler2DRect entradas;*/
 uniform sampler2DRect debug_input;
 
 uniform float floor_height;

@@ -115,8 +115,8 @@ class DepthProcessingSystem : public ECSsystem
 
       TS_START("DepthProcessingSystem"); 
 
-      ofTexture& depth_map = depth_data->f_depth_img.getTextureReference();
-      //ofTexture& depth_map = depth_map_bg_dif(e);
+      //ofTexture& depth_map = depth_data->f_depth_img.getTextureReference();
+      ofTexture& depth_map = depth_map_bg_dif(e);
 
       //ofTexture* depth_map_clean = &depth_map;
 

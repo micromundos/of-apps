@@ -55,6 +55,7 @@ class TableCalibSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
       entity = &e; //save singleton entity
+      learn_background(e);
       if (calibrate(e)) return;
       if (save(e)) return;
       if (load(e)) return;
@@ -125,13 +126,40 @@ class TableCalibSystem : public ECSsystem
     ofVboMesh tris3d_mesh;
     CoordMap depth2screen;  
 
-    bool calibrate(Entity &e)
+    bool learn_background(Entity &e)
     {
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
       DepthComponent* depth_data = depth_m.get(e);
 
-      if ( !table_calib_data->calibrate 
+      if ( !table_calib_data->learn_bg
           || !depth_data->dirty )
+        return false;
+
+      if ( !table_calib_data->background.isAllocated() )
+        table_calib_data->background.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
+
+      int n = depth_data->f_depth_ofpix_mm->size();
+      float* dpix = depth_data->f_depth_ofpix_mm->getPixels();
+      float* bgpix = table_calib_data->background.getPixels();
+
+      for ( int i = 0; i < n; i++ ) 
+      {
+        if ( dpix[i] != 0 )
+          bgpix[i] = (bgpix[i] + dpix[i]) * 0.5;
+      }
+
+      table_calib_data->background.update();
+
+      return true;
+    };
+
+    bool calibrate(Entity &e)
+    {
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+      //DepthComponent* depth_data = depth_m.get(e);
+
+      if ( !table_calib_data->calibrate )
+          //|| !depth_data->dirty )
         return false;
 
       //run once
@@ -145,7 +173,8 @@ class TableCalibSystem : public ECSsystem
       table_calib_data->triangle = triangle;
       table_calib_data->plane = plane;
 
-      table_calib_data->background.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
+      //done on learn_background
+      //table_calib_data->background.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
 
       return true;
     };

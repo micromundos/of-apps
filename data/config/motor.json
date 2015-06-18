@@ -76,10 +76,11 @@
                   "calibrate" : false,
                   "filename_background" : "calib/table_background.yml",
                   "filename_plane" : "calib/table_plane.yml",
+                  "learn_bg" : false,
                   "load" : false,
                   "planes_num" : [ 20, 0, 100 ],
                   "radius_step" : [ 6, 0, 30 ],
-                  "render_plane" : true,
+                  "render_plane" : false,
                   "render_planes_list" : false,
                   "save" : false
                },
@@ -100,34 +101,27 @@
                   /*"render_normals_smoothed" : false,*/
                   "render_plane_angles" : false,
                   "render_surfaces" : false,
-                  "threshold_background" : [ 0, -300, 300 ],
+                  "threshold_background" : [ -300, -300, 300 ],
                   "threshold_far" : [ 2000, -2000, 2000 ],
-                  "threshold_near" : [ 10, -200, 200 ],
+                  "threshold_near" : [ 20, -200, 200 ],
                   "threshold_plane" : [ 360, 0, 360 ]
                },
-               /*"normals_bilateral_domain" : [ 10, 0, 100 ],*/
-               /*"normals_bilateral_range" : [ 2, 0, 20 ],*/
-               /*"normals_bilateral_kernel" : [ 6, 0, 10 ] */
                "id" : "depth_processing"
             },
+            /*{*/
+            /*"data" : {*/
+            /*"close_iter" : [ 1, 1, 6 ],*/
+            /*"render" : false,*/
+            /*"threshold_far" : [ -200, -200, 200 ],*/
+            /*"threshold_near" : [ 0, -100, 100 ]*/
+            /*},*/
+            /*"id" : "entradas"*/
+            /*},*/
             {
                "data" : {
-                  "close_iter" : [ 1, 1, 6 ],
-                  "render" : false,
-                  /*"render_smoothed" : false,*/
-                  "threshold_far" : [ -200, -200, 200 ],
-                  "threshold_near" : [ 0, -100, 100 ]
-               },
-               /*"bilateral_domain" : [ 10, 0, 100 ],*/
-               /*"bilateral_range" : [ 2, 0, 20 ],*/
-               /*"bilateral_kernel" : [ 6, 0, 10 ]*/
-               "id" : "entradas"
-            },
-            {
-               "data" : {
-                  "render" : false,
-                  "force_weight_min": [ 0, 0, 1 ],
-                  "force_weight_max": [ 0.01, 0, 1 ]
+                  "force_weight_max" : [ 0.09791667014360428, 0, 1 ],
+                  "force_weight_min" : [ 0, 0, 1 ],
+                  "render" : false
                },
                "id" : "flow_field"
             }

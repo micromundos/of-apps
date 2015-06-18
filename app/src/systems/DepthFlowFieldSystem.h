@@ -27,7 +27,7 @@ class DepthFlowFieldSystem : public ECSsystem
       depth_m.init( *world );
       flowfield_m.init( *world );
       depth_processing_m.init( *world );
-      entradas_m.init(*world);
+      //entradas_m.init(*world);
       entity = NULL;
       scale = 0.3;
     };
@@ -62,7 +62,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       flowfield(e)
         .set( "heightmap", surfaces(e).get() )
-        .set( "entradas", entradas(e).get() )
+        //.set( "entradas", entradas(e).get() )
         .update();
 
       if ( ff_data->render )
@@ -105,7 +105,7 @@ class DepthFlowFieldSystem : public ECSsystem
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<FlowFieldComponent> flowfield_m;
-    ComponentMapper<EntradasComponent> entradas_m;
+    //ComponentMapper<EntradasComponent> entradas_m;
 
     void update_flowfield( ofShader& shader )
     {
@@ -132,9 +132,9 @@ class DepthFlowFieldSystem : public ECSsystem
       return depth_processing_m.get(e)->height_map();
     };
 
-    gpgpu::Process& entradas(Entity &e)
-    {
-      return entradas_m.get(e)->output();
-    };
+    //gpgpu::Process& entradas(Entity &e)
+    //{
+      //return entradas_m.get(e)->output();
+    //};
 };
 

@@ -30,24 +30,18 @@
    "game" : [
       {
          "components" : [
-            { 
+            {
                "id" : "fisica"
             },
             {
                "data" : {
-                   "maxspeed" : [ 1, 0, 10 ]
+                  "maxspeed" : [ 5, 0, 10 ]
                },
                "id" : "particle_system"
             },
-            /*{*/
-            /*"data" : {*/
-            /*"render" : true*/
-            /*},*/
-            /*"id" : "particle_blobs_containers"*/
-            /*},*/
             {
                "data" : {
-                   "maxforce" : [ 0, 0, 20 ]
+                  "maxforce" : [ 10, 0, 20 ]
                },
                "id" : "particle_flow_field"
             }

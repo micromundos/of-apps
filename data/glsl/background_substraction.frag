@@ -23,10 +23,10 @@ void main( void )
   vec2 loc_F = gl_TexCoord[0].xy / size * foreground_size;
   vec2 loc_B = gl_TexCoord[0].xy / size * background_size;
 
-  float zero = threshold;
-
   float F = texture2DRect( foreground, loc_F ).x;
   float B = texture2DRect( background, loc_B ).x;
+
+  float zero = B - threshold; //5000.0;
 
   float diff = B-F; //depth map: distance to camera
 

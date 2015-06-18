@@ -59,7 +59,7 @@ class DepthProcessingComponent : public ECScomponent
       //param(open_iter, "open_iter");
       //param(close_iter, "close_iter");
 
-      //param(threshold_background, "threshold_background");
+      param(threshold_background, "threshold_background");
       param(threshold_plane, "threshold_plane");
       param(threshold_near, "threshold_near");
       param(threshold_far, "threshold_far"); 

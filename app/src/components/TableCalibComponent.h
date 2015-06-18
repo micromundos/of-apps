@@ -19,6 +19,7 @@ class TableCalibComponent : public ECScomponent
     string filename_background;
 
     ofParameter<bool> calibrate;
+    ofParameter<bool> learn_bg;
     ofParameter<bool> save;
     ofParameter<bool> load;
     ofParameter<float> planes_num;
@@ -37,6 +38,7 @@ class TableCalibComponent : public ECScomponent
       filename_background = d.get("filename_background","table_background.yml").asString();
 
       param(calibrate, "calibrate");
+      param(learn_bg, "learn_bg");
       param(save, "save");
       param(load, "load");
       param(planes_num, "planes_num");

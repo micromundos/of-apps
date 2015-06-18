@@ -4,7 +4,6 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "Systems.h"
-#include "bloqs/Bloq.h"
 
 using namespace artemis;
 
@@ -125,7 +124,7 @@ class ParticleSystem : public ECSsystem
       mesh.setMode( OF_PRIMITIVE_POINTS );
 
       max_count = 5000;
-      lifetime = 10.0; 
+      lifetime = 15.0; 
       radius = 6.0;
       render_size = 4.0;
       ofcolor.set( 127, 200, 255 );
