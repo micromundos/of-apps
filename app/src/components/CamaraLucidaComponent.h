@@ -14,7 +14,7 @@ class CamaraLucidaComponent : public ECScomponent
 
     ofParameter<bool> enabled;
     ofParameter<float> xoff;
-    ofParameter<bool> render_background;
+    ofParameter<float> render_background;
     ofParameter<bool> render_hue_tex;
 
     CamaraLucidaComponent(string _id) : ECScomponent(_id) 

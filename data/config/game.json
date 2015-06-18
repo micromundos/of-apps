@@ -35,7 +35,11 @@
             },
             {
                "data" : {
-                  "maxspeed" : [ 5, 0, 10 ]
+                  "max_particles" : 5000,
+                  "radius" : 6,
+                  "max_speed" : [ 5, 0, 10 ], 
+                  "lifetime" : [ 15, 0, 50 ],
+                  "render_size" : [ 4, 0, 20 ]
                },
                "id" : "particle_system"
             },

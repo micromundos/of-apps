@@ -31,8 +31,15 @@ class FisicaSystem : public ECSsystem
       gravity.Set(0.0f,0.0f);
       _world = new b2World(gravity); 
 
+      _world->SetAllowSleeping(true);
+      //debugging
+      _world->SetWarmStarting(false);
+      _world->SetContinuousPhysics(false);
+      _world->SetSubStepping(false);
+
       _fps = 30.0f;
       _scale = 30.0f; //see OFX_BOX2D_SCALE
+
       vel_iterations = 8;
       pos_iterations = 3;
       particle_iterations = 1;
@@ -41,13 +48,7 @@ class FisicaSystem : public ECSsystem
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
     {
-      TS_START("FisicaSystem");
-
-      _world->SetAllowSleeping(true);
-      //debugging
-      _world->SetWarmStarting(false);
-      _world->SetContinuousPhysics(false);
-      _world->SetSubStepping(false);
+      TS_START("FisicaSystem"); 
 
       //particle_iterations = ceil( ofGetFrameRate() / 30.0f ); 
 

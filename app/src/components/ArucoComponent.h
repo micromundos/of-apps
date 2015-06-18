@@ -20,6 +20,7 @@ class ArucoComponent : public ECScomponent
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
       ECScomponent::init(e_id,d,p);
+
       param( render, "render" );
       param( render_img, "render_img" );
 

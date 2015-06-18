@@ -50,6 +50,13 @@ void ofApp::update()
     params_sender.send();
     prev = now;
   }
+
+  if ( gui.getShape().height > ofGetHeight() )
+  {
+    float pct = ofMap( ofGetMouseY(), 0, ofGetHeight(), 0, 1, true );
+    float diff = gui.getShape().height - ofGetHeight();
+    gui.setPosition( gui.getPosition().x, -diff * pct );
+  }
 }
 
 void ofApp::parse_all_config()
@@ -261,7 +268,7 @@ Json::Value* ofApp::get_component( Json::Value& entity, string _component_id )
 
 void ofApp::draw()
 {
-    gui.draw();
+  gui.draw();
 }
 
 

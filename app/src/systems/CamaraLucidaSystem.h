@@ -118,10 +118,11 @@ class CamaraLucidaSystem : public ECSsystem
       //CamaraLucidaComponent* cml_data = camara_lucida_m.get(e);
       //RenderComponent* render_data = render_m.get(e);
 
-      if ( cml_data->render_background )
+      float bg = cml_data->render_background;
+      if ( bg > 0.0 )
       {
         ofPushStyle();
-        ofColor(255,255,255);
+        ofSetColor( bg*255 );
         ofRect( 0, 0, render_data->width, render_data->height );
         ofPopStyle();
       }

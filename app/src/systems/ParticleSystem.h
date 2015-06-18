@@ -22,11 +22,52 @@ class ParticleSystem : public ECSsystem
     {
       ps_m.init( *world ); 
       fisica = require_system<FisicaSystem>();
-      init(); 
+      entity = NULL; 
     };  
 
     virtual void added(Entity &e) 
-    {};
+    {
+      if ( entity != NULL )
+      {
+        ofLogWarning("ParticleSystem")
+          << "singleton entity already added";
+        return;
+      } 
+      entity = &e;
+
+      mesh.setMode( OF_PRIMITIVE_POINTS );
+
+      ParticleSystemComponent* ps_data = ps_m.get(e);
+
+      ofcolor.set( 127, 200, 255 );
+
+      b2color.Set( ofcolor.r, ofcolor.g, ofcolor.b, ofcolor.a );
+
+      b2ParticleSystemDef psd;
+      psd.radius = ps_data->radius/fisica->scale();
+      psd.maxCount = ps_data->max_particles;
+
+      /// Reduces relative velocity of viscous particles
+      /// Larger values slow down viscous particles more
+      psd.viscousStrength = 0.6f; //0.25f;
+
+      /// Change the particle density.
+      /// Particle density affects the mass of the particles, which in turn
+      /// affects how the particles interact with b2Bodies. Note that the density
+      /// does not affect how the particles interact with each other.
+      //psd.density = 0.0f; //1.0f;
+
+      /// Pushes particles out of solid particle group
+      /// Larger values repulse more
+      //psd.ejectionStrength = 0.0f; //0.5f;
+
+      b2particles = fisica->b2world()->CreateParticleSystem( &psd );
+    };
+
+    virtual void removed(Entity &e) 
+    { 
+      entity = NULL;
+    };
 
     virtual void processEntity(Entity &e)
     {
@@ -34,9 +75,9 @@ class ParticleSystem : public ECSsystem
 
       //limit particles speed
 
-      float maxspeed = ps_data->maxspeed;
+      float max_speed = ps_data->max_speed;
 
-      if ( maxspeed == 0.0 )
+      if ( max_speed == 0.0 )
         return;
 
       int32 n = b2particles->GetParticleCount();
@@ -45,14 +86,14 @@ class ParticleSystem : public ECSsystem
       {
         b2Vec2& vel = vels[i];
         float len = vel.Normalize();
-        vel *= len > maxspeed ? maxspeed : len;
-        //cout << i << ": vel len " << len << ", max " << maxspeed << endl;
+        vel *= len > max_speed ? max_speed : len;
+        //cout << i << ": vel len " << len << ", max " << max_speed << endl;
       }
     }; 
 
-    void renderEntities(ImmutableBag<Entity*>& bag) 
+    virtual void renderEntity(Entity &e)
     {
-      //EntityProcessingSystem::renderEntities(bag);
+      ParticleSystemComponent* ps_data = ps_m.get(e);
 
       mesh.clear();
 
@@ -73,16 +114,18 @@ class ParticleSystem : public ECSsystem
       ofSetColor(255);
       ofPushMatrix();
       ofScale( fisica->scale(), fisica->scale() );
-      glPointSize( render_size );
+      glPointSize( ps_data->render_size );
       mesh.draw();
       ofPopMatrix();
     };
 
-    virtual void renderEntity(Entity &e)
-    {};
-
     int32 make_particle( float _locx, float _locy, float _velx, float _vely )
     {
+      if ( entity == NULL )
+        return -1;
+
+      ParticleSystemComponent* ps_data = ps_m.get( *entity );
+
       float locx, locy, velx, vely;
       fisica->screen2world(_locx,_locy,locx,locy);
       fisica->screen2world(_velx,_vely,velx,vely);
@@ -94,8 +137,8 @@ class ParticleSystem : public ECSsystem
       pd.position.Set( locx, locy );
       pd.velocity.Set( velx, vely );
       pd.color = b2color;
-      if ( lifetime > 0.0 )
-        pd.lifetime = lifetime; 
+      if ( ps_data->lifetime > 0.0 )
+        pd.lifetime = ps_data->lifetime; 
 
       return b2particles->CreateParticle( pd );
     }; 
@@ -109,48 +152,13 @@ class ParticleSystem : public ECSsystem
 
     ComponentMapper<ParticleSystemComponent> ps_m;
 
-    FisicaSystem* fisica;
+    Entity* entity;
     b2ParticleSystem* b2particles;
+    FisicaSystem* fisica;
 
     ofVboMesh mesh;
 
-    //TODO params
     ofColor ofcolor;
     b2ParticleColor b2color;
-    float max_count, lifetime, radius, render_size;
-
-    void init()
-    {
-      mesh.setMode( OF_PRIMITIVE_POINTS );
-
-      max_count = 5000;
-      lifetime = 15.0; 
-      radius = 6.0;
-      render_size = 4.0;
-      ofcolor.set( 127, 200, 255 );
-
-      b2color.Set( ofcolor.r, ofcolor.g, ofcolor.b, ofcolor.a );
-
-      b2ParticleSystemDef psd;
-      psd.radius = radius / fisica->scale();
-      psd.maxCount = max_count;
-
-      /// Reduces relative velocity of viscous particles
-      /// Larger values slow down viscous particles more
-      psd.viscousStrength = 0.6f; //0.25f;
-
-      /// Change the particle density.
-      /// Particle density affects the mass of the particles, which in turn
-      /// affects how the particles interact with b2Bodies. Note that the density
-      /// does not affect how the particles interact with each other.
-      //psd.density = 0.0f; //1.0f;
-
-      /// Pushes particles out of solid particle group
-      /// Larger values repulse more
-      //psd.ejectionStrength = 0.0f; //0.5f;
-
-      b2particles = fisica->b2world()->CreateParticleSystem( &psd );
-    };
-
 };
 
