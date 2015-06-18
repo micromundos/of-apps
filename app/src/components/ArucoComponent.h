@@ -9,6 +9,8 @@ class ArucoComponent : public ECScomponent
   public:
 
     ofParameter<bool> render;
+    ofParameter<bool> render_img;
+    float marker_size;
     string calib_rgb_file;
     string calib_depth_file;
     string calib_stereo_file;
@@ -19,7 +21,9 @@ class ArucoComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
+      param( render_img, "render_img" );
 
+      marker_size = d["calibration"]["marker_size"].asFloat();
       calib_rgb_file = d["calibration"]["rgb"].asString();
       calib_depth_file = d["calibration"]["depth"].asString();
       calib_stereo_file = d["calibration"]["stereo"].asString();

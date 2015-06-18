@@ -68,8 +68,10 @@ class ArucoSystem : public ECSsystem
       this->channels = 3;
 
       //aruco.setup2d( w, h ); //no calibration, no board config
-      aruco.setupXML( aruco_data->calib_rgb_file, w, h );
+      aruco.setupXML( aruco_data->calib_rgb_file, w, h, "", aruco_data->marker_size );
       //aruco.setThresholdMethod(aruco::MarkerDetector::CANNY);
+      //aruco.setMinMaxSize( 0.001, 1.0 );
+      //aruco.pyrDown( 1 );
     };
 
     virtual void processEntity(Entity &e) 
@@ -125,37 +127,46 @@ class ArucoSystem : public ECSsystem
       ArucoComponent* aruco_data = aruco_m.get(e);
       RgbComponent* rgb_data = rgb_m.get(e);
 
-      //debug
-      if ( !aruco_data->render )
-        return;
-
-      RenderComponent* render_data = require_component<RenderComponent>("output");
-
-      //aruco.draw2d();
-      //aruco.draw3d();
-
-      ofPushStyle();
-      ofSetLineWidth( 5 ); 
-
-      ofSetColor(ofColor::green);
-      ofVec2f loc;
-      for (int i = 0; i < bloqs.size(); i++)
+      if ( aruco_data->render_img )
       {
-        string id = bloqs[i]->id;
-        ofVec2f& dir = bloqs[i]->dir; 
-        loc.set( bloqs[i]->loc ); 
-
-        //loc.x *= rgb_data->width;
-        //loc.y *= rgb_data->height;
-        loc.x *= render_data->width;
-        loc.y *= render_data->height;
-
-        ofLine( loc, loc + dir * 40 );
-        ofRect( loc, 8, 8 );
-        ofDrawBitmapString( id, loc ); 
+        aruco.getThresholdImage( threshold_img.getPixelsRef() );
+        threshold_img.update();
+        ofPushStyle();
+        ofSetColor(255); 
+        threshold_img.draw(0,0);
+        ofPopStyle();
       }
 
-      ofPopStyle();
+      if ( aruco_data->render )
+      {
+        RenderComponent* render_data = require_component<RenderComponent>("output");
+
+        //aruco.draw2d();
+        //aruco.draw3d();
+
+        ofPushStyle();
+        ofSetLineWidth( 5 ); 
+
+        ofSetColor(ofColor::green);
+        ofVec2f loc;
+        for (int i = 0; i < bloqs.size(); i++)
+        {
+          string id = bloqs[i]->id;
+          ofVec2f& dir = bloqs[i]->dir; 
+          loc.set( bloqs[i]->loc ); 
+
+          //loc.x *= rgb_data->width;
+          //loc.y *= rgb_data->height;
+          loc.x *= render_data->width;
+          loc.y *= render_data->height;
+
+          ofLine( loc, loc + dir * 40 );
+          ofRect( loc, 8, 8 );
+          ofDrawBitmapString( id, loc ); 
+        }
+
+        ofPopStyle();
+      }
     };
 
   private: 
@@ -169,6 +180,8 @@ class ArucoSystem : public ECSsystem
     ofxAruco aruco;
     int channels;
     bool inited;
+
+    ofImage threshold_img;
 
     Extrinsics calib_stereo;
     ofxCv::Calibration calib_rgb;
