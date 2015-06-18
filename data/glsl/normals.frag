@@ -1,5 +1,6 @@
 #version 120
 #extension GL_ARB_texture_rectangle : enable
+#extension GL_EXT_gpu_shader4 : enable
 
 /*
  * normals calc
@@ -16,31 +17,35 @@
 #pragma include "lib/math.glsl"
 #pragma include "lib/debug_normalized.glsl"
 
-uniform sampler2DRect mesh_3d;
+uniform vec2 size;
+
+uniform sampler2DRect mesh3d;
 uniform sampler2DRect debug_input;
 
 const int kernel = 1;
 
 void main( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].xy;
-  vec3 p3 = texture2DRect( mesh_3d, p2 ).xyz;
+  vec2 mesh3d_size = vec2(textureSize2DRect(mesh3d,0));
+
+  vec2 p2 = gl_TexCoord[0].xy / size * mesh3d_size;
+  vec3 p3 = texture2DRect( mesh3d, p2 ).xyz;
 
   vec3 normal = vec3(0.);
 
   for ( int i = 1; i <= kernel; i++ )
   {
     /* south */
-    vec3 s = vec3(texture2DRect(mesh_3d,vec2( p2.x, p2.y + i )));
+    vec3 s = vec3(texture2DRect(mesh3d,vec2( p2.x, p2.y + i )));
 
     /* north */
-    vec3 n = vec3(texture2DRect(mesh_3d,vec2( p2.x, p2.y - i )));
+    vec3 n = vec3(texture2DRect(mesh3d,vec2( p2.x, p2.y - i )));
 
     /* east */
-    vec3 e = vec3(texture2DRect(mesh_3d,vec2( p2.x + i, p2.y )));
+    vec3 e = vec3(texture2DRect(mesh3d,vec2( p2.x + i, p2.y )));
 
     /* west */
-    vec3 w = vec3(texture2DRect(mesh_3d,vec2( p2.x - i, p2.y ))); 
+    vec3 w = vec3(texture2DRect(mesh3d,vec2( p2.x - i, p2.y ))); 
 
     /* edges */
     vec3 xe = p3 - e;

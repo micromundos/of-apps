@@ -4,13 +4,13 @@
          "components" : [
             {
                "data" : {
-                  "force" : [ 1.5, 0, 100 ],
-                  "rate" : [ 39.21052551269531, 0, 100 ]
+                  "force" : [ 9.791666984558105, 0, 100 ],
+                  "rate" : [ 5, 0, 100 ]
                },
                "id" : "particle_emitter"
             }
          ],
-         "id" : "64"
+         "id" : "125"
       },
       {
          "components" : [
@@ -36,6 +36,12 @@
             {
                "id" : "particle_system"
             },
+            /*{*/
+            /*"data" : {*/
+            /*"render" : true*/
+            /*},*/
+            /*"id" : "particle_blobs_containers"*/
+            /*},*/
             {
                "id" : "particle_flow_field"
             }

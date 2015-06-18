@@ -23,4 +23,5 @@
 #include "EntradasComponent.h"
 #include "FlowFieldDebugComponent.h"
 
+#include "DepthHoleFillerComponent.h"
 //dont remove this line
