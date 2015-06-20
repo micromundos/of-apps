@@ -98,7 +98,7 @@
     {
       "data" : {
         /*"open_iter" : [ 1, 0, 6 ],*/
-        /*"close_iter" : [ 1, 0, 6 ],*/
+        "close_iter" : [ 1, 0, 6 ],
         /*"gaussian_sigma" : [ 2.5, 0, 10 ],*/
         /*"gaussian_kernel" : [ 3, 0, 10 ],*/
         /*"bilateral_domain" : [ 100, 0, 100 ],*/
@@ -143,7 +143,7 @@
         /*"history" : [ 10, 0, 32 ],*/
         /*"closing_passes" : [ 5, 0, 5 ],*/
         "render" : false,
-        "use_contour" : true
+        "use_contour" : false
         /*"use_closing" : false,*/
         /*"use_history" : false*/
       },

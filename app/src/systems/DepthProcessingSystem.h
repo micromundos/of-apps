@@ -117,39 +117,38 @@ class DepthProcessingSystem : public ECSsystem
 
       TS_START("DepthProcessingSystem"); 
 
-      //ofTexture& depth_map = depth_data->f_depth_img.getTextureReference();
-      ofTexture& depth_map = depth_map_bg_dif(e);
-
-      //ofTexture* depth_map_clean = &depth_map;
+      ofTexture& depth_map_in = input(e);
+      ofTexture* depth_map;
 
       //int open_iter = depth_proc_data->open_iter;
       //if ( open_iter > 0 )
       //{
-        ///[>depth_map_clean = cv_utils::open( *depth_map_clean, open_iter, erode, dilate );
         //erode
-          //.set( "data", *depth_map_clean )
+          //.set( "data", depth_map_in )
           //.update( open_iter );
         //dilate
           //.set( "data", erode.get() )
           //.update( open_iter );
-        //depth_map_clean = &(dilate.get());
+        //depth_map = &(dilate.get());
       //}
 
-      //int close_iter = depth_proc_data->close_iter;
-      //if ( close_iter > 0 )
-      //{
-        ///[>depth_map_clean = cv_utils::close( *depth_map_clean, close_iter, dilate, erode );
-        //dilate
-          //.set( "data", *depth_map_clean )
-          //.update( close_iter );
-        //erode
-          //.set( "data", dilate.get() )
-          //.update( close_iter );
-        //depth_map_clean = &(erode.get());
-      //}
+      int close_iter = depth_proc_data->close_iter;
+      if ( close_iter > 0 )
+      {
+        dilate
+          .set( "data", depth_map_in )
+          .update( close_iter );
+        erode
+          .set( "data", dilate.get() )
+          .update( close_iter );
+        depth_map = &(erode.get());
+      }
+
+      if ( close_iter == 0 ) //&& open_iter == 0 )
+        depth_map = &depth_map_in;
 
       //gaussian
-        //.set( "data", *depth_map_clean )
+        //.set( "data", *depth_map )
         ////.set( "data", depth_3d.get() )
         //.update( 2 ); //horiz + vert
 
@@ -160,9 +159,8 @@ class DepthProcessingSystem : public ECSsystem
 
       depth_3d
         //.set( "depth_map", bilateral.get() )
-        //.set( "depth_map", *depth_map_clean )
         //.set( "depth_map", gaussian.get() )
-        .set( "depth_map", depth_map )
+        .set( "depth_map", *depth_map )
         .update(); 
 
       height_map(e)
@@ -446,38 +444,42 @@ class DepthProcessingSystem : public ECSsystem
     };
 
 
-    ofTexture& depth_map_bg_dif(Entity &e)
+    //input/output shortcuts
+
+    ofTexture& input(Entity &e)
     {
       DepthComponent* depth_data = depth_m.get(e);
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
       DepthHoleFillerComponent* depth_hole_filler_data = depth_hole_filler_m.get(e);
 
-      ofTexture* input;
+      //return depth_data->f_depth_img.getTextureReference(); 
 
+      ofTexture* _input;
+
+      // depth hole filler
       if ( depth_hole_filler_data->enabled && depth_hole_filler_data->output.isAllocated() )
       {
-        input = &(depth_hole_filler_data->output.getTextureReference()); 
+        _input = &(depth_hole_filler_data->output.getTextureReference()); 
       }
 
+      //depth map
       else
       {
-        input = &(depth_data->f_depth_img.getTextureReference());
+        _input = &(depth_data->f_depth_img.getTextureReference());
       }
 
+      //table background diff
       if ( table_calib_data->background.isAllocated() )
       {
         return bg_dif
-          .set( "foreground", *input )
+          .set( "foreground", *_input )
           .set( "background", table_calib_data->background.getTextureReference() )
           .update()
           .get();
       }
 
-      return *input;
+      return *_input;
     };
-
-
-    //output shortcuts
 
     gpgpu::Process& surfaces(Entity &e)
     {

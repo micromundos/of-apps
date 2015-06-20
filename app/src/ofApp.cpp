@@ -7,7 +7,7 @@ void ofApp::setup()
   
   ofSetLogLevel(OF_LOG_NOTICE);
   
-  ofSetFrameRate(60.0f); 
+  //ofSetFrameRate(60.0f); 
   ofSetVerticalSync(false);
 
   gpgpu::Process::watch("all");
