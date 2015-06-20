@@ -44,6 +44,7 @@ class BlobsSystem : public ECSsystem
 
       contourFinder.setMinAreaRadius( 10 );
       contourFinder.setMaxAreaRadius( (w*h)/3 );
+      //contourFinder.setAutoThreshold(true); // invert works with autothreshold only
       //contourFinder.setInvert(true); // find black instead of white
 
       ofxCv::RectTracker& tracker = contourFinder.getTracker();

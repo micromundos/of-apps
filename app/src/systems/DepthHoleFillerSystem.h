@@ -29,19 +29,6 @@ class DepthHoleFillerSystem : public ECSsystem
    
     };
 
-    //virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::processEntities(bag);
-      //int len = bag.getCount();
-      //for ( int i = 0; i < len; i++ )
-        //processEntity( *bag.get(i) );
-    //};
-
-    //virtual void renderEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::renderEntities(bag);
-    //};
-
     virtual void added(Entity &e) 
     {
       //depth_hole_filler_m.get(e)->data;
@@ -59,7 +46,7 @@ class DepthHoleFillerSystem : public ECSsystem
 
     };
 
-    virtual void processEntity(Entity &e) 
+    virtual void processEntity(Entity &e)
     {
     
       depth_data = depth_m.get(e);
@@ -103,20 +90,18 @@ class DepthHoleFillerSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-    
       DepthHoleFillerComponent* depth_hole_filler_data = depth_hole_filler_m.get(e);
 
       if(!depth_hole_filler_data->render)
         return;
-      
-      
+
+      int w = 640 * .75;
+      int h = 480 * .75;
+
       ofSetColor(255,255);
-      cv_float_depth.draw(0,0,320,240);
-      cv_gray_image.draw(320,0,320,240);
-
-    
+      cv_float_depth.draw(0,0,w,h);
+      cv_gray_image.draw(w,0,w,h);
     };
-
 
   private:
     ComponentMapper<DepthComponent> depth_m;
