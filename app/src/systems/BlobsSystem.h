@@ -16,14 +16,12 @@ class BlobsSystem : public ECSsystem
     BlobsSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<BlobsComponent>();
-      addComponentType<DepthSmoothingComponent>();
       addComponentType<DepthComponent>();
     };
 
     virtual void initialize() 
     {
       blobs_m.init( *world );
-      smooth_m.init( *world );
       depth_m.init( *world ); 
       inited = false; 
     };
@@ -33,17 +31,12 @@ class BlobsSystem : public ECSsystem
       if (inited) return;
       inited = true;
 
-      ofPixels& input = get_input(e);
-
       resampled_len = 100.0f;
       interpolation_coef = 0.06f;
       blobs_threshold = 15;
 
-      int w = input.getWidth();
-      int h = input.getHeight();
-
       contourFinder.setMinAreaRadius( 10 );
-      contourFinder.setMaxAreaRadius( (w*h)/3 );
+      contourFinder.setMaxAreaRadius( 10000 );
       //contourFinder.setAutoThreshold(true); // invert works with autothreshold only
       //contourFinder.setInvert(true); // find black instead of white
 
@@ -70,32 +63,39 @@ class BlobsSystem : public ECSsystem
       contourFinder.setThreshold( blobs_threshold );
       contourFinder.findContours( input );
 
-      vector<ofPolyline>& blobs = blobs_data->blobs;
       const vector<ofPolyline>& ofblobs = contourFinder.getPolylines();
-
       ofxCv::RectTracker& tracker = contourFinder.getTracker();
-
       int len = contourFinder.size();
 
+      vector<ofPolyline>& blobs = blobs_data->blobs;
       blobs.clear();
+
       for (unsigned int i = 0; i < len; i++)
       {
         unsigned int label = contourFinder.getLabel(i);
 
-        ofPolyline& prev = ofblobs_prev[label];
-        if ( tracker.existsPrevious(label) ) 
+        if ( blobs_data->interpolate && tracker.existsPrevious(label) ) 
         {
+          ofPolyline& prev = ofblobs_prev[label];
+
           ofPolyline interpolated = interpolate( prev, ofblobs[i] );
           blobs.push_back( interpolated );
+
           prev.clear();
           prev.addVertices( interpolated.getVertices() );
         }
+
         else
         {
           ofPolyline resampled = ofblobs[i].getResampledByCount( resampled_len );
           blobs.push_back( resampled );
-          prev.clear();
-          prev.addVertices(resampled.getVertices());
+
+          if ( blobs_data->interpolate )
+          {
+            ofPolyline& prev = ofblobs_prev[label];
+            prev.clear();
+            prev.addVertices(resampled.getVertices());
+          }
         }
 
         normalize_blob( w, h, blobs[i] );
@@ -128,12 +128,11 @@ class BlobsSystem : public ECSsystem
     bool inited;
 
     ComponentMapper<BlobsComponent> blobs_m;
-    ComponentMapper<DepthSmoothingComponent> smooth_m;
     ComponentMapper<DepthComponent> depth_m;
 
     ofPixels& get_input(Entity &e)
     {
-      return smooth_m.get(e)->output;
+      return *(depth_m.get(e)->depth_ofpix_grey);
     };
 
     void normalize_blob( int w, int h, ofPolyline& blob )

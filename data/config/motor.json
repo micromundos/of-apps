@@ -88,6 +88,13 @@
       },
       "id" : "table_calib"
     },
+    /*{*/
+    /*"data" : {*/
+    /*"interpolate" : false,*/
+    /*"render" : false*/
+    /*},*/
+    /*"id" : "blobs"*/
+    /*},*/
     {
       "data" : {
         /*"open_iter" : [ 1, 0, 6 ],*/
@@ -126,19 +133,19 @@
         "render" : false
       },
       "id" : "flow_field"
-    },
+    }, 
     {
       "data" : {
-        "contour_delta" : [ 251.6447296142578, 0, 255 ],
+        "contour_delta" : [ 255, 0, 255 ],
         "contour_fill_width" : [ 100, 0, 100 ],
         "contour_max_area" : [ 10000, 1, 10000 ],
         "contour_max_holes" : [ 1000, 0, 1000 ],
-        "depth_history" : [ 10, 0, 32 ],
-        "passes" : [ 5, 0, 5 ],
+        /*"history" : [ 10, 0, 32 ],*/
+        /*"closing_passes" : [ 5, 0, 5 ],*/
         "render" : false,
-        "use_closing" : true,
-        "use_contour" : true,
-        "use_history" : false
+        "use_contour" : true
+        /*"use_closing" : false,*/
+        /*"use_history" : false*/
       },
       "id" : "depth_hole_filler"
     }

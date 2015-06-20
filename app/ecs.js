@@ -15,8 +15,8 @@ prog
     .option('-a, --add', 'Add system and/or component (operator)')
     .option('-r, --remove', 'Remove system and/or component (operator)')
     .option('-x, --archive', 'Archive system and/or component (operator)')
-    .option('-d, --disable', 'Disable system and/or component (operator)')
-    .option('-e, --enable', 'Enable system and/or component (operator)')
+    .option('-d, --disable', 'Disable system and/or component: removes the thing from factories and includes (operator)')
+    .option('-e, --enable', 'Enable system and/or component: adds the thing to factories and includes (operator)')
     //operands
     .option('-c, --component', 'Process a component (operand)')
     .option('-s, --system', 'Process a system (operand)')

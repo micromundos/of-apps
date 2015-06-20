@@ -19,6 +19,7 @@ class DepthProcessingSystem : public ECSsystem
       addComponentType<DepthProcessingComponent>();
       addComponentType<DepthComponent>();
       addComponentType<TableCalibComponent>();
+      addComponentType<DepthHoleFillerComponent>();
     };
 
     virtual void initialize() 
@@ -26,6 +27,7 @@ class DepthProcessingSystem : public ECSsystem
       depth_processing_m.init( *world );
       depth_m.init( *world );
       table_calib_m.init( *world );
+      depth_hole_filler_m.init( *world );
       entity = NULL; 
       scale = 0.5;
     };
@@ -292,6 +294,7 @@ class DepthProcessingSystem : public ECSsystem
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<TableCalibComponent> table_calib_m;
+    ComponentMapper<DepthHoleFillerComponent> depth_hole_filler_m;
 
 
     // gpu processes updates
@@ -447,17 +450,30 @@ class DepthProcessingSystem : public ECSsystem
     {
       DepthComponent* depth_data = depth_m.get(e);
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
+      DepthHoleFillerComponent* depth_hole_filler_data = depth_hole_filler_m.get(e);
 
-      if (table_calib_data->background.isAllocated())
+      ofTexture* input;
+
+      if ( depth_hole_filler_data->enabled && depth_hole_filler_data->output.isAllocated() )
+      {
+        input = &(depth_hole_filler_data->output.getTextureReference()); 
+      }
+
+      else
+      {
+        input = &(depth_data->f_depth_img.getTextureReference());
+      }
+
+      if ( table_calib_data->background.isAllocated() )
       {
         return bg_dif
-          .set( "foreground", depth_data->f_depth_img.getTextureReference() )
+          .set( "foreground", *input )
           .set( "background", table_calib_data->background.getTextureReference() )
           .update()
           .get();
       }
 
-      return depth_data->f_depth_img.getTextureReference();
+      return *input;
     };
 
 

@@ -51,6 +51,11 @@ class DepthHoleFiller {
 	ofxCvGrayscaleImage		ofxCv8uC1_Blobs;
 	ofxCvGrayscaleImage		ofxCv8uC1_DepthInvalid;	
 	ofxCvGrayscaleImage		ofxCv8uC1_DepthInvalidCopy;
+
+  uint8_t* get_blobs_pixels()
+  {
+    return ofxCv8uC1_Blobs.getPixels();
+  };
 		
 	//--------------------------------------------
 	ofxCvContourFinder		contourFinder;

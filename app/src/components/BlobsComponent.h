@@ -11,6 +11,7 @@ class BlobsComponent : public ECScomponent
 
     vector<ofPolyline> blobs;
 
+    ofParameter<bool> interpolate;
     ofParameter<bool> render;
 
     BlobsComponent(string _id) : ECScomponent(_id) 
@@ -20,6 +21,7 @@ class BlobsComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
 
+      param(interpolate, "interpolate");
       param(render, "render");
     };
 

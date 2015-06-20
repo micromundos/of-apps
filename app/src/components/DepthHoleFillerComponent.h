@@ -8,13 +8,16 @@ class DepthHoleFillerComponent : public ECScomponent
 {
   public:
 
+    ofFloatImage output;
+    bool enabled; //use_history || use_closing || use_contour
+
     ofParameter<bool>  render;
     ofParameter<bool>  use_history;
     ofParameter<bool>  use_closing;
     ofParameter<bool>  use_contour;
 
-    ofParameter<float>  depth_history;
-    ofParameter<float>  passes;
+    ofParameter<float>  history;
+    ofParameter<float>  closing_passes;
     ofParameter<float>  contour_max_area;
     ofParameter<float>  contour_max_holes;
     ofParameter<float>  contour_delta;
@@ -25,12 +28,20 @@ class DepthHoleFillerComponent : public ECScomponent
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
       ECScomponent::init(e_id,d,p);
+
       param( render, "render" );
-      param( use_history, "use_history" );
-      param( use_closing, "use_closing" );
+
       param( use_contour, "use_contour" );
-      param( depth_history, "depth_history" );
-      param( passes, "passes" );
+      use_closing = false;
+      //param( use_closing, "use_closing" );
+      use_history = false;
+      //param( use_history, "use_history" );
+
+      history = 0;
+      //param( history, "history" );
+      closing_passes = 0;
+      //param( closing_passes, "closing_passes" );
+
       param( contour_max_area, "contour_max_area" );
       param( contour_max_holes, "contour_max_holes" );
       param( contour_delta, "contour_delta" );
