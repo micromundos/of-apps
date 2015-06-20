@@ -1,57 +1,57 @@
 {
-   "bloqs" : [
+  "bloqs" : [
+  {
+    "components" : [
+    {
+      "data" : {
+        "force" : [ 15, 0, 100 ],
+        "rate" : [ 10, 0, 100 ]
+      },
+      "id" : "particle_emitter"
+    }
+    ],
+      "id" : "428"
+  },
+  {
+    "components" : [
+    {
+      "id" : "knob"
+    },
+    {
+      "data" : {
+        "coef" : [ 21.32105255126953, 1, 100 ]
+      },
+      "id" : "time_bender"
+    }
+    ],
+      "id" : "838"
+  }
+  ],
+    "game" : [
+    {
+      "components" : [
       {
-         "components" : [
-            {
-               "data" : {
-                  "force" : [ 15, 0, 100 ],
-                  "rate" : [ 10, 0, 100 ]
-               },
-               "id" : "particle_emitter"
-            }
-         ],
-         "id" : "428"
+        "id" : "fisica"
       },
       {
-         "components" : [
-            {
-               "id" : "knob"
-            },
-            {
-               "data" : {
-                  "coef" : [ 21.32105255126953, 1, 100 ]
-               },
-               "id" : "time_bender"
-            }
-         ],
-         "id" : "838"
-      }
-   ],
-   "game" : [
+        "data" : {
+          "max_particles" : 5000,
+          "radius" : 6,
+          "max_speed" : [ 5, 0, 10 ], 
+          "lifetime" : [ 15, 0, 50 ],
+          "render_size" : [ 4, 0, 20 ]
+        },
+        "id" : "particle_system"
+      },
       {
-         "components" : [
-            {
-               "id" : "fisica"
-            },
-            {
-               "data" : {
-                  "max_particles" : 5000,
-                  "radius" : 6,
-                  "max_speed" : [ 5, 0, 10 ], 
-                  "lifetime" : [ 15, 0, 50 ],
-                  "render_size" : [ 4, 0, 20 ]
-               },
-               "id" : "particle_system"
-            },
-            {
-               "data" : {
-                  "maxforce" : [ 10, 0, 20 ]
-               },
-               "id" : "particle_flow_field"
-            }
-         ],
-         "id" : "particles"
+        "data" : {
+          "maxforce" : [ 10, 0, 20 ]
+        },
+        "id" : "particle_flow_field"
       }
-   ]
+      ],
+        "id" : "particles"
+    }
+  ]
 }
 

@@ -36,6 +36,8 @@ ecs.add_system(new ParticleEmitterSystem("particle_emitter"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new KnobSystem("knob"));
 ecs.add_system(new TimeBenderSystem("time_bender"));
+ecs.add_system(new FlowfieldDebugSystem("flowfield_debug"));
+ecs.add_system(new DepthHoleFillerSystem("depth_hole_filler"));
 //dont remove this line
 };
 

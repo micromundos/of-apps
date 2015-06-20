@@ -39,6 +39,7 @@ void main( void )
 
   //3) depth_segmentation.frag
   height = height < threshold_far && height > threshold_near ? height : 0.;
+  height = height > 0.0 ? 200.0 : 0.0;
 
   //write output
   gl_FragColor = vec4(vec3(height),1.);

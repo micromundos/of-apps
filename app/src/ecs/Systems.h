@@ -16,5 +16,7 @@
 #include "KnobSystem.h"
 #include "TableCalibSystem.h"
 #include "DepthProcessingSystem.h"
+#include "FlowfieldDebugSystem.h"
 #include "EntradasSystem.h"
+#include "DepthHoleFillerSystem.h"
 //dont remove this line

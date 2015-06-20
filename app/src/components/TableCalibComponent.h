@@ -46,6 +46,7 @@ class TableCalibComponent : public ECScomponent
       param(angle_step, "angle_step");
       param(render_plane, "render_plane");
       param(render_planes_list, "render_planes_list");
+      
     };
 
 };
