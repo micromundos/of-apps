@@ -23,7 +23,10 @@ void ofApp::setup()
   sender.setup( host, app_port );
 
   params_sender.init( &sender );
+
 	params.setName("params");
+	//params_motor.setName("motor");
+	//params_game.setName("game");
 
   parse_all_config();
 
@@ -31,6 +34,8 @@ void ofApp::setup()
   ofxGuiSetDefaultWidth(ofGetWidth()-20);
 
   gui.setup( params );
+  //gui_motor.setup( params_motor );
+  //gui_game.setup( params_game );
 
   //gui_settings = "ctrl/gui.xml";
   //gui.setup( params, gui_settings );
@@ -51,18 +56,20 @@ void ofApp::update()
     prev = now;
   }
 
-  if ( gui.getShape().height > ofGetHeight() )
+  float yoff = 20;
+
+  if ( gui.getShape().height > ofGetHeight() - yoff )
   {
     float pct = ofMap( ofGetMouseY(), 0, ofGetHeight(), 0, 1, true );
-    float diff = gui.getShape().height - ofGetHeight();
-    gui.setPosition( gui.getPosition().x, -diff * pct );
+    float diff = gui.getShape().height - ofGetHeight()+yoff*2;
+    gui.setPosition( gui.getPosition().x, -diff * pct +yoff );
   }
 }
 
 void ofApp::parse_all_config()
 {
-  parse_config( motor );
-  parse_config( game );
+  parse_config( motor, params );
+  parse_config( game, params );
 };
 
 void ofApp::load_all_config()
@@ -83,8 +90,8 @@ void ofApp::load_all_config()
 
 void ofApp::save_all_config()
 {
-  save_config( motor, motor_json );
-  save_config( game, game_json );
+  save_config( motor, motor_json, params );
+  save_config( game, game_json, params );
 };
 
 void ofApp::load_and_parse_all_config()
@@ -94,7 +101,7 @@ void ofApp::load_and_parse_all_config()
 };
 
 
-void ofApp::parse_config( ofxJSONElement& config )
+void ofApp::parse_config( ofxJSONElement& config, ofParameterGroup& params )
 {
   ofLog() << "*** parse config ***";
 
@@ -154,7 +161,7 @@ void ofApp::parse_config( ofxJSONElement& config )
 };
 
 
-void ofApp::update_config( ofxJSONElement& config )
+void ofApp::update_config( ofxJSONElement& config, ofParameterGroup& params )
 {
   ofLog() << "*** update config ***";
 
@@ -195,10 +202,10 @@ void ofApp::update_config( ofxJSONElement& config )
   }
 };
 
-void ofApp::save_config( ofxJSONElement& config, string filename )
+void ofApp::save_config( ofxJSONElement& config, string filename, ofParameterGroup& params )
 {
   ofLog() << "*** save config ***";
-  update_config( config );
+  update_config( config, params );
   config.save( filename, true );
 };
 
@@ -269,6 +276,8 @@ Json::Value* ofApp::get_component( Json::Value& entity, string _component_id )
 void ofApp::draw()
 {
   gui.draw();
+  //gui_motor.draw();
+  //gui_game.draw();
 }
 
 
@@ -279,6 +288,8 @@ void ofApp::exit()
 
   params.clear();
   gui.clear();
+  //gui_motor.clear();
+  //gui_game.clear();
 }
 
 

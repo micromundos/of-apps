@@ -28,9 +28,11 @@ class ofApp : public ofBaseApp{
     void gotMessage(ofMessage msg);
 
     ofParameterGroup params;
-    ofxOscSender sender;
+    //ofParameterGroup params_motor, params_game;
     ofxPanel gui;
+    //ofxPanel gui_motor, gui_game;
     //string gui_settings;
+    ofxOscSender sender;
 
     ofxJSONElement motor, game, settings;
     string settings_json, game_json, motor_json;
@@ -42,9 +44,9 @@ class ofApp : public ofBaseApp{
     void save_all_config();
     void load_and_parse_all_config();
 
-    void parse_config( ofxJSONElement& config );
-    void update_config( ofxJSONElement& config );
-    void save_config( ofxJSONElement& config, string filename );
+    void parse_config( ofxJSONElement& config, ofParameterGroup& params );
+    void update_config( ofxJSONElement& config, ofParameterGroup& params );
+    void save_config( ofxJSONElement& config, string filename, ofParameterGroup& params );
 
     Json::Value* get_entity( ofxJSONElement& config, string _entity_id );
     Json::Value* get_component( Json::Value& entity, string _component_id );
