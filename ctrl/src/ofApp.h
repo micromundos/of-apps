@@ -27,10 +27,12 @@ class ofApp : public ofBaseApp{
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
-    ofParameterGroup params;
-    //ofParameterGroup params_motor, params_game;
-    ofxPanel gui;
-    //ofxPanel gui_motor, gui_game;
+    //ofParameterGroup params;
+    ofParameterGroup params_motor, params_game;
+
+    //ofxPanel gui;
+    ofxPanel gui_motor, gui_game;
+
     //string gui_settings;
     ofxOscSender sender;
 
@@ -38,6 +40,10 @@ class ofApp : public ofBaseApp{
     string settings_json, game_json, motor_json;
 
     ECSparamsSender params_sender;
+
+    float padding;
+    float panel_width;
+    void scroll_gui( ofxPanel& gui );
 
     void load_all_config();
     void parse_all_config();

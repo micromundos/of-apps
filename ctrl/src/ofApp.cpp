@@ -7,7 +7,7 @@ int send_interval;
 void ofApp::setup()
 {
   ofSetDataPathRoot( __data_path__ );
-  ofSetWindowPosition( ofGetScreenWidth()-ofGetWidth(), 0 );
+  ofSetWindowPosition( ofGetScreenWidth()-ofGetWidth()-20, 0 );
 
   ofSetFrameRate( 30 ); 
   ofSetVerticalSync(true); 
@@ -24,25 +24,34 @@ void ofApp::setup()
 
   params_sender.init( &sender );
 
-	params.setName("params");
-	//params_motor.setName("motor");
-	//params_game.setName("game");
+	//params.setName("params");
+  params_motor.setName("motor");
+  params_game.setName("game");
 
   parse_all_config();
 
 
-  ofxGuiSetDefaultWidth(ofGetWidth()-20);
+  padding = 10;
+  panel_width = ofGetWidth()/2 - padding*1.5;
 
-  gui.setup( params );
-  //gui_motor.setup( params_motor );
-  //gui_game.setup( params_game );
+  ofxGuiSetDefaultWidth( panel_width );
+
+  //gui.setup( params );
+  gui_motor.setup( params_motor );
+  gui_motor.setPosition( panel_width + padding*2, padding );
+  gui_game.setup( params_game );
+  gui_game.setPosition( padding, padding );
 
   //gui_settings = "ctrl/gui.xml";
   //gui.setup( params, gui_settings );
   //gui.loadFromFile( gui_settings );
 
-  ofAddListener( gui.savePressedE, this, &ofApp::save_all_config );
-  ofAddListener( gui.loadPressedE, this, &ofApp::load_and_parse_all_config );
+  //ofAddListener( gui.savePressedE, this, &ofApp::save_all_config );
+  //ofAddListener( gui.loadPressedE, this, &ofApp::load_and_parse_all_config );
+  ofAddListener( gui_motor.savePressedE, this, &ofApp::save_all_config );
+  ofAddListener( gui_motor.loadPressedE, this, &ofApp::load_and_parse_all_config );
+  ofAddListener( gui_game.savePressedE, this, &ofApp::save_all_config );
+  ofAddListener( gui_game.loadPressedE, this, &ofApp::load_and_parse_all_config );
 
   prev = ofGetSeconds();
 }
@@ -56,8 +65,14 @@ void ofApp::update()
     prev = now;
   }
 
-  float yoff = 20;
+  //scroll_gui( gui, padding );
+  scroll_gui( gui_motor );
+  scroll_gui( gui_game );
+}
 
+void ofApp::scroll_gui( ofxPanel& gui )
+{
+  float yoff = padding * 2;
   if ( gui.getShape().height > ofGetHeight() - yoff )
   {
     float pct = ofMap( ofGetMouseY(), 0, ofGetHeight(), 0, 1, true );
@@ -68,8 +83,8 @@ void ofApp::update()
 
 void ofApp::parse_all_config()
 {
-  parse_config( motor, params );
-  parse_config( game, params );
+  parse_config( motor, params_motor );
+  parse_config( game, params_game );
 };
 
 void ofApp::load_all_config()
@@ -90,8 +105,8 @@ void ofApp::load_all_config()
 
 void ofApp::save_all_config()
 {
-  save_config( motor, motor_json, params );
-  save_config( game, game_json, params );
+  save_config( motor, motor_json, params_motor );
+  save_config( game, game_json, params_motor );
 };
 
 void ofApp::load_and_parse_all_config()
@@ -275,21 +290,28 @@ Json::Value* ofApp::get_component( Json::Value& entity, string _component_id )
 
 void ofApp::draw()
 {
-  gui.draw();
-  //gui_motor.draw();
-  //gui_game.draw();
+  //gui.draw();
+  gui_motor.draw();
+  gui_game.draw();
 }
 
 
 void ofApp::exit()
 {
-  ofRemoveListener( gui.savePressedE, this, &ofApp::save_all_config );
-  ofRemoveListener( gui.loadPressedE, this, &ofApp::load_and_parse_all_config );
+  //ofRemoveListener( gui.savePressedE, this, &ofApp::save_all_config );
+  //ofRemoveListener( gui.loadPressedE, this, &ofApp::load_and_parse_all_config );
+  ofRemoveListener( gui_motor.savePressedE, this, &ofApp::save_all_config );
+  ofRemoveListener( gui_motor.loadPressedE, this, &ofApp::load_and_parse_all_config );
+  ofRemoveListener( gui_game.savePressedE, this, &ofApp::save_all_config );
+  ofRemoveListener( gui_game.loadPressedE, this, &ofApp::load_and_parse_all_config );
 
-  params.clear();
-  gui.clear();
-  //gui_motor.clear();
-  //gui_game.clear();
+  //params.clear();
+  params_motor.clear();
+  params_game.clear();
+
+  //gui.clear();
+  gui_motor.clear();
+  gui_game.clear();
 }
 
 
