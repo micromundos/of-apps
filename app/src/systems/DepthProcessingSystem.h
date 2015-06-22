@@ -54,9 +54,9 @@ class DepthProcessingSystem : public ECSsystem
       depth_3d
         .init("glsl/depth_3d.frag", w, h );
 
-      //bilateral
-        //.init("glsl/cv/bilateral.frag", w, h )
-        //.set_debug("glsl/debug/depth_d.frag");
+      bilateral
+        .init("glsl/cv/bilateral.frag", w, h )
+        .set_debug("glsl/debug/depth_d.frag");
 
       //gaussian
         //.init( &gaussian_shader, w, h )
@@ -152,15 +152,15 @@ class DepthProcessingSystem : public ECSsystem
         ////.set( "data", depth_3d.get() )
         //.update( 2 ); //horiz + vert
 
-      //bilateral
-        //.set( "data", depth_map )
-        ////.set( "data", depth_3d.get() )
-        //.update();
+      bilateral
+        .set( "data", *depth_map )
+        //.set( "data", depth_3d.get() )
+        .update();
 
       depth_3d
-        //.set( "depth_map", bilateral.get() )
+        .set( "depth_map", bilateral.get() )
         //.set( "depth_map", gaussian.get() )
-        .set( "depth_map", *depth_map )
+        //.set( "depth_map", *depth_map )
         .update(); 
 
       height_map(e)
@@ -215,8 +215,8 @@ class DepthProcessingSystem : public ECSsystem
         normals(e).update_debug();
 
       if ( depth_proc_data->render_smoothed )  
-        gaussian.update_debug();
-        //bilateral.update_debug();
+        bilateral.update_debug();
+        //gaussian.update_debug();
 
       if ( depth_proc_data->render_plane_angles ) 
         plane_angles.update_debug();
@@ -246,8 +246,8 @@ class DepthProcessingSystem : public ECSsystem
       ofSetColor(255); 
 
       if (depth_proc_data->render_smoothed)
-        gaussian.draw_debug(0,0,rw,rh);
-        //bilateral.draw_debug(0,0,rw,rh);
+        bilateral.draw_debug(0,0,rw,rh);
+        //gaussian.draw_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_height_map)
         height_map(e).draw_debug(0,0,rw,rh);

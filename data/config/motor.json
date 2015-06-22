@@ -101,18 +101,18 @@
         "close_iter" : [ 1, 0, 6 ],
         /*"gaussian_sigma" : [ 2.5, 0, 10 ],*/
         /*"gaussian_kernel" : [ 3, 0, 10 ],*/
-        /*"bilateral_domain" : [ 100, 0, 100 ],*/
-        /*"bilateral_kernel" : [ 6, 0, 10 ],*/
-        /*"bilateral_range" : [ 20, 0, 20 ],*/
+        "bilateral_domain" : [ 100, 0, 100 ],
+        "bilateral_kernel" : [ 6, 0, 10 ],
+        "bilateral_range" : [ 20, 0, 20 ],
         "render_height_map" : false,
         /*"render_smoothed" : false,*/
         "render_normals" : false,
         /*"render_normals_smoothed" : false,*/
         "render_plane_angles" : false,
         "render_surfaces" : false,
-        "threshold_background" : [ -300, -300, 300 ],
+        "threshold_background" : [ 5, -300, 300 ],
         "threshold_far" : [ 2000, -2000, 2000 ],
-        "threshold_near" : [ 20, -200, 200 ],
+        "threshold_near" : [ 0, -200, 200 ],
         "threshold_plane" : [ 360, 0, 360 ]
       },
       "id" : "depth_processing"
@@ -128,7 +128,7 @@
     /*},*/
     {
       "data" : {
-        "force_weight_max" : [ 0.09791667014360428, 0, 1 ],
+        "force_weight_max" : [ 0.01, 0, 1 ],
         "force_weight_min" : [ 0, 0, 1 ],
         "render" : false
       },

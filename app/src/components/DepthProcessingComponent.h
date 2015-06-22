@@ -67,9 +67,9 @@ class DepthProcessingComponent : public ECScomponent
       //param(gaussian_sigma, "gaussian_sigma"); 
       //param(gaussian_kernel, "gaussian_kernel"); 
 
-      //param(bilateral_domain, "bilateral_domain"); 
-      //param(bilateral_range, "bilateral_range"); 
-      //param(bilateral_kernel, "bilateral_kernel");
+      param(bilateral_domain, "bilateral_domain"); 
+      param(bilateral_range, "bilateral_range"); 
+      param(bilateral_kernel, "bilateral_kernel");
 
       //param(normals_bilateral_domain, "normals_bilateral_domain"); 
       //param(normals_bilateral_range, "normals_bilateral_range"); 

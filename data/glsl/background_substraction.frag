@@ -26,7 +26,7 @@ void main( void )
   float F = texture2DRect( foreground, loc_F ).x;
   float B = texture2DRect( background, loc_B ).x;
 
-  float zero = B - threshold; //5000.0;
+  float zero = 0.0;//B - threshold; //5000.0;
 
   float diff = B-F; //depth map: distance to camera
 
