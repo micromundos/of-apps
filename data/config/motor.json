@@ -99,8 +99,8 @@
       "data" : {
         /*"open_iter" : [ 1, 0, 6 ],*/
         "close_iter" : [ 1, 0, 6 ],
-        /*"gaussian_sigma" : [ 2.5, 0, 10 ],*/
-        /*"gaussian_kernel" : [ 3, 0, 10 ],*/
+        "gaussian_sigma" : [ 2.5, 0, 10 ],
+        "gaussian_kernel" : [ 3, 0, 10 ],
         /*"bilateral_domain" : [ 100, 0, 100 ],*/
         /*"bilateral_kernel" : [ 6, 0, 10 ],*/
         /*"bilateral_range" : [ 20, 0, 20 ],*/

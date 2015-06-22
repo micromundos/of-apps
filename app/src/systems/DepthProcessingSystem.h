@@ -73,6 +73,10 @@ class DepthProcessingSystem : public ECSsystem
       table_normals
         .init("glsl/normals.frag", w, h );
 
+      table_gaussian
+        .init( &gaussian_shader, w, h )
+        .set_debug("glsl/debug/depth_d.frag");
+
 
       height_map(e)
         .init("glsl/height_map.frag", w, h );  
@@ -285,13 +289,14 @@ class DepthProcessingSystem : public ECSsystem
 
     gpgpu::Process depth_3d;
     gpgpu::Process gaussian;
-    gpgpu::Gaussian gaussian_shader;
     gpgpu::Process bilateral;
+    gpgpu::Gaussian gaussian_shader;
 
     bool table_inited;
     gpgpu::Process table_dif;
     gpgpu::Process table_depth_3d;
     gpgpu::Process table_normals;
+    gpgpu::Process table_gaussian;
 
     //gpgpu::Process segmentation;
     //gpgpu::Process height_map;
@@ -319,15 +324,20 @@ class DepthProcessingSystem : public ECSsystem
     {
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
-      if ( table_inited || !table_calib_data->background.isAllocated() )
-        return;
+      if ( !table_calib_data->background.isAllocated() )
+      //if ( table_inited || !table_calib_data->background.isAllocated() )
+        return; 
 
       table_depth_3d
         .set( "depth_map", table_calib_data->background.getTextureReference() )
         .update();
 
+      table_gaussian
+        .set( "data", table_depth_3d.get() )
+        .update( 2 ); //horiz + vert
+
       table_normals
-        .set( "mesh3d", table_depth_3d.get() )
+        .set( "mesh3d", table_gaussian.get() )
         .update();
 
       table_inited = true;
@@ -458,6 +468,7 @@ class DepthProcessingSystem : public ECSsystem
 
       ofAddListener( table_dif.on_update, this, &DepthProcessingSystem::update_table_dif );
       ofAddListener( table_depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
+      ofAddListener( table_gaussian.on_update, this, &DepthProcessingSystem::update_gaussian ); 
 
       ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
       ofAddListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
@@ -477,6 +488,7 @@ class DepthProcessingSystem : public ECSsystem
 
       ofRemoveListener( table_dif.on_update, this, &DepthProcessingSystem::update_table_dif );
       ofRemoveListener( table_depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
+      ofRemoveListener( table_gaussian.on_update, this, &DepthProcessingSystem::update_gaussian ); 
 
       ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
       ofRemoveListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );

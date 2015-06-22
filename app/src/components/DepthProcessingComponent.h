@@ -64,8 +64,8 @@ class DepthProcessingComponent : public ECScomponent
       param(threshold_near, "threshold_near");
       param(threshold_far, "threshold_far"); 
 
-      //param(gaussian_sigma, "gaussian_sigma"); 
-      //param(gaussian_kernel, "gaussian_kernel"); 
+      param(gaussian_sigma, "gaussian_sigma"); 
+      param(gaussian_kernel, "gaussian_kernel"); 
 
       //param(bilateral_domain, "bilateral_domain"); 
       //param(bilateral_range, "bilateral_range"); 
