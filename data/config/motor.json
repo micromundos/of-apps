@@ -144,7 +144,7 @@
         /*"history" : [ 10, 0, 32 ],*/
         /*"closing_passes" : [ 5, 0, 5 ],*/
         "render" : false,
-        "use_contour" : false
+        "use_contour" : true
         /*"use_closing" : false,*/
         /*"use_history" : false*/
       },

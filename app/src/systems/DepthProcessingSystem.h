@@ -461,20 +461,19 @@ class DepthProcessingSystem : public ECSsystem
       if ( depth_hole_filler_data->enabled && depth_hole_filler_data->output.isAllocated() )
       {
         _input = &(depth_hole_filler_data->output.getTextureReference()); 
+        if ( _input == NULL )
+        {
+          ofLogError("DepthProcessingSystem")
+            << "depth hole filler has no output data";
+          static ofTexture _dummytex_ = ofTexture();
+          _input = &(_dummytex_);
+        }
       }
 
       //depth map
       else if ( depth_data->f_depth_img.isAllocated() )
       {
         _input = &(depth_data->f_depth_img.getTextureReference());
-      }
-
-      else
-      {
-        ofLogError("DepthProcessingSystem")
-          << "couldn't find any input texture";
-        static ofTexture _dummytex_ = ofTexture();
-        _input = &(_dummytex_);
       }
 
       //table background diff

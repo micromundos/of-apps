@@ -112,6 +112,7 @@ void DepthHoleFiller::fillHolesUsingContourFinder (ofxCvGrayscaleImage &depthIma
 	fillBlobsWithInterpolatedData (depthImage, maxLevelDelta, maxHoleFillWidth);
 	
 	// Add the interpolated holes back into the depth image
+  // delegate blobs + image merge to users
 	//cvMax(depthImage.getCvImage(), 
 			//ofxCv8uC1_Blobs.getCvImage(), 
 			//depthImage.getCvImage());
