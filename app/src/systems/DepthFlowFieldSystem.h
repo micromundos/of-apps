@@ -114,7 +114,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       shader.setUniform1f( "floor_height", depth_proc_data->threshold_near );
       shader.setUniform1f( "force_weight_min", ff_data->force_weight_min );
-      shader.setUniform1f( "force_weight_max", ff_data->force_weight_max );
+      shader.setUniform1f( "force_weight_max", ff_data->force_weight_max * ff_data->force_weight_max_m );
     };
 
     gpgpu::Process& flowfield(Entity &e)

@@ -18,6 +18,7 @@ class FlowFieldComponent : public ECScomponent
     ofParameter<bool> render;
     ofParameter<float> force_weight_min;
     ofParameter<float> force_weight_max;
+    ofParameter<float> force_weight_max_m;
 
     FlowFieldComponent(string _id) : ECScomponent(_id) {};
 
@@ -27,6 +28,7 @@ class FlowFieldComponent : public ECScomponent
       param( render, "render" );
       param( force_weight_min, "force_weight_min" );
       param( force_weight_max, "force_weight_max" );
+      param( force_weight_max_m, "force_weight_max_m" );
     };
 };
 

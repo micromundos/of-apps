@@ -31,18 +31,20 @@ class DepthHoleFillerSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      //depth_hole_filler_m.get(e)->data;
-      depth_data = depth_m.get(e);
+      DepthComponent* depth_data = depth_m.get(e);
+      int w = depth_data->width;
+      int h = depth_data->height;
+
       if(!DHF_inited)
       {
         DHF_inited = true;
-        DHF.setDimensions(depth_data->width,depth_data->height);
+        DHF.setDimensions(w,h);
         
         DHF.setDepthHistory(1);
 
-        cv_float_depth.allocate(depth_data->width,depth_data->height);
-        cv_float_depth_holes.allocate(depth_data->width,depth_data->height);
-        cv_gray_image.allocate(depth_data->width,depth_data->height);
+        cv_float_depth.allocate(w,h);
+        cv_float_depth_holes.allocate(w,h);
+        cv_gray_image.allocate(w,h);
 
         cv_float_depth.setNativeScale( 0.0, 5000.0 );
         cv_float_depth_holes.setNativeScale( 0.0, 5000.0 );
@@ -53,22 +55,18 @@ class DepthHoleFillerSystem : public ECSsystem
 
     virtual void processEntity(Entity &e)
     {
-    
-      depth_data = depth_m.get(e);
-      
-      if ( !depth_data->dirty )
-        return;
 
+      DepthComponent* depth_data = depth_m.get(e);
       DepthHoleFillerComponent* depth_hole_filler_data = depth_hole_filler_m.get(e);
-
-      if(!depth_hole_filler_data)
-        return;
 
       bool use_history	= depth_hole_filler_data->use_history;
       bool use_contour = depth_hole_filler_data->use_contour;
       bool use_closing	= depth_hole_filler_data->use_closing;
 
       depth_hole_filler_data->enabled = use_history || use_contour || use_closing;
+
+      if ( !depth_data->dirty )
+        return;
 
       cv_float_depth.setFromPixels( depth_data->f_depth_ofpix_mm->getPixels(), depth_data->width, depth_data->height );
       cv_gray_image.setFromFloatImage( cv_float_depth ); //maps scale min-max -> 0-255
@@ -133,7 +131,6 @@ class DepthHoleFillerSystem : public ECSsystem
 
   private:
     ComponentMapper<DepthComponent> depth_m;
-    DepthComponent* depth_data;
     ComponentMapper<DepthHoleFillerComponent> depth_hole_filler_m;
     //
     bool                DHF_inited;

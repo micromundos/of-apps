@@ -120,17 +120,17 @@ class DepthProcessingSystem : public ECSsystem
       ofTexture& depth_map_in = input(e);
       ofTexture* depth_map;
 
-      //int open_iter = depth_proc_data->open_iter;
-      //if ( open_iter > 0 )
-      //{
-        //erode
-          //.set( "data", depth_map_in )
-          //.update( open_iter );
-        //dilate
-          //.set( "data", erode.get() )
-          //.update( open_iter );
-        //depth_map = &(dilate.get());
-      //}
+      int open_iter = depth_proc_data->open_iter;
+      if ( open_iter > 0 )
+      {
+        erode
+          .set( "data", depth_map_in )
+          .update( open_iter );
+        dilate
+          .set( "data", erode.get() )
+          .update( open_iter );
+        depth_map = &(dilate.get());
+      }
 
       int close_iter = depth_proc_data->close_iter;
       if ( close_iter > 0 )
@@ -144,7 +144,7 @@ class DepthProcessingSystem : public ECSsystem
         depth_map = &(erode.get());
       }
 
-      if ( close_iter == 0 ) //&& open_iter == 0 )
+      if ( close_iter == 0 && open_iter == 0 )
         depth_map = &depth_map_in;
 
       //gaussian
@@ -339,6 +339,7 @@ class DepthProcessingSystem : public ECSsystem
     {
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
       shader.setUniform1f( "threshold", depth_proc_data->threshold_background );
+      //shader.setUniform1f( "zero", depth_proc_data->threshold_near );
     };
 
     void update_height_map( ofShader& shader )
@@ -377,12 +378,12 @@ class DepthProcessingSystem : public ECSsystem
       shader.setUniform1f("threshold_far", depth_proc_data->threshold_far);
     };
 
-    void update_threshold( ofShader& shader )
-    {
-      shader.setUniform1i("binary", 1);
-      shader.setUniform1f("threshold_near", 0.);
-      shader.setUniform1f("threshold_far", 5000.);
-    };
+    //void update_threshold( ofShader& shader )
+    //{
+      //shader.setUniform1i("binary", 1);
+      //shader.setUniform1f("threshold_near", 0.);
+      //shader.setUniform1f("threshold_far", 5000.);
+    //};
 
     void render_3d(ofEventArgs &args)
     {
@@ -463,9 +464,17 @@ class DepthProcessingSystem : public ECSsystem
       }
 
       //depth map
-      else
+      else if ( depth_data->f_depth_img.isAllocated() )
       {
         _input = &(depth_data->f_depth_img.getTextureReference());
+      }
+
+      else
+      {
+        ofLogError("DepthProcessingSystem")
+          << "couldn't find any input texture";
+        static ofTexture _dummytex_ = ofTexture();
+        _input = &(_dummytex_);
       }
 
       //table background diff

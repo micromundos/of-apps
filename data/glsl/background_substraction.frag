@@ -12,8 +12,9 @@ uniform vec2 size;
 uniform sampler2DRect foreground;
 uniform sampler2DRect background;
 uniform float threshold;
+/*uniform float zero;*/
 
-/*const float zero = 5000.;*/
+const float zero = 0.0; //5000.0;
 
 void main( void ) 
 {
@@ -26,7 +27,7 @@ void main( void )
   float F = texture2DRect( foreground, loc_F ).x;
   float B = texture2DRect( background, loc_B ).x;
 
-  float zero = B - threshold; //5000.0;
+  /*float zero = B - threshold;*/
 
   float diff = B-F; //depth map: distance to camera
 
