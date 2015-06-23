@@ -452,7 +452,7 @@ class ArucoSystem : public ECSsystem
         calib_stereo.T.convertTo( calib_stereo.T, CV_32FC1 );
 
       //@#$%ˆ& scale.....
-      float scale = 2.;
+      float scale = 1.;
 
       calib_stereo.T *= scale;
 

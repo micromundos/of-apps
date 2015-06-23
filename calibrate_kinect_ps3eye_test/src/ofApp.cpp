@@ -22,7 +22,7 @@ void ofApp::setup()
   kinect.init(false, true, true);
 	kinect.open();
 
-	aruco.setupXML( "calib/intrinsics_ps3eye.aruco.yml", ofGetWidth(), ofGetHeight() );
+	aruco.setupXML( "calib/intrinsics_ps3eye.aruco.yml", ofGetWidth(), ofGetHeight(), "", 0.07  );
 
   load_intrinsics( calib_kinect, int_k, "calib/intrinsics_kinect.aruco.yml" );
   load_intrinsics( calib_ps3, int_ps3, "calib/intrinsics_ps3eye.aruco.yml" );
@@ -269,7 +269,7 @@ void ofApp::load_extrinsics(string filename)
 
 
   //@#$%ˆ& scale.....
-  float scale = 2.;
+  float scale = 1.;
 
   extrinsics.T *= scale;
 
