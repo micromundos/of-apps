@@ -46,9 +46,9 @@
     "components" : [
     {
       "data" : {
-        "height" : 480,
+        "height" : 720, //480,
         "render" : false,
-        "width" : 640
+        "width" : 1280 //640
       },
       "id" : "rgb"
     },

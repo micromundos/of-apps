@@ -47,8 +47,23 @@ class VideoInputSystem : public ECSsystem
       RgbComponent* rgb_data = rgb_m.get(e);
       bool dirty = video_grabber.isFrameNew();
       rgb_data->dirty = dirty;
+
       if ( dirty )
-        rgb_data->update( video_grabber.getPixelsRef() );
+      {
+        //rgb_data->pixels = &(video_grabber.getPixelsRef());
+        //copy & scale
+        pix = video_grabber.getPixelsRef();
+        //float scale = 1.0;
+        //int w = rgb_data->width * scale;
+        //int h = rgb_data->height * scale;
+        //pix.resize(w,h);
+        int w = rgb_data->width;
+        int h = rgb_data->height;
+        pix.crop( 
+            (float)w*0.25, (float)h*0.25,
+            (float)w*0.5, (float)h*0.5 );
+        rgb_data->pixels = &(pix);
+      }
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -57,14 +72,16 @@ class VideoInputSystem : public ECSsystem
       if ( !rgb_data->render )
         return;
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      //RenderComponent* render_data = require_component<RenderComponent>("output");
 
       ofPushStyle();
       ofSetColor(255);
 
       video_grabber.draw(0,0,
-          render_data->width,
-          render_data->height );
+          rgb_data->width, 
+          rgb_data->height );
+          //render_data->width,
+          //render_data->height );
 
       ofPopStyle();
     };
@@ -74,6 +91,7 @@ class VideoInputSystem : public ECSsystem
     ComponentMapper<RgbComponent> rgb_m;
 
     ofVideoGrabber video_grabber;
+    ofPixels pix;
     bool inited;
 };
 

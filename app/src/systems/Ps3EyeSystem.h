@@ -106,7 +106,7 @@ class Ps3EyeSystem : public ECSsystem
       if ( !rgb_data->render )
         return;
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      //RenderComponent* render_data = require_component<RenderComponent>("output");
 
       ofPushStyle();
       ofSetColor(255); 
