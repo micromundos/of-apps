@@ -74,7 +74,7 @@ class DepthProcessingSystem : public ECSsystem
         //.init("glsl/cv/bilateral.frag", w, h )
         //.set_debug("glsl/debug/normalized_d.frag");
 
-      plane_angles
+      plane_angles(e)
         .init("glsl/plane_angles.frag", w, h );
 
       //segmentation
@@ -179,7 +179,7 @@ class DepthProcessingSystem : public ECSsystem
         //.set( "data", normals(e).get() )
         //.update();
 
-      plane_angles
+      plane_angles(e)
         .set( "normals", normals(e).get() )
         //.set( "normals", normals_bilateral.get() )
         .update(); 
@@ -187,7 +187,7 @@ class DepthProcessingSystem : public ECSsystem
       //segmentation
       surfaces(e)
         .set( "height_map", height_map(e).get() )
-        .set( "plane_angles", plane_angles.get() )
+        .set( "plane_angles", plane_angles(e).get() )
         //.set( "normals", normals_bilateral.get() )
         .update();  
 
@@ -219,7 +219,7 @@ class DepthProcessingSystem : public ECSsystem
         //bilateral.update_debug();
 
       if ( depth_proc_data->render_plane_angles ) 
-        plane_angles.update_debug();
+        plane_angles(e).update_debug();
 
       TS_STOP("DepthProcessingSystem");
     }; 
@@ -256,7 +256,7 @@ class DepthProcessingSystem : public ECSsystem
         normals(e).draw_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_plane_angles)
-        plane_angles.draw_debug(0,0,rw,rh);
+        plane_angles(e).draw_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_surfaces)
         surfaces(e).draw_debug(0,0,rw,rh);
@@ -273,12 +273,7 @@ class DepthProcessingSystem : public ECSsystem
     gpgpu::Gaussian gaussian_shader;
     gpgpu::Process bilateral;
     gpgpu::Process bg_dif;
-    //gpgpu::Process segmentation;
-    //gpgpu::Process height_map;
-    //gpgpu::Process normals;
     //gpgpu::Process normals_bilateral;
-    gpgpu::Process plane_angles;
-    //post-processing:
     //gpgpu::Process threshold;
     //gpgpu::Process mask;
     gpgpu::Process erode;
@@ -421,7 +416,7 @@ class DepthProcessingSystem : public ECSsystem
       ofAddListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
       ofAddListener( bg_dif.on_update, this, &DepthProcessingSystem::update_bg_dif );
       ofAddListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
-      ofAddListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
+      ofAddListener( plane_angles(e).on_update, this, &DepthProcessingSystem::update_plane_angles );
       //ofAddListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
       ofAddListener( surfaces(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
       //ofAddListener( threshold.on_update, this, &DepthProcessingSystem::update_threshold );
@@ -438,7 +433,7 @@ class DepthProcessingSystem : public ECSsystem
       ofRemoveListener( depth_3d.on_update, this, &DepthProcessingSystem::update_depth_3d );
       ofRemoveListener( bg_dif.on_update, this, &DepthProcessingSystem::update_bg_dif );
       ofRemoveListener( height_map(e).on_update, this, &DepthProcessingSystem::update_height_map );
-      ofRemoveListener( plane_angles.on_update, this, &DepthProcessingSystem::update_plane_angles );
+      ofRemoveListener( plane_angles(e).on_update, this, &DepthProcessingSystem::update_plane_angles );
       //ofRemoveListener( normals_bilateral.on_update, this, &DepthProcessingSystem::update_normals_bilateral ); 
       ofRemoveListener( surfaces(e).on_update, this, &DepthProcessingSystem::update_depth_segmentation );
       //ofRemoveListener( threshold.on_update, this, &DepthProcessingSystem::update_threshold );
@@ -503,6 +498,11 @@ class DepthProcessingSystem : public ECSsystem
     {
       return depth_processing_m.get(e)->normals();
     }; 
+
+    gpgpu::Process& plane_angles(Entity &e)
+    {
+      return depth_processing_m.get(e)->plane_angles();
+    };
 
 };
 

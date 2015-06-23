@@ -12,6 +12,7 @@ class DepthProcessingComponent : public ECScomponent
     gpgpu::Process _surfaces;
     gpgpu::Process _height_map;
     gpgpu::Process _normals;
+    gpgpu::Process _plane_angles;
 
   public:
 
@@ -23,6 +24,9 @@ class DepthProcessingComponent : public ECScomponent
 
     gpgpu::Process& normals()
     { return _normals; };
+
+    gpgpu::Process& plane_angles()
+    { return _plane_angles; };
 
     ofParameter<bool> render_surfaces;
     ofParameter<bool> render_normals;
