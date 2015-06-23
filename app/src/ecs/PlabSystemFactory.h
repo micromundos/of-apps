@@ -28,6 +28,7 @@ ecs.add_system(new Ps3EyeSystem("ps_3_eye"));
 ecs.add_system(new TableCalibSystem("table_calib"));
 ecs.add_system(new DepthHoleFillerSystem("depth_hole_filler"));
 ecs.add_system(new DepthProcessingSystem("depth_processing"));
+ecs.add_system(new GraphSystem("graph"));
 ecs.add_system(new EntradasSystem("entradas"));
 ecs.add_system(new ArucoSystem("aruco"));
 ecs.add_system(new DepthFlowFieldSystem("depth_flow_field"));

@@ -37,6 +37,7 @@ else if (id == "table_calib") return new TableCalibComponent(id);
 else if (id == "depth_processing") return new DepthProcessingComponent(id);
 else if (id == "entradas") return new EntradasComponent(id);
 else if (id == "depth_hole_filler") return new DepthHoleFillerComponent(id);
+else if (id == "graph") return new GraphComponent(id);
 //dont remove this line
 
 return NULL;

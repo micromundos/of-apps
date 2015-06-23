@@ -18,4 +18,5 @@
 #include "DepthProcessingSystem.h"
 #include "EntradasSystem.h"
 #include "DepthHoleFillerSystem.h"
+#include "GraphSystem.h"
 //dont remove this line

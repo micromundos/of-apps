@@ -149,6 +149,14 @@
         /*"use_history" : false*/
       },
       "id" : "depth_hole_filler"
+    },
+    {
+      "data" : {
+        "render" : true,
+        "threshold_nodes" : [ 90, 0, 360 ],
+        "threshold_nodes_offset" : [ 10, 0, 360 ]
+      },
+      "id" : "depth_hole_filler"
     }
     ],
       "id" : "input"

@@ -24,4 +24,5 @@
 #include "FlowFieldDebugComponent.h"
 
 #include "DepthHoleFillerComponent.h"
+#include "GraphComponent.h"
 //dont remove this line
