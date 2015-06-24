@@ -54,13 +54,13 @@ void ofApp::setup()
       settings["params"]["calib_kinect_projector"]["chessboard_port"].asInt() );
 
 
-  capture_osc_num = "1";
-  calibrate_osc_num = "2"; 
-  save_calib_osc_num = "3";
-  save_images_osc_num = "4";
-  load_images_osc_num = "5";
-  chessboard_projected_osc_num = "6";
-  reset_calib_osc_num = "7";
+  capture_osc_num = "11";
+  calibrate_osc_num = "12"; 
+  save_calib_osc_num = "13";
+  save_images_osc_num = "14";
+  load_images_osc_num = "15";
+  chessboard_projected_osc_num = "16";
+  reset_calib_osc_num = "17";
 
   capture_btn.addListener(this,&ofApp::capture);
   calibrate_btn.addListener(this,&ofApp::calibrate);
@@ -209,7 +209,7 @@ void ofApp::update_osc()
     ofxOscMessage m;
     receiver.getNextMessage(&m);
 
-    //log_osc_msg( m );
+    log_osc_msg( m );
 
     if ( ofIsStringInString( m.getAddress(), "/fader" ) )
     {
