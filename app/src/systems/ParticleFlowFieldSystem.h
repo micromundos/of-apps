@@ -28,14 +28,10 @@ class ParticleFlowFieldSystem : public ECSsystem
       fisica = require_system<FisicaSystem>();
     };
 
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      update_screen2ff();
-      artemis::EntityProcessingSystem::processEntities( bag );
-    };
-
     virtual void processEntity(Entity &e) 
     {
+      update_screen2ff();
+
       ParticleFlowFieldComponent* pff_data = particle_flowfield_m.get(e);
 
       FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");

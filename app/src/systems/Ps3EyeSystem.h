@@ -63,6 +63,7 @@ class Ps3EyeSystem : public ECSsystem
       //test.loadImage("test_aruco_markers_640x480.jpg");
       //test.loadImage("test_aruco_markers_1280x720.jpg");
       //test.loadImage("test_aruco_markers_1920x1080.jpg");
+      //test.loadImage("test_aruco_markers_1280x720_crop640x360.jpg");
     };
 
     virtual void removed(Entity &e) 
@@ -90,7 +91,6 @@ class Ps3EyeSystem : public ECSsystem
       rgb_data->dirty = dirty;
       if ( dirty )
       {
-        //rgb_data->update( ps3.getPixelsRef() );
         TS_START("Ps3EyeSystem copy pixels");
         //copy & convert rgba -> rgb
         ps3_pix = ps3.getPixelsRef();
@@ -103,8 +103,11 @@ class Ps3EyeSystem : public ECSsystem
     virtual void renderEntity(Entity &e)
     {
       RgbComponent* rgb_data = rgb_m.get(e);
+
       if ( !rgb_data->render )
         return;
+
+      TS_START("Ps3EyeSystem render");
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
 
@@ -122,6 +125,8 @@ class Ps3EyeSystem : public ECSsystem
       //test.draw( 0, 0, 640, 360 );
 
       ofPopStyle();
+
+      TS_STOP("Ps3EyeSystem render");
     };
 
   private:

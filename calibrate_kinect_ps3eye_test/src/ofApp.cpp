@@ -5,7 +5,7 @@ void ofApp::setup()
 {
   ofSetDataPathRoot( __data_path__ );
   ofSetFrameRate(30);
-  ofSetVerticalSync(true);
+  ofSetVerticalSync(false);
   ofSetLogLevel(OF_LOG_NOTICE);
 
   draw_ps3eye = false;

@@ -4,10 +4,10 @@ void ofApp::setup()
 {
   ofSetDataPathRoot( __data_path__ );
   ofSetWindowPosition(0,0);
-  
+
   ofSetLogLevel(OF_LOG_NOTICE);
-  
-  //ofSetFrameRate(60.0f); 
+
+  //ofSetFrameRate(30.0f); 
   ofSetVerticalSync(false);
 
   gpgpu::Process::watch("all");
@@ -15,6 +15,7 @@ void ofApp::setup()
 
   config.init();
   ecs.init();
+  ecs.fps(30.0);
   system_factory.add_systems( ecs );
   ecs.init_systems();
 
@@ -34,7 +35,7 @@ void ofApp::setup()
 
 void ofApp::update()
 {
-  ofSetWindowTitle(ofToString(ofGetFrameRate(),2));
+  ofSetWindowTitle( "of " + ofToString(ofGetFrameRate(),2) + " / ecs " + ofToString(ecs.framerate(),2) );
   ecs.update();
 }
 
@@ -47,6 +48,9 @@ void ofApp::draw()
     cml_data->cml->render();
   else
     ecs.render();
+
+  if ( render_ecs_fps )
+    ofDrawBitmapString( "ecs fps " + ofToString(ecs.framerate(),2), ofGetWidth()-140, ofGetHeight()-10);
 }
 
 void ofApp::render_texture(ofEventArgs &args)
@@ -79,6 +83,10 @@ void ofApp::keyReleased(int key)
 
     case keys::cml_wireframe:
       cml->wireframe( !cml->wireframe() );
+      break;
+
+    case keys::cml_key_debug:
+      render_ecs_fps = !render_ecs_fps;
       break;
 
 

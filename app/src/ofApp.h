@@ -41,6 +41,7 @@ class ofApp : public ofBaseApp
     void render_texture(ofEventArgs &args);
 
     void init_time_measurements();
+    bool render_ecs_fps;
 
 };
 
