@@ -18,4 +18,5 @@
 #include "DepthProcessingSystem.h"
 #include "EntradasSystem.h"
 #include "DepthHoleFillerSystem.h"
+#include "RgbInputTestSystem.h"
 //dont remove this line

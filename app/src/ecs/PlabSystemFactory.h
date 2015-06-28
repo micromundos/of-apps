@@ -25,6 +25,8 @@ ecs.add_system(new BloqMakerSystem("bloq_maker"));
 ecs.add_system(new CamaraLucidaSystem("camara_lucida"));
 ecs.add_system(new KinectSystem("kinect"));
 ecs.add_system(new Ps3EyeSystem("ps_3_eye"));
+//ecs.add_system(new VideoInputSystem("video_input"));
+//ecs.add_system(new RgbInputTestSystem("rgb_input_test"));
 ecs.add_system(new ArucoSystem("aruco"));
 ecs.add_system(new TableCalibSystem("table_calib"));
 ecs.add_system(new DepthHoleFillerSystem("depth_hole_filler"));

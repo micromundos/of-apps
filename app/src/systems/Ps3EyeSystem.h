@@ -58,12 +58,7 @@ class Ps3EyeSystem : public ECSsystem
       //ps3.setBrightness(uint8_t val);
       //ps3.setHue(uint8_t val);
       //ps3.setRedBalance(uint8_t val);
-      //ps3.setBlueBalance(uint8_t val);
-
-      //test.loadImage("test_aruco_markers_640x480.jpg");
-      //test.loadImage("test_aruco_markers_1280x720.jpg");
-      //test.loadImage("test_aruco_markers_1920x1080.jpg");
-      //test.loadImage("test_aruco_markers_1280x720_crop640x360.jpg");
+      //ps3.setBlueBalance(uint8_t val); 
     };
 
     virtual void removed(Entity &e) 
@@ -73,14 +68,7 @@ class Ps3EyeSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      if ( entity == NULL ) return;
-
-      //TS_START("Ps3EyeSystem test aruco");
-      //RgbComponent* rgb_data = rgb_m.get(e);
-      //rgb_data->dirty = true;
-      //rgb_data->pixels = &(test.getPixelsRef());
-      //TS_STOP("Ps3EyeSystem test aruco");
-      //return;
+      if ( entity == NULL ) return; 
 
       TS_START("Ps3EyeSystem update ps3");
       ps3.update();
@@ -119,10 +107,7 @@ class Ps3EyeSystem : public ECSsystem
           rgb_data->width, 
           rgb_data->height );
           //render_data->width, 
-          //render_data->height );
-
-      //test.draw( 0, 0, 640, 480 );
-      //test.draw( 0, 0, 640, 360 );
+          //render_data->height ); 
 
       ofPopStyle();
 
@@ -136,8 +121,6 @@ class Ps3EyeSystem : public ECSsystem
     ofxPS3EyeGrabber ps3;
     ofPixels ps3_pix;
     ofTexture ps3_tex; //render
-
-    //ofImage test;
 
     Entity* entity;
 };
