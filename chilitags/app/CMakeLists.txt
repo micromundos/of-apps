@@ -12,6 +12,6 @@ add_executable( detect_from_file detect_from_file.cpp)
 target_link_libraries( detect_from_file chilitags_static )
 target_link_libraries( detect_from_file oscpack ${LIBS})
 
-add_executable( osc_dump OscDump.cpp)
+add_executable( osc_dump osc_dump.cpp)
 target_link_libraries( osc_dump oscpack ${LIBS})
 
