@@ -141,9 +141,15 @@ int main(int argc, char* argv[])
       0,      0,      0,      0,      0,      0,      1e-5f);
   float alphaR = 1.0f;
 
-  while ('q' != (keyPressed = (char) cv::waitKey(1))) {
+  const char* trigName = "ASYNC_DETECT_PERIODICALLY";
+  chilitags::Chilitags::DetectionTrigger trig = chilitags::Chilitags::ASYNC_DETECT_PERIODICALLY; //Runs the detection in the background, with a period, only tracking in the call to `find()`, period defaults to 15, i.e. out of 15 consecutive calls to `find()`, the background thread will be informed to run detection. After this, a new detection will be done as soon as a new image frame is presented in the call to `find()`. If the background thread takes more time than 15 calls to `find()`, it will be running as frequently as possible
+  //chilitags::Chilitags::DetectionTrigger trig = chilitags::Chilitags::DETECT_PERIODICALLY; //tracking most of the time, eventually run a full detection
+  //chilitags::Chilitags::DetectionTrigger trig = chilitags::Chilitags::ASYNC_DETECT_ALWAYS; //detection is run as frequently as possible, i.e a new detection is started as soon as the new image frame is presented in the call to `find()` after the previous detection is finished
 
-    switch(keyPressed)
+  while ('q' != (keyPressed = (char) cv::waitKey(1)))
+  {
+
+    switch ( keyPressed )
     {
       case 'f':
         filterEnabled = !filterEnabled;
@@ -165,16 +171,29 @@ int main(int argc, char* argv[])
         alphaR /= 10.0f;
         chilitags3D.setFilterObservationNoiseCovariance(alphaR*R);
         break;
+
+      case 't':
+        if ( trig == chilitags::Chilitags::DETECT_PERIODICALLY ) 
+        {
+          trig = chilitags::Chilitags::ASYNC_DETECT_PERIODICALLY;
+          trigName = "ASYNC_DETECT_PERIODICALLY";
+        }
+        else if ( trig == chilitags::Chilitags::ASYNC_DETECT_PERIODICALLY )
+        {
+          trig = chilitags::Chilitags::ASYNC_DETECT_ALWAYS;
+          trigName = "ASYNC_DETECT_ALWAYS";
+        }
+        else
+        {
+          trig = chilitags::Chilitags::DETECT_PERIODICALLY;
+          trigName = "DETECT_PERIODICALLY";
+        }
+        break;
     }
 
     cv::Mat inputImage;
     capture.read(inputImage);
-    cv::Mat outputImage = inputImage.clone();
-
-    const char* trigName = "ASYNC_DETECT_PERIODICALLY";
-    chilitags::Chilitags::DetectionTrigger trig = chilitags::Chilitags::ASYNC_DETECT_PERIODICALLY; //Runs the detection in the background, with a period, only tracking in the call to `find()`, period defaults to 15, i.e. out of 15 consecutive calls to `find()`, the background thread will be informed to run detection. After this, a new detection will be done as soon as a new image frame is presented in the call to `find()`. If the background thread takes more time than 15 calls to `find()`, it will be running as frequently as possible
-    //chilitags::Chilitags::DetectionTrigger trig = chilitags::Chilitags::DETECT_PERIODICALLY; //tracking most of the time, eventually run a full detection
-    //chilitags::Chilitags::DetectionTrigger trig = chilitags::Chilitags::ASYNC_DETECT_ALWAYS; //detection is run as frequently as possible, i.e a new detection is started as soon as the new image frame is presented in the call to `find()` after the previous detection is finished
+    cv::Mat outputImage = inputImage.clone(); 
 
     cv::putText(outputImage, 
         cv::format("Filtering %s, press 'f' to toggle",filterEnabled ? "ENABLED" : "DISABLED"),
@@ -191,14 +210,21 @@ int main(int argc, char* argv[])
         cv::Point(8,52), 
         cv::FONT_HERSHEY_SIMPLEX, 0.5, text_color);
 
+    cv::putText(outputImage,
+        cv::format("Detection trigger: %s (press 't' to toggle)", trigName),
+        cv::Point(8,68),
+        cv::FONT_HERSHEY_SIMPLEX, 0.5, text_color);
+
     //cv::putText(outputImage,
         //cv::format("Run 'top -H -p `pgrep async-detection`' to see running threads", trigName),
-        //cv::Point(8, 68),
+        //cv::Point(8, 84),
         //cv::FONT_HERSHEY_SIMPLEX, 0.5, text_color);
+
 
     //auto tags2d = chilitags.find( inputImage, trig );
     //auto tags3d = chilitags3D.estimate( tags2d );
     auto tags3d = chilitags3D.estimate( inputImage, trig );
+
 
     //draw_tags2d( outputImage, tags2d );
 
@@ -223,7 +249,6 @@ int main(int argc, char* argv[])
       std::vector<cv::Point2f> t2DPoints;
       for ( auto homogenousPoint : referential )
       {
-
         t2DPoints.push_back( cv::Point2f(
               homogenousPoint[0]/homogenousPoint[3],
               homogenousPoint[1]/homogenousPoint[3] ) );
@@ -254,10 +279,10 @@ int main(int argc, char* argv[])
       }
     }
 
-    cv::imshow("Pose Estimation", outputImage);
+    cv::imshow("plab chilitags", outputImage);
   }
 
-  cv::destroyWindow("Pose Estimation");
+  cv::destroyWindow("plab chilitags");
   capture.release();
 
   return 0;
