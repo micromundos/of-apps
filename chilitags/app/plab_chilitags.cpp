@@ -21,6 +21,8 @@ int main(int argc, char* argv[])
     << " [-c <tag configuration (YAML)>]"
     << " [-i <camera calibration (YAML)>]"
     << " [-d <camera device index (num)>]"
+    << " [-w <camera camera width (num)>]"
+    << " [-h <camera camera width (num)>]"
     << "\n";
 
   static const float DEFAULT_SIZE = 20.f;
@@ -28,6 +30,8 @@ int main(int argc, char* argv[])
   const char* intrinsicsFilename = 0;
   const char* configFilename = 0;
   int cameraIndex = 0;
+  int width = 0;
+  int height = 0;
 
   for ( int i = 1; i < argc; i++ )
   {
@@ -42,6 +46,14 @@ int main(int argc, char* argv[])
     else if ( strcmp(argv[i], "-d") == 0 )
     {
       cameraIndex = std::atoi(argv[++i]);
+    }
+    else if ( strcmp(argv[i], "-w") == 0 )
+    {
+      width = std::atoi(argv[++i]);
+    }
+    else if ( strcmp(argv[i], "-h") == 0 )
+    {
+      height = std::atoi(argv[++i]);
     }
   }
 
@@ -58,35 +70,42 @@ int main(int argc, char* argv[])
   /******************************/
   /* Setting up pose estimation */
   /******************************/
+
+  if ( width == 0 )
+  {
 #ifdef OPENCV3
-  double inputWidth  = capture.get(cv::CAP_PROP_FRAME_WIDTH);
-  double inputHeight = capture.get(cv::CAP_PROP_FRAME_HEIGHT);
+    width  = capture.get(cv::CAP_PROP_FRAME_WIDTH);
 #else
-  double inputWidth  = capture.get(CV_CAP_PROP_FRAME_WIDTH);
-  double inputHeight = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
-#endif
-
-  chilitags::Chilitags3D chilitags3D(Size(inputWidth, inputHeight));
-
-  if (configFilename) chilitags3D.readTagConfiguration(configFilename);
-
-  if (intrinsicsFilename) {
-    Size calibratedImageSize = chilitags3D.readCalibration(intrinsicsFilename);
-#ifdef OPENCV3
-    capture.set(cv::CAP_PROP_FRAME_WIDTH, calibratedImageSize.width);
-    capture.set(cv::CAP_PROP_FRAME_HEIGHT, calibratedImageSize.height);
-#else
-    capture.set(CV_CAP_PROP_FRAME_WIDTH, calibratedImageSize.width);
-    capture.set(CV_CAP_PROP_FRAME_HEIGHT, calibratedImageSize.height);
+    width  = capture.get(CV_CAP_PROP_FRAME_WIDTH);
 #endif
   }
 
+  if ( height == 0 )
+  {
 #ifdef OPENCV3
-  inputWidth  = capture.get(cv::CAP_PROP_FRAME_WIDTH);
-  inputHeight = capture.get(cv::CAP_PROP_FRAME_HEIGHT);
+    height = capture.get(cv::CAP_PROP_FRAME_HEIGHT);
 #else
-  inputWidth  = capture.get(CV_CAP_PROP_FRAME_WIDTH);
-  inputHeight = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
+    height = capture.get(CV_CAP_PROP_FRAME_HEIGHT);
+#endif
+  }
+
+  chilitags::Chilitags3D chilitags3D( Size( width, height ) );
+
+  if (configFilename) chilitags3D.readTagConfiguration(configFilename);
+
+  if (intrinsicsFilename) 
+  {
+    Size calibratedImageSize = chilitags3D.readCalibration(intrinsicsFilename);
+    //width = calibratedImageSize.width;
+    //height = calibratedImageSize.height;
+  }
+
+#ifdef OPENCV3
+    capture.set(cv::CAP_PROP_FRAME_WIDTH, width);
+    capture.set(cv::CAP_PROP_FRAME_HEIGHT, height);
+#else
+    capture.set(CV_CAP_PROP_FRAME_WIDTH, width);
+    capture.set(CV_CAP_PROP_FRAME_HEIGHT, height);
 #endif
 
   cv::Mat projectionMat = cv::Mat::zeros(4,4,CV_64F);
@@ -172,10 +191,10 @@ int main(int argc, char* argv[])
         cv::Point(8,52), 
         cv::FONT_HERSHEY_SIMPLEX, 0.5, text_color);
 
-    cv::putText(outputImage,
-        cv::format("Run 'top -H -p `pgrep async-detection`' to see running threads", trigName),
-        cv::Point(8, inputHeight - 18),
-        cv::FONT_HERSHEY_SIMPLEX, 0.5, text_color);
+    //cv::putText(outputImage,
+        //cv::format("Run 'top -H -p `pgrep async-detection`' to see running threads", trigName),
+        //cv::Point(8, 68),
+        //cv::FONT_HERSHEY_SIMPLEX, 0.5, text_color);
 
     //auto tags2d = chilitags.find( inputImage, trig );
     //auto tags3d = chilitags3D.estimate( tags2d );
