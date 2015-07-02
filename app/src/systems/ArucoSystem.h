@@ -10,6 +10,20 @@
 
 using namespace artemis;
 
+//TODO
+//TagsReceiverSystem: recive tags por osc
+//TagsReceiverComponent: 
+//- tiene un vector<Tag>
+//- Tag: tiene id, la loc 3d en ofVec3f, los corners en vector<ofVec2f>
+//TagsProcessingSystem: 
+//- levanta las calibraciones
+//- agarra el vector<Tag> del TagsReceiver
+//- tranforma la loc 3d de c/tag para verlo desde la depth cam
+//- projecta la loc 3d en la depth cam
+//- crea un Bloq por c/tag
+//- y notifica el evento
+//TagsProcessingComponent: solo params
+
 struct Extrinsics
 {
   cv::Mat R, T;

@@ -7,12 +7,17 @@
 #include <opencv2/highgui/highgui.hpp> // for camera capture
 #include <opencv2/imgproc/imgproc.hpp> // for camera capture
 
+// osc
+#include "osc/OscOutboundPacketStream.h"
+#include "ip/UdpSocket.h"
+#define OUTPUT_BUFFER_SIZE 1024
+
 using namespace std;
 using namespace cv;
 
 cv::Scalar text_color = cv::Scalar(0, 0, 255);
 
-void draw_tags2d(cv::Mat outputImage, std::map<int, chilitags::Quad> const& tags);
+void draw_tags2d( cv::Mat outputImage, std::map<int, chilitags::Quad> const& tags2d );
 
 int main(int argc, char* argv[])
 {
@@ -23,7 +28,12 @@ int main(int argc, char* argv[])
     << " [-d <camera device index (num)>]"
     << " [-w <camera camera width (num)>]"
     << " [-h <camera camera width (num)>]"
+    << " [-a <osc ip address (string)>]"
+    << " [-p <osc port (num)>]"
     << "\n";
+
+  string ip = "127.0.0.1";
+  int port = 7000;
 
   static const float DEFAULT_SIZE = 20.f;
 
@@ -55,7 +65,22 @@ int main(int argc, char* argv[])
     {
       height = std::atoi(argv[++i]);
     }
+
+    //osc
+    else if ( strcmp(argv[i], "-a") == 0 )
+    {
+      ip = argv[++i];
+    }
+    else if ( strcmp(argv[i], "-p") == 0 )
+    {
+      port = std::atoi(argv[++i]);
+    }
   }
+
+  /*****************************/
+  /*    osc                    */
+  /*****************************/
+  UdpTransmitSocket socket( IpEndpointName( ip.c_str(), port ) ); 
 
   /*****************************/
   /*    Init camera capture    */
@@ -90,6 +115,7 @@ int main(int argc, char* argv[])
   }
 
   chilitags::Chilitags3D chilitags3D( Size( width, height ) );
+  chilitags3D.setDefaultTagSize(DEFAULT_SIZE);
 
   if (configFilename) chilitags3D.readTagConfiguration(configFilename);
 
@@ -221,15 +247,38 @@ int main(int argc, char* argv[])
         //cv::FONT_HERSHEY_SIMPLEX, 0.5, text_color);
 
 
-    //auto tags2d = chilitags.find( inputImage, trig );
-    //auto tags3d = chilitags3D.estimate( tags2d );
-    auto tags3d = chilitags3D.estimate( inputImage, trig );
+    auto tags2d = chilitags3D.getChilitags().find( inputImage, trig );
+    auto tags3d = chilitags3D.estimate( tags2d );
+    //auto tags3d = chilitags3D.estimate( inputImage, trig );
 
+    draw_tags2d( outputImage, tags2d );
 
-    //draw_tags2d( outputImage, tags2d );
+    // osc message
+    char buffer[OUTPUT_BUFFER_SIZE];
+    osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
+    p << osc::BeginBundleImmediate << osc::BeginMessage( "/tags" );
 
     for ( auto& tag : tags3d )
     {
+      string id = tag.first;
+      int idx = std::atoi(id.c_str());
+
+      chilitags::Quad& tag2d = tags2d[idx];
+      const cv::Mat_<cv::Point2f> corners( tag2d );
+
+      //TODO add tags 3d to osc message
+      cv::Matx44d transformation = tag.second;
+
+      p << "id" << idx
+        << "corners"
+        << corners(0).x << corners(0).y
+        << corners(1).x << corners(1).y
+        << corners(2).x << corners(2).y
+        << corners(3).x << corners(3).y
+        << "translation"
+        << transformation(0,3)
+        << transformation(1,3)
+        << transformation(2,3); 
 
       static const cv::Vec4d UNITS[4] {
         {0.f, 0.f, 0.f, 1.f},
@@ -238,7 +287,6 @@ int main(int argc, char* argv[])
         {0.f, 0.f, DEFAULT_SIZE, 1.f},
       };
 
-      cv::Matx44d transformation = tag.second;
       cv::Vec4f referential[4] = {
         projection*transformation*UNITS[0],
         projection*transformation*UNITS[1],
@@ -250,8 +298,8 @@ int main(int argc, char* argv[])
       for ( auto homogenousPoint : referential )
       {
         t2DPoints.push_back( cv::Point2f(
-              homogenousPoint[0]/homogenousPoint[3],
-              homogenousPoint[1]/homogenousPoint[3] ) );
+          homogenousPoint[0]/homogenousPoint[3],
+          homogenousPoint[1]/homogenousPoint[3] ) );
       }
 
       static const int SHIFT = 16;
@@ -261,7 +309,7 @@ int main(int argc, char* argv[])
         {0,0,255},{0,255,0},{255,0,0},
       };
 
-      for (int i : {1,2,3}) 
+      for ( int i : {1,2,3} )
       {
         cv::line(
             outputImage,
@@ -279,6 +327,9 @@ int main(int argc, char* argv[])
       }
     }
 
+    p << osc::EndMessage << osc::EndBundle;
+    socket.Send( p.Data(), p.Size() );
+
     cv::imshow("plab chilitags", outputImage);
   }
 
@@ -290,9 +341,9 @@ int main(int argc, char* argv[])
 
 void draw_tags2d(
     cv::Mat outputImage,
-    const std::map<int, chilitags::Quad> &tags)
+    const std::map<int, chilitags::Quad> &tags2d)
 {
-  for ( const auto& tag : tags )
+  for ( const auto& tag : tags2d )
   {
     const cv::Mat_<cv::Point2f> corners(tag.second);
 

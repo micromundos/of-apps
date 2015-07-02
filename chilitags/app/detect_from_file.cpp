@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
   cv::Mat image = cv::imread(argv[1]);
   if ( image.data ) 
   {
-    for (const auto &tag : chilitags::Chilitags().find(image))
+    for ( const auto &tag : chilitags::Chilitags().find(image) )
     {
       cout << tag.first << "\n";
 

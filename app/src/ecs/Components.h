@@ -10,7 +10,6 @@
 #include "CamaraLucidaComponent.h"
 #include "RgbComponent.h"
 #include "DepthComponent.h"
-#include "ArucoComponent.h"
 #include "FlowFieldComponent.h"
 #include "FisicaComponent.h"
 #include "ParticleSystemComponent.h"
@@ -24,4 +23,6 @@
 #include "FlowFieldDebugComponent.h"
 
 #include "DepthHoleFillerComponent.h"
+#include "TagsReceiverComponent.h"
+#include "TagsProcessingComponent.h"
 //dont remove this line

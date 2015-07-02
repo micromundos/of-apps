@@ -43,15 +43,6 @@
       "id" : "output"
   },
   {
-    "components" : [
-    {
-      "data" : {
-        "height" : 480,
-        "render" : false,
-        "width" : 640
-      },
-      "id" : "rgb"
-    },
     {
       "data" : {
         "flip" : false,
@@ -61,17 +52,45 @@
     },
     {
       "data" : {
+        "ip" : "127.0.0.1",
+        "port" : 7000
+      },
+      "id" : "tags_receiver"
+    },
+    {
+      "data" : {
         "calibration" : {
           "marker_size" : 0.07,
           "depth" : "calib/intrinsics_kinect.aruco.yml",
           "rgb" : "calib/intrinsics_ps3eye.aruco.yml",
           "stereo" : "calib/extrinsics_ps3eye_to_kinect.yml"
         },
-        "render_img" : false,
         "render" : true
       },
-      "id" : "aruco"
+      "id" : "tags_processing"
     },
+    /*"components" : [*/
+    /*{*/
+      /*"data" : {*/
+        /*"height" : 480,*/
+        /*"render" : false,*/
+        /*"width" : 640*/
+      /*},*/
+      /*"id" : "rgb"*/
+    /*},*/ 
+    /*{*/
+      /*"data" : {*/
+        /*"calibration" : {*/
+          /*"marker_size" : 0.07,*/
+          /*"depth" : "calib/intrinsics_kinect.aruco.yml",*/
+          /*"rgb" : "calib/intrinsics_ps3eye.aruco.yml",*/
+          /*"stereo" : "calib/extrinsics_ps3eye_to_kinect.yml"*/
+        /*},*/
+        /*"render_img" : false,*/
+        /*"render" : true*/
+      /*},*/
+      /*"id" : "aruco"*/
+    /*},*/
     {
       "data" : {
         "angle_step" : [ 30, 0, 360 ],

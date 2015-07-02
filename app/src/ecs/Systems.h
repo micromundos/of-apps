@@ -3,10 +3,8 @@
  */
 #pragma once
 #include "BloqMakerSystem.h"
-#include "ArucoSystem.h"
 #include "CamaraLucidaSystem.h"
 #include "KinectSystem.h"
-#include "Ps3EyeSystem.h"
 #include "FisicaSystem.h"
 #include "ParticleSystem.h"
 #include "ParticleEmitterSystem.h"
@@ -18,5 +16,6 @@
 #include "DepthProcessingSystem.h"
 #include "EntradasSystem.h"
 #include "DepthHoleFillerSystem.h"
-#include "RgbInputTestSystem.h"
+#include "TagsReceiverSystem.h"
+#include "TagsProcessingSystem.h"
 //dont remove this line
