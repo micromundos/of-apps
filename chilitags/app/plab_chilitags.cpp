@@ -266,7 +266,6 @@ int main(int argc, char* argv[])
       chilitags::Quad& tag2d = tags2d[idx];
       const cv::Mat_<cv::Point2f> corners( tag2d );
 
-      //TODO add tags 3d to osc message
       cv::Matx44d transformation = tag.second;
 
       p << "id" << idx
@@ -276,9 +275,9 @@ int main(int argc, char* argv[])
         << corners(2).x << corners(2).y
         << corners(3).x << corners(3).y
         << "translation"
-        << transformation(0,3)
-        << transformation(1,3)
-        << transformation(2,3); 
+        << (float)transformation(0,3)
+        << (float)transformation(1,3)
+        << (float)transformation(2,3); 
 
       static const cv::Vec4d UNITS[4] {
         {0.f, 0.f, 0.f, 1.f},
@@ -328,7 +327,11 @@ int main(int argc, char* argv[])
     }
 
     p << osc::EndMessage << osc::EndBundle;
-    socket.Send( p.Data(), p.Size() );
+
+    if ( tags3d.size() > 0 )
+    {
+      socket.Send( p.Data(), p.Size() );
+    }
 
     cv::imshow("plab chilitags", outputImage);
   }
