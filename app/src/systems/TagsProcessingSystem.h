@@ -40,7 +40,9 @@ class TagsProcessingSystem : public ECSsystem
       load_intrinsics( tags_proc_data->calib_rgb_file, calib_rgb );
       load_intrinsics( tags_proc_data->calib_depth_file, calib_depth );
 
-      rgb_size = calib_rgb.getDistortedIntrinsics().getImageSize();
+      cv::Size rgb_size = calib_rgb.getDistortedIntrinsics().getImageSize();
+      rgb_width = rgb_size.width;
+      rgb_height = rgb_size.height;
     }; 
 
     virtual void removed(Entity &e) 
@@ -61,9 +63,6 @@ class TagsProcessingSystem : public ECSsystem
       //TODO refactor BloqEventsComponent.h => events/BloqEvents.h 
       BloqEventsComponent* events = require_component<BloqEventsComponent>("core");
 
-      int w = rgb_size.width;
-      int h = rgb_size.height;
-
       //ofLogNotice("TagsProcessingSystem") << "tags " << tags.size();
 
       int len = tags.size();
@@ -78,12 +77,12 @@ class TagsProcessingSystem : public ECSsystem
         if ( bloq == NULL )
         {
           shared_ptr<Bloq> _bloq( new Bloq() );
-          update_bloq( _bloq.get(), tag, w, h ); 
+          update_bloq( _bloq.get(), tag ); 
           bloqs.push_back( _bloq );
           ofNotifyEvent( events->added, *_bloq );
         }
 
-        else if ( update_bloq( bloq, tag, w, h ) )
+        else if ( update_bloq( bloq, tag ) )
         {
           ofNotifyEvent( events->updated, *bloq );
         }
@@ -108,8 +107,9 @@ class TagsProcessingSystem : public ECSsystem
       vector<Tag>& tags = tags_receiver_data->tags;
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
-      int dst_w = render_data->width;
-      int dst_h = render_data->height;
+
+      int render_width = render_data->width;
+      int render_height = render_data->height;
 
       // render bloqs loc/angle
       ofPushStyle();
@@ -123,8 +123,8 @@ class TagsProcessingSystem : public ECSsystem
         ofVec2f& dir = bloqs[i]->dir; 
         loc.set( bloqs[i]->loc ); 
 
-        loc.x *= dst_w;
-        loc.y *= dst_h;
+        loc.x *= render_width;
+        loc.y *= render_height;
 
         ofLine( loc, loc + dir * 40 );
         ofRect( loc, 8, 8 );
@@ -136,7 +136,7 @@ class TagsProcessingSystem : public ECSsystem
       ofPushStyle();
       ofSetColor(ofColor::blue);
       for (int i = 0; i < tags.size(); i++)
-        render_tag_2d( tags[i], dst_w, dst_h );
+        render_tag_2d( tags[i], render_width, render_height );
       ofPopStyle();
     };
 
@@ -152,7 +152,7 @@ class TagsProcessingSystem : public ECSsystem
     Extrinsics calib_stereo;
     ofxCv::Calibration calib_rgb;
     ofxCv::Calibration calib_depth;
-    cv::Size rgb_size;
+    int rgb_width, rgb_height;
 
     ofVec2f up2;
     ofVec3f up3;
@@ -180,12 +180,12 @@ class TagsProcessingSystem : public ECSsystem
       return NULL;
     };
 
-    bool update_bloq( Bloq* bloq, const Tag& tag, int w, int h )
+    bool update_bloq( Bloq* bloq, const Tag& tag )
     {
       ofVec2f tloc, tdir;
 
       //3d loc
-      tag_loc_on_depth( tag, w, h, tloc );
+      tag_loc_on_depth( tag, tloc );
 
       //debug: project back on rgb
       //ofVec2f tloc_rgb;
@@ -193,7 +193,7 @@ class TagsProcessingSystem : public ECSsystem
 
       //2d loc
       //vector<ofVec2f> corners(4,ofVec2f());
-      //tag_corners_normalized(tag, w, h, corners);
+      //tag_corners_normalized(tag, corners);
       //tag_loc_normalized(corners, tloc); 
 
       //if ( bloq->loc == tloc )
@@ -208,7 +208,7 @@ class TagsProcessingSystem : public ECSsystem
 
       //2d angle/dir
       vector<ofVec2f> corners(4,ofVec2f());
-      tag_corners_normalized( tag, w, h, corners );
+      tag_corners_normalized( tag, corners );
       tag_dir_from_corners( corners, tdir );
       float radians = tag_angle_2d( tdir );
 
@@ -281,13 +281,13 @@ class TagsProcessingSystem : public ECSsystem
     //2d
 
     //normalized [0,1] loc
-    void tag_loc_on_depth( const Tag& tag, int w, int h, ofVec2f& tloc )
+    void tag_loc_on_depth( const Tag& tag, ofVec2f& tloc )
     {
       ofVec3f p3; 
       transform_to_depth( tag, p3 );
       project( calib_depth.getDistortedIntrinsics(), p3, tloc ); 
-      tloc.x /= w;
-      tloc.y /= h;
+      tloc.x /= rgb_width;
+      tloc.y /= rgb_height;
     }; 
 
     //normalized [0,1] loc
@@ -303,10 +303,10 @@ class TagsProcessingSystem : public ECSsystem
     };
 
     //normalized [0,1] corners
-    void tag_corners_normalized( const Tag& tag, int w, int h, vector<ofVec2f>& corners )
+    void tag_corners_normalized( const Tag& tag, vector<ofVec2f>& corners )
     {
       for ( int i = 0; i < tag.corners.size(); i++ )
-        corners[i].set( tag.corners[i].x / w, tag.corners[i].y / h ); 
+        corners[i].set( tag.corners[i].x / rgb_width, tag.corners[i].y / rgb_height ); 
     };
 
     //normalized [0,1] dir
@@ -413,21 +413,19 @@ class TagsProcessingSystem : public ECSsystem
       tdir.rotate( radians * RAD_TO_DEG );
     };
 
-    void render_tag_2d( Tag& tag, int dst_w, int dst_h )
+    void render_tag_2d( Tag& tag, int render_width, int render_height )
     {
-      int w = rgb_size.width;
-      int h = rgb_size.height;
       vector<ofVec2f> corners(4,ofVec2f());
-      tag_corners_normalized(tag, w, h, corners);
+      tag_corners_normalized(tag, corners);
 
-      ofVec2f dst_s( dst_w, dst_h );
+      ofVec2f render_size( render_width, render_height );
 
       ofVec2f p0,p1;
       ofPoint ctr(0,0);
       for ( int i = 0; i < corners.size(); i++ )
       {
-        p0 = corners[i] * dst_s;
-        p1 = corners[ (i+1)%4 ] * dst_s;
+        p0 = corners[i] * render_size;
+        p1 = corners[ (i+1)%4 ] * render_size;
         ofLine( p0.x, p0.y, p1.x, p1.y );
         ctr.x += p0.x;
         ctr.y += p0.y;
@@ -435,7 +433,7 @@ class TagsProcessingSystem : public ECSsystem
 
       ctr.x /= 4.;
       ctr.y /= 4.;
-      ctr *= dst_s;
+      ctr *= render_size;
       ofDrawBitmapString( tag.id, ctr );
     }
 
