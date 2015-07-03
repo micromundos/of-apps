@@ -7,6 +7,7 @@
 class RenderComponent : public ECScomponent 
 {
   public:
+
     int width, height;
 
     RenderComponent(string _id) : ECScomponent(_id)

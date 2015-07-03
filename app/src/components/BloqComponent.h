@@ -8,6 +8,7 @@
 class BloqComponent : public ECScomponent
 {
   public:
+
     Bloq* bloq;
 
     BloqComponent(string _id) : ECScomponent(_id) {};

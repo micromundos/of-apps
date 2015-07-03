@@ -17,7 +17,6 @@ class KinectSystem : public ECSsystem
     KinectSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<DepthComponent>();
-      //addComponentType<RgbComponent>();
     };
 
     ~KinectSystem()
@@ -28,7 +27,6 @@ class KinectSystem : public ECSsystem
 
     virtual void initialize() 
     {
-      rgb_m.init( *world );
       depth_m.init( *world );
       inited = false; 
       prev = 0;
@@ -44,12 +42,10 @@ class KinectSystem : public ECSsystem
       inited = true; 
 
       DepthComponent* depth_data = depth_m.get(e);
-      //RgbComponent* rgb_data = rgb_m.get(e);
 
       int w = kinect.width;
       int h = kinect.height;
 
-      //rgb_data->setup( w, h );
       depth_data->setup( w, h );
 
       kinect.setRegistration(false);
@@ -66,11 +62,9 @@ class KinectSystem : public ECSsystem
       TS_STOP("KinectSystem update kinect");
 
       DepthComponent* depth_data = depth_m.get(e);
-      //RgbComponent* rgb_data = rgb_m.get(e);
 
       bool dirty = kinect.isFrameNew();
       depth_data->dirty = dirty; 
-      //rgb_data->dirty = dirty; 
 
       if ( !dirty ) return;
 
@@ -116,9 +110,6 @@ class KinectSystem : public ECSsystem
       ofPushStyle();
       ofSetColor(255);
 
-      if ( rgb_m.get(e)->render )
-        kinect.draw( 0, 0, w, h );
-
       if ( depth_data->render )
       {
         if ( depth_data->flip && cml_data->enabled )
@@ -132,7 +123,6 @@ class KinectSystem : public ECSsystem
 
   private: 
 
-    ComponentMapper<RgbComponent> rgb_m;
     ComponentMapper<DepthComponent> depth_m;
 
     ofxKinect kinect; 

@@ -17,7 +17,8 @@ using namespace cv;
 
 cv::Scalar text_color = cv::Scalar(0, 0, 255);
 
-void draw_tags2d( cv::Mat outputImage, std::map<int, chilitags::Quad> const& tags2d );
+void render_tags_2d( cv::Mat outputImage, std::map<int, chilitags::Quad> const& tags2d );
+vector <string> ofSplitString ( const string & source, const string & delimiter, bool ignoreEmpty = false );
 
 int main(int argc, char* argv[])
 {
@@ -251,30 +252,37 @@ int main(int argc, char* argv[])
     auto tags3d = chilitags3D.estimate( tags2d );
     //auto tags3d = chilitags3D.estimate( inputImage, trig );
 
-    draw_tags2d( outputImage, tags2d );
+    render_tags_2d( outputImage, tags2d );
 
     // osc message
     char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
+
     p << osc::BeginBundleImmediate << osc::BeginMessage( "/tags" );
+
+    //length
+    p << (int)tags3d.size(); 
 
     for ( auto& tag : tags3d )
     {
       string id = tag.first;
-      int idx = std::atoi(id.c_str());
+      string idxs = ofSplitString( id, "_" )[1];
+      int idx = std::atoi( idxs.c_str() );
 
       chilitags::Quad& tag2d = tags2d[idx];
       const cv::Mat_<cv::Point2f> corners( tag2d );
 
       cv::Matx44d transformation = tag.second;
 
-      p << "id" << idx
-        << "corners"
-        << corners(0).x << corners(0).y
-        << corners(1).x << corners(1).y
-        << corners(2).x << corners(2).y
-        << corners(3).x << corners(3).y
-        << "translation"
+      p << idxs.c_str() //id.c_str() //id
+        //size
+        << (float)DEFAULT_SIZE 
+        //corners
+        << (float)corners(0).x << (float)corners(0).y
+        << (float)corners(1).x << (float)corners(1).y
+        << (float)corners(2).x << (float)corners(2).y
+        << (float)corners(3).x << (float)corners(3).y
+        //translation
         << (float)transformation(0,3)
         << (float)transformation(1,3)
         << (float)transformation(2,3); 
@@ -316,9 +324,9 @@ int main(int argc, char* argv[])
             PRECISION*t2DPoints[i],
             AXIS_COLORS[i-1],
 #ifdef OPENCV3
-            2, cv::LINE_AA, SHIFT);
+            1, cv::LINE_AA, SHIFT);
 #else
-            2, CV_AA, SHIFT);
+            1, CV_AA, SHIFT);
 #endif
 
         cv::putText( outputImage, AXIS_NAMES[i-1], t2DPoints[i],
@@ -327,11 +335,7 @@ int main(int argc, char* argv[])
     }
 
     p << osc::EndMessage << osc::EndBundle;
-
-    if ( tags3d.size() > 0 )
-    {
-      socket.Send( p.Data(), p.Size() );
-    }
+    socket.Send( p.Data(), p.Size() );
 
     cv::imshow("plab chilitags", outputImage);
   }
@@ -342,7 +346,7 @@ int main(int argc, char* argv[])
   return 0;
 }
 
-void draw_tags2d(
+void render_tags_2d(
     cv::Mat outputImage,
     const std::map<int, chilitags::Quad> &tags2d)
 {
@@ -360,9 +364,9 @@ void draw_tags2d(
           PRECISION*corners(i),
           PRECISION*corners((i+1)%4),
 #ifdef OPENCV3
-          text_color, 3, cv::LINE_AA, SHIFT);
+          text_color, 1, cv::LINE_AA, SHIFT);
 #else
-          text_color, 3, CV_AA, SHIFT);
+          text_color, 1, CV_AA, SHIFT);
 #endif
     }
 
@@ -370,5 +374,30 @@ void draw_tags2d(
     cv::putText(outputImage, cv::format("%d", tag.first), center,
         cv::FONT_HERSHEY_SIMPLEX, 0.5, text_color);
   }
+}
+
+vector <string> ofSplitString ( const string & source, const string & delimiter, bool ignoreEmpty ) 
+{
+  vector<string> result;
+  if (delimiter.empty()) {
+    result.push_back(source);
+    return result;
+  }
+  string::const_iterator substart = source.begin(), subend;
+  while (true) {
+    subend = search(substart, source.end(), delimiter.begin(), delimiter.end());
+    string sub(substart, subend);
+    //if(trim) {
+      //Poco::trimInPlace(sub);
+    //}
+    if (!ignoreEmpty || !sub.empty()) {
+      result.push_back(sub);
+    }
+    if (subend == source.end()) {
+      break;
+    }
+    substart = subend + delimiter.size();
+  }
+  return result;
 }
 

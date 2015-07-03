@@ -8,16 +8,39 @@ class TagsReceiverComponent : public ECScomponent
 {
   public:
 
-    //float _data; //to get value from config.json or live in code only
-    //ofParameter<float> _param; //to get value from a sender via osc
+    struct Tag
+    {
+      string id;
+      float size;
+      ofVec3f translation;
+      vector<ofVec2f> corners;
+
+      string str()
+      {
+        stringstream ss;
+        ss << "[ tag "
+          << "id: " << id
+          << ", size: " << size
+          << ", translation: " << translation
+          << ", corners: " << corners.size()
+          << " ]";
+        return ss.str(); 
+      }
+    }; 
+
+    vector<Tag> tags;
+
+    string ip;
+    int port;
 
     TagsReceiverComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
       ECScomponent::init(e_id,d,p);
-      //_data = d.get("_data",1.0f).asFloat();
-      //param(_param, "_param");
+
+      ip = d["ip"].asString();
+      port = d["port"].asInt();
     };
 
 };
