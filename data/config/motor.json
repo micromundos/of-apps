@@ -6,9 +6,6 @@
       "id" : "config"
     },
     {
-      "id" : "bloq_events"
-    },
-    {
       "id" : "bloq_maker"
     }
     ],

@@ -4,7 +4,7 @@
 #xga -w 1024 -h 576
 #vga -w 640 -h 480
 calibration="../data/calib/intrinsics_ps3eye.aruco.yml"
-device=0
+device=1
 width=1024
 height=576
 ip="127.0.0.1"

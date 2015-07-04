@@ -4,7 +4,6 @@
 #pragma once
 #include "ConfigComponent.h"
 #include "BloqComponent.h"
-#include "BloqEventsComponent.h"
 #include "BloqMakerComponent.h"
 #include "RenderComponent.h"
 #include "CamaraLucidaComponent.h"

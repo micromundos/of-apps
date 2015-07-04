@@ -3,29 +3,31 @@
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
 #include "Components.h"
-#include "Bloq.h"
 #include "ofxAruco.h"
 #include "ofxCv.h"
 #include "ofxTimeMeasurements.h"
+#include "events/BloqEvents.h"
 
 using namespace artemis;
-
-struct Extrinsics
-{
-  cv::Mat R, T;
-};
-
-struct Frustum
-{
-  float left, right;
-  float bottom, top;
-  float near, far;
-};
 
 class ArucoSystem : public ECSsystem 
 { 
 
   public:
+
+    struct Extrinsics
+    {
+      cv::Mat R, T;
+    };
+
+    struct Frustum
+    {
+      float left, right;
+      float bottom, top;
+      float near, far;
+    };
+
+    typedef TagsReceiverComponent::Tag Tag;
 
     ArucoSystem(string _id) : ECSsystem(_id)
     {
@@ -85,8 +87,6 @@ class ArucoSystem : public ECSsystem
 
       TS_START("ArucoSystem");
 
-      BloqEventsComponent* events = require_component<BloqEventsComponent>("core");
-
       int w = rgb_data->width;
       int h = rgb_data->height;
 
@@ -107,16 +107,16 @@ class ArucoSystem : public ECSsystem
           shared_ptr<Bloq> _bloq( new Bloq() );
           update_bloq( _bloq.get(), m, w, h ); 
           bloqs.push_back( _bloq );
-          ofNotifyEvent( events->added, *_bloq );
+          ofNotifyEvent( BloqEvents::added, *_bloq );
         }
 
         else if (update_bloq( bloq, m, w, h ))
         {
-          ofNotifyEvent( events->updated, *bloq );
+          ofNotifyEvent( BloqEvents::updated, *bloq );
         }
       }
 
-      remove_bloqs_missing( events );
+      remove_bloqs_missing();
 
       TS_STOP("ArucoSystem");
     }; 
@@ -207,7 +207,7 @@ class ArucoSystem : public ECSsystem
       return NULL;
     }; 
 
-    void remove_bloqs_missing( BloqEventsComponent* events )
+    void remove_bloqs_missing()
     {
       vector<aruco::Marker>& markers = aruco.getMarkers();
       vector< vector< shared_ptr<Bloq> >::iterator> to_remove;
@@ -220,7 +220,7 @@ class ArucoSystem : public ECSsystem
           continue;
         to_remove.push_back( bloqs.begin() + i );
 
-        ofNotifyEvent( events->removed, bloq_id );
+        ofNotifyEvent( BloqEvents::removed, bloq_id );
       }
 
       for (size_t i = 0; i < to_remove.size(); i++)

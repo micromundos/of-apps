@@ -4,6 +4,8 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "PlabComponentFactory.h"
+#include "bloqs/Bloq.h"
+#include "events/BloqEvents.h"
 
 using namespace artemis;
 
@@ -15,7 +17,6 @@ class BloqMakerSystem : public ECSsystem
     BloqMakerSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<BloqMakerComponent>();
-      addComponentType<BloqEventsComponent>();
       addComponentType<ConfigComponent>();
 
       component_factory = new PlabComponentFactory();
@@ -29,13 +30,12 @@ class BloqMakerSystem : public ECSsystem
     virtual void initialize() 
     {
       bloq_maker_m.init( *world );
-      bloq_events_m.init( *world );
       config_m.init( *world );
     };
 
     virtual void added(Entity &e) 
     {
-      init( config_m.get(e), bloq_events_m.get(e) );
+      init( config_m.get(e) );
     };
 
     virtual void processEntities( ImmutableBag<Entity*>& bag ) 
@@ -55,7 +55,6 @@ class BloqMakerSystem : public ECSsystem
   private:
 
     ComponentMapper<BloqMakerComponent> bloq_maker_m;
-    ComponentMapper<BloqEventsComponent> bloq_events_m;
     ComponentMapper<ConfigComponent> config_m;
 
     ECmaker bloq_maker;
@@ -65,13 +64,13 @@ class BloqMakerSystem : public ECSsystem
     map< string,int > bloqs_by_id;
 
 
-    void init( ConfigComponent* config_data, BloqEventsComponent* bloq_events )
+    void init( ConfigComponent* config_data )
     {
       bloq_maker.init( world, ((ComponentFactory*)component_factory), config_data->config.game()["bloqs"], config_data->config.settings()["params"]["app_port"].asInt() );
 
-      ofAddListener( bloq_events->added, this, &BloqMakerSystem::bloq_added );
-      ofAddListener( bloq_events->updated, this, &BloqMakerSystem::bloq_updated );
-      ofAddListener( bloq_events->removed, this, &BloqMakerSystem::bloq_removed );
+      ofAddListener( BloqEvents::added, this, &BloqMakerSystem::bloq_added );
+      ofAddListener( BloqEvents::updated, this, &BloqMakerSystem::bloq_updated );
+      ofAddListener( BloqEvents::removed, this, &BloqMakerSystem::bloq_removed );
 
     };
 

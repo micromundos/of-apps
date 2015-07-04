@@ -4,20 +4,9 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "ofxOsc.h"
+#include "tags/Tag.h"
 
 using namespace artemis;
-
-struct Extrinsics
-{
-  cv::Mat R, T;
-};
-
-struct Frustum
-{
-  float left, right;
-  float bottom, top;
-  float near, far;
-};
 
 class TagsReceiverSystem : public ECSsystem 
 { 
@@ -88,8 +77,6 @@ class TagsReceiverSystem : public ECSsystem
 
     ofxOscReceiver receiver;
     vector<string> tag_msg; //message layout
-
-    typedef TagsReceiverComponent::Tag Tag;
 
     ComponentMapper<TagsReceiverComponent> tags_receiver_m;
 

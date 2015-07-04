@@ -20,7 +20,6 @@ ofLogNotice("PlabComponentFactory") << "\t make " << id;
 if (id == "bloq") return new BloqComponent(id);
 else if (id == "config") return new ConfigComponent(id);
 else if (id == "bloq_maker") return new BloqMakerComponent(id);
-else if (id == "bloq_events") return new BloqEventsComponent(id);
 else if (id == "camara_lucida") return new CamaraLucidaComponent(id);
 else if (id == "render") return new RenderComponent(id);
 else if (id == "rgb") return new RgbComponent(id);

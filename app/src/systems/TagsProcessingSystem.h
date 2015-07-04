@@ -3,7 +3,9 @@
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
 #include "Components.h"
+#include "events/BloqEvents.h"
 #include "bloqs/Bloq.h"
+#include "tags/Tag.h"
 
 using namespace artemis;
 
@@ -60,9 +62,6 @@ class TagsProcessingSystem : public ECSsystem
       vector< shared_ptr<Bloq> >& bloqs = tags_proc_data->bloqs;
       vector<Tag>& tags = tags_receiver_data->tags;
 
-      //TODO refactor BloqEventsComponent.h => events/BloqEvents.h 
-      BloqEventsComponent* events = require_component<BloqEventsComponent>("core");
-
       //ofLogNotice("TagsProcessingSystem") << "tags " << tags.size();
 
       int len = tags.size();
@@ -79,16 +78,16 @@ class TagsProcessingSystem : public ECSsystem
           shared_ptr<Bloq> _bloq( new Bloq() );
           update_bloq( _bloq.get(), tag ); 
           bloqs.push_back( _bloq );
-          ofNotifyEvent( events->added, *_bloq );
+          ofNotifyEvent( BloqEvents::added, *_bloq );
         }
 
         else if ( update_bloq( bloq, tag ) )
         {
-          ofNotifyEvent( events->updated, *bloq );
+          ofNotifyEvent( BloqEvents::updated, *bloq );
         }
       } 
 
-      remove_bloqs( events, bloqs, tags );
+      remove_bloqs( bloqs, tags );
 
       //ofLogNotice("TagsProcessingSystem") << "\t bloqs " << bloqs.size();
 
@@ -140,16 +139,14 @@ class TagsProcessingSystem : public ECSsystem
       ofPopStyle();
     };
 
-  private:
-
-    typedef TagsReceiverComponent::Tag Tag;
+  private: 
 
     Entity* entity;
 
     ComponentMapper<TagsProcessingComponent> tags_processing_m;
     ComponentMapper<TagsReceiverComponent> tags_receiver_m;
 
-    Extrinsics calib_stereo;
+    Tag::Extrinsics calib_stereo;
     ofxCv::Calibration calib_rgb;
     ofxCv::Calibration calib_depth;
     int rgb_width, rgb_height;
@@ -225,7 +222,7 @@ class TagsProcessingSystem : public ECSsystem
       return true;
     };
 
-    void remove_bloqs( BloqEventsComponent* events, vector< shared_ptr<Bloq> >& bloqs, vector<Tag>& tags )
+    void remove_bloqs( vector< shared_ptr<Bloq> >& bloqs, vector<Tag>& tags )
     {
       vector< vector< shared_ptr<Bloq> >::iterator> to_remove;
 
@@ -236,7 +233,7 @@ class TagsProcessingSystem : public ECSsystem
           continue;
         to_remove.push_back( bloqs.begin() + i );
 
-        ofNotifyEvent( events->removed, id );
+        ofNotifyEvent( BloqEvents::removed, id );
       }
 
       for (size_t i = 0; i < to_remove.size(); i++)
@@ -440,7 +437,7 @@ class TagsProcessingSystem : public ECSsystem
 
     // calibration
 
-    void load_extrinsics( string filename, Extrinsics& calib_stereo )
+    void load_extrinsics( string filename, Tag::Extrinsics& calib_stereo )
     {
       bool absolute = false;
 

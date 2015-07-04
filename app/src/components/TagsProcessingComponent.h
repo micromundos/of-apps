@@ -7,7 +7,7 @@
 
 class TagsProcessingComponent : public ECScomponent 
 {
-  public:
+  public: 
 
     vector< shared_ptr<Bloq> > bloqs;
 
