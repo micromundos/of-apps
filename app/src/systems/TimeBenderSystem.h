@@ -25,7 +25,6 @@ class TimeBenderSystem : public ECSsystem
       knob_m.init( *world );
 
       fisica = require_system<FisicaSystem>();
-
       initial_fps_fisica = fisica->fps();
       //initial_fps_of = ofGetFrameRate();
     };
@@ -47,7 +46,7 @@ class TimeBenderSystem : public ECSsystem
 
       float fps = ofMap( t, 0.0f, 1.0f, initial_fps_fisica, initial_fps_fisica * coef, true );
 
-      ofLogNotice("TimeBenderSystem") << "t: " << t << ", fps: " << fps << ", dt: " << (1.0f/fps) << ", coef: " << coef;
+      //ofLogNotice("TimeBenderSystem") << "t: " << t << ", fps: " << fps << ", dt: " << (1.0f/fps) << ", coef: " << coef;
 
       fisica->fps( fps );
       //ofSetFrameRate( fps_of );

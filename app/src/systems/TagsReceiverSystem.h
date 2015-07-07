@@ -4,7 +4,7 @@
 #include "ofxECS.h"
 #include "Components.h"
 #include "ofxOsc.h"
-#include "tags/Tag.h"
+#include "bloqs/Tag.h"
 
 using namespace artemis;
 

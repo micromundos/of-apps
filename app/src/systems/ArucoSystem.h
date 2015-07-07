@@ -27,8 +27,6 @@ class ArucoSystem : public ECSsystem
       float near, far;
     };
 
-    typedef TagsReceiverComponent::Tag Tag;
-
     ArucoSystem(string _id) : ECSsystem(_id)
     {
       addComponentType<ArucoComponent>();

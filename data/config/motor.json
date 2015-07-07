@@ -64,7 +64,7 @@
         },
         "render" : true
       },
-      "id" : "tags_processing"
+      "id" : "tags"
     },
     {
       "data" : {

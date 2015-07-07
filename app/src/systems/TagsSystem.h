@@ -5,42 +5,44 @@
 #include "Components.h"
 #include "events/BloqEvents.h"
 #include "bloqs/Bloq.h"
-#include "tags/Tag.h"
+#include "bloqs/Tag.h"
 
 using namespace artemis;
 
-class TagsProcessingSystem : public ECSsystem 
+class TagsSystem : public ECSsystem 
 { 
 
   public:
 
-    TagsProcessingSystem(string _id) : ECSsystem(_id)
+    TagsSystem(string _id) : ECSsystem(_id)
     {
-      addComponentType<TagsProcessingComponent>();
+      addComponentType<TagsComponent>();
       addComponentType<TagsReceiverComponent>();
     };
 
     virtual void initialize() 
     {
-      tags_processing_m.init( *world );
+      tags_m.init( *world );
       tags_receiver_m.init( *world );
       entity = NULL;
+      up2 = ofVec2f(0,1);
+      up3 = ofVec3f(0,1,0);
     };
 
     virtual void added(Entity &e) 
     {
       if ( entity != NULL ) 
       {
-        ofLogWarning("TagsProcessingSystem") << "already inited";
+        ofLogWarning("TagsSystem") << "already inited";
         return;
       }
       entity = &e;
 
-      TagsProcessingComponent* tags_proc_data = tags_processing_m.get(e);
+      TagsComponent* tags_data = tags_m.get(e);
 
-      load_extrinsics( tags_proc_data->calib_stereo_file, calib_stereo );
-      load_intrinsics( tags_proc_data->calib_rgb_file, calib_rgb );
-      load_intrinsics( tags_proc_data->calib_depth_file, calib_depth );
+      load_extrinsics( tags_data->calib_stereo_file, calib_stereo );
+      load_intrinsics( tags_data->calib_rgb_file, calib_rgb );
+      load_intrinsics( tags_data->calib_depth_file, calib_depth );
 
       cv::Size rgb_size = calib_rgb.getDistortedIntrinsics().getImageSize();
       rgb_width = rgb_size.width;
@@ -54,15 +56,15 @@ class TagsProcessingSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      TagsProcessingComponent* tags_proc_data = tags_processing_m.get(e);
+      TagsComponent* tags_data = tags_m.get(e);
       TagsReceiverComponent* tags_receiver_data = tags_receiver_m.get(e);
 
-      TS_START("TagsProcessingSystem");
+      TS_START("TagsSystem");
 
-      vector< shared_ptr<Bloq> >& bloqs = tags_proc_data->bloqs;
+      vector< shared_ptr<Bloq> >& bloqs = tags_data->bloqs;
       vector<Tag>& tags = tags_receiver_data->tags;
 
-      //ofLogNotice("TagsProcessingSystem") << "tags " << tags.size();
+      //ofLogNotice("TagsSystem") << "tags " << tags.size();
 
       int len = tags.size();
       for ( int i = 0; i < len; i++ )
@@ -71,7 +73,7 @@ class TagsProcessingSystem : public ECSsystem
         string id = tag.id;
         Bloq* bloq = get_bloq( id, bloqs );
 
-        //ofLogNotice("TagsProcessingSystem") << "\t get bloq " << id << ": " << (bloq != NULL);
+        //ofLogNotice("TagsSystem") << "\t get bloq " << id << ": " << (bloq != NULL);
 
         if ( bloq == NULL )
         {
@@ -89,20 +91,20 @@ class TagsProcessingSystem : public ECSsystem
 
       remove_bloqs( bloqs, tags );
 
-      //ofLogNotice("TagsProcessingSystem") << "\t bloqs " << bloqs.size();
+      //ofLogNotice("TagsSystem") << "\t bloqs " << bloqs.size();
 
-      TS_STOP("TagsProcessingSystem");
+      TS_STOP("TagsSystem");
     }; 
 
     virtual void renderEntity(Entity &e)
     {
-      TagsProcessingComponent* tags_proc_data = tags_processing_m.get(e);
+      TagsComponent* tags_data = tags_m.get(e);
       TagsReceiverComponent* tags_receiver_data = tags_receiver_m.get(e);
 
-      if ( !tags_proc_data->render )
+      if ( !tags_data->render )
         return;
 
-      vector< shared_ptr<Bloq> >& bloqs = tags_proc_data->bloqs;
+      vector< shared_ptr<Bloq> >& bloqs = tags_data->bloqs;
       vector<Tag>& tags = tags_receiver_data->tags;
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
@@ -143,7 +145,7 @@ class TagsProcessingSystem : public ECSsystem
 
     Entity* entity;
 
-    ComponentMapper<TagsProcessingComponent> tags_processing_m;
+    ComponentMapper<TagsComponent> tags_m;
     ComponentMapper<TagsReceiverComponent> tags_receiver_m;
 
     Tag::Extrinsics calib_stereo;
@@ -209,10 +211,10 @@ class TagsProcessingSystem : public ECSsystem
       tag_dir_from_corners( corners, tdir );
       float radians = tag_angle_2d( tdir );
 
-      //ofLog()
-          //<< " angle deg " 
-          //<< (radians*RAD_TO_DEG)
-          //<< ", dir " << tdir;
+      ofLogNotice("TagsSystem")
+          << " tag angle deg " 
+          << (radians*RAD_TO_DEG)
+          << ", dir " << tdir;
 
       bloq->loc.set( tloc );
       bloq->dir.set( tdir );
@@ -457,7 +459,7 @@ class TagsProcessingSystem : public ECSsystem
 
       calib_stereo.T *= scale;
 
-      //ofLogNotice("TagsProcessingSystem")
+      //ofLogNotice("TagsSystem")
         //<< "load_extrinsics:"
         //<< "\n" << "T: \n" << calib_stereo.T
         //<< "\n" << "R: \n" << calib_stereo.R

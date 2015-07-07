@@ -5,7 +5,7 @@
 #include "ofxECS.h"
 #include "bloqs/Bloq.h"
 
-class TagsProcessingComponent : public ECScomponent 
+class TagsComponent : public ECScomponent 
 {
   public: 
 
@@ -16,7 +16,7 @@ class TagsProcessingComponent : public ECScomponent
     string calib_depth_file;
     string calib_stereo_file;
 
-    TagsProcessingComponent(string _id) : ECScomponent(_id) {};
+    TagsComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {

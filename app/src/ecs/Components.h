@@ -23,5 +23,5 @@
 
 #include "DepthHoleFillerComponent.h"
 #include "TagsReceiverComponent.h"
-#include "TagsProcessingComponent.h"
+#include "TagsComponent.h"
 //dont remove this line

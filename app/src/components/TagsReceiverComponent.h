@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
-#include "tags/Tag.h"
+#include "bloqs/Tag.h"
 
 class TagsReceiverComponent : public ECScomponent 
 {

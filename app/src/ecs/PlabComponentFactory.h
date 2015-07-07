@@ -36,7 +36,7 @@ else if (id == "depth_processing") return new DepthProcessingComponent(id);
 else if (id == "entradas") return new EntradasComponent(id);
 else if (id == "depth_hole_filler") return new DepthHoleFillerComponent(id);
 else if (id == "tags_receiver") return new TagsReceiverComponent(id);
-else if (id == "tags_processing") return new TagsProcessingComponent(id);
+else if (id == "tags") return new TagsComponent(id);
 //dont remove this line
 
 return NULL;
