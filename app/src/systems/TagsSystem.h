@@ -211,10 +211,10 @@ class TagsSystem : public ECSsystem
       tag_dir_from_corners( corners, tdir );
       float radians = tag_angle_2d( tdir );
 
-      ofLogNotice("TagsSystem")
-          << " tag angle deg " 
-          << (radians*RAD_TO_DEG)
-          << ", dir " << tdir;
+      //ofLogNotice("TagsSystem")
+          //<< " tag angle deg " 
+          //<< (radians*RAD_TO_DEG)
+          //<< ", dir " << tdir;
 
       bloq->loc.set( tloc );
       bloq->dir.set( tdir );
