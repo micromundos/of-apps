@@ -14,7 +14,6 @@
 #include "KnobSystem.h"
 #include "TableCalibSystem.h"
 #include "DepthProcessingSystem.h"
-#include "EntradasSystem.h"
 #include "DepthHoleFillerSystem.h"
 #include "TagsReceiverSystem.h"
 #include "TagsSystem.h"

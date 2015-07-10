@@ -12,15 +12,17 @@
 #pragma include "lib/math.glsl"
 #pragma include "lib/geom.glsl"
 
+//defaults
 uniform vec2 size;
+uniform int pass;
 
 uniform sampler2DRect height_map;
-uniform sampler2DRect plane_angles;
+/*uniform sampler2DRect table_angles;*/
 uniform sampler2DRect debug_input;
 
-uniform float threshold_plane;
-uniform float threshold_near;
-uniform float threshold_far;
+/*uniform float threshold_table_angle;*/
+uniform float threshold_table_near;
+uniform float threshold_table_far;
 
 /*const float zero = 0.;*/
 
@@ -29,19 +31,19 @@ void main( void )
   vec2 height_map_size = vec2(textureSize2DRect(height_map,0));
   vec2 p2_height_map = gl_TexCoord[0].xy / size * height_map_size;
 
-  vec2 plane_angles_size = vec2(textureSize2DRect(plane_angles,0));
-  vec2 p2_plane_angles = gl_TexCoord[0].xy / size * plane_angles_size;
+  /*vec2 table_angles_size = vec2(textureSize2DRect(table_angles,0));*/
+  /*vec2 p2_table_angles = gl_TexCoord[0].xy / size * table_angles_size;*/
 
-  float zero = threshold_near;
+  float zero = threshold_table_near;
 
   float height = texture2DRect( height_map , p2_height_map ).r;
 
-  //clamp vertices too near/far from plane
-  height = height < threshold_far && height > threshold_near ? height : zero;
+  //clamp vertices too near/far from table
+  height = height < threshold_table_far && height > threshold_table_near ? height : zero;
 
-  //clamp vertices too perpendicular to plane
-  float ang = texture2DRect( plane_angles, p2_plane_angles ).x;
-  height = degrees(ang) < threshold_plane ? height : zero;
+  //clamp vertices too perpendicular to table
+  /*float ang = texture2DRect( table_angles, p2_table_angles ).x;*/
+  /*height = degrees(ang) < threshold_table_angle ? height : zero;*/
 
   gl_FragColor = vec4(vec3(height),1.);
 }

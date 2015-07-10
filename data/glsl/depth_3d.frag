@@ -13,7 +13,9 @@
 
 #pragma include "lib/depth.glsl"
 
+//defaults
 uniform vec2 size;
+uniform int pass;
 
 uniform sampler2DRect depth_map;
 uniform bool depth_flip;

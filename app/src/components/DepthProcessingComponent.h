@@ -12,7 +12,7 @@ class DepthProcessingComponent : public ECScomponent
     gpgpu::Process _surfaces;
     gpgpu::Process _height_map;
     gpgpu::Process _normals;
-    gpgpu::Process _plane_angles;
+    //gpgpu::Process _table_angles;
 
   public:
 
@@ -25,30 +25,32 @@ class DepthProcessingComponent : public ECScomponent
     gpgpu::Process& normals()
     { return _normals; };
 
-    gpgpu::Process& plane_angles()
-    { return _plane_angles; };
+    //gpgpu::Process& table_angles()
+    //{ return _table_angles; };
 
     ofParameter<bool> render_surfaces;
     ofParameter<bool> render_normals;
     ofParameter<bool> render_height_map;
     ofParameter<bool> render_smoothed;
     //ofParameter<bool> render_normals_smoothed;
-    ofParameter<bool> render_plane_angles;
+    //ofParameter<bool> render_table_angles;
 
     ofParameter<float> open_iter;
     ofParameter<float> close_iter;
 
+    ofParameter<float> bg_dif_expand_kernel;
+
     ofParameter<float> threshold_background;
-    ofParameter<float> threshold_plane;
-    ofParameter<float> threshold_near;
-    ofParameter<float> threshold_far;
+    ofParameter<float> threshold_table_near;
+    ofParameter<float> threshold_table_far;
+    //ofParameter<float> threshold_table_angle;
 
-    ofParameter<float> gaussian_sigma;
-    ofParameter<float> gaussian_kernel;
+    //ofParameter<float> gaussian_sigma;
+    //ofParameter<float> gaussian_kernel;
 
-    ofParameter<float> bilateral_domain;
-    ofParameter<float> bilateral_range;
-    ofParameter<float> bilateral_kernel;
+    //ofParameter<float> bilateral_domain;
+    //ofParameter<float> bilateral_range;
+    //ofParameter<float> bilateral_kernel;
 
     //ofParameter<float> normals_bilateral_domain;
     //ofParameter<float> normals_bilateral_range;
@@ -63,10 +65,12 @@ class DepthProcessingComponent : public ECScomponent
       param(open_iter, "open_iter");
       param(close_iter, "close_iter");
 
+      param(bg_dif_expand_kernel, "bg_dif_expand_kernel");
+
       param(threshold_background, "threshold_background");
-      param(threshold_plane, "threshold_plane");
-      param(threshold_near, "threshold_near");
-      param(threshold_far, "threshold_far"); 
+      param(threshold_table_near, "threshold_table_near");
+      param(threshold_table_far, "threshold_table_far"); 
+      //param(threshold_table_angle, "threshold_table_angle");
 
       //param(gaussian_sigma, "gaussian_sigma"); 
       //param(gaussian_kernel, "gaussian_kernel"); 
@@ -84,7 +88,7 @@ class DepthProcessingComponent : public ECScomponent
       param(render_height_map, "render_height_map");
       //param(render_smoothed, "render_smoothed"); 
       //param(render_normals_smoothed, "render_normals_smoothed"); 
-      param(render_plane_angles, "render_plane_angles"); 
+      //param(render_table_angles, "render_table_angles"); 
     };
 
 };

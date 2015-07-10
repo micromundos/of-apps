@@ -40,7 +40,8 @@ class EntradasSystem : public ECSsystem
       //int h = input(e).height();
 
       threshold
-        .init("glsl/height_threshold.frag", w, h );
+        .init("glsl/height_threshold.frag", w, h )
+        .on( "update", this, &EntradasSystem::update_threshold );
 
       //erode
       output(e) 
@@ -54,14 +55,8 @@ class EntradasSystem : public ECSsystem
 
       //bilateral
         //.init("glsl/cv/bilateral.frag", w, h )
-        //.set_debug("glsl/debug/depth_d.frag");
-
-      // events
-
-      //ofAddListener( bilateral.on_update, this, &EntradasSystem::update_bilateral );
-
-      ofAddListener( threshold.on_update, this, &EntradasSystem::update_threshold );
-
+        //.set_debug("glsl/debug/depth_d.frag")
+        //.on( "update", this, &EntradasSystem::update_bilateral );
     }; 
 
     virtual void processEntity(Entity &e) 
@@ -138,8 +133,8 @@ class EntradasSystem : public ECSsystem
 
     virtual void removed(Entity &e) 
     {
-      //ofRemoveListener( bilateral.on_update, this, &EntradasSystem::update_bilateral );
-      ofRemoveListener( threshold.on_update, this, &EntradasSystem::update_threshold );
+      //bilateral.off( "update", this, &EntradasSystem::update_bilateral );
+      threshold.off( "update", this, &EntradasSystem::update_threshold );
       entradas_data = NULL;
     };
 

@@ -2,8 +2,6 @@
 #extension GL_EXT_gpu_shader4 : enable
 #extension GL_ARB_texture_rectangle : enable
 
-#pragma include "lib/math.glsl"
-
 /*
  * flowfield
  *
@@ -13,7 +11,11 @@
  *  2d vector field, rgb = xyz
  */
 
+#pragma include "lib/math.glsl"
+
+//defaults
 uniform vec2 size;
+uniform int pass;
 
 uniform sampler2DRect heightmap;
 /*uniform sampler2DRect entradas;*/

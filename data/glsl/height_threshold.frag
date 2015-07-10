@@ -11,7 +11,9 @@
 
 #pragma include "lib/math.glsl"
 
+//defaults
 uniform vec2 size;
+uniform int pass;
 
 uniform sampler2DRect height_map;
 uniform sampler2DRect debug_input;

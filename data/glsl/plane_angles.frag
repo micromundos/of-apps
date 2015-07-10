@@ -12,7 +12,9 @@
 #pragma include "lib/math.glsl"
 #pragma include "lib/geom.glsl"
 
+//defaults
 uniform vec2 size;
+uniform int pass;
 
 uniform sampler2DRect normals;
 uniform sampler2DRect debug_input;

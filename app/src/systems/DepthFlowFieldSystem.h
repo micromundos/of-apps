@@ -47,8 +47,9 @@ class DepthFlowFieldSystem : public ECSsystem
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
-      flowfield(e).init("glsl/flowfield.frag",w,h);
-      ofAddListener( flowfield(e).on_update, this, &DepthFlowFieldSystem::update_flowfield ); 
+      flowfield(e)
+        .init("glsl/flowfield.frag",w,h)
+        .on( "update", this, &DepthFlowFieldSystem::update_flowfield ); 
     };
 
     virtual void processEntity(Entity &e) 
@@ -93,7 +94,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
     virtual void removed(Entity &e) 
     {
-      ofRemoveListener( flowfield(e).on_update, this, &DepthFlowFieldSystem::update_flowfield ); 
+      flowfield(e).off( "update", this, &DepthFlowFieldSystem::update_flowfield ); 
       entity = NULL;
     };
 
@@ -112,7 +113,7 @@ class DepthFlowFieldSystem : public ECSsystem
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
       FlowFieldComponent* ff_data = flowfield_m.get( *entity ); 
 
-      shader.setUniform1f( "floor_height", depth_proc_data->threshold_near );
+      shader.setUniform1f( "floor_height", depth_proc_data->threshold_table_near );
       shader.setUniform1f( "force_weight_min", ff_data->force_weight_min );
       shader.setUniform1f( "force_weight_max", ff_data->force_weight_max * ff_data->force_weight_max_m );
     };

@@ -29,7 +29,6 @@ ecs.add_system(new TagsSystem("tags"));
 ecs.add_system(new TableCalibSystem("table_calib"));
 ecs.add_system(new DepthHoleFillerSystem("depth_hole_filler"));
 ecs.add_system(new DepthProcessingSystem("depth_processing"));
-ecs.add_system(new EntradasSystem("entradas"));
 ecs.add_system(new DepthFlowFieldSystem("depth_flow_field"));
 ecs.add_system(new FisicaSystem("fisica"));
 ecs.add_system(new ParticleSystem("particle"));
