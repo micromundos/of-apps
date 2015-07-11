@@ -62,7 +62,7 @@ class DepthFlowFieldSystem : public ECSsystem
       TS_START("DepthFlowFieldSystem");
 
       flowfield(e)
-        .set( "heightmap", surfaces(e).get() )
+        .set( "height_map", surfaces(e).get() )
         //.set( "entradas", entradas(e).get() )
         .update();
 
@@ -113,7 +113,7 @@ class DepthFlowFieldSystem : public ECSsystem
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
       FlowFieldComponent* ff_data = flowfield_m.get( *entity ); 
 
-      shader.setUniform1f( "floor_height", depth_proc_data->threshold_table_near );
+      shader.setUniform1f( "table_height", depth_proc_data->threshold_table_near );
       shader.setUniform1f( "force_weight_min", ff_data->force_weight_min );
       shader.setUniform1f( "force_weight_max", ff_data->force_weight_max * ff_data->force_weight_max_m );
     };

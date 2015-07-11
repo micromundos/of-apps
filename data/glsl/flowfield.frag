@@ -17,33 +17,33 @@
 uniform vec2 size;
 uniform int pass;
 
-uniform sampler2DRect heightmap;
+uniform sampler2DRect height_map;
 /*uniform sampler2DRect entradas;*/
 uniform sampler2DRect debug_input;
 
-uniform float floor_height;
+uniform float table_height;
 uniform float force_weight_min;
 uniform float force_weight_max;
 
 const int kernel = 6;
 
-bool on_floor( float height )
+bool on_table( float height )
 {
-  return height <= floor_height + EPSILON;
+  return height <= table_height + EPSILON;
 }
 
 void main( void ) 
 {
-  vec2 heightmap_size = vec2(textureSize2DRect(heightmap,0));
+  vec2 height_map_size = vec2(textureSize2DRect(height_map,0));
   /*vec2 entradas_size = vec2(textureSize2DRect(entradas,0));*/
 
   vec2 loc = gl_TexCoord[0].xy / size; //normalized [0,1]
-  vec2 loc_heightmap = loc * heightmap_size;
+  vec2 loc_height_map = loc * height_map_size;
   /*vec2 loc_entradas = loc * entradas_size;*/
 
   vec2 force = vec2(0.,0.);
 
-  float height = texture2DRect(heightmap,loc_heightmap).r;
+  float height = texture2DRect(height_map,loc_height_map).r;
   /*float entrada = texture2DRect(entradas,loc_entradas).r;*/
 
   float sign = -1.0;
@@ -59,21 +59,21 @@ void main( void )
       continue; 
 
     vec2 ndir = vec2(i,j);
-    vec2 nloc_heightmap = loc_heightmap + ndir;
+    vec2 nloc_height_map = loc_height_map + ndir;
     /*vec2 nloc_entradas = loc_entradas + ndir;*/
 
     /*float nentrada = texture2DRect( entradas, nloc_entradas ).r;*/
 
-    /*if ( on_floor(height) && !on_floor(nentrada) || !on_floor(entrada) )*/
+    /*if ( on_table(height) && !on_table(nentrada) || !on_table(entrada) )*/
     /*{*/
       /*sign = 0.0;*/
       /*continue;*/
     /*}*/
 
-    if ( nloc_heightmap.x < 0 || nloc_heightmap.x >= heightmap_size.x || nloc_heightmap.y < 0 || nloc_heightmap.y >= heightmap_size.y )
+    if ( nloc_height_map.x < 0 || nloc_height_map.x >= height_map_size.x || nloc_height_map.y < 0 || nloc_height_map.y >= height_map_size.y )
       continue;
 
-    float nheight = texture2DRect( heightmap, nloc_heightmap ).r;
+    float nheight = texture2DRect( height_map, nloc_height_map ).r;
 
     // drive away from plane or towards plane
     float slope = nheight - height;
@@ -86,7 +86,7 @@ void main( void )
     force /= n; 
   }
 
-  if ( on_floor(height) )
+  if ( on_table(height) )
   {
     force *= sign;
   }
@@ -98,7 +98,7 @@ void main( void )
 
   gl_FragColor = vec4( force, 0.,1.);
 
-  /*float height = texture2DRect(heightmap,loc_heightmap).r;*/
+  /*float height = texture2DRect(height_map,loc_height_map).r;*/
   /*float vis = lerp2d( height, 0.,200., 0.,1.);*/
   /*gl_FragColor = vec4(vis,vis,vis,1.);*/
 }
