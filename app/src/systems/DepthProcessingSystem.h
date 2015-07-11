@@ -99,13 +99,13 @@ class DepthProcessingSystem : public ECSsystem
         //on( "update", this, &DepthProcessingSystem::update_threshold );
 
       erode
-        .add_backbuffer( "data" )
-        .init("glsl/cv/erode.frag", w, h );
+        .add_backbuffer( "tex" )
+        .init("glsl/openvision/erode.fs", w, h );
         //.set_debug("glsl/debug/height_d.frag");
 
       dilate
-        .add_backbuffer( "data" )
-        .init("glsl/cv/dilate.frag", w, h );
+        .add_backbuffer( "tex" )
+        .init("glsl/openvision/dilate.fs", w, h );
 
       //mask
         //.init("glsl/cv/mask.frag", w, h )
@@ -177,10 +177,10 @@ class DepthProcessingSystem : public ECSsystem
       if ( open_iter > 0 )
       {
         erode
-          .set( "data", *depth_map )
+          .set( "tex", *depth_map )
           .update( open_iter );
         dilate
-          .set( "data", erode.get() )
+          .set( "tex", erode.get() )
           .update( open_iter );
         depth_map = &(dilate.get());
       }
@@ -189,10 +189,10 @@ class DepthProcessingSystem : public ECSsystem
       if ( close_iter > 0 )
       {
         dilate
-          .set( "data", *depth_map )
+          .set( "tex", *depth_map )
           .update( close_iter );
         erode
-          .set( "data", dilate.get() )
+          .set( "tex", dilate.get() )
           .update( close_iter );
         depth_map = &(erode.get());
       }

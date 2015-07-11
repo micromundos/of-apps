@@ -45,13 +45,13 @@ class EntradasSystem : public ECSsystem
 
       //erode
       output(e) 
-        .add_backbuffer("data")
-        .init("glsl/cv/erode.frag", w, h );
+        .add_backbuffer("tex")
+        .init("glsl/openvision/erode.fs", w, h );
 
       dilate
       //output(e) 
-        .add_backbuffer("data")
-        .init("glsl/cv/dilate.frag", w, h );
+        .add_backbuffer("tex")
+        .init("glsl/openvision/dilate.fs", w, h );
 
       //bilateral
         //.init("glsl/cv/bilateral.frag", w, h )
@@ -93,11 +93,11 @@ class EntradasSystem : public ECSsystem
 
       //cv_utils::close( threshold.get(), close_iter, dilate, output(e) );
       dilate
-        .set( "data", threshold.get() )
+        .set( "tex", threshold.get() )
         .update( close_iter );
       //erode
       output(e) 
-        .set( "data", dilate.get() )
+        .set( "tex", dilate.get() )
         .update( close_iter ); 
 
       //if ( entradas_data->render ) 
