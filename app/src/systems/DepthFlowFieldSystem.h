@@ -63,6 +63,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       flowfield(e)
         .set( "height_map", surfaces(e).get() )
+        //.set( "height_map", height_map(e).get() )
         //.set( "entradas", entradas(e).get() )
         .update();
 

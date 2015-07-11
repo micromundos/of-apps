@@ -29,7 +29,7 @@ const int kernel = 6;
 
 bool on_table( float height )
 {
-  return height <= table_height + EPSILON;
+  return height < table_height + EPSILON;
 }
 
 void main( void ) 
