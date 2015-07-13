@@ -150,7 +150,7 @@ class DepthProcessingSystem : public ECSsystem
       }
 
       // table background diff
-      if ( table_calib_data->background.isAllocated() )
+      if ( table_calib_data->background.isAllocated() && depth_proc_data->bg_dif )
       {
         ofTexture& _bg_dif = bg_dif
           .set( "foreground", *depth_map )
@@ -383,7 +383,7 @@ class DepthProcessingSystem : public ECSsystem
     void update_bg_dif( ofShader& shader )
     {
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
-      shader.setUniform1f( "threshold", depth_proc_data->threshold_background );
+      shader.setUniform1f( "threshold", depth_proc_data->bg_dif_threshold );
       //shader.setUniform1f( "zero", depth_proc_data->threshold_table_near );
     };
 

@@ -97,7 +97,8 @@
         /*"render_normals_smoothed" : false,*/
         /*"render_table_angles" : false,*/
         "render_surfaces" : false,
-        "threshold_background" : [ 20, -300, 300 ],
+        "bg_dif" : true,
+        "bg_dif_threshold" : [ 20, -300, 300 ],
         "bg_dif_expand_kernel" : [ 5, 0, 10 ],
         "threshold_table_far" : [ 2000, -2000, 2000 ],
         "threshold_table_near" : [ -200, -200, 200 ]

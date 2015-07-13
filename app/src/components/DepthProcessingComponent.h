@@ -38,9 +38,10 @@ class DepthProcessingComponent : public ECScomponent
     ofParameter<float> open_iter;
     ofParameter<float> close_iter;
 
+    ofParameter<bool> bg_dif;
+    ofParameter<float> bg_dif_threshold;
     ofParameter<float> bg_dif_expand_kernel;
 
-    ofParameter<float> threshold_background;
     ofParameter<float> threshold_table_near;
     ofParameter<float> threshold_table_far;
     //ofParameter<float> threshold_table_angle;
@@ -65,9 +66,11 @@ class DepthProcessingComponent : public ECScomponent
       param(open_iter, "open_iter");
       param(close_iter, "close_iter");
 
+      param(bg_dif, "bg_dif");
+      param(bg_dif_threshold, "bg_dif_threshold");
       param(bg_dif_expand_kernel, "bg_dif_expand_kernel");
 
-      param(threshold_background, "threshold_background");
+
       param(threshold_table_near, "threshold_table_near");
       param(threshold_table_far, "threshold_table_far"); 
       //param(threshold_table_angle, "threshold_table_angle");
