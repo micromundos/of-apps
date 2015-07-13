@@ -12,7 +12,6 @@
 uniform vec2 size;
 
 uniform sampler2DRect data;  
-uniform sampler2DRect debug_input;
 
 uniform float domain_sigma;
 uniform float range_sigma;
