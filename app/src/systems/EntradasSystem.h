@@ -123,10 +123,10 @@ class EntradasSystem : public ECSsystem
 
       if (entradas_data->render)
         output(e).get().draw(0,0,rw,rh);
-        //output(e).draw_debug(0,0,rw,rh);
+        //output(e).render_debug(0,0,rw,rh);
 
       //if (entradas_data->render_smoothed)
-        //bilateral.draw_debug(0,0,rw,rh);
+        //bilateral.render_debug(0,0,rw,rh);
 
       TS_STOP("EntradasSystem render");
     };

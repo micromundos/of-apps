@@ -24,7 +24,6 @@ else if (id == "camara_lucida") return new CamaraLucidaComponent(id);
 else if (id == "render") return new RenderComponent(id);
 else if (id == "rgb") return new RgbComponent(id);
 else if (id == "depth") return new DepthComponent(id);
-else if (id == "flow_field") return new FlowFieldComponent(id);
 else if (id == "particle_system") return new ParticleSystemComponent(id);
 else if (id == "particle_emitter") return new ParticleEmitterComponent(id);
 else if (id == "particle_flow_field") return new ParticleFlowFieldComponent(id);
@@ -36,6 +35,9 @@ else if (id == "depth_processing") return new DepthProcessingComponent(id);
 else if (id == "depth_hole_filler") return new DepthHoleFillerComponent(id);
 else if (id == "tags_receiver") return new TagsReceiverComponent(id);
 else if (id == "tags") return new TagsComponent(id);
+else if (id == "flow_field_container") return new FlowFieldContainerComponent(id);
+else if (id == "flow_field_gradient") return new FlowFieldGradientComponent(id);
+else if (id == "flow_field") return new FlowFieldComponent(id);
 //dont remove this line
 
 return NULL;

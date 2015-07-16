@@ -9,7 +9,6 @@
 #include "ParticleSystem.h"
 #include "ParticleEmitterSystem.h"
 #include "ParticleFlowFieldSystem.h"
-#include "DepthFlowFieldSystem.h"
 #include "TimeBenderSystem.h"
 #include "KnobSystem.h"
 #include "TableCalibSystem.h"
@@ -17,4 +16,7 @@
 #include "DepthHoleFillerSystem.h"
 #include "TagsReceiverSystem.h"
 #include "TagsSystem.h"
+#include "FlowFieldContainerSystem.h"
+#include "FlowFieldGradientSystem.h"
+#include "FlowFieldSystem.h"
 //dont remove this line

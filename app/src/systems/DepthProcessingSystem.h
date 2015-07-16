@@ -5,7 +5,6 @@
 #include "Components.h"
 #include "ofxGPGPU.h"
 #include "shaders/gaussian.h"
-#include "ofxTimeMeasurements.h"
 
 using namespace artemis;
 
@@ -63,7 +62,7 @@ class DepthProcessingSystem : public ECSsystem
       //gaussian
         //.init( &gaussian_shader, w, h )
         //.set_debug("glsl/debug/depth_d.frag")
-        //on( "update", this, &DepthProcessingSystem::update_gaussian ); 
+        //.on( "update", this, &DepthProcessingSystem::update_gaussian ); 
 
       bg_dif
         .init("glsl/background_substraction.frag", w, h )
@@ -275,17 +274,9 @@ class DepthProcessingSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e);
-
-      if ( !depth_proc_data->render_surfaces
-          && !depth_proc_data->render_normals
-          && !depth_proc_data->render_height_map
-          && !depth_proc_data->render_smoothed
-          //&& !depth_proc_data->render_normals_smoothed
-          //&& !depth_proc_data->render_table_angles
-       ) return;
-
       TS_START("DepthProcessingSystem render");
+
+      DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e);
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
       int rw = render_data->width;
@@ -295,20 +286,20 @@ class DepthProcessingSystem : public ECSsystem
       ofSetColor(255); 
 
       //if (depth_proc_data->render_smoothed)
-        //gaussian.draw_debug(0,0,rw,rh);
-        //bilateral.draw_debug(0,0,rw,rh);
+        //gaussian.render_debug(0,0,rw,rh);
+        //bilateral.render_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_height_map)
-        height_map(e).draw_debug(0,0,rw,rh);
+        height_map(e).render_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_normals)
-        normals(e).draw_debug(0,0,rw,rh);
+        normals(e).render_debug(0,0,rw,rh);
 
       //if (depth_proc_data->render_table_angles)
-        //table_angles(e).draw_debug(0,0,rw,rh);
+        //table_angles(e).render_debug(0,0,rw,rh);
 
       if (depth_proc_data->render_surfaces)
-        surfaces(e).draw_debug(0,0,rw,rh);
+        surfaces(e).render_debug(0,0,rw,rh);
 
       ofPopStyle();
 
@@ -468,6 +459,11 @@ class DepthProcessingSystem : public ECSsystem
       depth_3d.off( "update", this, &DepthProcessingSystem::update_depth_3d );
       height_map(e).off( "update", this, &DepthProcessingSystem::update_height_map );
       surfaces(e).off( "update", this, &DepthProcessingSystem::update_depth_segmentation );
+      //bilateral.off( "update", this, &DepthProcessingSystem::update_bilateral ); 
+      //gaussian.off( "update", this, &DepthProcessingSystem::update_gaussian ); 
+      //normals_bilateral.off( "update", this, &DepthProcessingSystem::update_normals_bilateral ); 
+      //table_angles.off( "update", this, &DepthProcessingSystem::update_table_angles );
+      //threshold.off( "update", this, &DepthProcessingSystem::update_threshold );
     };
 
 

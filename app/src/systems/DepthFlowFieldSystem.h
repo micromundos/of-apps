@@ -86,7 +86,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       //entradas(e).get().draw(0,0,render_data->width, render_data->height );
 
-      flowfield(e).draw_debug( 0, 0, render_data->width, render_data->height );
+      flowfield(e).render_debug( 0, 0, render_data->width, render_data->height );
       //flowfield(e).get().draw( 0, 0, render_data->width, render_data->height );
       //surfaces(e).get().draw( 0, 0, render_data->width, render_data->height );
 

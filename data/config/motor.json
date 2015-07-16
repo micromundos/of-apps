@@ -106,6 +106,20 @@
       },
       "id" : "depth_processing"
     },
+    //TODO mover los flow fields a los tags
+    {
+      "data" : {
+        "edge_detection_threshold" : [ 10, 0, 100 ],
+        "gaussian_sigma" : [ 2.5, 0, 10 ],
+        "gaussian_kernel" : [ 3, 0, 10 ],
+        "bilateral_domain" : [ 100, 0, 100 ],
+        "bilateral_kernel" : [ 6, 0, 10 ],
+        "bilateral_range" : [ 20, 0, 20 ],
+        "render_edges" : false,
+        "render" : false
+      },
+      "id" : "flow_field_container"
+    }, 
     {
       "data" : {
         "force_weight_max" : [ 0.01, 0, 0.1 ],
@@ -113,8 +127,15 @@
         "force_weight_min" : [ 0, 0, 1 ],
         "render" : false
       },
+      "id" : "flow_field_gradient"
+    },
+    {
+      "data" : { 
+        "scale" : 0.3,
+        "render" : false
+      },
       "id" : "flow_field"
-    }, 
+    },
     {
       "data" : {
         "contour_delta" : [ 255, 0, 255 ],

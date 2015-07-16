@@ -9,7 +9,6 @@
 #include "CamaraLucidaComponent.h"
 #include "RgbComponent.h"
 #include "DepthComponent.h"
-#include "FlowFieldComponent.h"
 #include "FisicaComponent.h"
 #include "ParticleSystemComponent.h"
 #include "ParticleFlowFieldComponent.h"
@@ -18,9 +17,11 @@
 #include "KnobComponent.h"
 #include "TableCalibComponent.h"
 #include "DepthProcessingComponent.h"
-#include "FlowFieldDebugComponent.h"
-
 #include "DepthHoleFillerComponent.h"
 #include "TagsReceiverComponent.h"
 #include "TagsComponent.h"
+#include "FlowFieldContainerComponent.h"
+#include "FlowFieldGradientComponent.h"
+#include "FlowFieldDebugComponent.h"
+#include "FlowFieldComponent.h"
 //dont remove this line
