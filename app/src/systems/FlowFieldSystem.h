@@ -29,18 +29,34 @@ class FlowFieldSystem : public ECSsystem
       ff_container_m.init( *world );
       ff_gradient_m.init( *world );
       depth_m.init( *world );
+      entity = NULL;
     };
 
     virtual void added(Entity &e) 
     {
+      if ( entity != NULL )
+      {
+        ofLogWarning("FlowFieldSystem")
+          << "entity already added";
+        return;
+      }
+      entity = &e;
+
       float scale = ff_m.get(e)->scale;
       DepthComponent* depth_data = depth_m.get(e);
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
       flowfield(e)
-        .init("glsl/flowfields/flowfield.frag",w,h);
+        .init("glsl/flowfields/flowfield.frag",w,h)
+        .on( "update", this, &FlowFieldSystem::update_flowfield );
     }; 
+
+    virtual void removed(Entity &e) 
+    {
+      flowfield(e).off( "update", this, &FlowFieldSystem::update_flowfield ); 
+      entity = NULL;
+    };
 
     virtual void processEntity(Entity &e) 
     {
@@ -81,10 +97,19 @@ class FlowFieldSystem : public ECSsystem
 
   private:
 
+    Entity* entity;
+
     ComponentMapper<FlowFieldComponent> ff_m;
     ComponentMapper<FlowFieldContainerComponent> ff_container_m;
     ComponentMapper<FlowFieldGradientComponent> ff_gradient_m;
     ComponentMapper<DepthComponent> depth_m; 
+
+    void update_flowfield( ofShader& shader )
+    {
+      FlowFieldComponent* ff_data = ff_m.get( *entity ); 
+      shader.setUniform1f( "weight_0", ff_data->weight_0 );
+      shader.setUniform1f( "weight_1", ff_data->weight_1 );
+    };
 
     gpgpu::Process& flowfield(Entity &e)
     {

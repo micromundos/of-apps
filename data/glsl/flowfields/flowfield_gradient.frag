@@ -54,7 +54,7 @@ void main( void )
 
     float nheight = texture2DRect( height_map, nloc_height_map ).r;
 
-    // drive away from plane or towards plane
+    // drive away from table or towards table
     float slope = nheight - height;
     force += normalize(ndir) * slope;
     n++;
@@ -65,17 +65,15 @@ void main( void )
     force /= n; 
   }
 
-  // este weight fue hecho para reforzar la fuerza en los bordes,
-  // ahora queremos lo contrario, 
-  // que afecte solo el gradiente interno de los bloques, 
-  // nada de bordes, y tampoco el piso
-  // soluciones: 
-  // - invertir el weight
-  // - que llegue un heightmap blureado
-  // - con bg_dif sin piso ?
-  /*float weight = lerp2d( height, 0., 1000., 0., 10. );*/
-  float weight = lerp2d( length(force), 0., 1., force_weight_min, force_weight_max );
+  float weight = lerp2d( height, 0., 1000., 0., 10. );
+  /*float weight = lerp2d( length(force), 0., 1., force_weight_min, force_weight_max );*/
   force *= weight;
+
+  float max_force = 10.;
+  if ( length(force) > max_force )
+  {
+    force = normalize(force) * max_force;
+  }
 
   gl_FragColor = vec4( force, 0.,1.);
 }

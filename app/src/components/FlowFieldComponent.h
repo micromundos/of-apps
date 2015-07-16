@@ -17,6 +17,8 @@ class FlowFieldComponent : public ECScomponent
 
     float scale;
     ofParameter<bool> render;
+    ofParameter<float> weight_0;
+    ofParameter<float> weight_1;
 
     FlowFieldComponent(string _id) : ECScomponent(_id) {};
 
@@ -25,6 +27,8 @@ class FlowFieldComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
       scale = d["scale"].asFloat();
       param( render, "render" );
+      param( weight_0, "weight_0" );
+      param( weight_1, "weight_1" );
     };
 };
 

@@ -71,7 +71,11 @@ class DepthProcessingSystem : public ECSsystem
       bg_dif_expand
         .add_backbuffer( "backbuffer" )
         .init("glsl/background_substraction_expand.frag", w, h )
-        .on( "update", this, &DepthProcessingSystem::update_bg_dif_expand );
+        .on( "update", this, &DepthProcessingSystem::update_bg_dif_expand ); 
+
+      height_map_clean
+        .init("glsl/height_map.frag", w, h )
+        .on( "update", this, &DepthProcessingSystem::update_height_map );
 
       height_map(e)
         .init("glsl/height_map.frag", w, h )
@@ -134,8 +138,6 @@ class DepthProcessingSystem : public ECSsystem
 
       ofTexture* depth_map;
 
-      //depth_map = &(depth_data->f_depth_img.getTextureReference());
-
       // depth hole filler
       if ( depth_hole_filler_data->enabled && depth_hole_filler_data->output.isAllocated() )
       {
@@ -148,6 +150,21 @@ class DepthProcessingSystem : public ECSsystem
         depth_map = &(depth_data->f_depth_img.getTextureReference());
       }
 
+      depth_3d
+        .set( "depth_map", *depth_map )
+        .update(); 
+
+      height_map(e)
+        .set( "mesh3d", depth_3d.get() )
+        .update(); 
+
+      normals(e)
+        .set( "mesh3d", depth_3d.get() )
+        .update();
+
+
+      ofTexture* depth_map_clean;
+
       // table background diff
       if ( table_calib_data->background.isAllocated() && depth_proc_data->bg_dif )
       {
@@ -157,86 +174,59 @@ class DepthProcessingSystem : public ECSsystem
           .update()
           .get();
 
-        if ( depth_proc_data->bg_dif_expand_kernel < 1 )
+        if ( depth_proc_data->bg_dif_expand_kernel > 0 )
         {
-          depth_map = &(_bg_dif);
-        }
-        else
-        {
-          depth_map = &(bg_dif_expand
+          depth_map_clean = &(bg_dif_expand
             .set( "backbuffer", _bg_dif )
             .set( "foreground", *depth_map )
             .set( "background", table_calib_data->background.getTextureReference() )
             .update()
             .get());
         }
+        else
+        {
+          depth_map_clean = &(_bg_dif);
+        }
+      }
+      else
+      {
+        depth_map_clean = depth_map;
       }
 
       int open_iter = depth_proc_data->open_iter;
       if ( open_iter > 0 )
       {
         erode
-          .set( "tex", *depth_map )
+          .set( "tex", *depth_map_clean )
           .update( open_iter );
         dilate
           .set( "tex", erode.get() )
           .update( open_iter );
-        depth_map = &(dilate.get());
+        depth_map_clean = &(dilate.get());
       }
 
       int close_iter = depth_proc_data->close_iter;
       if ( close_iter > 0 )
       {
         dilate
-          .set( "tex", *depth_map )
+          .set( "tex", *depth_map_clean )
           .update( close_iter );
         erode
           .set( "tex", dilate.get() )
           .update( close_iter );
-        depth_map = &(erode.get());
+        depth_map_clean = &(erode.get());
       }
 
-      //gaussian
-        //.set( "data", *depth_map )
-        ////.set( "data", depth_3d.get() )
-        //.update( 2 ); //horiz + vert
-
-      //bilateral
-        //.set( "data", depth_map )
-        ////.set( "data", depth_3d.get() )
-        //.update();
-
-      depth_3d
-        //.set( "depth_map", bilateral.get() )
-        //.set( "depth_map", gaussian.get() )
-        .set( "depth_map", *depth_map )
+      depth_3d //reuse
+        .set( "depth_map", *depth_map_clean )
         .update(); 
 
-      height_map(e)
-        //.set( "mesh3d", gaussian.get() )
-        //.set( "mesh3d", bilateral.get() )
+      height_map_clean
         .set( "mesh3d", depth_3d.get() )
-        .update(); 
-
-      normals(e)
-        //.set( "mesh3d", gaussian.get() )
-        //.set( "mesh3d", bilateral.get() )
-        .set( "mesh3d", depth_3d.get() )
-        .update();  
-
-      //normals_bilateral
-        //.set( "data", normals(e).get() )
-        //.update();
-
-      //table_angles(e)
-        //.set( "normals", normals(e).get() )
-        ////.set( "normals", normals_bilateral.get() )
-        //.update(); 
+        .update();
 
       surfaces(e) //segmentation
-        .set( "height_map", height_map(e).get() )
-        //.set( "table_angles", table_angles(e).get() )
-        //.set( "normals", normals_bilateral.get() )
+        .set( "height_map", height_map_clean.get() )
         .update();  
 
       //binarize
@@ -309,6 +299,7 @@ class DepthProcessingSystem : public ECSsystem
   private:
 
     gpgpu::Process depth_3d;
+    gpgpu::Process height_map_clean;
     //gpgpu::Process gaussian;
     //gpgpu::Gaussian gaussian_shader;
     //gpgpu::Process bilateral;
@@ -458,6 +449,7 @@ class DepthProcessingSystem : public ECSsystem
       bg_dif_expand.off( "update", this, &DepthProcessingSystem::update_bg_dif_expand );
       depth_3d.off( "update", this, &DepthProcessingSystem::update_depth_3d );
       height_map(e).off( "update", this, &DepthProcessingSystem::update_height_map );
+      height_map_clean.off( "update", this, &DepthProcessingSystem::update_height_map );
       surfaces(e).off( "update", this, &DepthProcessingSystem::update_depth_segmentation );
       //bilateral.off( "update", this, &DepthProcessingSystem::update_bilateral ); 
       //gaussian.off( "update", this, &DepthProcessingSystem::update_gaussian ); 

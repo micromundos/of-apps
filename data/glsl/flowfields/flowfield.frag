@@ -15,6 +15,9 @@
 uniform vec2 size;
 uniform int pass;
 
+uniform float weight_0;
+uniform float weight_1;
+
 /*https://www.opengl.org/wiki/Data_Type_%28GLSL%29#Opaque_arrays*/
 uniform sampler2DRect flowfield_0;
 uniform sampler2DRect flowfield_1;
@@ -27,9 +30,9 @@ void main( void )
   vec2 loc = gl_TexCoord[0].xy / size * ff_size;
 
   vec2 force = vec2(0.,0.);
-  force += texture2DRect( flowfield_0, loc ).xy;
-  force += texture2DRect( flowfield_1, loc ).xy;
-  force /= 2;
+  force += texture2DRect( flowfield_0, loc ).xy * weight_0;
+  force += texture2DRect( flowfield_1, loc ).xy * weight_1;
+  /*force /= 2;*/
 
   gl_FragColor = vec4( force, 0., 1. );
 }
