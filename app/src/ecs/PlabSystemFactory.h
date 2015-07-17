@@ -4,8 +4,7 @@
  *
  * XXX order is very important!
  *
- * TODO 
- * take the order from config.json
+ * TODO take the order of systems processsing from config.json
  * only add the systems needed parsing config.json on the fly
  */
 #pragma once
