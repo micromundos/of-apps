@@ -45,8 +45,7 @@ class FlowFieldContainerSystem : public ECSsystem
       int h = depth_data->height * scale;
 
       edges
-        .add_backbuffer( "tex" )
-        .init("glsl/openvision/canny.fs",w,h)
+        .init( "glsl/openvision/canny.fs", w, h )
         .on( "update", this, &FlowFieldContainerSystem::update_edges )
         .set_debug("glsl/debug/height_d.frag");
 
@@ -88,13 +87,13 @@ class FlowFieldContainerSystem : public ECSsystem
       if ( ff_data->bilateral_kernel > 0 )
       {
         bilateral
-          .set( "data", height_map(e).get() )
+          .set( "data", surfaces(e).get() )
           .update();
         edges_input = &(bilateral.get()); 
       }
       else
       {
-        edges_input = &(height_map(e).get()); 
+        edges_input = &(surfaces(e).get()); 
       }
 
       edges
@@ -191,6 +190,11 @@ class FlowFieldContainerSystem : public ECSsystem
     gpgpu::Process& flowfield(Entity &e)
     {
       return flow_field_container_m.get(e)->flowfield();
+    };
+
+    gpgpu::Process& surfaces(Entity &e)
+    {
+      return depth_processing_m.get(e)->surfaces();
     };
 
     gpgpu::Process& height_map(Entity &e)

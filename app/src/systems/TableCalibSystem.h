@@ -35,6 +35,20 @@ class TableCalibSystem : public ECSsystem
       }
       entity = &e;
 
+      DepthComponent* depth_data = depth_m.get(e);
+
+      depth_3d
+        .init("glsl/depth_3d.frag", 
+            depth_data->width, 
+            depth_data->height )
+        .on( "update", this, &TableCalibSystem::update_depth_3d );
+
+      height_map
+        .init("glsl/height_map.frag", 
+            depth_data->width, 
+            depth_data->height )
+        .on( "update", this, &TableCalibSystem::update_height_map );
+
       cml_data = require_component<CamaraLucidaComponent>("output");
       ofAddListener( cml_data->cml->render_3d, this, &TableCalibSystem::render_3d );
       //ofAddListener( ofEvents().mousePressed, this, &TableCalibSystem::mousePressed );
@@ -48,14 +62,19 @@ class TableCalibSystem : public ECSsystem
         ofRemoveListener( cml_data->cml->render_3d, this, &TableCalibSystem::render_3d );
         cml_data = NULL;
       }
+
+      depth_3d.off( "update", this, &TableCalibSystem::update_depth_3d );
+      height_map.off( "update", this, &TableCalibSystem::update_height_map );
+
       entity = NULL;
+
       //ofRemoveListener( ofEvents().mousePressed, this, &TableCalibSystem::mousePressed );
     };
 
     virtual void processEntity(Entity &e) 
     {
       entity = &e; //save singleton entity
-      learn_background(e);
+      learn_background_depth_map(e);
       if (calibrate(e)) return;
       if (save(e)) return;
       if (load(e)) return;
@@ -116,6 +135,9 @@ class TableCalibSystem : public ECSsystem
     Entity* entity; //singleton entity
     CamaraLucidaComponent* cml_data;
 
+    gpgpu::Process depth_3d;
+    gpgpu::Process height_map;
+
     ofxTriangle triangle; 
     ofxPlane plane;
     vector<ofxTriangle> tris3d;
@@ -126,7 +148,7 @@ class TableCalibSystem : public ECSsystem
     ofVboMesh tris3d_mesh;
     CoordMap depth2screen;  
 
-    bool learn_background(Entity &e)
+    bool learn_background_depth_map(Entity &e)
     {
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
       DepthComponent* depth_data = depth_m.get(e);
@@ -135,12 +157,12 @@ class TableCalibSystem : public ECSsystem
           || !depth_data->dirty )
         return false;
 
-      if ( !table_calib_data->background.isAllocated() )
-        table_calib_data->background.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
+      if ( !table_calib_data->background_depth_map.isAllocated() )
+        table_calib_data->background_depth_map.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
 
       int n = depth_data->f_depth_ofpix_mm->size();
       float* dpix = depth_data->f_depth_ofpix_mm->getPixels();
-      float* bgpix = table_calib_data->background.getPixels();
+      float* bgpix = table_calib_data->background_depth_map.getPixels();
 
       for ( int i = 0; i < n; i++ ) 
       {
@@ -148,9 +170,59 @@ class TableCalibSystem : public ECSsystem
           bgpix[i] = (bgpix[i] + dpix[i]) * 0.5;
       }
 
-      table_calib_data->background.update();
+      table_calib_data->background_depth_map.update();
 
       return true;
+    };
+
+    bool update_background_height_map(Entity &e)
+    {
+      TableCalibComponent* table_calib_data = table_calib_m.get(e);
+
+      if ( !table_calib_data->background_depth_map.isAllocated() )
+        return false;
+
+      depth_3d
+        .set( "depth_map", table_calib_data->background_depth_map.getTextureReference() )
+        .update();
+
+      height_map
+        .set( "mesh3d", depth_3d.get() )
+        .update();
+
+      table_calib_data->background_height_map.setFromPixels( height_map.get_data_pix() );
+
+      return true;
+    };
+
+    void update_height_map( ofShader& shader )
+    {
+      TableCalibComponent* table_calib_data = table_calib_m.get( *entity );
+      ofxPlane& p = table_calib_data->plane;
+      shader.setUniform4f( "plane", p.a, p.b, p.c, p.d );
+    };
+
+    void update_depth_3d( ofShader& shader )
+    {
+      if ( cml_data == NULL || entity == NULL ) 
+        return;
+
+      DepthComponent* depth_data = depth_m.get( *entity );
+
+      shader.setUniform1i("depth_flip", depth_data->flip);
+
+      cml::DepthCamera* depthcam = cml_data->cml->depth_camera();
+
+      shader.setUniform1f("width", depthcam->width);
+      shader.setUniform1f("height", depthcam->height);
+      shader.setUniform1f("xoff", depthcam->xoff);
+      shader.setUniform1f("near", depthcam->near);
+      shader.setUniform1f("far", depthcam->far);
+      shader.setUniform1f("far_clamp", depthcam->far_clamp);
+      shader.setUniform1f("cx", depthcam->cx);
+      shader.setUniform1f("cy", depthcam->cy);
+      shader.setUniform1f("fx", depthcam->fx);
+      shader.setUniform1f("fy", depthcam->fy);
     };
 
     bool calibrate(Entity &e)
@@ -173,8 +245,10 @@ class TableCalibSystem : public ECSsystem
       table_calib_data->triangle = triangle;
       table_calib_data->plane = plane;
 
-      //done on learn_background
-      //table_calib_data->background.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
+      //done on learn_background_depth_map
+      //table_calib_data->background_depth_map.setFromPixels( *(depth_data->f_depth_ofpix_mm) );
+
+      update_background_height_map(e);
 
       return true;
     };
@@ -257,35 +331,68 @@ class TableCalibSystem : public ECSsystem
     {
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
+      // save background depth map
+
       ofLogNotice("TableCalibSystem") 
-        << "save background to " << table_calib_data->filename_background;
+        << "save background_depth_map to " << table_calib_data->filename_background_depth_map;
 
-      cv::Mat background = ofxCv::toCv( table_calib_data->background );
+      cv::Mat background_depth_map = ofxCv::toCv( table_calib_data->background_depth_map );
 
-      cv::FileStorage fs( ofToDataPath(table_calib_data->filename_background, false), cv::FileStorage::WRITE );
-      fs << "table_background" << background;
+      cv::FileStorage fs_bg_depth( ofToDataPath(table_calib_data->filename_background_depth_map, false), cv::FileStorage::WRITE );
+      fs_bg_depth << "table_background_depth_map" << background_depth_map;
+
+      // save background height map
+
+      ofLogNotice("TableCalibSystem") 
+        << "save background_height_map to " << table_calib_data->filename_background_height_map;
+
+      cv::Mat background_height_map = ofxCv::toCv( table_calib_data->background_height_map );
+
+      cv::FileStorage fs_bg_height( ofToDataPath(table_calib_data->filename_background_height_map, false), cv::FileStorage::WRITE );
+      fs_bg_height << "table_background_height_map" << background_height_map;
     };
 
     bool load_background(Entity &e)
     {
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
 
+      // load background depth map
+
       ofLogNotice("TableCalibSystem") 
-        << "load background from " << table_calib_data->filename_background;
+        << "load background_depth_map from " << table_calib_data->filename_background_depth_map;
 
-      cv::FileStorage fs( ofToDataPath(table_calib_data->filename_background, false), cv::FileStorage::READ );  
+      cv::FileStorage fs_bg_depth( ofToDataPath(table_calib_data->filename_background_depth_map, false), cv::FileStorage::READ );  
 
-      if ( !fs.isOpened() )
+      if ( !fs_bg_depth.isOpened() )
       {
-        ofLogError("TableCalibSystem") << "failed to load table background file " << table_calib_data->filename_background;
+        ofLogError("TableCalibSystem") << "failed to load table background_depth_map file " << table_calib_data->filename_background_depth_map;
         return false;
       }
 
-      cv::Mat background;
-      fs["table_background"] >> background;
-      ofFloatPixels bg;
-      ofxCv::toOf( background, bg );
-      table_calib_data->background.setFromPixels( bg );
+      cv::Mat background_depth_map;
+      fs_bg_depth["table_background_depth_map"] >> background_depth_map;
+      ofFloatPixels bg_depth;
+      ofxCv::toOf( background_depth_map, bg_depth );
+      table_calib_data->background_depth_map.setFromPixels( bg_depth );
+
+      // load background height map
+
+      ofLogNotice("TableCalibSystem") 
+        << "load background_height_map from " << table_calib_data->filename_background_height_map;
+
+      cv::FileStorage fs_bg_height( ofToDataPath(table_calib_data->filename_background_height_map, false), cv::FileStorage::READ );  
+
+      if ( !fs_bg_height.isOpened() )
+      {
+        ofLogError("TableCalibSystem") << "failed to load table background_height_map file " << table_calib_data->filename_background_height_map;
+        return false;
+      }
+
+      cv::Mat background_height_map;
+      fs_bg_height["table_background_height_map"] >> background_height_map;
+      ofFloatPixels bg_height;
+      ofxCv::toOf( background_height_map, bg_height );
+      table_calib_data->background_height_map.setFromPixels( bg_height );
 
       return true;
     };

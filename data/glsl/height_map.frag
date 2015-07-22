@@ -29,9 +29,6 @@ void main( void )
 
   float height = plane_distance( plane, p3 );
   gl_FragColor = vec4( height, height, height, 1. );
-
-  /*float vis = lerp2d( height, 0.,100., 0.,1.);*/
-  /*gl_FragColor = vec4(vis,vis,vis,1.);*/
 }
 
 void __debug__( void ) 

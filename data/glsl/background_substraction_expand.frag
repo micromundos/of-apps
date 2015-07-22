@@ -3,7 +3,7 @@
 #extension GL_EXT_gpu_shader4 : enable
 
 /*
- * in: depth maps for foreground, background
+ * in: height maps for foreground, background
  * out: foreground without background
  * chequea si está sobre el borde de un bloque 
  * (i.e. algún vecino está por encima del threshold) 
@@ -19,14 +19,14 @@ uniform int pass;
 
 uniform sampler2DRect backbuffer;
 
-//depth maps: distance to camera
+//height maps: distance from table
 uniform sampler2DRect foreground;
 uniform sampler2DRect background;
 
 uniform int kernel;
 /*uniform float zero;*/
 
-const float zero = 0.0; //5000.0;
+const float zero = 0.0;
 
 void main( void ) 
 {

@@ -2,6 +2,8 @@
 #define TWO_PI 6.28318530717958647693
 #define HALF_PI 1.57079632679489661923
 #define EPSILON 1e-30
+#define FLT_MAX 3.402823466e+38
+#define FLT_MIN -(FLT_MAX)
 
 float lerp( float n, float min, float max ) 
 {

@@ -13,14 +13,14 @@
 uniform vec2 size;
 uniform int pass;
 
-//depth maps: distance to camera
+//height maps: distance from table
 uniform sampler2DRect foreground;
 uniform sampler2DRect background;
 
 uniform float threshold;
 /*uniform float zero;*/
 
-const float zero = 0.0; //5000.0;
+const float zero = FLT_MIN;
 
 void main( void ) 
 {
@@ -32,7 +32,7 @@ void main( void )
 
   float fg = texture2DRect( foreground, loc_fg ).x;
   float bg = texture2DRect( background, loc_bg ).x;
-  float diff = bg - fg; 
+  float diff = abs(fg - bg); 
   gl_FragColor = diff < threshold ? vec4(vec3(zero),1.) : vec4(vec3(fg),1.);
 }
 

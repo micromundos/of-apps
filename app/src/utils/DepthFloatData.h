@@ -1,9 +1,3 @@
-
-//DEPRECATED
-//DEPRECATED
-//DEPRECATED
-//DEPRECATED
-
 #pragma once
 
 #include "ofxCv.h"
@@ -58,6 +52,11 @@ class DepthFloatData
       tex.clear();
       pix_mm.clear();
       pix_scaled.clear();
+    };
+
+    bool inited()
+    {
+      return tex.isAllocated();
     };
 
   private:

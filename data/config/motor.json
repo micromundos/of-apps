@@ -70,7 +70,8 @@
                "data" : {
                   "angle_step" : [ 30, 0, 360 ],
                   "calibrate" : false,
-                  "filename_background" : "calib/table_background.yml",
+                  "filename_background_depth_map" : "calib/table_background_depth_map.yml",
+                  "filename_background_height_map" : "calib/table_background_height_map.yml",
                   "filename_plane" : "calib/table_plane.yml",
                   "learn_bg" : false,
                   "load" : false,
@@ -85,10 +86,10 @@
             {
                "data" : {
                   "bg_dif" : true,
-                  "bg_dif_expand_kernel" : [ 5, 0, 10 ],
+                  "bg_dif_expand_kernel" : [ 0, 0, 10 ],
                   "bg_dif_threshold" : [ 20, -300, 300 ],
                   "close_iter" : [ 0, 0, 6 ],
-                  "open_iter" : [ 0, 0, 6 ],
+                  "open_iter" : [ 2, 0, 6 ],
                   /*"gaussian_sigma" : [ 2.5, 0, 10 ],*/
                   /*"gaussian_kernel" : [ 3, 0, 10 ],*/
                   /*"bilateral_domain" : [ 100, 0, 100 ],*/
@@ -101,7 +102,7 @@
                   /*"render_table_angles" : false,*/
                   "render_surfaces" : false,
                   "threshold_table_far" : [ 2000, -2000, 2000 ],
-                  "threshold_table_near" : [ -200, -200, 200 ]
+                  "threshold_table_near" : [ 5, -200, 200 ]
                },
                /*"threshold_table_angle" : [ 360, 0, 360 ]*/
                "id" : "depth_processing"
@@ -110,11 +111,11 @@
             {
                "data" : {
                   "bilateral_domain" : [ 100, 0, 100 ],
-                  "bilateral_kernel" : [ 0.5567010641098022, 0, 10 ],
+                  "bilateral_kernel" : [ 1, 0, 10 ],
                   "bilateral_range" : [ 20, 0, 20 ],
-                  "edge_detection_threshold" : [ 100, 0, 100 ],
-                  "gaussian_kernel" : [ 3.38144326210022, 0, 10 ],
-                  "gaussian_sigma" : [ 7.340206146240234, 0, 10 ],
+                  "edge_detection_threshold" : [ 100, 0, 300 ],
+                  "gaussian_kernel" : [ 2, 0, 10 ],
+                  "gaussian_sigma" : [ 5, 0, 30 ],
                   "render" : false,
                   "render_edges" : false
                },
@@ -147,7 +148,7 @@
                   /*"history" : [ 10, 0, 32 ],*/
                   /*"closing_passes" : [ 5, 0, 5 ],*/
                   "render" : false,
-                  "use_contour" : true
+                  "use_contour" : false
                },
                /*"use_closing" : false,*/
                /*"use_history" : false*/

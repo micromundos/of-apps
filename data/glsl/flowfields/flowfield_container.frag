@@ -51,7 +51,7 @@ void main( void )
     force /= n; 
   }
 
-  gl_FragColor = vec4( force, 0.,1.);
+  gl_FragColor = vec4( force, 0., 1.);
 }
 
 void __debug__( void ) 

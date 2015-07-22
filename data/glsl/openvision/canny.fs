@@ -2,6 +2,10 @@
 #extension GL_ARB_texture_rectangle : enable
 #extension GL_EXT_gpu_shader4 : enable
 
+//defaults
+uniform vec2 size;
+uniform int pass;
+
 uniform sampler2DRect tex;
 uniform float threshold;
 
@@ -64,7 +68,9 @@ float mag(vec2 G) {
 
 void main()
 {
-	vec2 G = edge(gl_TexCoord[0].xy);
+  vec2 loc = gl_TexCoord[0].xy / size * vec2(textureSize2DRect(tex,0));
+
+	vec2 G = edge(loc);
 	
 	float T = atan2(G.x, G.y);
 	int a = int(T * 4. / PI);
@@ -79,9 +85,9 @@ void main()
 		p = vec2(1, -1);
 
 	float m0 = mag(G);
-	float m1 = mag(edge(gl_TexCoord[0].xy + p));
-	float m2 = mag(edge(gl_TexCoord[0].xy - p));
-	float alpha = texture2DRect(tex, gl_TexCoord[0].xy).a;
+	float m1 = mag(edge(loc + p));
+	float m2 = mag(edge(loc - p));
+	float alpha = texture2DRect(tex, loc).a;
 
 	if(m0 > m1 && m0 > m2 && m0 > threshold)
 		gl_FragColor = vec4(vec3(m0), alpha);

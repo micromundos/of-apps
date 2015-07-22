@@ -13,10 +13,12 @@ class TableCalibComponent : public ECScomponent
     ofxPlane plane; 
     ofxTriangle triangle; 
 
-    ofFloatImage background;
+    ofFloatImage background_depth_map;
+    ofFloatImage background_height_map;
 
     string filename_plane;
-    string filename_background;
+    string filename_background_depth_map;
+    string filename_background_height_map;
 
     ofParameter<bool> calibrate;
     ofParameter<bool> learn_bg;
@@ -35,7 +37,8 @@ class TableCalibComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
 
       filename_plane = d.get("filename_plane","table_plane.yml").asString();
-      filename_background = d.get("filename_background","table_background.yml").asString();
+      filename_background_depth_map = d.get("filename_background_depth_map","table_background_depth_map.yml").asString();
+      filename_background_height_map = d.get("filename_background_height_map","table_background_height_map.yml").asString();
 
       param(calibrate, "calibrate");
       param(learn_bg, "learn_bg");
