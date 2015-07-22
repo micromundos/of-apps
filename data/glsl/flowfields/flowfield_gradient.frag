@@ -23,7 +23,7 @@ uniform sampler2DRect debug_input;
 uniform float force_weight_min;
 uniform float force_weight_max;
 
-const int kernel = 6;
+const int kernel = 3;
 
 void main( void ) 
 {
@@ -35,6 +35,12 @@ void main( void )
   vec2 force = vec2(0.,0.);
 
   float height = texture2DRect(height_map,loc_height_map).r;
+
+  if ( height < 0.0 )
+  {
+    gl_FragColor = vec4( force, 0.,1.);
+    return;
+  }
 
   int n = 0;
   int ini = -kernel / 2;
@@ -54,6 +60,9 @@ void main( void )
 
     float nheight = texture2DRect( height_map, nloc_height_map ).r;
 
+    if ( nheight < 0.0 )
+      continue;
+
     // drive away from table or towards table
     float slope = nheight - height;
     force += normalize(ndir) * slope;
@@ -65,11 +74,12 @@ void main( void )
     force /= n; 
   }
 
-  float weight = lerp2d( height, 0., 1000., 0., 10. );
-  /*float weight = lerp2d( length(force), 0., 1., force_weight_min, force_weight_max );*/
+  /*float weight = lerp2d( height, 0., 1000., 0., 10. );*/
+  float weight = lerp2d( length(force), 0., 1., force_weight_min, force_weight_max );
   force *= weight;
 
-  float max_force = 10.;
+  // limit force
+  float max_force = 10.0;
   if ( length(force) > max_force )
   {
     force = normalize(force) * max_force;

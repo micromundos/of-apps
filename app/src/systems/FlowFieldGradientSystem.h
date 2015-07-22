@@ -64,7 +64,7 @@ class FlowFieldGradientSystem : public ECSsystem
       FlowFieldGradientComponent* ff_data = flow_field_gradient_m.get(e); 
 
       flowfield(e)
-        .set( "height_map", height_map(e).get() )
+        .set( "height_map", surfaces(e).get() )
         .update();
 
       if ( ff_data->render )
@@ -115,6 +115,11 @@ class FlowFieldGradientSystem : public ECSsystem
     gpgpu::Process& height_map(Entity &e)
     {
       return depth_processing_m.get(e)->height_map();
+    };
+
+    gpgpu::Process& surfaces(Entity &e)
+    {
+      return depth_processing_m.get(e)->surfaces();
     };
 
 };

@@ -44,7 +44,7 @@
             {
                "data" : {
                   "flip" : false,
-                  "render" : true
+                  "render" : false
                },
                "id" : "depth"
             },
@@ -100,7 +100,7 @@
                   "render_normals" : false,
                   /*"render_normals_smoothed" : false,*/
                   /*"render_table_angles" : false,*/
-                  "render_surfaces" : false,
+                  "render_surfaces" : true,
                   "threshold_table_far" : [ 2000, -2000, 2000 ],
                   "threshold_table_near" : [ 5, -200, 200 ]
                },
@@ -123,7 +123,7 @@
             },
             {
                "data" : {
-                  "force_weight_max" : [ 0.009999999776482582, 0, 0.1 ],
+                  "force_weight_max" : [ 0.01, 0, 0.1 ],
                   "force_weight_max_m" : [ 1, 0, 10 ],
                   "force_weight_min" : [ 0, 0, 1 ],
                   "render" : false
@@ -132,19 +132,19 @@
             },
             {
                "data" : {
-                  "weight_0" : [ 1, 0, 1 ],
-                  "weight_1" : [ 1, 0, 1 ],
                   "render" : false,
-                  "scale" : 0.3
+                  "scale" : 0.3,
+                  "weight_0" : [ 1, 0, 1 ],
+                  "weight_1" : [ 1, 0, 1 ]
                },
                "id" : "flow_field"
             },
             {
                "data" : {
-                  "contour_delta" : [ 255, 0, 255 ],
-                  "contour_fill_width" : [ 100, 0, 100 ],
-                  "contour_max_area" : [ 10000, 1, 10000 ],
-                  "contour_max_holes" : [ 1000, 0, 1000 ],
+                  "contour_delta" : [ 0, 0, 255 ],
+                  "contour_fill_width" : [ 0, 0, 100 ],
+                  "contour_max_area" : [ 1, 1, 10000 ],
+                  "contour_max_holes" : [ 0, 0, 1000 ],
                   /*"history" : [ 10, 0, 32 ],*/
                   /*"closing_passes" : [ 5, 0, 5 ],*/
                   "render" : false,
