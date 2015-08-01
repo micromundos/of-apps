@@ -105,6 +105,7 @@ class FlowFieldGradientSystem : public ECSsystem
 
       shader.setUniform1f( "force_weight_min", ff_data->force_weight_min );
       shader.setUniform1f( "force_weight_max", ff_data->force_weight_max * ff_data->force_weight_max_m );
+      shader.setUniform1f( "max_force", ff_data->max_force );
     };
 
     gpgpu::Process& flowfield(Entity &e)

@@ -22,6 +22,7 @@ uniform sampler2DRect debug_input;
 
 uniform float force_weight_min;
 uniform float force_weight_max;
+uniform float max_force;
 
 const int kernel = 3;
 
@@ -79,10 +80,12 @@ void main( void )
   force *= weight;
 
   // limit force
-  float max_force = 10.0;
-  if ( length(force) > max_force )
+  float len = length(force);
+  if ( len > max_force )
   {
-    force = normalize(force) * max_force;
+    force = (force/len) * max_force;
+    /*force = normalize(force) * max_force;*/
+    /*force = vec2(0.,0.);*/
   }
 
   gl_FragColor = vec4( force, 0.,1.);

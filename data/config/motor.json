@@ -107,7 +107,22 @@
                /*"threshold_table_angle" : [ 360, 0, 360 ]*/
                "id" : "depth_processing"
             },
-            //TODO mover los flow fields a los tags
+            {
+               "data" : {
+                  "contour_delta" : [ 0, 0, 255 ],
+                  "contour_fill_width" : [ 0, 0, 100 ],
+                  "contour_max_area" : [ 1, 1, 10000 ],
+                  "contour_max_holes" : [ 0, 0, 1000 ],
+                  /*"history" : [ 10, 0, 32 ],*/
+                  /*"closing_passes" : [ 5, 0, 5 ],*/
+                  "render" : false,
+                  "use_contour" : false
+               },
+               /*"use_closing" : false,*/
+               /*"use_history" : false*/
+               "id" : "depth_hole_filler"
+            },
+            // flow fields
             {
                "data" : {
                   "bilateral_domain" : [ 100, 0, 100 ],
@@ -126,6 +141,7 @@
                   "force_weight_max" : [ 0.01, 0, 0.1 ],
                   "force_weight_max_m" : [ 1, 0, 10 ],
                   "force_weight_min" : [ 0, 0, 1 ],
+                  "max_force" : [ 10, 0, 100 ],
                   "render" : false
                },
                "id" : "flow_field_gradient"
@@ -138,22 +154,7 @@
                   "weight_1" : [ 1, 0, 1 ]
                },
                "id" : "flow_field"
-            },
-            {
-               "data" : {
-                  "contour_delta" : [ 0, 0, 255 ],
-                  "contour_fill_width" : [ 0, 0, 100 ],
-                  "contour_max_area" : [ 1, 1, 10000 ],
-                  "contour_max_holes" : [ 0, 0, 1000 ],
-                  /*"history" : [ 10, 0, 32 ],*/
-                  /*"closing_passes" : [ 5, 0, 5 ],*/
-                  "render" : false,
-                  "use_contour" : false
-               },
-               /*"use_closing" : false,*/
-               /*"use_history" : false*/
-               "id" : "depth_hole_filler"
-            }
+            } 
          ],
          "id" : "input"
       }
