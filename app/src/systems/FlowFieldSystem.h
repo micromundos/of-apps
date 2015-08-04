@@ -66,17 +66,12 @@ class FlowFieldSystem : public ECSsystem
       TS_START("FlowFieldSystem");
 
       flowfield(e)
-
         .set( "flowfield_0", ff_container_m
             .get(e)->flowfield().get() )
-
         .set( "flowfield_1", ff_gradient_m
             .get(e)->flowfield().get() )
-
-        .update();
-
-      if ( ff_m.get(e)->render )
-        flowfield(e).update_debug();
+        .update()
+        .update_debug( ff_m.get(e)->render );
 
       TS_STOP("FlowFieldSystem");
     }; 

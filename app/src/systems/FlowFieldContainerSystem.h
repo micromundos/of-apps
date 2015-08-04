@@ -114,10 +114,8 @@ class FlowFieldContainerSystem : public ECSsystem
 
       flowfield(e)
         .set( "edges", *(ff_input) )
-        .update();
-
-      if ( ff_data->render )
-        flowfield(e).update_debug();
+        .update()
+        .update_debug( ff_data->render );
 
       TS_STOP("FlowFieldContainerSystem");
     }; 

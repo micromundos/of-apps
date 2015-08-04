@@ -85,11 +85,11 @@ class DepthProcessingSystem : public ECSsystem
       //normals_bilateral
         //.init("glsl/cv/bilateral.frag", w, h )
         //.set_debug("glsl/debug/normalized_d.frag")
-        //on( "update", this, &DepthProcessingSystem::update_normals_bilateral ); 
+        //.on( "update", this, &DepthProcessingSystem::update_normals_bilateral ); 
 
       //table_angles(e)
         //.init("glsl/plane_angles.frag", w, h )
-        //on( "update", this, &DepthProcessingSystem::update_table_angles );
+        //.on( "update", this, &DepthProcessingSystem::update_table_angles );
 
       surfaces(e) //segmentation
         .init("glsl/segmentation.frag", w, h )
@@ -146,11 +146,13 @@ class DepthProcessingSystem : public ECSsystem
 
       height_map(e)
         .set( "mesh3d", depth_3d.get() )
-        .update(); 
+        .update()
+        .update_debug( depth_proc_data->render_height_map );
 
       normals(e)
         .set( "mesh3d", depth_3d.get() )
-        .update();
+        .update()
+        .update_debug( depth_proc_data->render_normals );
 
 
       // process surfaces = clean height map
@@ -214,26 +216,14 @@ class DepthProcessingSystem : public ECSsystem
 
       surfaces(e) //segmentation
         .set( "height_map", *_height_map_surfaces )
-        .update();
-
+        .update()
+        .update_debug( depth_proc_data->render_surfaces );
 
       // update render data
 
-      if ( depth_proc_data->render_surfaces ) 
-        surfaces(e).update_debug();
-
-      if ( depth_proc_data->render_height_map ) 
-        height_map(e).update_debug();
-
-      if ( depth_proc_data->render_normals ) 
-        normals(e).update_debug();
-
-      //if ( depth_proc_data->render_smoothed )  
-        //gaussian.update_debug();
-        //bilateral.update_debug();
-
-      //if ( depth_proc_data->render_table_angles ) 
-        //table_angles(e).update_debug();
+      //gaussian.update_debug( depth_proc_data->render_smoothed );
+      //bilateral.update_debug( depth_proc_data->render_smoothed );
+      //table_angles(e).update_debug( depth_proc_data->render_table_angles );
 
       TS_STOP("DepthProcessingSystem");
     }; 

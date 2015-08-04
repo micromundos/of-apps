@@ -67,8 +67,7 @@ class DepthFlowFieldSystem : public ECSsystem
         //.set( "entradas", entradas(e).get() )
         .update();
 
-      if ( ff_data->render )
-        flowfield(e).update_debug();
+      flowfield(e).update_debug( ff_data->render );
 
       TS_STOP("DepthFlowFieldSystem");
     };

@@ -100,11 +100,8 @@ class EntradasSystem : public ECSsystem
         .set( "tex", dilate.get() )
         .update( close_iter ); 
 
-      //if ( entradas_data->render ) 
-        //output(e).update_debug(); 
-
-      //if ( entradas_data->render_smoothed )
-        //bilateral.update_debug();
+      //output(e).update_debug( entradas_data->render ); 
+      //bilateral.update_debug( entradas_data->render_smoothed );
 
       TS_STOP("EntradasSystem");
     }; 
