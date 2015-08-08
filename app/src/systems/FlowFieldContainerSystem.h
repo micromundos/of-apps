@@ -1,3 +1,11 @@
+/*
+ * flow field container process: 
+ *  input: clean height map
+ *  bilateral: smooth surface keeping edges
+ *  canny: edge detection
+ *  gaussian: smooth edges
+ */
+
 #pragma once
 
 #include <Artemis/Artemis.h>
@@ -50,7 +58,7 @@ class FlowFieldContainerSystem : public ECSsystem
         .set_debug("glsl/debug/height_d.frag");
 
       gaussian
-        .init( &gaussian_shader, w, h )
+        .init( w, h )
         .on( "update", this, &FlowFieldContainerSystem::update_gaussian );
 
       bilateral
@@ -58,7 +66,7 @@ class FlowFieldContainerSystem : public ECSsystem
         .on( "update", this, &FlowFieldContainerSystem::update_bilateral )
         .set_debug("glsl/debug/depth_d.frag"); 
 
-      flowfield(e)
+      output(e)
         .init("glsl/flowfields/flowfield_container.frag",w,h);
         //.on( "update", this, &FlowFieldContainerSystem::update_flowfield );
     }; 
@@ -68,7 +76,7 @@ class FlowFieldContainerSystem : public ECSsystem
       edges.off( "update", this, &FlowFieldContainerSystem::update_edges );
       gaussian.off( "update", this, &FlowFieldContainerSystem::update_gaussian );
       bilateral.off( "update", this, &FlowFieldContainerSystem::update_bilateral );
-      //flowfield(e).off( "update", this, &FlowFieldContainerSystem::update_flowfield ); 
+      //output(e).off( "update", this, &FlowFieldContainerSystem::update_flowfield ); 
       entity = NULL;
     };
 
@@ -87,13 +95,13 @@ class FlowFieldContainerSystem : public ECSsystem
       if ( ff_data->bilateral_kernel > 0 )
       {
         bilateral
-          .set( "data", surfaces(e).get() )
+          .set( "data", input(e).get() )
           .update();
         edges_input = &(bilateral.get()); 
       }
       else
       {
-        edges_input = &(surfaces(e).get()); 
+        edges_input = &(input(e).get()); 
       }
 
       edges
@@ -112,7 +120,7 @@ class FlowFieldContainerSystem : public ECSsystem
         ff_input = &(edges.get()); 
       }
 
-      flowfield(e)
+      output(e)
         .set( "edges", *(ff_input) )
         .update()
         .update_debug( ff_data->render );
@@ -139,7 +147,7 @@ class FlowFieldContainerSystem : public ECSsystem
       }
 
       if ( ff_data->render )
-        flowfield(e).render_debug(0,0,rw,rh);
+        output(e).render_debug(0,0,rw,rh);
 
       TS_STOP("FlowFieldContainerSystem render");
     };
@@ -148,8 +156,7 @@ class FlowFieldContainerSystem : public ECSsystem
 
     Entity* entity;
     gpgpu::Process edges;
-    gpgpu::Process gaussian;
-    gpgpu::Gaussian gaussian_shader;
+    gpgpu::Gaussian gaussian;
     gpgpu::Process bilateral;
 
     ComponentMapper<FlowFieldContainerComponent> flow_field_container_m;
@@ -186,19 +193,14 @@ class FlowFieldContainerSystem : public ECSsystem
       //shader.setUniform1f( "xxx", xxx );
     //};
 
-    gpgpu::Process& flowfield(Entity &e)
+    gpgpu::Process& output(Entity &e)
     {
       return flow_field_container_m.get(e)->flowfield();
     };
 
-    gpgpu::Process& surfaces(Entity &e)
+    gpgpu::Process& input(Entity &e)
     {
       return depth_processing_m.get(e)->surfaces();
-    };
-
-    gpgpu::Process& height_map(Entity &e)
-    {
-      return depth_processing_m.get(e)->height_map();
     };
 
 };

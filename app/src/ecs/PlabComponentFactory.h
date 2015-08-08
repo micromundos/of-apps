@@ -32,7 +32,6 @@ else if (id == "time_bender") return new TimeBenderComponent(id);
 else if (id == "knob") return new KnobComponent(id);
 else if (id == "table_calib") return new TableCalibComponent(id);
 else if (id == "depth_processing") return new DepthProcessingComponent(id);
-else if (id == "depth_hole_filler") return new DepthHoleFillerComponent(id);
 else if (id == "tags_receiver") return new TagsReceiverComponent(id);
 else if (id == "tags") return new TagsComponent(id);
 else if (id == "flow_field_container") return new FlowFieldContainerComponent(id);

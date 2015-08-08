@@ -26,7 +26,6 @@ ecs.add_system(new KinectSystem("kinect"));
 ecs.add_system(new TagsReceiverSystem("tags_receiver"));
 ecs.add_system(new TagsSystem("tags"));
 ecs.add_system(new TableCalibSystem("table_calib"));
-ecs.add_system(new DepthHoleFillerSystem("depth_hole_filler"));
 ecs.add_system(new DepthProcessingSystem("depth_processing"));
 ecs.add_system(new FlowFieldContainerSystem("flow_field_container"));
 ecs.add_system(new FlowFieldGradientSystem("flow_field_gradient"));

@@ -17,7 +17,6 @@
 #include "KnobComponent.h"
 #include "TableCalibComponent.h"
 #include "DepthProcessingComponent.h"
-#include "DepthHoleFillerComponent.h"
 #include "TagsReceiverComponent.h"
 #include "TagsComponent.h"
 #include "FlowFieldContainerComponent.h"

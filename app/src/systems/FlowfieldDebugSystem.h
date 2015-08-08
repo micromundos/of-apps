@@ -35,7 +35,7 @@ class FlowfieldDebugSystem : public ECSsystem
     virtual void added(Entity &e) 
     {
       inited = true;
-      dot_step = 2;
+      dot_step = 1;
 
       FlowFieldComponent* ff_data = ff_m.get(e);
       gpgpu::Process& flowfield = ff_data->flowfield();
@@ -79,7 +79,7 @@ class FlowfieldDebugSystem : public ECSsystem
       );
 
       ofSetColor(255);
-      ofPushStyle();
+      //ofPushStyle();
       shader.begin();
       shader.setUniformTexture("data", flowfield.get(), 0);
       shader.setUniform1f("multx", io_scale.x);
@@ -88,7 +88,7 @@ class FlowfieldDebugSystem : public ECSsystem
       shader.setUniform1f("step",dot_step);
       mesh.draw();
       shader.end();
-      ofPopStyle();
+      //ofPopStyle();
     };
 
   private:
@@ -96,7 +96,7 @@ class FlowfieldDebugSystem : public ECSsystem
     ComponentMapper<FlowfieldDebugComponent> ffd_m;
     ComponentMapper<FlowFieldComponent> ff_m;
 
-    ofMesh    mesh;
+    ofVboMesh    mesh;
     ofShader  shader;
     int       dot_step;
     bool      inited;

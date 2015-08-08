@@ -13,7 +13,6 @@
 #include "KnobSystem.h"
 #include "TableCalibSystem.h"
 #include "DepthProcessingSystem.h"
-#include "DepthHoleFillerSystem.h"
 #include "TagsReceiverSystem.h"
 #include "TagsSystem.h"
 #include "FlowFieldContainerSystem.h"

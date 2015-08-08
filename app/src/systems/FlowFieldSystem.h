@@ -47,14 +47,14 @@ class FlowFieldSystem : public ECSsystem
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
-      flowfield(e)
+      output(e)
         .init("glsl/flowfields/flowfield.frag",w,h)
         .on( "update", this, &FlowFieldSystem::update_flowfield );
     }; 
 
     virtual void removed(Entity &e) 
     {
-      flowfield(e).off( "update", this, &FlowFieldSystem::update_flowfield ); 
+      output(e).off( "update", this, &FlowFieldSystem::update_flowfield ); 
       entity = NULL;
     };
 
@@ -65,7 +65,7 @@ class FlowFieldSystem : public ECSsystem
 
       TS_START("FlowFieldSystem");
 
-      flowfield(e)
+      output(e)
         .set( "flowfield_0", ff_container_m
             .get(e)->flowfield().get() )
         .set( "flowfield_1", ff_gradient_m
@@ -85,7 +85,7 @@ class FlowFieldSystem : public ECSsystem
       int rh = render_data->height;
 
       if ( ff_m.get(e)->render )
-        flowfield(e).render_debug(0,0,rw,rh);
+        output(e).render_debug(0,0,rw,rh);
 
       TS_STOP("FlowFieldSystem render");
     };
@@ -106,7 +106,7 @@ class FlowFieldSystem : public ECSsystem
       shader.setUniform1f( "weight_1", ff_data->weight_1 );
     };
 
-    gpgpu::Process& flowfield(Entity &e)
+    gpgpu::Process& output(Entity &e)
     {
       return ff_m.get(e)->flowfield();
     };

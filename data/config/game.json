@@ -37,7 +37,7 @@
                "data" : {
                   "lifetime" : [ 15, 0, 50 ],
                   "max_particles" : 5000,
-                  "max_speed" : [ 5, 0, 10 ],
+                  "max_speed" : [ 3, 0, 10 ],
                   "radius" : 6,
                   "render_size" : [ 4, 0, 20 ]
                },

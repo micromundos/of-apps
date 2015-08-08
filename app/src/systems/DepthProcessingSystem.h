@@ -18,7 +18,7 @@ class DepthProcessingSystem : public ECSsystem
       addComponentType<DepthProcessingComponent>();
       addComponentType<DepthComponent>();
       addComponentType<TableCalibComponent>();
-      addComponentType<DepthHoleFillerComponent>();
+      //addComponentType<DepthHoleFillerComponent>();
     };
 
     virtual void initialize() 
@@ -26,7 +26,7 @@ class DepthProcessingSystem : public ECSsystem
       depth_processing_m.init( *world );
       depth_m.init( *world );
       table_calib_m.init( *world );
-      depth_hole_filler_m.init( *world );
+      //depth_hole_filler_m.init( *world );
       entity = NULL; 
       scale = 0.5;
     };
@@ -71,7 +71,7 @@ class DepthProcessingSystem : public ECSsystem
         //.on( "update", this, &DepthProcessingSystem::update_bilateral ); 
 
       //gaussian
-        //.init( &gaussian_shader, w, h )
+        //.init( w, h )
         //.set_debug("glsl/debug/depth_d.frag")
         //.on( "update", this, &DepthProcessingSystem::update_gaussian );  
 
@@ -119,7 +119,7 @@ class DepthProcessingSystem : public ECSsystem
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e);
       DepthComponent* depth_data = depth_m.get(e);
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
-      DepthHoleFillerComponent* depth_hole_filler_data = depth_hole_filler_m.get(e);
+      //DepthHoleFillerComponent* depth_hole_filler_data = depth_hole_filler_m.get(e);
 
       if ( !depth_data->dirty )
         return; 
@@ -129,16 +129,16 @@ class DepthProcessingSystem : public ECSsystem
       ofTexture* depth_map;
 
       // depth hole filler
-      if ( depth_hole_filler_data->enabled && depth_hole_filler_data->output.isAllocated() )
-      {
-        depth_map = &( get_depth_map( depth_3d, e, depth_hole_filler_data->output ).getTextureReference() );
-      }
+      //if ( depth_hole_filler_data->enabled && depth_hole_filler_data->output.isAllocated() )
+      //{
+        //depth_map = &( get_depth_map( depth_3d, e, depth_hole_filler_data->output ).getTextureReference() );
+      //}
 
       // depth map
-      else if ( depth_data->f_depth_img.isAllocated() )
-      {
+      //else if ( depth_data->f_depth_img.isAllocated() )
+      //{
         depth_map = &( get_depth_map( depth_3d, e, depth_data->f_depth_img ).getTextureReference() );
-      }
+      //}
 
       depth_3d
         .set( "depth_map", *depth_map )
@@ -269,8 +269,7 @@ class DepthProcessingSystem : public ECSsystem
     gpgpu::Process bg_dif_expand;
     gpgpu::Process erode;
     gpgpu::Process dilate;
-    //gpgpu::Process gaussian;
-    //gpgpu::Gaussian gaussian_shader;
+    //gpgpu::Gaussian gaussian;
     //gpgpu::Process bilateral;
     //gpgpu::Process normals_bilateral;
 
@@ -286,7 +285,7 @@ class DepthProcessingSystem : public ECSsystem
     ComponentMapper<DepthProcessingComponent> depth_processing_m;
     ComponentMapper<DepthComponent> depth_m;
     ComponentMapper<TableCalibComponent> table_calib_m;
-    ComponentMapper<DepthHoleFillerComponent> depth_hole_filler_m;
+    //ComponentMapper<DepthHoleFillerComponent> depth_hole_filler_m;
 
 
     ofFloatImage& get_depth_map( gpgpu::Process& proc, Entity& e, ofFloatImage& src )
