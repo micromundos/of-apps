@@ -20,16 +20,21 @@ class KinectSystem : public ECSsystem
     };
 
     ~KinectSystem()
-    {
-      ofLogNotice("KinectSystem") << "kinect.close()";
-      kinect.close();
-    };
+    {};
 
     virtual void initialize() 
     {
       depth_m.init( *world );
       inited = false; 
-      prev = 0;
+      tprev = 0;
+      angle_prev = 0;
+    };
+
+    virtual void removed(Entity &e) 
+    {
+      ofLogNotice("KinectSystem") 
+        << "kinect.close()";
+      depth_m.get(e)->kinect.close();
     };
 
     virtual void added(Entity &e) 
@@ -42,6 +47,7 @@ class KinectSystem : public ECSsystem
       inited = true; 
 
       DepthComponent* depth_data = depth_m.get(e);
+      ofxKinect& kinect = depth_data->kinect;
 
       int w = kinect.width;
       int h = kinect.height;
@@ -57,11 +63,17 @@ class KinectSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
+      DepthComponent* depth_data = depth_m.get(e);
+      ofxKinect& kinect = depth_data->kinect;
+
       TS_START("KinectSystem update kinect");
       kinect.update();
       TS_STOP("KinectSystem update kinect");
 
-      DepthComponent* depth_data = depth_m.get(e);
+      int angle = depth_data->angle;
+      if ( angle != angle_prev )
+        kinect.setCameraTiltAngle( angle );
+      angle_prev = angle;
 
       bool dirty = kinect.isFrameNew();
       depth_data->dirty = dirty; 
@@ -100,6 +112,7 @@ class KinectSystem : public ECSsystem
     virtual void renderEntity(Entity &e)
     {
       DepthComponent* depth_data = depth_m.get(e);
+      ofxKinect& kinect = depth_data->kinect;
 
       CamaraLucidaComponent* cml_data = require_component<CamaraLucidaComponent>("output");
 
@@ -125,23 +138,23 @@ class KinectSystem : public ECSsystem
 
     ComponentMapper<DepthComponent> depth_m;
 
-    ofxKinect kinect; 
     bool inited;
-    float fps, prev;
+    float fps, tprev;
+    int angle_prev;
 
-    //flipped
+    //flip tmp
     ofShortPixels depth_ofpix_mm; //uint16_t
     ofFloatPixels f_depth_ofpix_mm; //float
     ofPixels depth_ofpix_grey; //uint8_t
 
     void calc_fps()
     {
-      float now = ofGetElapsedTimeMillis();
-      float FR = 1000.0/(now - prev);
+      float tnow = ofGetElapsedTimeMillis();
+      float FR = 1000.0/(tnow - tprev);
       float fA = 0.95; 
       float fB = 1.0-fA;
       fps = (fA*fps) + (fB*FR); 
-      prev = now;
+      tprev = tnow;
     };
 
 };

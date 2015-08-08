@@ -38,6 +38,7 @@ else if (id == "tags") return new TagsComponent(id);
 else if (id == "flow_field_container") return new FlowFieldContainerComponent(id);
 else if (id == "flow_field_gradient") return new FlowFieldGradientComponent(id);
 else if (id == "flow_field") return new FlowFieldComponent(id);
+else if (id == "flowfield_debug") return new FlowfieldDebugComponent(id);
 //dont remove this line
 
 return NULL;

@@ -24,4 +24,5 @@
 #include "FlowFieldGradientComponent.h"
 #include "FlowFieldDebugComponent.h"
 #include "FlowFieldComponent.h"
+#include "FlowfieldDebugComponent.h"
 //dont remove this line

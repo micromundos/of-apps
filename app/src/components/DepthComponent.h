@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
+#include "ofxKinect.h"
 
 class DepthComponent : public ECScomponent
 {
@@ -13,12 +14,14 @@ class DepthComponent : public ECScomponent
     ofFloatPixels* f_depth_ofpix_mm; //float
     ofFloatImage f_depth_img;
 
+    ofxKinect kinect; 
     int width, height;
     int channels;
     bool dirty;
 
     ofParameter<bool> render;
-    ofParameter<bool> flip;
+    int angle; //ofParameter<float> angle;
+    bool flip; //ofParameter<bool> flip;
 
     DepthComponent(string _id) : ECScomponent(_id)
     {
@@ -32,7 +35,10 @@ class DepthComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param(render, "render");
-      param(flip, "flip");
+      //param(angle, "angle");
+      angle = -2;
+      //param(flip, "flip");
+      flip = false;
     };
 
     void setup( int w, int h )

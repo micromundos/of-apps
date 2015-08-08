@@ -168,6 +168,7 @@ class FlowFieldContainerSystem : public ECSsystem
       FlowFieldContainerComponent* ff_data = flow_field_container_m.get( *entity );
       shader.setUniform1f("sigma", ff_data->gaussian_sigma);
       shader.setUniform1i("kernel", ff_data->gaussian_kernel);
+      shader.setUniform1f("alpha", 1.0);
     };
 
     void update_bilateral( ofShader& shader )

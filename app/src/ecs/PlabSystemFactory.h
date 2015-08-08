@@ -31,6 +31,7 @@ ecs.add_system(new DepthProcessingSystem("depth_processing"));
 ecs.add_system(new FlowFieldContainerSystem("flow_field_container"));
 ecs.add_system(new FlowFieldGradientSystem("flow_field_gradient"));
 ecs.add_system(new FlowFieldSystem("flow_field"));
+ecs.add_system(new FlowfieldDebugSystem("flowfield_debug"));
 ecs.add_system(new FisicaSystem("fisica"));
 ecs.add_system(new ParticleSystem("particle"));
 ecs.add_system(new ParticleEmitterSystem("particle_emitter"));

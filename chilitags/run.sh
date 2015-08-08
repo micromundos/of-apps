@@ -1,8 +1,8 @@
 #!/bin/bash
-#1080p -w 1920 -h 1080
-#720p -w 1280 -h 720
-#xga -w 1024 -h 576
-#vga -w 640 -h 480
+#1080p  = 1920 x 1080
+#720p   = 1280 x 720
+#xga    = 1024 x 576
+#vga    = 640  x 480
 calibration="../data/calib/intrinsics_ps3eye.aruco.yml"
 device=0
 width=1024
