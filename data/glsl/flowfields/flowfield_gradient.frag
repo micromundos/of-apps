@@ -20,8 +20,6 @@ uniform int pass;
 uniform sampler2DRect height_map;
 uniform sampler2DRect debug_input;
 
-uniform float force_weight_min;
-uniform float force_weight_max;
 uniform float max_force;
 
 const int kernel = 3;
@@ -75,17 +73,11 @@ void main( void )
     force /= n; 
   }
 
-  /*float weight = lerp2d( height, 0., 1000., 0., 10. );*/
-  float weight = lerp2d( length(force), 0., 1., force_weight_min, force_weight_max );
-  force *= weight;
-
   // limit force
   float len = length(force);
   if ( len > max_force )
   {
     force = (force/len) * max_force;
-    /*force = normalize(force) * max_force;*/
-    /*force = vec2(0.,0.);*/
   }
 
   gl_FragColor = vec4( force, 0.,1.);

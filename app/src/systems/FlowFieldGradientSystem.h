@@ -112,9 +112,6 @@ class FlowFieldGradientSystem : public ECSsystem
     void update_flowfield( ofShader& shader )
     {
       FlowFieldGradientComponent* ff_data = flow_field_gradient_m.get( *entity ); 
-
-      shader.setUniform1f( "force_weight_min", ff_data->force_weight_min );
-      shader.setUniform1f( "force_weight_max", ff_data->force_weight_max * ff_data->force_weight_max_m );
       shader.setUniform1f( "max_force", ff_data->max_force );
     };
 

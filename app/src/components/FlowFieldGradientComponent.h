@@ -15,9 +15,6 @@ class FlowFieldGradientComponent : public ECScomponent
     { return _flowfield; };
 
     ofParameter<bool> render;
-    ofParameter<float> force_weight_min;
-    ofParameter<float> force_weight_max;
-    ofParameter<float> force_weight_max_m;
     ofParameter<float> max_force;
 
     ofParameter<float> gaussian_sigma;
@@ -30,10 +27,6 @@ class FlowFieldGradientComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
 
       param( render, "render" );
-
-      param( force_weight_min, "force_weight_min" );
-      param( force_weight_max, "force_weight_max" );
-      param( force_weight_max_m, "force_weight_max_m" );
       param( max_force, "max_force" );
 
       param( gaussian_sigma, "gaussian_sigma" ); 
