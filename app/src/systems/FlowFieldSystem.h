@@ -20,7 +20,6 @@ class FlowFieldSystem : public ECSsystem
       addComponentType<FlowFieldComponent>();
       addComponentType<FlowFieldContainerComponent>();
       addComponentType<FlowFieldGradientComponent>();
-      addComponentType<DepthComponent>();
     };
 
     virtual void initialize() 
@@ -28,8 +27,17 @@ class FlowFieldSystem : public ECSsystem
       ff_m.init( *world );
       ff_container_m.init( *world );
       ff_gradient_m.init( *world );
-      depth_m.init( *world );
       entity = NULL;
+      depth_data = NULL;
+      render_data = NULL;
+    };
+
+    virtual void removed(Entity &e) 
+    {
+      output(e).off( "update", this, &FlowFieldSystem::update_flowfield ); 
+      entity = NULL;
+      depth_data = NULL;
+      render_data = NULL;
     };
 
     virtual void added(Entity &e) 
@@ -42,8 +50,10 @@ class FlowFieldSystem : public ECSsystem
       }
       entity = &e;
 
+      depth_data = require_component<DepthComponent>("input");
+      render_data = require_component<RenderComponent>("output");
+
       float scale = ff_m.get(e)->scale;
-      DepthComponent* depth_data = depth_m.get(e);
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
@@ -52,15 +62,8 @@ class FlowFieldSystem : public ECSsystem
         .on( "update", this, &FlowFieldSystem::update_flowfield );
     }; 
 
-    virtual void removed(Entity &e) 
-    {
-      output(e).off( "update", this, &FlowFieldSystem::update_flowfield ); 
-      entity = NULL;
-    };
-
     virtual void processEntity(Entity &e) 
     {
-      DepthComponent* depth_data = depth_m.get(e);
       if ( ! depth_data->dirty ) return;
 
       TS_START("FlowFieldSystem");
@@ -78,12 +81,10 @@ class FlowFieldSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      if ( !ff_m.get(e)->render )
-        return;
+      if ( !ff_m.get(e)->render ) return;
 
       TS_START("FlowFieldSystem render");
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
       int rw = render_data->width;
       int rh = render_data->height;
 
@@ -95,11 +96,12 @@ class FlowFieldSystem : public ECSsystem
   private:
 
     Entity* entity;
+    DepthComponent* depth_data;
+    RenderComponent* render_data;
 
     ComponentMapper<FlowFieldComponent> ff_m;
     ComponentMapper<FlowFieldContainerComponent> ff_container_m;
     ComponentMapper<FlowFieldGradientComponent> ff_gradient_m;
-    ComponentMapper<DepthComponent> depth_m; 
 
     void update_flowfield( ofShader& shader )
     {

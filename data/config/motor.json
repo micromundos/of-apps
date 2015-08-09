@@ -107,7 +107,7 @@
                },
                /*"threshold_table_angle" : [ 360, 0, 360 ]*/
                "id" : "depth_processing"
-            },
+            }
             /*{*/
                /*"data" : {*/
                   /*"contour_delta" : [ 0, 0, 255 ],*/
@@ -122,45 +122,7 @@
                    /*[>"use_history" : false<]*/
                /*},*/
                /*"id" : "depth_hole_filler"*/
-            /*},*/
-            // flow fields
-            {
-               "data" : {
-                  "bilateral_domain" : [ 100, 0, 100 ],
-                  "bilateral_kernel" : [ 1, 0, 10 ],
-                  "bilateral_range" : [ 20, 0, 20 ],
-                  "edge_detection_threshold" : [ 100, 0, 300 ],
-                  "gaussian_kernel" : [ 1, 0, 10 ],
-                  "gaussian_sigma" : [ 5, 0, 20 ],
-                  "render" : false,
-                  "render_edges" : false
-               },
-               "id" : "flow_field_container"
-            },
-            {
-               "data" : {
-                  "max_force" : [ 2, 0, 30 ],
-                  "gaussian_kernel" : [ 1, 0, 10 ],
-                  "gaussian_sigma" : [ 0.2, 0, 10 ],
-                  "render" : false
-               },
-               "id" : "flow_field_gradient"
-            },
-            {
-               "data" : {
-                  "render" : false,
-                  "scale" : 0.3,
-                  "weight_0" : [ 1, 0, 1 ],
-                  "weight_1" : [ 1, 0, 1 ]
-               },
-               "id" : "flow_field"
-            },
-            {
-               "data" : {
-                  "render" : false
-               },
-               "id" : "flowfield_debug"
-            }
+            /*},*/ 
          ],
          "id" : "input"
       }

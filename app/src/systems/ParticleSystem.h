@@ -25,6 +25,11 @@ class ParticleSystem : public ECSsystem
       entity = NULL; 
     };  
 
+    virtual void removed(Entity &e) 
+    { 
+      entity = NULL;
+    };
+
     virtual void added(Entity &e) 
     {
       if ( entity != NULL )
@@ -62,12 +67,7 @@ class ParticleSystem : public ECSsystem
       //psd.ejectionStrength = 0.0f; //0.5f;
 
       b2particles = fisica->b2world()->CreateParticleSystem( &psd );
-    };
-
-    virtual void removed(Entity &e) 
-    { 
-      entity = NULL;
-    };
+    }; 
 
     virtual void processEntity(Entity &e)
     {

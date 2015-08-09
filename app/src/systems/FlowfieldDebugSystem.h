@@ -22,8 +22,11 @@ class FlowfieldDebugSystem : public ECSsystem
       ffd_m.init( *world );
       ff_m.init( *world );
 
+      depth_data = NULL;
+      render_data = NULL;
       inited = false;
 
+      dot_step = 1;
       mesh.setMode(OF_PRIMITIVE_POINTS);
 
       shader.setGeometryInputType(GL_POINTS);
@@ -32,10 +35,18 @@ class FlowfieldDebugSystem : public ECSsystem
       shader.load("glsl/flowfield_debug/debug.vert","glsl/flowfield_debug/debug.frag","glsl/flowfield_debug/debug.geom");
     };
 
+    virtual void removed(Entity &e) 
+    {
+      depth_data = NULL;
+      render_data = NULL;
+    };
+
     virtual void added(Entity &e) 
     {
+      depth_data = require_component<DepthComponent>("input");
+      render_data = require_component<RenderComponent>("output");
+
       inited = true;
-      dot_step = 1;
 
       FlowFieldComponent* ff_data = ff_m.get(e);
       gpgpu::Process& flowfield = ff_data->flowfield();
@@ -58,14 +69,13 @@ class FlowfieldDebugSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
+      if ( ! depth_data->dirty ) return;
 
       FlowfieldDebugComponent* ffd_data = ffd_m.get(e);
       FlowFieldComponent* ff_data = ff_m.get(e);
 
-      if ( !ffd_data->render )
-        return;
+      if ( ! ffd_data->render ) return;
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
       int rw = render_data->width;
       int rh = render_data->height;
 
@@ -94,6 +104,9 @@ class FlowfieldDebugSystem : public ECSsystem
     };
 
   private:
+
+    DepthComponent* depth_data;
+    RenderComponent* render_data;
 
     ComponentMapper<FlowfieldDebugComponent> ffd_m;
     ComponentMapper<FlowFieldComponent> ff_m;

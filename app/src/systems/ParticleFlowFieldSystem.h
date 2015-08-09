@@ -26,6 +26,20 @@ class ParticleFlowFieldSystem : public ECSsystem
       particle_flowfield_m.init( *world );
       ps = require_system<ParticleSystem>();
       fisica = require_system<FisicaSystem>();
+      ff_data = NULL;
+      render_data = NULL;
+    };
+
+    virtual void removed(Entity &e) 
+    { 
+      ff_data = NULL;
+      render_data = NULL;
+    };
+
+    virtual void added(Entity &e) 
+    {
+      ff_data = require_component<FlowFieldComponent>("ff");
+      render_data = require_component<RenderComponent>("output");
     };
 
     virtual void processEntity(Entity &e) 
@@ -34,7 +48,6 @@ class ParticleFlowFieldSystem : public ECSsystem
 
       ParticleFlowFieldComponent* pff_data = particle_flowfield_m.get(e);
 
-      FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
       int ff_width = ff_data->flowfield().width();
 
       float* field = NULL;
@@ -88,6 +101,9 @@ class ParticleFlowFieldSystem : public ECSsystem
 
   private:
 
+    FlowFieldComponent* ff_data;
+    RenderComponent* render_data;
+
     ComponentMapper<ParticleFlowFieldComponent> particle_flowfield_m;
 
     ParticleSystem *ps;
@@ -97,10 +113,8 @@ class ParticleFlowFieldSystem : public ECSsystem
 
     void update_screen2ff()
     {
-      FlowFieldComponent* ff_data = require_component<FlowFieldComponent>("input");
       int ff_width = ff_data->flowfield().width();
       int ff_height = ff_data->flowfield().height();
-      RenderComponent* render_data = require_component<RenderComponent>("output");
       screen2ff.set( render_data->width, render_data->height, ff_width, ff_height ); 
     };
 

@@ -24,17 +24,16 @@ class FlowFieldContainerSystem : public ECSsystem
     {
       addComponentType<FlowFieldContainerComponent>();
       addComponentType<FlowFieldComponent>();
-      addComponentType<DepthComponent>();
-      addComponentType<DepthProcessingComponent>();
     };
 
     virtual void initialize() 
     {
       flow_field_container_m.init( *world );
       flow_field_m.init( *world );
-      depth_m.init( *world );
-      depth_processing_m.init( *world );
       entity = NULL;
+      depth_data = NULL;
+      depth_proc_data = NULL;
+      render_data = NULL;
     };
 
     virtual void added(Entity &e) 
@@ -47,8 +46,11 @@ class FlowFieldContainerSystem : public ECSsystem
       }
       entity = &e;
 
+      depth_data = require_component<DepthComponent>("input");
+      depth_proc_data = require_component<DepthProcessingComponent>("input");
+      render_data = require_component<RenderComponent>("output");
+
       float scale = flow_field_m.get(e)->scale;
-      DepthComponent* depth_data = depth_m.get(e);
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
@@ -77,12 +79,15 @@ class FlowFieldContainerSystem : public ECSsystem
       gaussian.off( "update", this, &FlowFieldContainerSystem::update_gaussian );
       bilateral.off( "update", this, &FlowFieldContainerSystem::update_bilateral );
       //output(e).off( "update", this, &FlowFieldContainerSystem::update_flowfield ); 
+
       entity = NULL;
+      depth_data = NULL;
+      depth_proc_data = NULL;
+      render_data = NULL;
     };
 
     virtual void processEntity(Entity &e) 
     {
-      DepthComponent* depth_data = depth_m.get(e);
       if ( ! depth_data->dirty ) return;
 
       TS_START("FlowFieldContainerSystem");
@@ -134,7 +139,6 @@ class FlowFieldContainerSystem : public ECSsystem
 
       FlowFieldContainerComponent* ff_data = flow_field_container_m.get(e); 
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
       int rw = render_data->width;
       int rh = render_data->height;
 
@@ -155,14 +159,16 @@ class FlowFieldContainerSystem : public ECSsystem
   private:
 
     Entity* entity;
+    DepthComponent* depth_data;
+    DepthProcessingComponent* depth_proc_data;
+    RenderComponent* render_data;
+
     gpgpu::Process edges;
     gpgpu::Gaussian gaussian;
     gpgpu::Process bilateral;
 
     ComponentMapper<FlowFieldContainerComponent> flow_field_container_m;
-    ComponentMapper<FlowFieldComponent> flow_field_m;
-    ComponentMapper<DepthComponent> depth_m; 
-    ComponentMapper<DepthProcessingComponent> depth_processing_m;
+    ComponentMapper<FlowFieldComponent> flow_field_m; 
 
     void update_edges( ofShader& shader )
     {
@@ -186,13 +192,6 @@ class FlowFieldContainerSystem : public ECSsystem
       shader.setUniform1i("kernel", ff_data->bilateral_kernel);
     };
 
-    //void update_flowfield( ofShader& shader )
-    //{
-      //FlowFieldComponent* ff_data = flow_field_container_m.get( *entity ); 
-      //DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
-      //shader.setUniform1f( "xxx", xxx );
-    //};
-
     gpgpu::Process& output(Entity &e)
     {
       return flow_field_container_m.get(e)->flowfield();
@@ -200,7 +199,7 @@ class FlowFieldContainerSystem : public ECSsystem
 
     gpgpu::Process& input(Entity &e)
     {
-      return depth_processing_m.get(e)->surfaces();
+      return depth_proc_data->surfaces();
     };
 
 };

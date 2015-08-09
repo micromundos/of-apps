@@ -16,17 +16,16 @@ class FlowFieldGradientSystem : public ECSsystem
     {
       addComponentType<FlowFieldGradientComponent>();
       addComponentType<FlowFieldComponent>();
-      addComponentType<DepthComponent>();
-      addComponentType<DepthProcessingComponent>();
     };
 
     virtual void initialize() 
     {
       ff_gradient_m.init( *world );
       ff_m.init( *world );
-      depth_m.init( *world );
-      depth_processing_m.init( *world );
       entity = NULL;
+      depth_data = NULL;
+      depth_proc_data = NULL;
+      render_data = NULL;
     };
 
     virtual void added(Entity &e) 
@@ -39,8 +38,11 @@ class FlowFieldGradientSystem : public ECSsystem
       }
       entity = &e;
 
+      depth_data = require_component<DepthComponent>("input");
+      depth_proc_data = require_component<DepthProcessingComponent>("input");
+      render_data = require_component<RenderComponent>("output");
+
       float scale = ff_m.get(e)->scale;
-      DepthComponent* depth_data = depth_m.get(e);
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
@@ -57,12 +59,15 @@ class FlowFieldGradientSystem : public ECSsystem
     {
       output(e).off( "update", this, &FlowFieldGradientSystem::update_flowfield ); 
       gaussian.off( "update", this, &FlowFieldGradientSystem::update_gaussian );
+
       entity = NULL;
+      depth_data = NULL;
+      depth_proc_data = NULL;
+      render_data = NULL;
     };
 
     virtual void processEntity(Entity &e) 
     {
-      DepthComponent* depth_data = depth_m.get(e);
       if ( ! depth_data->dirty ) return;
 
       TS_START("FlowFieldGradientSystem");
@@ -89,7 +94,6 @@ class FlowFieldGradientSystem : public ECSsystem
 
       TS_START("FlowFieldGradientSystem render"); 
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
       int rw = render_data->width;
       int rh = render_data->height;
 
@@ -102,12 +106,14 @@ class FlowFieldGradientSystem : public ECSsystem
   private:
 
     Entity* entity;
+    DepthComponent* depth_data;
+    DepthProcessingComponent* depth_proc_data;
+    RenderComponent* render_data;
+
     gpgpu::Gaussian gaussian;
 
     ComponentMapper<FlowFieldGradientComponent> ff_gradient_m;
-    ComponentMapper<FlowFieldComponent> ff_m;
-    ComponentMapper<DepthComponent> depth_m; 
-    ComponentMapper<DepthProcessingComponent> depth_processing_m;
+    ComponentMapper<FlowFieldComponent> ff_m; 
 
     void update_flowfield( ofShader& shader )
     {
@@ -130,7 +136,7 @@ class FlowFieldGradientSystem : public ECSsystem
 
     gpgpu::Process& input(Entity &e)
     {
-      return depth_processing_m.get(e)->surfaces();
+      return depth_proc_data->surfaces();
     };
 
 };
