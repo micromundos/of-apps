@@ -111,12 +111,15 @@ class ParticleSystem : public ECSsystem
         mesh.addColor( col );
       }
 
+      ofPushStyle();
       ofSetColor(255);
+      ofSetLineWidth(0.1);
+      glPointSize( ps_data->render_size );
       ofPushMatrix();
       ofScale( fisica->scale(), fisica->scale() );
-      glPointSize( ps_data->render_size );
       mesh.draw();
       ofPopMatrix();
+      ofPopStyle();
     };
 
     int32 make_particle( float _locx, float _locy, float _velx, float _vely )

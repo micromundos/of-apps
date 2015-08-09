@@ -78,8 +78,10 @@ class FlowfieldDebugSystem : public ECSsystem
         (float)rh / h 
       );
 
+      ofPushStyle();
       ofSetColor(255);
-      //ofPushStyle();
+      ofSetLineWidth(1.0);
+      glPointSize(0.0);
       shader.begin();
       shader.setUniformTexture("data", flowfield.get(), 0);
       shader.setUniform1f("multx", io_scale.x);
@@ -88,7 +90,7 @@ class FlowfieldDebugSystem : public ECSsystem
       shader.setUniform1f("step",dot_step);
       mesh.draw();
       shader.end();
-      //ofPopStyle();
+      ofPopStyle();
     };
 
   private:

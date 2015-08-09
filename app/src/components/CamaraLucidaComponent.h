@@ -38,8 +38,8 @@ class CamaraLucidaComponent : public ECScomponent
 
       init_cml( 
         d.get( "tex_width", 1024 ).asInt(), 
-        d.get( "tex_height", 768).asInt(), 
-        d.get( "mesh_res", 2).asInt(),
+        d.get( "tex_height", 768 ).asInt(), 
+        d.get( "mesh_res", 2 ).asInt(),
         d["calibration"]["kinect_intrinsics_file"].asString(),
         d["calibration"]["projector_intrinsics_file"].asString(),
         d["calibration"]["projector_kinect_extrinsics_file"].asString() );
