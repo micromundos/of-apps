@@ -54,7 +54,6 @@
       },
       {
          "components" : [
-// flow fields
             {
                "data" : {
                   "bilateral_domain" : [ 100, 0, 100 ],

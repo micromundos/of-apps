@@ -31,15 +31,15 @@ void main( void )
   vec2 loc = gl_TexCoord[0].xy / size; //normalized [0,1]
   vec2 loc_height_map = loc * height_map_size;
 
-  vec2 force = vec2(0.,0.);
-
   float height = texture2DRect(height_map,loc_height_map).r;
 
   if ( height < 0.0 )
   {
-    gl_FragColor = vec4( force, 0.,1.);
+    gl_FragColor = vec4(0.,0.,0.,1.);
     return;
   }
+
+  vec2 force = vec2(0.,0.);
 
   int n = 0;
   int ini = -kernel / 2;
