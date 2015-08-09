@@ -78,14 +78,16 @@ class FlowFieldSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
+      if ( !ff_m.get(e)->render )
+        return;
+
       TS_START("FlowFieldSystem render");
 
       RenderComponent* render_data = require_component<RenderComponent>("output");
       int rw = render_data->width;
       int rh = render_data->height;
 
-      if ( ff_m.get(e)->render )
-        output(e).render_debug(0,0,rw,rh);
+      output(e).render_debug(0,0,rw,rh);
 
       TS_STOP("FlowFieldSystem render");
     };
