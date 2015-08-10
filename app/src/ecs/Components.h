@@ -24,4 +24,6 @@
 #include "FlowFieldDebugComponent.h"
 #include "FlowFieldComponent.h"
 #include "FlowfieldDebugComponent.h"
+#include "ParticleAttractorComponent.h"
+#include "FlowFieldAttractorsComponent.h"
 //dont remove this line

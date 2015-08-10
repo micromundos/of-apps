@@ -19,4 +19,6 @@
 #include "FlowFieldGradientSystem.h"
 #include "FlowFieldSystem.h"
 #include "FlowfieldDebugSystem.h"
+#include "ParticleAttractorSystem.h"
+#include "FlowFieldAttractorsSystem.h"
 //dont remove this line

@@ -38,6 +38,8 @@ else if (id == "flow_field_container") return new FlowFieldContainerComponent(id
 else if (id == "flow_field_gradient") return new FlowFieldGradientComponent(id);
 else if (id == "flow_field") return new FlowFieldComponent(id);
 else if (id == "flowfield_debug") return new FlowfieldDebugComponent(id);
+else if (id == "particle_attractor") return new ParticleAttractorComponent(id);
+else if (id == "flow_field_attractors") return new FlowFieldAttractorsComponent(id);
 //dont remove this line
 
 return NULL;

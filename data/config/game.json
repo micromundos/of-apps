@@ -25,7 +25,29 @@
             }
          ],
          "id" : "1"
-      }
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                  "force_mult" : [ 0.1, 0, 1 ]
+               },
+               "id" : "particle_attractor"
+            }
+         ],
+         "id" : "2"
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                  "force_mult" : [ 0.1, 0, 1 ]
+               },
+               "id" : "particle_attractor"
+            }
+         ],
+         "id" : "3"
+      } 
    ],
    "game" : [
       {
@@ -77,11 +99,18 @@
                "id" : "flow_field_gradient"
             },
             {
+                "data" : {
+                  "render" : false
+               },
+               "id" : "flow_field_attractors"
+            },
+            {
                "data" : {
                   "render" : false,
                   "scale" : 0.3,
-                  "weight_0" : [ 1, 0, 1 ],
-                  "weight_1" : [ 1, 0, 1 ]
+                  "weight_container" : [ 1, 0, 1 ],
+                  "weight_gradient" : [ 1, 0, 1 ],
+                  "weight_attractors" : [ 1, 0, 1 ]
                },
                "id" : "flow_field"
             },

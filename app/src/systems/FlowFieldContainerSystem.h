@@ -56,8 +56,7 @@ class FlowFieldContainerSystem : public ECSsystem
 
       edges
         .init( "glsl/openvision/canny.fs", w, h )
-        .on( "update", this, &FlowFieldContainerSystem::update_edges )
-        .set_debug("glsl/debug/height_d.frag");
+        .on( "update", this, &FlowFieldContainerSystem::update_edges );
 
       gaussian
         .init( w, h )
@@ -65,8 +64,7 @@ class FlowFieldContainerSystem : public ECSsystem
 
       bilateral
         .init("glsl/cv/bilateral.frag",w,h)
-        .on( "update", this, &FlowFieldContainerSystem::update_bilateral )
-        .set_debug("glsl/debug/depth_d.frag"); 
+        .on( "update", this, &FlowFieldContainerSystem::update_bilateral );
 
       output(e)
         .init("glsl/flowfields/flowfield_container.frag",w,h);

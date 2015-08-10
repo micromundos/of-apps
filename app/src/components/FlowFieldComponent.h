@@ -17,8 +17,9 @@ class FlowFieldComponent : public ECScomponent
 
     float scale;
     ofParameter<bool> render;
-    ofParameter<float> weight_0;
-    ofParameter<float> weight_1;
+    ofParameter<float> weight_container;
+    ofParameter<float> weight_gradient;
+    ofParameter<float> weight_attractors;
 
     FlowFieldComponent(string _id) : ECScomponent(_id) {};
 
@@ -27,8 +28,9 @@ class FlowFieldComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
       scale = d["scale"].asFloat();
       param( render, "render" );
-      param( weight_0, "weight_0" );
-      param( weight_1, "weight_1" );
+      param( weight_container, "weight_container" );
+      param( weight_gradient, "weight_gradient" );
+      param( weight_attractors, "weight_attractors" );
     };
 };
 

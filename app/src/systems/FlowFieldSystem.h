@@ -20,6 +20,7 @@ class FlowFieldSystem : public ECSsystem
       addComponentType<FlowFieldComponent>();
       addComponentType<FlowFieldContainerComponent>();
       addComponentType<FlowFieldGradientComponent>();
+      addComponentType<FlowFieldAttractorsComponent>();
     };
 
     virtual void initialize() 
@@ -27,6 +28,7 @@ class FlowFieldSystem : public ECSsystem
       ff_m.init( *world );
       ff_container_m.init( *world );
       ff_gradient_m.init( *world );
+      ff_attractors_m.init( *world );
       entity = NULL;
       depth_data = NULL;
       render_data = NULL;
@@ -69,10 +71,12 @@ class FlowFieldSystem : public ECSsystem
       TS_START("FlowFieldSystem");
 
       output(e)
-        .set( "flowfield_0", ff_container_m
-            .get(e)->flowfield().get() )
-        .set( "flowfield_1", ff_gradient_m
-            .get(e)->flowfield().get() )
+      .set( "flowfield_container", ff_container_m
+          .get(e)->flowfield().get() )
+      .set( "flowfield_gradient", ff_gradient_m
+          .get(e)->flowfield().get() )
+      .set( "flowfield_attractors", ff_attractors_m
+          .get(e)->flowfield().get() )
         .update()
         .update_debug( ff_m.get(e)->render );
 
@@ -102,12 +106,14 @@ class FlowFieldSystem : public ECSsystem
     ComponentMapper<FlowFieldComponent> ff_m;
     ComponentMapper<FlowFieldContainerComponent> ff_container_m;
     ComponentMapper<FlowFieldGradientComponent> ff_gradient_m;
+    ComponentMapper<FlowFieldAttractorsComponent> ff_attractors_m;
 
     void update_flowfield( ofShader& shader )
     {
       FlowFieldComponent* ff_data = ff_m.get( *entity ); 
-      shader.setUniform1f( "weight_0", ff_data->weight_0 );
-      shader.setUniform1f( "weight_1", ff_data->weight_1 );
+      shader.setUniform1f( "weight_container", ff_data->weight_container );
+      shader.setUniform1f( "weight_gradient", ff_data->weight_gradient );
+      shader.setUniform1f( "weight_attractors", ff_data->weight_attractors );
     };
 
     gpgpu::Process& output(Entity &e)

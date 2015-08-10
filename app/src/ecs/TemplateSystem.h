@@ -34,9 +34,12 @@ class TemplateSystem : public ECSsystem
       //EntityProcessingSystem::renderEntities(bag);
     //};
 
+    virtual void removed(Entity &e) 
+    {
+    };
+
     virtual void added(Entity &e) 
     {
-      //template_m.get(e)->data;
     }; 
 
     virtual void processEntity(Entity &e) 
