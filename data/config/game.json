@@ -100,6 +100,7 @@
             },
             {
                 "data" : {
+                  "scale" : 0.1,
                   "render" : false
                },
                "id" : "flow_field_attractors"

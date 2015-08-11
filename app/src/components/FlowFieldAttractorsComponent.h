@@ -16,6 +16,7 @@ class FlowFieldAttractorsComponent : public ECScomponent
     { return _flowfield; };
 
     ofParameter<bool> render;
+    ofParameter<float> scale;
 
     FlowFieldAttractorsComponent(string _id) : ECScomponent(_id) {};
 
@@ -23,6 +24,7 @@ class FlowFieldAttractorsComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
+      param( scale, "scale" );
     };
 
 };

@@ -57,7 +57,7 @@ class FlowFieldAttractorsSystem : public ECSsystem
 
       FlowFieldAttractorsComponent* ff_attr_data = ff_attractors_m.get(e);
 
-      float scale = 0.1; //ff_m.get(e)->scale;
+      float scale = ff_attr_data->scale;
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
