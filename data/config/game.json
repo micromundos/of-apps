@@ -30,7 +30,7 @@
          "components" : [
             {
                "data" : {
-                  "force_mult" : [ 0.1, 0, 1 ]
+                  "force_mult" : [ 0.1, -10, 10 ]
                },
                "id" : "particle_attractor"
             }
@@ -41,7 +41,7 @@
          "components" : [
             {
                "data" : {
-                  "force_mult" : [ 0.1, 0, 1 ]
+                  "force_mult" : [ 0.1, -10, 10 ]
                },
                "id" : "particle_attractor"
             }

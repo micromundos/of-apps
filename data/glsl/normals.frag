@@ -16,10 +16,7 @@
 
 #pragma include "lib/math.glsl"
 #pragma include "lib/debug_normalized.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "lib/gpgpu.glsl"
 
 uniform sampler2DRect mesh3d;
 uniform sampler2DRect debug_input;
@@ -28,10 +25,8 @@ const int kernel = 1;
 
 void main( void ) 
 {
-  vec2 mesh3d_size = vec2(textureSize2DRect(mesh3d,0));
-
-  vec2 p2 = gl_TexCoord[0].xy / size * mesh3d_size;
-  vec3 p3 = texture2DRect( mesh3d, p2 ).xyz;
+  vec2 p2 = location(mesh3d);
+  vec3 p3 = texel( mesh3d, p2 ).xyz;
 
   vec3 normal = vec3(0.);
 
@@ -69,8 +64,7 @@ void main( void )
 
 void __debug__() 
 {
-  vec2 p2 = gl_TexCoord[0].xy;
-  vec4 _in = texture2DRect(debug_input, p2);
+  vec4 _in = texel( debug_input );
   gl_FragColor = debug_normalized(_in);
 }
 

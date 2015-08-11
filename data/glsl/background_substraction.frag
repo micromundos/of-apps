@@ -8,10 +8,7 @@
  */
 
 #pragma include "lib/math.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "lib/gpgpu.glsl"
 
 //height maps: distance from table
 uniform sampler2DRect foreground;
@@ -24,14 +21,8 @@ const float zero = FLT_MIN;
 
 void main( void ) 
 {
-  vec2 foreground_size = vec2(textureSize2DRect(foreground,0));
-  vec2 background_size = vec2(textureSize2DRect(background,0));
-
-  vec2 loc_fg = gl_TexCoord[0].xy / size * foreground_size;
-  vec2 loc_bg = gl_TexCoord[0].xy / size * background_size; 
-
-  float fg = texture2DRect( foreground, loc_fg ).x;
-  float bg = texture2DRect( background, loc_bg ).x;
+  float fg = texel( foreground ).x;
+  float bg = texel( background ).x;
   float diff = abs(fg - bg); 
   gl_FragColor = diff < threshold ? vec4(vec3(zero),1.) : vec4(vec3(fg),1.);
 }

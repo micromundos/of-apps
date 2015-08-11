@@ -12,20 +12,16 @@
  */
 
 #pragma include "lib/depth.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "lib/gpgpu.glsl"
 
 uniform sampler2DRect depth_map;
 uniform bool depth_flip;
 
 void main( void ) 
 {
-  vec2 depth_map_size = vec2(textureSize2DRect(depth_map,0));
-  vec2 p2 = gl_TexCoord[0].xy / size * depth_map_size;
+  vec2 p2 = location(depth_map);
 
-  float depth_mm = texture2DRect(depth_map,p2).r;
+  float depth_mm = texel(depth_map,p2).r;
 
   vec3 p3 = depth_to_p3( p2, depth_mm, depth_flip );
 

@@ -10,10 +10,7 @@
  */
 
 #pragma include "lib/math.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "lib/gpgpu.glsl"
 
 uniform sampler2DRect height_map;
 uniform sampler2DRect debug_input;
@@ -24,19 +21,14 @@ uniform bool binary;
 
 void main( void ) 
 {
-  vec2 height_map_size = vec2(textureSize2DRect(height_map,0));
-  vec2 p2 = gl_TexCoord[0].xy / size * height_map_size;
-
-  float height = texture2DRect( height_map , p2 ).r;
-
+  float height = texel( height_map ).r;
   height = height < threshold_far && height > threshold_near ? (binary ? 1. : height) : 0.;
   gl_FragColor = vec4(vec3(height),1.);
 }
 
 void __debug__( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].xy;
-  float _in = texture2DRect(debug_input, p2).r;
+  float _in = texel( debug_input ).r;
   float _out = _in == 0. ? 0. : lerp2d( _in, 0., 500., 0.2, 1. );
   gl_FragColor = vec4( _out, _out, _out, 1. );
 }

@@ -12,10 +12,7 @@
  */
 
 #pragma include "lib/math.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "lib/gpgpu.glsl"
 
 uniform sampler2DRect backbuffer;
 
@@ -30,16 +27,11 @@ const float zero = 0.0;
 
 void main( void ) 
 {
-  vec2 foreground_size = vec2(textureSize2DRect(foreground,0));
-  vec2 background_size = vec2(textureSize2DRect(background,0));
-  vec2 backbuffer_size = vec2(textureSize2DRect(backbuffer,0));
+  vec2 loc_bbf = location( backbuffer );
+  /*vec2 loc_bg = location(background); */
 
-  vec2 loc_fg = gl_TexCoord[0].xy / size * foreground_size;
-  vec2 loc_bg = gl_TexCoord[0].xy / size * background_size; 
-  vec2 loc_bbf = gl_TexCoord[0].xy / size * backbuffer_size;
-
-  float fg = texture2DRect( foreground, loc_fg ).x;
-  float bbf = texture2DRect( backbuffer, loc_bbf ).x;
+  float fg = texel( foreground ).x;
+  float bbf = texel( backbuffer, loc_bbf ).x;
 
   vec4 _out;
   vec4 fg4 = vec4(vec3(fg),1.);
@@ -55,9 +47,9 @@ void main( void )
         if (x == 0 && y == 0) continue;
 
         vec2 nloc_bbf = loc_bbf + vec2( x, y );
-        vec2 nloc_bg = loc_bg + vec2( x, y );
+        /*vec2 nloc_bg = loc_bg + vec2( x, y );*/
 
-        float nbbf = texture2DRect( backbuffer, nloc_bbf ).x;
+        float nbbf = texel( backbuffer, nloc_bbf ).x;
         if ( nbbf > zero )
         {
           _out = fg4;

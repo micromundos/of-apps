@@ -57,7 +57,7 @@ class FlowFieldAttractorsSystem : public ECSsystem
 
       FlowFieldAttractorsComponent* ff_attr_data = ff_attractors_m.get(e);
 
-      float scale = ff_m.get(e)->scale;
+      float scale = 0.1; //ff_m.get(e)->scale;
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
@@ -72,7 +72,7 @@ class FlowFieldAttractorsSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      if ( ! depth_data->dirty ) return;
+      //if ( ! depth_data->dirty ) return;
       FlowFieldAttractorsComponent* ff_attr_data = ff_attractors_m.get(e);
       ff_attr_data->flowfield()
         .update()
@@ -81,7 +81,7 @@ class FlowFieldAttractorsSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      if ( ! depth_data->dirty ) return;
+      //if ( ! depth_data->dirty ) return;
 
       FlowFieldAttractorsComponent* ff_attr_data = ff_attractors_m.get(e);
 
@@ -101,7 +101,7 @@ class FlowFieldAttractorsSystem : public ECSsystem
     DepthComponent* depth_data;
     bool inited;
 
-    map<string, Attractor> attractors; //copies
+    map<string, Attractor> attractors; //copies of Attractor
 
     ComponentMapper<FlowFieldAttractorsComponent> ff_attractors_m; 
     ComponentMapper<FlowFieldComponent> ff_m; 

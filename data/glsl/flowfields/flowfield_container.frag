@@ -3,10 +3,7 @@
 #extension GL_ARB_texture_rectangle : enable
 
 #pragma include "../lib/math.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "../lib/gpgpu.glsl"
 
 uniform sampler2DRect edges;
 uniform sampler2DRect debug_input;
@@ -15,12 +12,10 @@ const int kernel = 6;
 
 void main( void ) 
 {
-  vec2 edges_size = vec2(textureSize2DRect(edges,0));
+  vec2 edges_size = texsize(edges);
+  vec2 loc_edges = location()*edges_size;
 
-  vec2 loc = gl_TexCoord[0].xy / size; //normalized [0,1]
-  vec2 loc_edges = loc * edges_size;
-
-  float height = texture2DRect(edges,loc_edges).r;
+  float height = texel(edges,loc_edges).r;
   vec2 force = vec2(0.,0.);
 
   int n = 0;
@@ -39,7 +34,7 @@ void main( void )
     if ( nloc_edges.x < 0 || nloc_edges.x >= edges_size.x || nloc_edges.y < 0 || nloc_edges.y >= edges_size.y )
       continue;
 
-    float nheight = texture2DRect( edges, nloc_edges ).r;
+    float nheight = texel( edges, nloc_edges ).r;
 
     float slope = height - nheight;
     force += normalize(ndir) * slope;
@@ -56,8 +51,7 @@ void main( void )
 
 void __debug__( void ) 
 {
-    vec2 p2 = gl_TexCoord[0].xy;
-    vec3 _in = texture2DRect(debug_input, p2).xyz;
+    vec3 _in = texel(debug_input).xyz;
 
     vec3 _out;
 

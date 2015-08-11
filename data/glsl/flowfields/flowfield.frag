@@ -10,10 +10,7 @@
  */
 
 #pragma include "../lib/math.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "../lib/gpgpu.glsl"
 
 uniform float weight_container;
 uniform float weight_gradient;
@@ -28,21 +25,16 @@ uniform sampler2DRect debug_input;
 
 void main( void ) 
 {
-  vec2 ff_size = vec2(textureSize2DRect(flowfield_container,0));
-  vec2 loc = gl_TexCoord[0].xy / size * ff_size;
-
   vec2 force = vec2(0.,0.);
-  force += texture2DRect( flowfield_container, loc ).xy * weight_container;
-  force += texture2DRect( flowfield_gradient, loc ).xy * weight_gradient;
-  force += texture2DRect( flowfield_attractors, loc ).xy * weight_attractors;
-
+  force += texel( flowfield_container ).xy * weight_container;
+  force += texel( flowfield_gradient ).xy * weight_gradient;
+  force += texel( flowfield_attractors ).xy * weight_attractors;
   gl_FragColor = vec4( force, 0., 1. );
 }
 
 void __debug__( void ) 
 {
-    vec2 p2 = gl_TexCoord[0].xy;
-    vec3 _in = texture2DRect(debug_input, p2).xyz;
+    vec3 _in = texel(debug_input).xyz;
 
     vec3 _out;
 

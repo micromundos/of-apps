@@ -12,10 +12,7 @@
  */
 
 #pragma include "../lib/math.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "../lib/gpgpu.glsl"
 
 uniform sampler2DRect height_map;
 uniform sampler2DRect debug_input;
@@ -26,12 +23,11 @@ const int kernel = 3;
 
 void main( void ) 
 {
-  vec2 height_map_size = vec2(textureSize2DRect(height_map,0));
+  vec2 height_map_size = texsize(height_map);
 
-  vec2 loc = gl_TexCoord[0].xy / size; //normalized [0,1]
-  vec2 loc_height_map = loc * height_map_size;
+  vec2 loc_height_map = location() * height_map_size;
 
-  float height = texture2DRect(height_map,loc_height_map).r;
+  float height = texel(height_map,loc_height_map).r;
 
   if ( height < 0.0 )
   {
@@ -57,7 +53,7 @@ void main( void )
     if ( nloc_height_map.x < 0 || nloc_height_map.x >= height_map_size.x || nloc_height_map.y < 0 || nloc_height_map.y >= height_map_size.y )
       continue;
 
-    float nheight = texture2DRect( height_map, nloc_height_map ).r;
+    float nheight = texel( height_map, nloc_height_map ).r;
 
     if ( nheight < 0.0 )
       continue;
@@ -85,8 +81,7 @@ void main( void )
 
 void __debug__( void ) 
 {
-    vec2 p2 = gl_TexCoord[0].xy;
-    vec3 _in = texture2DRect(debug_input, p2).xyz;
+    vec3 _in = texel(debug_input).xyz;
 
     vec3 _out;
 

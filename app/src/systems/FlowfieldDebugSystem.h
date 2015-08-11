@@ -69,7 +69,7 @@ class FlowfieldDebugSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      if ( ! depth_data->dirty ) return;
+      //if ( ! depth_data->dirty ) return;
 
       FlowfieldDebugComponent* ffd_data = ffd_m.get(e);
       FlowFieldComponent* ff_data = ff_m.get(e);

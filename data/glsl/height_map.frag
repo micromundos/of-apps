@@ -11,10 +11,7 @@
 
 #pragma include "lib/math.glsl"
 #pragma include "lib/geom.glsl"
-
-//defaults
-uniform vec2 size;
-uniform int pass;
+#pragma include "lib/gpgpu.glsl"
 
 uniform sampler2DRect mesh3d;
 uniform sampler2DRect debug_input;
@@ -22,19 +19,14 @@ uniform vec4 plane;
 
 void main( void ) 
 {
-  vec2 mesh3d_size = vec2(textureSize2DRect(mesh3d,0));
-
-  vec2 p2 = gl_TexCoord[0].xy / size * mesh3d_size;
-  vec3 p3 = texture2DRect( mesh3d, p2 ).xyz;
-
+  vec3 p3 = texel( mesh3d ).xyz;
   float height = plane_distance( plane, p3 );
   gl_FragColor = vec4( height, height, height, 1. );
 }
 
 void __debug__( void ) 
 {
-  vec2 p2 = gl_TexCoord[0].xy;
-  float _in = texture2DRect(debug_input, p2).r;
+  float _in = texel( debug_input ).r;
   float _out = lerp2d( _in, 0., 500., 0.2, 1. );
   /*float _out = _in == 0. ? 0. : lerp2d( _in, 0., 5000., 0.2, 1. );*/
   gl_FragColor = vec4( _out, _out, _out, 1. );
