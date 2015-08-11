@@ -4,6 +4,8 @@
 #define EPSILON 1e-30
 #define FLT_MAX 3.402823466e+38
 #define FLT_MIN -(FLT_MAX)
+/*#define FLT_MAX  1.70141184e38*/
+/*#define FLT_MIN  1.17549435e-38*/
 
 float lerp( float n, float min, float max ) 
 {
