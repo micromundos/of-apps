@@ -1,0 +1,8 @@
+ofxCamaraLucidaCalibration
+ofxPS3EyeGrabber
+ofxJSON
+addons
+ofxKinect
+ofxOpenCv
+ofxCv
+ofxPlab

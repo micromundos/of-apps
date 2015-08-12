@@ -4,10 +4,17 @@
         "app_port": 6667,
         "ctrl_port": 6666,
         "ctrl_send_interval": 3,
-        "calib_kinect_rgb": {
+        "calib_kinect_rgb_mono": {
             "cam_pattern_path": "calib/cam_pattern.yml"
         },
-        "calib_kinect_p3eye": {
+        "calib_kinect_rgb_stereo": {
+            "rgb_cam_name": "logitech920",
+            "rgb_device_id": 1,
+            "calib_kinect_path": "calib/intrinsics_kinect.ofxcv.yml",
+            "cam_pattern_path": "calib/cam_pattern.yml"
+        },
+        "calib_kinect_ps3eye": {
+            "ps3_cam_name": "ps3eye",
             "calib_kinect_path": "calib/intrinsics_kinect.ofxcv.yml",
             "cam_pattern_path": "calib/cam_pattern.yml"
         },

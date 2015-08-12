@@ -15,21 +15,14 @@ void ofApp::setup()
     return;
   }
 
+  rgb_cam_name = settings["params"]["calib_kinect_rgb_stereo"]["rgb_cam_name"].asString(),
+  rgb_device_id = settings["params"]["calib_kinect_rgb_stereo"]["rgb_device_id"].asInt(),
+
   w = 640;
   h = 480;
-  chan = 3;
 
-  ps3.initGrabber(w, h);
-  ps3.setAutogain(true);
-  ps3.setAutoWhiteBalance(true);
-  //ps3.setGain(uint8_t val);
-  //ps3.setExposure(uint8_t val);
-  //ps3.setSharpness(uint8_t val);
-  //ps3.setContrast(uint8_t val);
-  //ps3.setBrightness(uint8_t val);
-  //ps3.setHue(uint8_t val);
-  //ps3.setRedBalance(uint8_t val);
-  //ps3.setBlueBalance(uint8_t val);
+  rgb_cam.setDeviceID( rgb_device_id );
+  rgb_cam.initGrabber( w, h, true );
 
   kinect.setRegistration(true);
   // ir, rgb, texture
@@ -37,27 +30,24 @@ void ofApp::setup()
   kinect.open();
 
   kinect.update(); 
-  ps3.update();
+  rgb_cam.update();
 
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
-  pix_ps3eye = ps3.getPixelsRef(); //copy
-  pix_ps3eye.setNumChannels( chan );
-
-  ps3_cam_name = settings["params"]["calib_kinect_ps3eye"]["ps3_cam_name"].asString(),
+  pix_rgb = rgb_cam.getPixelsRef(); //copy
 
   calibration.init( 
-      settings["params"]["calib_kinect_ps3eye"]["cam_pattern_path"].asString(),
+      settings["params"]["calib_kinect_rgb_stereo"]["cam_pattern_path"].asString(),
       "kinect", pix_kinect_rgb, 
-      ps3_cam_name, pix_ps3eye, 
+      rgb_cam_name, pix_rgb, 
       //load calibrated kinect intrinsics
-      settings["params"]["calib_kinect_ps3eye"]["calib_kinect_path"].asString() );
+      settings["params"]["calib_kinect_rgb_stereo"]["calib_kinect_path"].asString() );
 }
 
 
 void ofApp::exit() 
 {
   kinect.close();
-  ps3.close();
+  rgb_cam.close();
 }
 
 
@@ -66,21 +56,19 @@ void ofApp::update()
   ofSetWindowTitle(ofToString(ofGetFrameRate(),2));
 
   kinect.update(); 
-  ps3.update();
+  rgb_cam.update();
 
-  if ( !kinect.isFrameNew() && !ps3.isFrameNew() ) return;
+  if ( !kinect.isFrameNew() && !rgb_cam.isFrameNew() ) return;
 
   if ( kinect.isFrameNew() )
     pix_kinect_rgb = kinect.getPixelsRef(); //copy
 
-  if ( ps3.isFrameNew() )
+  if ( rgb_cam.isFrameNew() )
   {
-    ps3_tex.loadData(ps3.getPixelsRef());
-    pix_ps3eye = ps3.getPixelsRef(); //copy
-    pix_ps3eye.setNumChannels( chan );
+    pix_rgb = rgb_cam.getPixelsRef(); //copy
   }
 
-  calibration.update( pix_kinect_rgb, pix_ps3eye );
+  calibration.update( pix_kinect_rgb, pix_rgb );
 }
 
 
@@ -92,8 +80,7 @@ void ofApp::draw()
   kinect.draw( 0, 0, w, h );
   //kinect.drawDepth( 0, h, w, h );
 
-  //ps3.draw( 0, w );
-  ps3_tex.draw( w, 0 );
+  rgb_cam.draw( w, 0 );
 
   calibration.render();
 
@@ -129,15 +116,15 @@ void ofApp::keyReleased(int key)
 
   else if ( key == 's' )
   {
-    //save ps3 intrinsics & stereo
+    //save rgb intrinsics & stereo
     //DONT save kinect intrinsics
     string folder = "calib";
 
-    calibration.save_intrinsics( ps3_cam_name, folder, "ofxcv" );
-    calibration.save_intrinsics( ps3_cam_name, folder, "aruco" );
+    calibration.save_intrinsics( rgb_cam_name, folder, "ofxcv" );
+    calibration.save_intrinsics( rgb_cam_name, folder, "aruco" );
 
-    calibration.save_extrinsics( "kinect", ps3_cam_name, folder );
-    calibration.save_extrinsics( ps3_cam_name, "kinect", folder );
+    calibration.save_extrinsics( "kinect", rgb_cam_name, folder );
+    calibration.save_extrinsics( rgb_cam_name, "kinect", folder );
 
     //calibration.save_all( "calib" );
   }

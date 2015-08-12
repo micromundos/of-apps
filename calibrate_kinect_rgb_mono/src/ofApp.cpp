@@ -29,7 +29,7 @@ void ofApp::setup()
   w = kinect.getWidth();
   h = kinect.getHeight();
 
-  load_pattern_settings( settings["params"]["calib_kinect_rgb"]["cam_pattern_path"].asString() );
+  load_pattern_settings( settings["params"]["calib_kinect_rgb_mono"]["cam_pattern_path"].asString() );
 
   pix_kinect_rgb = kinect.getPixelsRef(); //copy
 

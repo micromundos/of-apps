@@ -4,7 +4,6 @@
 #include "ofxCv.h"
 #include "ofxKinect.h"
 #include "ofxCamaraLucidaCalibration.h"
-#include "ofxPS3EyeGrabber.h"
 #include "ofxJSON.h"
 
 #include "data_path.h"
@@ -29,14 +28,14 @@ class ofApp : public ofBaseApp
 		void gotMessage(ofMessage msg);
 
     cml::StereoCalibration calibration;
-    ofPixels pix_kinect_rgb, pix_ps3eye;
+    ofPixels pix_kinect_rgb, pix_rgb;
 
     ofxKinect kinect;
-    ofxPS3EyeGrabber ps3;
-    ofTexture ps3_tex;
+    ofVideoGrabber rgb_cam;
 
-    string ps3_cam_name;
+    string rgb_cam_name;
+    int rgb_device_id;
 
     ofxJSONElement settings;
-    int w, h, chan;
+    int w, h;
 };
