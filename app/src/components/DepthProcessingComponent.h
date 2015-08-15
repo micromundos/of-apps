@@ -9,12 +9,16 @@ class DepthProcessingComponent : public ECScomponent
 {
 
   private:
+    gpgpu::Process _depth_3d;
     gpgpu::Process _surfaces;
     gpgpu::Process _height_map;
     gpgpu::Process _normals;
     //gpgpu::Process _table_angles;
 
   public:
+
+    gpgpu::Process& depth_3d() 
+    { return _depth_3d; };
 
     gpgpu::Process& surfaces() 
     { return _surfaces; };
@@ -23,7 +27,7 @@ class DepthProcessingComponent : public ECScomponent
     { return _height_map; };
 
     gpgpu::Process& normals()
-    { return _normals; };
+    { return _normals; }; 
 
     //gpgpu::Process& table_angles()
     //{ return _table_angles; };

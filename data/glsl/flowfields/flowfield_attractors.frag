@@ -34,7 +34,7 @@ void main()
   for ( int i = 0; i < attractors_size; i++ )
   {
     dir = attractors_locs[i] - loc;
-    d = length(dir);
+    d = clamp( length(dir), EPSILON, FLT_MAX );
     force += dir * 1/d * attractors_force_mult[i];
   }
   force /= attractors_size;

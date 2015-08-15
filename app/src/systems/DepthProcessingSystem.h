@@ -50,7 +50,7 @@ class DepthProcessingSystem : public ECSsystem
       int w = depth_data->width * scale;
       int h = depth_data->height * scale;
 
-      depth_3d
+      depth_3d(e)
         .init("glsl/depth_3d.frag", 
             depth_data->width, 
             depth_data->height )
@@ -131,26 +131,26 @@ class DepthProcessingSystem : public ECSsystem
       // depth hole filler
       //if ( depth_hole_filler_data->enabled && depth_hole_filler_data->output.isAllocated() )
       //{
-        //depth_map = &( get_depth_map( depth_3d, e, depth_hole_filler_data->output ).getTextureReference() );
+        //depth_map = &( get_depth_map( depth_3d(e), e, depth_hole_filler_data->output ).getTextureReference() );
       //}
 
       // depth map
       //else if ( depth_data->f_depth_img.isAllocated() )
       //{
-        depth_map = &( get_depth_map( depth_3d, e, depth_data->f_depth_img ).getTextureReference() );
+        depth_map = &( get_depth_map( depth_3d(e), e, depth_data->f_depth_img ).getTextureReference() );
       //}
 
-      depth_3d
+      depth_3d(e)
         .set( "depth_map", *depth_map )
         .update(); 
 
       height_map(e)
-        .set( "mesh3d", depth_3d.get() )
+        .set( "mesh3d", depth_3d(e).get() )
         .update()
         .update_debug( depth_proc_data->render_height_map );
 
       normals(e)
-        .set( "mesh3d", depth_3d.get() )
+        .set( "mesh3d", depth_3d(e).get() )
         .update()
         .update_debug( depth_proc_data->render_normals );
 
@@ -264,7 +264,6 @@ class DepthProcessingSystem : public ECSsystem
 
   private:
 
-    gpgpu::Process depth_3d;
     gpgpu::Process bg_dif;
     gpgpu::Process bg_dif_expand;
     gpgpu::Process erode;
@@ -449,7 +448,7 @@ class DepthProcessingSystem : public ECSsystem
 
       bg_dif.off( "update", this, &DepthProcessingSystem::update_bg_dif );
       bg_dif_expand.off( "update", this, &DepthProcessingSystem::update_bg_dif_expand );
-      depth_3d.off( "update", this, &DepthProcessingSystem::update_depth_3d );
+      depth_3d(e).off( "update", this, &DepthProcessingSystem::update_depth_3d );
       height_map(e).off( "update", this, &DepthProcessingSystem::update_height_map );
       surfaces(e).off( "update", this, &DepthProcessingSystem::update_depth_segmentation );
       //bilateral.off( "update", this, &DepthProcessingSystem::update_bilateral ); 
@@ -460,6 +459,11 @@ class DepthProcessingSystem : public ECSsystem
 
 
     //shortcuts
+
+    gpgpu::Process& depth_3d(Entity &e)
+    {
+      return depth_processing_m.get(e)->depth_3d();
+    };
 
     gpgpu::Process& surfaces(Entity &e)
     {
