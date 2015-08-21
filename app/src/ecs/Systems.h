@@ -21,4 +21,5 @@
 #include "FlowfieldDebugSystem.h"
 #include "ParticleAttractorSystem.h"
 #include "FlowFieldAttractorsSystem.h"
+#include "SyphonSystem.h"
 //dont remove this line

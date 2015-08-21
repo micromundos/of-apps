@@ -40,6 +40,7 @@ else if (id == "flow_field") return new FlowFieldComponent(id);
 else if (id == "flowfield_debug") return new FlowfieldDebugComponent(id);
 else if (id == "particle_attractor") return new ParticleAttractorComponent(id);
 else if (id == "flow_field_attractors") return new FlowFieldAttractorsComponent(id);
+else if (id == "syphon") return new SyphonComponent(id);
 //dont remove this line
 
 return NULL;

@@ -27,6 +27,7 @@ ecs.add_system(new TagsReceiverSystem("tags_receiver"));
 ecs.add_system(new TagsSystem("tags"));
 ecs.add_system(new TableCalibSystem("table_calib"));
 ecs.add_system(new DepthProcessingSystem("depth_processing"));
+ecs.add_system(new SyphonSystem("syphon"));
 ecs.add_system(new FlowFieldContainerSystem("flow_field_container"));
 ecs.add_system(new FlowFieldGradientSystem("flow_field_gradient"));
 ecs.add_system(new FlowFieldAttractorsSystem("flow_field_attractors"));
@@ -39,6 +40,7 @@ ecs.add_system(new ParticleAttractorSystem("particle_attractor"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new KnobSystem("knob"));
 ecs.add_system(new TimeBenderSystem("time_bender"));
+
 //dont remove this line
 };
 
