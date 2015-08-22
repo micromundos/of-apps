@@ -47,7 +47,7 @@ class SyphonSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
       DepthProcessingComponent* depth_proc_data = require_component<DepthProcessingComponent>("input");
-      syphon_server.publishTexture(&depth_proc_data->height_map().get());
+      syphon_server.publishTexture(&depth_proc_data->surfaces().get_debug().get());
       //  DepthComponent* depth_data = depth_m.get(e);
      // ofLogNotice("SyphonSystem") << "process entity " << e.getId();
       //syphon_m.get(e)->data;

@@ -42,7 +42,7 @@ void main( void )
 void __debug__() 
 {
   float _in = texel( debug_input ).r;
-  float _out = lerp2d( _in, 0., 500., 0.2, 1. );
+  float _out = lerp2d( _in, 0., 500., 0.0, 1. );
   /*float _out = _in <= 0. ? 0. : lerp2d( _in, 0., 500., 0.2, 1. );*/
   gl_FragColor = vec4( _out, _out, _out, 1. );
 }
