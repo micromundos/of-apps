@@ -2,6 +2,7 @@
 # plab
 #########################
 data/settings.xml
+data/ofxTimeMeasurements.settings
 data/calib/**
 
 #########################
