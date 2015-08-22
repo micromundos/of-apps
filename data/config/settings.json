@@ -1,8 +1,8 @@
 { "params": {
     "app_port": 6667,
     "ctrl": {
-        /*"host": "localhost",*/
-        "host": "192.168.0.16", /*gl*/
+        "host": "localhost",
+        /*"host": "192.168.0.16", [>gl<]*/
         "port": 6666,
         "send_interval": 3
     },
