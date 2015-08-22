@@ -33,8 +33,12 @@ class SyphonSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
+      DepthComponent* depth_data = require_component<DepthComponent>("input");
+      if ( ! depth_data->dirty ) return;
+      TS_START("SyphonSystem"); 
       DepthProcessingComponent* depth_proc_data = require_component<DepthProcessingComponent>("input");
       syphon_server.publishTexture(&depth_proc_data->surfaces().get_debug().get());
+      TS_STOP("SyphonSystem");
     }; 
 
     virtual void renderEntity(Entity &e)
