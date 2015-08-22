@@ -23,19 +23,6 @@ class SyphonSystem : public ECSsystem
       syphon_server.setName("Plab");
     };
 
-    //virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::processEntities(bag);
-      //int len = bag.getCount();
-      //for ( int i = 0; i < len; i++ )
-        //processEntity( *bag.get(i) );
-    //};
-
-    //virtual void renderEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::renderEntities(bag);
-    //};
-
     virtual void removed(Entity &e) 
     {
     };
@@ -48,9 +35,6 @@ class SyphonSystem : public ECSsystem
     {
       DepthProcessingComponent* depth_proc_data = require_component<DepthProcessingComponent>("input");
       syphon_server.publishTexture(&depth_proc_data->surfaces().get_debug().get());
-      //  DepthComponent* depth_data = depth_m.get(e);
-     // ofLogNotice("SyphonSystem") << "process entity " << e.getId();
-      //syphon_m.get(e)->data;
     }; 
 
     virtual void renderEntity(Entity &e)
