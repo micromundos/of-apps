@@ -14,11 +14,11 @@ void ofApp::setup()
 
   load_all_config();
 
-  string host = "localhost";
   int app_port = settings["params"]["app_port"].asInt();
-  //int ctrl_port = settings["params"]["ctrl_port"].asInt();
+  string host = settings["params"]["ctrl"]["host"].asString();
+  //int ctrl_port = settings["params"]["ctrl"]["port"].asInt();
 
-  send_interval = settings["params"]["ctrl_send_interval"].asInt();
+  send_interval = settings["params"]["ctrl"]["send_interval"].asInt();
 
   sender.setup( host, app_port );
 

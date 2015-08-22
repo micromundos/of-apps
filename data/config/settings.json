@@ -1,32 +1,32 @@
-{
-    "params": {
-        "host": "localhost",
-        "app_port": 6667,
-        "ctrl_port": 6666,
-        "ctrl_send_interval": 3,
-        "calib_kinect_rgb_mono": {
-            "cam_pattern_path": "calib/cam_pattern.yml"
-        },
-        "calib_kinect_rgb_stereo": {
-            "rgb_cam_name": "logitech920",
-            "rgb_device_id": 1,
-            "calib_kinect_path": "calib/intrinsics_kinect.ofxcv.yml",
-            "cam_pattern_path": "calib/cam_pattern.yml"
-        },
-        "calib_kinect_ps3eye": {
-            "ps3_cam_name": "ps3eye",
-            "calib_kinect_path": "calib/intrinsics_kinect.ofxcv.yml",
-            "cam_pattern_path": "calib/cam_pattern.yml"
-        },
-        "calib_kinect_projector": {
-            "port": 6668,
-            "chessboard_port": 6669,
-            "chessboard_host": "localhost",
-            "calib_cam_path": "calib/intrinsics_kinect.ofxcv.yml",
-            "pattern_settings_path": "calib/kinect_projector_pattern.yml",
-            "gui_settings_path": "calib/kinect_projector_gui.xml",
-            "cam_name": "kinect_rgb",
-            "proj_name": "proj_lg"
-        }
+{ "params": {
+    "app_port": 6667,
+    "ctrl": {
+        "host": "192.168.0.16",
+        "port": 6666,
+        "send_interval": 3
+    },
+    "calib_kinect_rgb_mono": {
+        "cam_pattern_path": "calib/cam_pattern.yml"
+    },
+    "calib_kinect_rgb_stereo": {
+        "rgb_cam_name": "logitech920",
+        "rgb_device_id": 1,
+        "calib_kinect_path": "calib/intrinsics_kinect.ofxcv.yml",
+        "cam_pattern_path": "calib/cam_pattern.yml"
+    },
+    "calib_kinect_ps3eye": {
+        "ps3_cam_name": "ps3eye",
+        "calib_kinect_path": "calib/intrinsics_kinect.ofxcv.yml",
+        "cam_pattern_path": "calib/cam_pattern.yml"
+    },
+    "calib_kinect_projector": {
+        "port": 6668,
+        "chessboard_port": 6669,
+        "chessboard_host": "localhost",
+        "calib_cam_path": "calib/intrinsics_kinect.ofxcv.yml",
+        "pattern_settings_path": "calib/kinect_projector_pattern.yml",
+        "gui_settings_path": "calib/kinect_projector_gui.xml",
+        "cam_name": "kinect_rgb",
+        "proj_name": "proj_lg"
     }
-}
+}}
