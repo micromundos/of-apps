@@ -21,7 +21,7 @@ void ofApp::setup()
 
   component_factory = new PlabComponentFactory();
 
-  int app_port = config.settings()["params"]["app_port"].asInt();
+  int app_port = config.settings()["params"]["app"]["port"].asInt();
 
   motor.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.motor()["motor"], app_port );
   motor.make_all();

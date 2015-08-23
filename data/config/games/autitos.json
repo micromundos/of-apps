@@ -1,0 +1,18 @@
+{
+   "bloqs" : [
+      {
+         "components" : [
+            {
+               "data" : {
+                  "force" : [ 15, 0, 100 ],
+                  "rate" : [ 10, 0, 100 ]
+               },
+               "id" : "particle_emitter"
+            }
+         ],
+         "id" : "0"
+      }
+   ],
+   "game" : []
+}
+

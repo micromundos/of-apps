@@ -1,5 +1,10 @@
 { "params": {
-    "app_port": 6667,
+    "app": {
+        "port": 6667,
+        "motor_path": "config/motor.json",
+        "game_path": "config/games/autitos.json"
+        /*"game_path": "config/games/plab.json"*/
+    },
     "ctrl": {
         "host": "localhost",
         /*"host": "192.168.0.16", [>gl<]*/

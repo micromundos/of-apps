@@ -14,7 +14,7 @@ void ofApp::setup()
 
   load_all_config();
 
-  int app_port = settings["params"]["app_port"].asInt();
+  int app_port = settings["params"]["app"]["port"].asInt();
   string host = settings["params"]["ctrl"]["host"].asString();
   //int ctrl_port = settings["params"]["ctrl"]["port"].asInt();
 
