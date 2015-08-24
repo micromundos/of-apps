@@ -10,14 +10,14 @@ class Config
 
     void init()
     {
-      if ( !_motor.open( "config/motor.json" ) ) 
-        ofLogError("Config") << "error opening motor.json \n";
-
-      if ( !_game.open( "config/game.json" ) )
-        ofLogError("Config") << "error opening game.json \n";
-
       if ( !_settings.open( "config/settings.json" ) )
         ofLogError("Config") << "error opening settings.json \n";
+
+      if ( !_motor.open( _settings["params"]["app"]["motor_path"].asString() ) ) 
+        ofLogError("Config") << "error opening motor.json \n";
+
+      if ( !_game.open( _settings["params"]["app"]["game_path"].asString() ) ) 
+        ofLogError("Config") << "error opening game.json \n"; 
     };
 
     const ofxJSONElement& motor()

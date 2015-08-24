@@ -17,18 +17,24 @@ class FisicaSystem : public ECSsystem
       addComponentType<FisicaComponent>();
     };
 
-    ~FisicaSystem()
-    {
-      delete _world;
-      _world = NULL;
-    };
-
     virtual void initialize() 
     {
       fisica_m.init( *world );
+      _world = NULL; 
+    };
+
+    virtual void added(Entity &e) 
+    {
+      if ( _world != NULL )
+      {
+        ofLogWarning("FisicaSystem")
+          << "entity already added";
+        return;
+      }
 
       b2Vec2 gravity;
       gravity.Set(0.0f,0.0f);
+
       _world = new b2World(gravity); 
 
       _world->SetAllowSleeping(true);
@@ -46,7 +52,13 @@ class FisicaSystem : public ECSsystem
       //particle_iterations = b2CalculateParticleIterations( 10, 0.04f, 1.0f / _fps );
     };
 
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
+    virtual void removed(Entity &e) 
+    {
+      delete _world;
+      _world = NULL;
+    };
+
+    virtual void processEntity(Entity &e) 
     {
       TS_START("FisicaSystem"); 
 
@@ -59,13 +71,7 @@ class FisicaSystem : public ECSsystem
           particle_iterations);
 
       TS_STOP("FisicaSystem");
-    };
-
-    virtual void added(Entity &e) 
-    {};
-
-    virtual void processEntity(Entity &e) 
-    {}; 
+    }; 
 
     virtual void renderEntity(Entity &e)
     {};
