@@ -14,16 +14,16 @@ void ofApp::setup()
     ofLogFatalError() << "error opening settings.json";
     ofExit();
     return;
-  }
-
-  w = 640;
-  h = 480;
+  } 
 
   kinect.setRegistration(true);
   // ir, rgb, texture
   kinect.init(false, true, true);
   kinect.open();
   kinect.update(); 
+
+  w = kinect.getWidth();
+  h = kinect.getHeight();
 
 
   calibration.init( 

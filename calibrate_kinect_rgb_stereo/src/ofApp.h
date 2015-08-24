@@ -35,7 +35,8 @@ class ofApp : public ofBaseApp
 
     string rgb_cam_name;
     int rgb_device_id;
+    int rgb_width, rgb_height;
+    int rgb_width_draw, rgb_height_draw;
 
     ofxJSONElement settings;
-    int w, h;
 };

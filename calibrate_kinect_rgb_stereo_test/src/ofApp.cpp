@@ -10,11 +10,19 @@ void ofApp::setup()
 
   draw_rgb = false;
 
-  w = 640;
-  h = 480;
+  if ( !settings.open( "config/settings.json" ) ) 
+  {
+    ofLogFatalError() << "error opening settings.json";
+    ofExit();
+    return;
+  }
 
-  rgb_cam.setDeviceID( 1 );
-  rgb_cam.initGrabber( w, h, true );
+  rgb_device_id = settings["params"]["calib_kinect_rgb_stereo"]["rgb_device_id"].asInt();
+  rgb_width = settings["params"]["calib_kinect_rgb_stereo"]["rgb_width"].asInt();
+  rgb_height = settings["params"]["calib_kinect_rgb_stereo"]["rgb_height"].asInt();
+
+  rgb_cam.setDeviceID( rgb_device_id );
+  rgb_cam.initGrabber( rgb_width, rgb_height, true );
 
   kinect.setRegistration(true);
   // ir, rgb, texture
@@ -26,6 +34,12 @@ void ofApp::setup()
   load_intrinsics( calib_kinect, int_k, "calib/intrinsics_kinect.aruco.yml" );
   load_intrinsics( calib_rgb, int_rgb, "calib/intrinsics_rgb.aruco.yml" );
   load_extrinsics("calib/extrinsics_rgb_to_kinect.yml"); //"extrinsics_kinect_to_rgb.yml"
+
+  //window setup
+  ofSetWindowShape( 
+      kinect.width + rgb_width, 
+      rgb_height > kinect.height ? rgb_height : kinect.height );
+  ofSetWindowPosition( 0, 0 );
 }
 
 void ofApp::update()
@@ -55,7 +69,7 @@ void ofApp::draw()
   else 
   {
     //draw_kinect_undistorted( 0, 0 );
-    kinect.draw( 0, 0, w, h );
+    kinect.draw( 0, 0 );
   }
 
   aruco.draw2d();
@@ -169,7 +183,7 @@ void ofApp::draw_epilines()
     cv::Vec3f& line = epilines[i];
     ofLine(
         ofVec2f( 0, -line[2]/line[1]),
-        ofVec2f( w, -(line[2]+line[0]*w)/line[1])
+        ofVec2f( kinect.width, -(line[2]+line[0]*kinect.width)/line[1])
         );
   }
   ofPopStyle();
@@ -255,10 +269,14 @@ void ofApp::load_extrinsics(string filename)
 
 
   vector<cv::Point2f> corners;
-  corners.push_back( cv::Point2f( 0,0 ) );
-  corners.push_back( cv::Point2f( 0,w ) );
-  corners.push_back( cv::Point2f( h,w ) );
-  corners.push_back( cv::Point2f( h,0 ) );
+  corners.push_back( 
+      cv::Point2f( 0,0 ) );
+  corners.push_back( 
+      cv::Point2f( 0, kinect.width ) );
+  corners.push_back( 
+      cv::Point2f( kinect.height, kinect.width ) );
+  corners.push_back( 
+      cv::Point2f( kinect.height, 0 ) );
   cv::computeCorrespondEpilines(
       cv::Mat(corners), 1,
       extrinsics.F,

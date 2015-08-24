@@ -1,6 +1,7 @@
-ofxPlab
+addons
 ofxKinect
 ofxOpenCv
 ofxAruco
 ofxCv
-ofxPS3EyeGrabber
+ofxJSON
+ofxPlab
