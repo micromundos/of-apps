@@ -14,6 +14,11 @@
       {
          "components" : [
             {
+               "data" : {
+                   "render": true,
+                   "src": "Plab",
+                   "dst": "Main Camera"
+               },
                "id" : "syphon"
             }
          ],
@@ -23,10 +28,7 @@
          "components" : [
             {
                "id" : "render"
-            },
-            {
-               "id" : "screen"
-            },
+            }, 
             {
                "data" : {
                   "calibration" : {

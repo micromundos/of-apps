@@ -29,6 +29,7 @@ class CamaraLucidaSystem : public ECSsystem
     {
       camara_lucida_m.init( *world );
       render_m.init( *world );
+      inited = false; 
     };
 
     void dispose()
@@ -37,15 +38,18 @@ class CamaraLucidaSystem : public ECSsystem
         cml_data->enabled.removeListener(this, &CamaraLucidaSystem::update_render_data);
       cml_data = NULL;
       render_data = NULL;
+      inited = false; 
     };
 
     virtual void added(Entity &e) 
     {
-      if ( cml_data != NULL ) 
+      if (inited)
       {
-        ofLogWarning("CamaraLucidaSystem") << "add entity: entity already exists and only 1 entity with CamaraLucidaComponent is expected";
-        dispose();
+        ofLogWarning("CamaraLucidaSystem") 
+          << "singleton entity already added";
+        return;
       }
+      inited = true;
 
       cml_data = camara_lucida_m.get(e);
       render_data = render_m.get(e);
@@ -61,23 +65,8 @@ class CamaraLucidaSystem : public ECSsystem
       dispose();
     }; 
 
-    virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    {
-      int len = bag.getCount();
-
-      if ( len == 1 )
-        processEntity( *bag.get(0) );
-
-      else if ( len > 1 )
-        ofLogError("CamaraLucidaSystem") << "expected only 1 entity with CamaraLucidaComponent and got " << len;
-
-      //for ( int i = 0; i < len; i++ )
-        //processEntity( *bag.get(i) );
-    };
-
     virtual void processEntity(Entity &e) 
     {
-
       DepthComponent* depth_data = require_component<DepthComponent>("input");
 
       cml_data->cml->depth_camera()->xoff = cml_data->xoff;
@@ -92,8 +81,6 @@ class CamaraLucidaSystem : public ECSsystem
 
     void update_render_data(bool& enabled)
     { 
-      //ofLogNotice("CamaraLucidaSystem") << "update_render_data, cml enabled: " << enabled;
-
       float w, h;
 
       if ( enabled )
@@ -112,12 +99,6 @@ class CamaraLucidaSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      if ( cml_data == NULL )
-        return;
-
-      //CamaraLucidaComponent* cml_data = camara_lucida_m.get(e);
-      //RenderComponent* render_data = render_m.get(e);
-
       float bg = cml_data->render_background;
       if ( bg > 0.0 )
       {
@@ -161,6 +142,13 @@ class CamaraLucidaSystem : public ECSsystem
 
   private:
 
+    bool inited;
+    CamaraLucidaComponent* cml_data;
+    RenderComponent* render_data;
+
+    ComponentMapper<CamaraLucidaComponent> camara_lucida_m;
+    ComponentMapper<RenderComponent> render_m;
+
     void render_hue_tex()
     {
       if (cml_data == NULL) return;
@@ -172,17 +160,7 @@ class CamaraLucidaSystem : public ECSsystem
 
       ofSetColor(255);
       cml_data->cml->depth_camera()->get_hue_tex_ref( depth_data->depth_ofpix_mm->getPixels() ).draw( 0, 0, w, h );
-    };
-
-    //single entity
-    //save the components to use 
-    //in the event listener
-    //TODO a better way to do this?
-    CamaraLucidaComponent* cml_data;
-    RenderComponent* render_data;
-
-    ComponentMapper<CamaraLucidaComponent> camara_lucida_m;
-    ComponentMapper<RenderComponent> render_m;
+    }; 
 
 };
 

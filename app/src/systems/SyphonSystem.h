@@ -19,16 +19,29 @@ class SyphonSystem : public ECSsystem
 
     virtual void initialize() 
     {
-      syphon_m.init( *world );
-      syphon_server.setName("Plab");
+      syphon_m.init( *world ); 
+      inited = false;
     };
 
     virtual void removed(Entity &e) 
     {
+      inited = false;
     };
 
     virtual void added(Entity &e) 
     {
+      if (inited)
+      {
+        ofLogWarning("SyphonSystem") 
+          << "singleton entity already added";
+        return;
+      }
+      inited = true;
+
+      SyphonComponent* syphon_data = syphon_m.get(e);
+      server.setName( syphon_data->src );
+      client.setup();
+      client.set( "", syphon_data->dst );
     }; 
 
     virtual void processEntity(Entity &e) 
@@ -37,18 +50,27 @@ class SyphonSystem : public ECSsystem
       if ( ! depth_data->dirty ) return;
       TS_START("SyphonSystem"); 
       DepthProcessingComponent* depth_proc_data = require_component<DepthProcessingComponent>("input");
-      syphon_server.publishTexture(&depth_proc_data->surfaces().get_debug().get());
+      server.publishTexture( &depth_proc_data->surfaces().get_debug().get() );
       TS_STOP("SyphonSystem");
     }; 
 
     virtual void renderEntity(Entity &e)
-    {};
+    {
+      SyphonComponent* syphon_data = syphon_m.get(e);
+      if ( ! syphon_data->render ) return;
+      TS_START("SyphonSystem render"); 
+      RenderComponent* render_data = require_component<RenderComponent>("output");
+      client.draw( 0, 0, render_data->width, render_data->height );
+      TS_STOP("SyphonSystem render");
+    };
 
   private:
 
+    bool inited;
+    ofxSyphonServer server;
+    ofxSyphonClient client;
+
     ComponentMapper<SyphonComponent> syphon_m;
-    ComponentMapper<DepthProcessingComponent> depth_processing_m;
-    ofxSyphonServer                  syphon_server;
 
 };
 
