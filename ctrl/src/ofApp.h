@@ -37,7 +37,7 @@ class ofApp : public ofBaseApp{
     ofxOscSender sender;
 
     ofxJSONElement motor, game, settings;
-    string settings_json, game_json, motor_json;
+    string settings_path, game_path, motor_path;
 
     ECSparamsSender params_sender;
 

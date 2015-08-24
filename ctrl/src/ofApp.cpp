@@ -89,24 +89,25 @@ void ofApp::parse_all_config()
 
 void ofApp::load_all_config()
 {
-  settings_json = "config/settings.json";
-  game_json = "config/game.json";
-  motor_json = "config/motor.json";
+  settings_path = "config/settings.json"; 
 
-  if ( !settings.open( settings_json ) )
+  if ( !settings.open( settings_path ) )
     ofLogError() << "error opening settings.json";
 
-  if ( !game.open( game_json ) )
+  game_path = settings["params"]["app"]["game_path"].asString();
+  motor_path = settings["params"]["app"]["motor_path"].asString();
+
+  if ( !game.open( game_path ) )
     ofLogError() << "error opening game.json";
 
-  if ( !motor.open( motor_json ) )
+  if ( !motor.open( motor_path ) )
     ofLogError() << "error opening motor.json";
 };
 
 void ofApp::save_all_config()
 {
-  save_config( motor, motor_json, params_motor );
-  save_config( game, game_json, params_motor );
+  save_config( motor, motor_path, params_motor );
+  save_config( game, game_path, params_motor );
 };
 
 void ofApp::load_and_parse_all_config()
