@@ -29,17 +29,17 @@ void ofApp::setup()
   kinect.init(false, true, true);
 	kinect.open();
 
-	aruco.setupXML( "calib/intrinsics_rgb.aruco.yml", ofGetWidth(), ofGetHeight(), "", 0.07  );
-
-  load_intrinsics( calib_kinect, int_k, "calib/intrinsics_kinect.aruco.yml" );
-  load_intrinsics( calib_rgb, int_rgb, "calib/intrinsics_rgb.aruco.yml" );
-  load_extrinsics("calib/extrinsics_rgb_to_kinect.yml"); //"extrinsics_kinect_to_rgb.yml"
 
   //window setup
-  ofSetWindowShape( 
-      kinect.width + rgb_width, 
-      rgb_height > kinect.height ? rgb_height : kinect.height );
+  ofSetWindowShape( rgb_width, rgb_height );
   ofSetWindowPosition( 0, 0 );
+
+
+	aruco.setupXML( "calib/intrinsics_logitech920.aruco.yml", ofGetWidth(), ofGetHeight(), "", 0.07  );
+
+  load_intrinsics( calib_kinect, int_k, "calib/intrinsics_kinect.aruco.yml" );
+  load_intrinsics( calib_rgb, int_rgb, "calib/intrinsics_logitech920.aruco.yml" );
+  load_extrinsics("calib/extrinsics_logitech920_to_kinect.yml"); //"extrinsics_kinect_to_logitech920.yml" 
 }
 
 void ofApp::update()
@@ -87,10 +87,10 @@ void ofApp::draw()
     //ofMatrix4x4 mMV = get_marker_mv(m);
     //ofVec3f mT = mMV.getTranslation();
 
-    ofVec3f mT;
-    mT.x = m.Tvec.at<float>(0,0);
-    mT.y = m.Tvec.at<float>(1,0);
-    mT.z = m.Tvec.at<float>(2,0);
+    ofVec3f mTvec;
+    mTvec.x = m.Tvec.at<float>(0,0);
+    mTvec.y = m.Tvec.at<float>(1,0);
+    mTvec.z = m.Tvec.at<float>(2,0);
 
     //ofMatrix4x4 mk_MV = extrinsics.ofMV * mMV;
     //ofVec3f p3_k = mk_MV.getTranslation();
@@ -106,13 +106,17 @@ void ofApp::draw()
     p3_k.z = mk_T.at<float>(2,0);
 
     ofVec2f p2_k; 
-    project( calib_kinect.getDistortedIntrinsics(), p3_k, p2_k );
-    //project( calib_kinect.getUndistortedIntrinsics(), p3_k, p2_k );
+    project( 
+        calib_kinect.getDistortedIntrinsics(), 
+        //calib_kinect.getUndistortedIntrinsics(), 
+        p3_k, p2_k );
 
     // test projection back on rgb 
     ofVec2f p2_rgb; 
-    project( calib_rgb.getDistortedIntrinsics(), mT, p2_rgb );
-    //project( calib_rgb.getUndistortedIntrinsics(), mT, p2_rgb );
+    project( 
+        calib_rgb.getDistortedIntrinsics(), 
+        //calib_rgb.getUndistortedIntrinsics(), 
+        mTvec, p2_rgb );
 
 
     cv::Point2f ctr = m.getCenter();
@@ -121,7 +125,7 @@ void ofApp::draw()
       << "marker= " << i << "\n"
       << "Tvec= " << m.Tvec << "\n"
       << "Rvec= " << m.Rvec << "\n"
-      << "T= " << mT << "\n"
+      << "T= " << mTvec << "\n"
       //<< "MV= \n" << mMV << "\n"
       //<< "MV kinect= \n" << mk_MV << "\n"
       //<< "MV calib stereo= \n" << extrinsics.ofMV << "\n"
