@@ -282,11 +282,13 @@ class TagsSystem : public ECSsystem
     //normalized [0,1] loc
     void tag_loc_on_depth( const Tag& tag, ofVec2f& tloc )
     {
+      const ofxCv::Intrinsics& depth_int = calib_depth.getDistortedIntrinsics();
+      cv::Size depth_size = depth_int.getImageSize();
       ofVec3f p3; 
       transform_to_depth( tag, p3 );
-      project( calib_depth.getDistortedIntrinsics(), p3, tloc ); 
-      tloc.x /= rgb_width;
-      tloc.y /= rgb_height;
+      project( depth_int, p3, tloc ); 
+      tloc.x /= depth_size.width;
+      tloc.y /= depth_size.height;
     }; 
 
     //normalized [0,1] loc

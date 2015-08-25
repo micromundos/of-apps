@@ -70,8 +70,8 @@
                "data" : {
                   "calibration" : {
                      "depth" : "calib/intrinsics_kinect.aruco.yml",
-                     "rgb" : "calib/intrinsics_ps3eye.aruco.yml",
-                     "stereo" : "calib/extrinsics_ps3eye_to_kinect.yml"
+                     "rgb" : "calib/intrinsics_logitech920.aruco.yml",
+                     "stereo" : "calib/extrinsics_logitech920_to_kinect.yml"
                   },
                   "render" : true
                },
