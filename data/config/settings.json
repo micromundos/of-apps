@@ -17,8 +17,8 @@
     "calib_kinect_rgb_stereo": {
         "rgb_cam_name": "logitech920",
         "rgb_device_id": 1,
-        "rgb_width": 1280,
-        "rgb_height": 720,
+        "rgb_width": 1024,
+        "rgb_height": 576,
         "calib_kinect_path": "calib/intrinsics_kinect.ofxcv.yml",
         "cam_pattern_path": "calib/cam_pattern.yml"
     },
