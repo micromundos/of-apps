@@ -3,7 +3,7 @@
 #########################
 data/settings.xml
 data/ofxTimeMeasurements.settings
-data/calib/**
+data/calib/imgs_proj/**
 
 #########################
 # xcode proj files
