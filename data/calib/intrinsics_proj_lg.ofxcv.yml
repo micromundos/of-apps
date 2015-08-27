@@ -3,8 +3,8 @@ cameraMatrix: !!opencv-matrix
    rows: 3
    cols: 3
    dt: d
-   data: [ 1.4098247353786132e+03, 0., 4.9016724421418320e+02, 0.,
-       1.3991500421333719e+03, 8.1530961751960899e+02, 0., 0., 1. ]
+   data: [ 1.5032079852067720e+03, 0., 5.0204393878381831e+02, 0.,
+       1.4931040119567633e+03, 8.1193520101423235e+02, 0., 0., 1. ]
 imageSize_width: 1024
 imageSize_height: 768
 sensorSize_width: 0
@@ -14,13 +14,13 @@ distCoeffs: !!opencv-matrix
    cols: 5
    dt: d
    data: [ 0., 0., 0., 0., 0. ]
-reprojectionError: 1.0534340143203735e+00
+reprojectionError: 1.2733000516891479e+00
 undistorted_cameraMatrix: !!opencv-matrix
    rows: 3
    cols: 3
    dt: d
-   data: [ 1.4084479980468750e+03, 0., 4.8968857378764369e+02, 0.,
-       1.3973282470703125e+03, 8.1424800889192556e+02, 0., 0., 1. ]
+   data: [ 1.5017399902343750e+03, 0., 5.0155366407039401e+02, 0.,
+       1.4911597900390625e+03, 8.1087793433110346e+02, 0., 0., 1. ]
 undistorted_imageSize_width: 1024
 undistorted_imageSize_height: 768
 undistorted_sensorSize_width: 0

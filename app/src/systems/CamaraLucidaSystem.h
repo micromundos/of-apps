@@ -5,6 +5,7 @@
 #include "Components.h"
 #include "ofxCamaraLucida.h"
 #include "ofxTimeMeasurements.h"
+#include "keys.h"
 
 using namespace artemis;
 
@@ -15,11 +16,10 @@ class CamaraLucidaSystem : public ECSsystem
 
     CamaraLucidaSystem(string _id) : ECSsystem(_id)
     {
-      cml_data = NULL;
-      render_data = NULL;
-
       addComponentType<CamaraLucidaComponent>();
       addComponentType<RenderComponent>();
+      cml_data = NULL;
+      render_data = NULL;
     };
 
     //~CamaraLucidaSystem()
@@ -35,7 +35,10 @@ class CamaraLucidaSystem : public ECSsystem
     void dispose()
     {
       if ( cml_data != NULL ) 
+      {
         cml_data->enabled.removeListener(this, &CamaraLucidaSystem::update_render_data);
+        ofRemoveListener(ofEvents().keyPressed, this, &CamaraLucidaSystem::keyPressed);
+      }
       cml_data = NULL;
       render_data = NULL;
       inited = false; 
@@ -54,10 +57,13 @@ class CamaraLucidaSystem : public ECSsystem
       cml_data = camara_lucida_m.get(e);
       render_data = render_m.get(e);
 
+      initial_projector_frustum = cml_data->cml->projector()->gl_frustum();
       cml_data->enabled.addListener(this, &CamaraLucidaSystem::update_render_data);
 
       bool enabled = cml_data->enabled;
       update_render_data( enabled );
+
+      ofAddListener(ofEvents().keyPressed, this, &CamaraLucidaSystem::keyPressed);
     };
 
     virtual void removed(Entity &e) 
@@ -140,11 +146,49 @@ class CamaraLucidaSystem : public ECSsystem
       }
     };
 
+    void keyPressed(ofKeyEventArgs &args)
+    {
+      if (cml_data == NULL) return;
+
+      cml::CamaraLucida* cml = cml_data->cml;
+
+      if ( args.key == keys::cml_tweak_frustum_inc || 
+          args.key == keys::cml_tweak_frustum_dec )
+      {
+        cml::OpticalDevice::Frustum& f = cml->projector()->gl_frustum();
+        float d = 0.1 * (args.key == keys::cml_tweak_frustum_inc ? 1 : -1);
+        f.left -= d;
+        f.right += d;
+        f.bottom -= d;
+        f.top += d;
+      }
+
+      if ( args.key == keys::cml_tweak_frustum_reset )
+      {
+        cml::OpticalDevice::Frustum& f = cml->projector()->gl_frustum();
+        f.left = initial_projector_frustum.left;
+        f.right = initial_projector_frustum.right;
+        f.bottom = initial_projector_frustum.bottom;
+        f.top = initial_projector_frustum.top;
+      }
+
+      if ( args.key == keys::cml_gpu )
+      {
+        cml->gpu( !cml->gpu() );
+      }
+
+      if ( args.key == keys::cml_wireframe )
+      {
+        cml->wireframe( !cml->wireframe() );
+      }
+    };
+
   private:
 
     bool inited;
     CamaraLucidaComponent* cml_data;
     RenderComponent* render_data;
+    cml::OpticalDevice::Frustum initial_projector_frustum;
 
     ComponentMapper<CamaraLucidaComponent> camara_lucida_m;
     ComponentMapper<RenderComponent> render_m;

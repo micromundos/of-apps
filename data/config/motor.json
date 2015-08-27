@@ -37,7 +37,7 @@
                      "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_lg_to_kinect_rgb.yml"
                   },
                   "enabled" : true,
-                  "mesh_res" : 4,
+                  "mesh_res" : 1,
                   "render_background" : [ 0, 0, 1 ],
                   "render_hue_tex" : false,
                   "tex_height" : 1152,

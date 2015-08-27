@@ -3,7 +3,4 @@ DepthProcessingSystem render=1|1
 KinectSystem update kinect=1|1
 update()=1|1
 TagsSystem=1|1
-SyphonSystem=1|1
-DepthProcessingSystem=1|1
-CamaraLucidaSystem=1|1
 SyphonSystem render=1|1

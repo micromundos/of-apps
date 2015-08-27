@@ -8,6 +8,9 @@ namespace keys
   //app
   const char cml_gpu = 'g';
   const char cml_wireframe = 'w';
+  const char cml_tweak_frustum_inc = 'm';
+  const char cml_tweak_frustum_dec = 'n';
+  const char cml_tweak_frustum_reset = 'k';
 
   //cml
   const char cml_key_debug = 'd';
