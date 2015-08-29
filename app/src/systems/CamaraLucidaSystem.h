@@ -38,6 +38,7 @@ class CamaraLucidaSystem : public ECSsystem
       {
         cml_data->enabled.removeListener(this, &CamaraLucidaSystem::update_render_data);
         ofRemoveListener(ofEvents().keyPressed, this, &CamaraLucidaSystem::keyPressed);
+        ofRemoveListener(ofEvents().keyReleased, this, &CamaraLucidaSystem::keyReleased);
       }
       cml_data = NULL;
       render_data = NULL;
@@ -57,13 +58,25 @@ class CamaraLucidaSystem : public ECSsystem
       cml_data = camara_lucida_m.get(e);
       render_data = render_m.get(e);
 
-      initial_projector_frustum = cml_data->cml->projector()->gl_frustum();
+      cml::OpticalDevice* proj = cml_data->cml->projector();
+      ini_proj_frustum = proj->gl_frustum();
+      ini_proj_loc = proj->loc();
+      ini_proj_fwd = proj->fwd();
+      ini_proj_up = proj->up();
+      ini_proj_trg = proj->trg();
+
+      proj_tweak_Rz_ang = 0;
+
+      for (int i = 0; i < 512; i++) 
+        pressed[i] = false;
+
       cml_data->enabled.addListener(this, &CamaraLucidaSystem::update_render_data);
 
       bool enabled = cml_data->enabled;
       update_render_data( enabled );
 
       ofAddListener(ofEvents().keyPressed, this, &CamaraLucidaSystem::keyPressed);
+      ofAddListener(ofEvents().keyReleased, this, &CamaraLucidaSystem::keyReleased);
     };
 
     virtual void removed(Entity &e) 
@@ -146,30 +159,57 @@ class CamaraLucidaSystem : public ECSsystem
       }
     };
 
+    void keyReleased(ofKeyEventArgs &args)
+    {
+      pressed[args.key] = false;
+    };
+
     void keyPressed(ofKeyEventArgs &args)
     {
+      pressed[args.key] = true;
+
       if (cml_data == NULL) return;
 
       cml::CamaraLucida* cml = cml_data->cml;
+      cml::OpticalDevice* proj = cml->projector();
+      cml::OpticalDevice::Frustum& f = proj->gl_frustum();
 
-      if ( args.key == keys::cml_tweak_frustum_inc || 
-          args.key == keys::cml_tweak_frustum_dec )
+      //tweak projector reset
+      if ( args.key == keys::cml_tweak_reset )
+      { 
+        f.left = ini_proj_frustum.left;
+        f.right = ini_proj_frustum.right;
+        f.bottom = ini_proj_frustum.bottom;
+        f.top = ini_proj_frustum.top;
+
+        proj->loc().set( ini_proj_loc );
+        proj->fwd().set( ini_proj_fwd );
+        proj->up().set( ini_proj_up );
+        proj->trg().set( ini_proj_trg );
+
+        proj_tweak_Rz_ang = 0;
+      }
+
+      //tweak projector frustum
+      if ( pressed[keys::cml_tweak_frustum] && (args.key == OF_KEY_UP || args.key == OF_KEY_DOWN) )
       {
-        cml::OpticalDevice::Frustum& f = cml->projector()->gl_frustum();
-        float d = 0.1 * (args.key == keys::cml_tweak_frustum_inc ? 1 : -1);
+        float d = 0.1 * (args.key == OF_KEY_UP ? 1 : -1);
         f.left -= d;
         f.right += d;
         f.bottom -= d;
         f.top += d;
+      } 
+
+      //tweak projector rotation around Z axis
+      if ( pressed[keys::cml_tweak_Rz] && (args.key == OF_KEY_UP || args.key == OF_KEY_DOWN) )
+      {
+        proj_tweak_Rz_ang += 1 * (args.key == OF_KEY_UP ? 1 : -1);
+        proj->fwd().rotate( proj_tweak_Rz_ang, proj->up() );
       }
 
-      if ( args.key == keys::cml_tweak_frustum_reset )
+      if ( pressed[keys::cml_tweak_T] && (args.key == OF_KEY_UP || args.key == OF_KEY_DOWN) )
       {
-        cml::OpticalDevice::Frustum& f = cml->projector()->gl_frustum();
-        f.left = initial_projector_frustum.left;
-        f.right = initial_projector_frustum.right;
-        f.bottom = initial_projector_frustum.bottom;
-        f.top = initial_projector_frustum.top;
+        //TODO tweak projector translation
       }
 
       if ( args.key == keys::cml_gpu )
@@ -188,7 +228,15 @@ class CamaraLucidaSystem : public ECSsystem
     bool inited;
     CamaraLucidaComponent* cml_data;
     RenderComponent* render_data;
-    cml::OpticalDevice::Frustum initial_projector_frustum;
+
+    //tweaks
+    cml::OpticalDevice::Frustum ini_proj_frustum;
+    ofVec3f ini_proj_loc;
+    ofVec3f ini_proj_fwd;
+    ofVec3f ini_proj_up;
+    ofVec3f ini_proj_trg;
+    float proj_tweak_Rz_ang;
+    bool pressed[512];
 
     ComponentMapper<CamaraLucidaComponent> camara_lucida_m;
     ComponentMapper<RenderComponent> render_m;
