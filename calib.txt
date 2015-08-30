@@ -1,0 +1,10 @@
+
+calibration steps 
+=================
+
+kinect rgb -- rgb camera -- projector
+
+1) calib-kinect-rgb-mono
+2) calib-kinect-rgb-stereo
+3) calib-kinect-rgb-stereo-test (aruco)
+4) calib-proj.sh

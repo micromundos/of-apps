@@ -10,11 +10,11 @@ namespace keys
   const char cml_wireframe = 'w';
 
   //cml tweaks
-  const char cml_tweak_reset = 'm';
-  const char cml_tweak_frustum = 'j';
+  const char cml_tweak_reset = 'n';
+  const char cml_tweak_frustum = 'm';
+  //const char cml_tweak_Rxy = 'j';
   const char cml_tweak_Rz = 'k';
-  const char cml_tweak_T = 'l';
-  //OF_KEY_LEFT OF_KEY_RIGHT OF_KEY_UP OF_KEY_DOWN
+  const char cml_tweak_Txy = 'l';
 
   //cml
   const char cml_key_debug = 'd';
