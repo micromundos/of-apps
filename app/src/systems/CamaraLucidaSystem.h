@@ -161,10 +161,21 @@ class CamaraLucidaSystem : public ECSsystem
     {
       pressed[args.key] = true;
 
-      if (cml_data == NULL) return;
+      if (cml_data == NULL) 
+        return;
 
       cml::CamaraLucida* cml = cml_data->cml;
       cml::OpticalDevice* proj = cml->projector();
+
+      if ( args.key == keys::cml_tweak_save )
+      {
+        tweak_save();
+      }
+
+      if ( args.key == keys::cml_tweak_load )
+      {
+        tweak_load();
+      }
 
       if ( args.key == keys::cml_tweak_reset )
       { 
@@ -175,8 +186,15 @@ class CamaraLucidaSystem : public ECSsystem
         && (args.key == OF_KEY_UP 
         || args.key == OF_KEY_DOWN) )
       {
-        tweak_frustum( args.key == OF_KEY_UP ? 1. : -1. );
+        tweak_frustum_y( args.key == OF_KEY_DOWN ? 1. : -1. );
       } 
+
+      if ( pressed[keys::cml_tweak_frustum] 
+        && (args.key == OF_KEY_LEFT 
+        || args.key == OF_KEY_RIGHT) )
+      {
+        tweak_frustum_x( args.key == OF_KEY_RIGHT ? 1. : -1. );
+      }
 
       if ( pressed[keys::cml_tweak_Rz] 
         && (args.key == OF_KEY_UP 
@@ -231,16 +249,18 @@ class CamaraLucidaSystem : public ECSsystem
     CamaraLucidaComponent* cml_data;
     RenderComponent* render_data;
 
-    //tweaks
-    cml::OpticalDevice::Frustum ini_proj_frustum;
-    ofVec3f ini_proj_loc;
-    ofVec3f ini_proj_fwd;
-    ofVec3f ini_proj_up;
-    ofVec3f ini_proj_trg;
-    ofVec3f ini_proj_left;
-    float tweak_frustum_off;
+    //tweak projector
+    cml::OpticalDevice::Frustum tweak_ini_frustum;
+    ofVec3f tweak_ini_loc;
+    ofVec3f tweak_ini_fwd;
+    ofVec3f tweak_ini_up;
+    ofVec3f tweak_ini_trg;
+    ofVec3f tweak_ini_left;
     float tweak_T_off;
     float tweak_R_off;
+    float tweak_frustum_off;
+    string tweak_file;
+
     bool pressed[512];
 
     ComponentMapper<CamaraLucidaComponent> camara_lucida_m;
@@ -250,16 +270,20 @@ class CamaraLucidaSystem : public ECSsystem
     {
       cml::OpticalDevice* proj = cml_data->cml->projector();
 
-      ini_proj_frustum = proj->gl_frustum();
-      ini_proj_loc = proj->loc();
-      ini_proj_fwd = proj->fwd();
-      ini_proj_up = proj->up();
-      ini_proj_trg = proj->trg();
-      ini_proj_left = proj->left();
+      tweak_ini_frustum = proj->gl_frustum();
+      tweak_ini_loc = proj->loc();
+      tweak_ini_fwd = proj->fwd();
+      tweak_ini_up = proj->up();
+      tweak_ini_trg = proj->trg();
+      tweak_ini_left = proj->left();
 
       tweak_frustum_off = 0.1;
       tweak_R_off = 0.1;
       tweak_T_off = 0.0005;
+
+      tweak_file = "calib/cml_tweak.yml";
+
+      tweak_load();
     };
 
     void tweak_reset()
@@ -267,19 +291,112 @@ class CamaraLucidaSystem : public ECSsystem
       cml::OpticalDevice* proj = cml_data->cml->projector();
       cml::OpticalDevice::Frustum& f = proj->gl_frustum();
 
-      f.left = ini_proj_frustum.left;
-      f.right = ini_proj_frustum.right;
-      f.bottom = ini_proj_frustum.bottom;
-      f.top = ini_proj_frustum.top;
+      f.left = tweak_ini_frustum.left;
+      f.right = tweak_ini_frustum.right;
+      f.bottom = tweak_ini_frustum.bottom;
+      f.top = tweak_ini_frustum.top;
 
-      proj->loc( ini_proj_loc );
-      proj->fwd( ini_proj_fwd );
-      proj->up( ini_proj_up );
-      proj->trg( ini_proj_trg );
-      proj->left( ini_proj_left );
+      proj->loc( tweak_ini_loc );
+      proj->fwd( tweak_ini_fwd );
+      proj->up( tweak_ini_up );
+      proj->trg( tweak_ini_trg );
+      proj->left( tweak_ini_left );
     };
 
-    void tweak_frustum( float sign )
+    void tweak_save()
+    {
+      ofLogNotice("CamaraLucidaSystem")
+        << "save tweak to " << tweak_file;
+
+      cml::OpticalDevice* proj = cml_data->cml->projector();
+      cml::OpticalDevice::Frustum& f = proj->gl_frustum();
+
+      cv::FileStorage fs( ofToDataPath(tweak_file, false), cv::FileStorage::WRITE ); 
+
+      fs << "proj_frustum_left" << f.left;
+      fs << "proj_frustum_right" << f.right;
+      fs << "proj_frustum_bottom" << f.bottom;
+      fs << "proj_frustum_top" << f.top;
+
+      fs << "proj_loc_x" << proj->loc().x;
+      fs << "proj_loc_y" << proj->loc().y;
+      fs << "proj_loc_z" << proj->loc().z;
+
+      fs << "proj_fwd_x" << proj->fwd().x;
+      fs << "proj_fwd_y" << proj->fwd().y;
+      fs << "proj_fwd_z" << proj->fwd().z;
+
+      fs << "proj_up_x" << proj->up().x;
+      fs << "proj_up_y" << proj->up().y;
+      fs << "proj_up_z" << proj->up().z;
+
+      fs << "proj_trg_x" << proj->trg().x;
+      fs << "proj_trg_y" << proj->trg().y;
+      fs << "proj_trg_z" << proj->trg().z;
+
+      fs << "proj_left_x" << proj->left().x;
+      fs << "proj_left_y" << proj->left().y;
+      fs << "proj_left_z" << proj->left().z;
+    };
+
+    bool tweak_load()
+    {
+      ofLogNotice("CamaraLucidaSystem")
+        << "load tweak from " << tweak_file;
+
+      cv::FileStorage fs( ofToDataPath(tweak_file, false), cv::FileStorage::READ ); 
+
+      if ( !fs.isOpened() )
+      {
+        ofLogError("CamaraLucidaSystem") << "failed to load projector tweak file " << tweak_file;
+        return false;
+      }
+
+      cml::OpticalDevice* proj = cml_data->cml->projector();
+      cml::OpticalDevice::Frustum& f = proj->gl_frustum(); 
+
+      f.left = fs["proj_frustum_left"];
+      f.right = fs["proj_frustum_right"];
+      f.bottom = fs["proj_frustum_bottom"];
+      f.top = fs["proj_frustum_top"];
+
+      ofVec3f ploc = ofVec3f( 
+          fs["proj_loc_x"],
+          fs["proj_loc_y"],
+          fs["proj_loc_z"]);
+      proj->loc( ploc );
+
+      ofVec3f pfwd = ofVec3f( 
+          fs["proj_fwd_x"],
+          fs["proj_fwd_y"],
+          fs["proj_fwd_z"]);
+      proj->fwd( pfwd );
+
+      ofVec3f pup = ofVec3f( 
+          fs["proj_up_x"],
+          fs["proj_up_y"],
+          fs["proj_up_z"]); 
+      proj->up( pup );
+
+      ofVec3f ptrg = ofVec3f( 
+          fs["proj_trg_x"],
+          fs["proj_trg_y"],
+          fs["proj_trg_z"]); 
+      proj->trg( ptrg );
+
+      ofVec3f pleft = ofVec3f( 
+          fs["proj_left_x"],
+          fs["proj_left_y"],
+          fs["proj_left_z"]); 
+      proj->left( pleft );
+
+      ofLogNotice("CamaraLucidaSystem")
+        << "loaded projector tweak from " << tweak_file << "\n";
+
+      return true;
+    };
+
+    void tweak_frustum_x( float sign )
     {
       cml::OpticalDevice* proj = cml_data->cml->projector();
       cml::OpticalDevice::Frustum& f = proj->gl_frustum();
@@ -287,6 +404,14 @@ class CamaraLucidaSystem : public ECSsystem
       float d = tweak_frustum_off * sign;
       f.left -= d;
       f.right += d;
+    };
+
+    void tweak_frustum_y( float sign )
+    {
+      cml::OpticalDevice* proj = cml_data->cml->projector();
+      cml::OpticalDevice::Frustum& f = proj->gl_frustum();
+
+      float d = tweak_frustum_off * sign;
       f.bottom -= d;
       f.top += d;
     };
@@ -355,6 +480,9 @@ class CamaraLucidaSystem : public ECSsystem
       if (cml_data == NULL) return;
 
       DepthComponent* depth_data = component<DepthComponent>("input");
+
+      if ( depth_data->depth_ofpix_mm == NULL )
+        return;
 
       int w = render_data->width;
       int h = render_data->height;

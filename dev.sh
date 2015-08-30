@@ -1,5 +1,5 @@
 #!/bin/bash
-open ctrl/ctrl.xcodeproj;
 open app/app.xcodeproj;
-#open ctrl/bin/ctrl.app;
+open ctrl/ctrl.xcodeproj;
 #open app/bin/app.app;
+#open ctrl/bin/ctrl.app;

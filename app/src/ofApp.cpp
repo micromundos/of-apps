@@ -10,7 +10,8 @@ void ofApp::setup()
   //ofSetFrameRate(60.0f); 
   ofSetVerticalSync(false);
 
-  gpgpu::Process::watch("all");
+  keys::init();
+  //gpgpu::Process::watch("all");
   init_time_measurements();
 
   config.init();
@@ -80,9 +81,9 @@ void ofApp::keyReleased(int key)
       ofSetWindowPosition( ofGetWindowPositionX() == 0 ? ofGetScreenWidth() : 0, 0 );
       break;
 
-    case keys::fullscreen:
-      ofToggleFullscreen();
-      break;
+    //case keys::fullscreen:
+      //ofToggleFullscreen();
+      //break;
 
     case keys::tm_toggle:
       TIME_SAMPLE_SET_ENABLED( !TIME_SAMPLE_GET_ENABLED() );

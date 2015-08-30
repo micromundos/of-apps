@@ -1,8 +1,10 @@
 #pragma once
 
+#include "ofxTimeMeasurements.h"
+
 namespace keys
 {
-  const char fullscreen = 'f';
+  //const char fullscreen = 'f';
   const char projector = 'p';
 
   //app
@@ -10,11 +12,13 @@ namespace keys
   const char cml_wireframe = 'w';
 
   //cml tweaks
-  const char cml_tweak_reset = 'n';
-  const char cml_tweak_frustum = 'm';
-  //const char cml_tweak_Rxy = 'j';
-  const char cml_tweak_Rz = 'k';
-  const char cml_tweak_Txy = 'l';
+  const char cml_tweak_reset = 'X';
+  const char cml_tweak_frustum = 'F';
+  //const char cml_tweak_Rxy = 'E';
+  const char cml_tweak_Rz = 'R';
+  const char cml_tweak_Txy = 'T';
+  const char cml_tweak_save = 'S';
+  const char cml_tweak_load = 'L';
 
   //cml
   const char cml_key_debug = 'd';
@@ -24,8 +28,14 @@ namespace keys
   const char cml_key_view_next = 'v';
 
   //time measurements
-  const char tm_toggle = 'Y';
-  //const char tm_avg = 'A';
-  //const char tm_edit = 'T';
+  const char tm_toggle = '1'; //'Y';
+  const char tm_edit = '2'; //'T';
+  //const char tm_avg = '3'; //'A';
+
+  void init()
+  {
+    ofxTimeMeasurements::instance()->setUIActivationKey( tm_edit );
+  };
+
 };
 
