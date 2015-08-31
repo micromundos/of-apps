@@ -12,13 +12,13 @@ namespace keys
   const char cml_wireframe = 'w';
 
   //cml tweaks
-  const char cml_tweak_reset = 'X';
-  const char cml_tweak_frustum = 'F';
-  //const char cml_tweak_Rxy = 'E';
-  const char cml_tweak_Rz = 'R';
-  const char cml_tweak_Txy = 'T';
-  const char cml_tweak_save = 'S';
-  const char cml_tweak_load = 'L';
+  const char cml_tweak_reset = 'q';
+  const char cml_tweak_frustum = 'f';
+  //const char cml_tweak_Rxy = 'e';
+  const char cml_tweak_Rz = 'r';
+  const char cml_tweak_Txy = 't';
+  const char cml_tweak_save = 's';
+  const char cml_tweak_load = 'l';
 
   //cml
   const char cml_key_debug = 'd';
