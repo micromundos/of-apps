@@ -40,6 +40,7 @@ ecs.add_system(new ParticleAttractorSystem("particle_attractor"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new KnobSystem("knob"));
 ecs.add_system(new TimeBenderSystem("time_bender"));
+ecs.add_system(new TagSenderSystem("tag_sender"));
 //dont remove this line
 };
 

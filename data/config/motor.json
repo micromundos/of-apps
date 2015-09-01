@@ -15,9 +15,9 @@
          "components" : [
             {
                "data" : {
-                   "render": true,
-                   "src": "Plab",
-                   "dst": "Main Camera"
+                  "dst" : "Main Camera",
+                  "render" : true,
+                  "src" : "Plab"
                },
                "id" : "syphon"
             }
@@ -28,7 +28,7 @@
          "components" : [
             {
                "id" : "render"
-            }, 
+            },
             {
                "data" : {
                   "calibration" : {
@@ -65,6 +65,13 @@
                   "port" : 7000
                },
                "id" : "tags_receiver"
+            },
+            {
+               "id" : "tag_sender",
+               "data" : {
+                  "host":"127.0.0.1",
+                  "port": 9000
+               }
             },
             {
                "data" : {
@@ -111,29 +118,29 @@
                   "render_normals" : false,
                   /*"render_normals_smoothed" : false,*/
                   /*"render_table_angles" : false,*/
-                  "render_surfaces" : false,
+                  "render_surfaces" : true,
                   "threshold_table_far" : [ 2000, -2000, 2000 ],
                   "threshold_table_near" : [ 5, -200, 200 ]
                },
                /*"threshold_table_angle" : [ 360, 0, 360 ]*/
                "id" : "depth_processing"
             }
-            /*{*/
-               /*"data" : {*/
-                  /*"contour_delta" : [ 0, 0, 255 ],*/
-                  /*"contour_fill_width" : [ 0, 0, 100 ],*/
-                  /*"contour_max_area" : [ 1, 1, 10000 ],*/
-                  /*"contour_max_holes" : [ 0, 0, 1000 ],*/
-                  /*[>"history" : [ 10, 0, 32 ],<]*/
-                  /*[>"closing_passes" : [ 5, 0, 5 ],<]*/
-                  /*"render" : false,*/
-                  /*"use_contour" : false*/
-                   /*[>"use_closing" : false,<]*/
-                   /*[>"use_history" : false<]*/
-               /*},*/
-               /*"id" : "depth_hole_filler"*/
-            /*},*/ 
          ],
+         /*{*/
+         /*"data" : {*/
+         /*"contour_delta" : [ 0, 0, 255 ],*/
+         /*"contour_fill_width" : [ 0, 0, 100 ],*/
+         /*"contour_max_area" : [ 1, 1, 10000 ],*/
+         /*"contour_max_holes" : [ 0, 0, 1000 ],*/
+         /*[>"history" : [ 10, 0, 32 ],<]*/
+         /*[>"closing_passes" : [ 5, 0, 5 ],<]*/
+         /*"render" : false,*/
+         /*"use_contour" : false*/
+         /*[>"use_closing" : false,<]*/
+         /*[>"use_history" : false<]*/
+         /*},*/
+         /*"id" : "depth_hole_filler"*/
+         /*},*/
          "id" : "input"
       }
    ]

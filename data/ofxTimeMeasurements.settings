@@ -1,10 +1,6 @@
-FlowFieldContainerSystem render=1|1
 draw()=1|1
 DepthProcessingSystem render=1|1
-FisicaSystem=1|1
 KinectSystem update kinect=1|1
-ParticleFlowFieldSystem=1|1
 update()=1|1
-ParticleFlowFieldSystem #gpu->cpu=1|1
 TagsSystem=1|1
 SyphonSystem render=1|1
