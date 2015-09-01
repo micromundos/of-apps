@@ -41,7 +41,7 @@ class SyphonSystem : public ECSsystem
       SyphonComponent* syphon_data = syphon_m.get(e);
       server.setName( syphon_data->src );
       client.setup();
-      client.set( "", syphon_data->dst );
+      client.set( syphon_data->dst, "Unity" );
     }; 
 
     virtual void processEntity(Entity &e) 
