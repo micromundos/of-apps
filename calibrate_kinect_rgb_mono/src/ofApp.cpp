@@ -2,6 +2,7 @@
 
 using namespace ofxCv;
 
+const float diffThreshold = 4; // maximum amount of movement
 const float timeThreshold = 3; // minimum time between snapshots
 const int startCleaning = 10; // start cleaning outliers after this many samples
 const float min_reprojection_error = 1.f;
@@ -19,6 +20,8 @@ void ofApp::setup()
     ofExit();
     return;
   }
+
+  calib_cml.diffThreshold = diffThreshold;
 
   kinect.setRegistration(true);
   // ir, rgb, texture

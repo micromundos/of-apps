@@ -4,6 +4,7 @@
 #include "ofxKinect.h"
 #include "ofxAruco.h"
 #include "ofxCv.h"
+#include "ofxJSON.h"
 
 #include "data_path.h"
 
@@ -34,7 +35,10 @@ class ofApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 
 
-    int w, h;
+    ofxJSONElement settings;
+    int rgb_width, rgb_height;
+    int rgb_device_id;
+
     ofxKinect kinect;
 		ofxAruco aruco;
 

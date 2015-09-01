@@ -10,7 +10,8 @@ void ofApp::setup()
   //ofSetFrameRate(60.0f); 
   ofSetVerticalSync(false);
 
-  gpgpu::Process::watch("all");
+  keys::init();
+  //gpgpu::Process::watch("all");
   init_time_measurements();
 
   config.init();
@@ -69,34 +70,20 @@ void ofApp::keyPressed(int key)
 
 void ofApp::keyReleased(int key)
 {
-
-  cml::CamaraLucida* cml = cml_data->cml;
-
-  RenderComponent* render_data = ecs.require_component<RenderComponent>("output");
-
   switch (key)
   { 
-
-    case keys::cml_gpu:
-      cml->gpu( !cml->gpu() );
-      break;
-
-    case keys::cml_wireframe:
-      cml->wireframe( !cml->wireframe() );
-      break;
 
     case keys::cml_key_debug:
       render_ecs_fps = !render_ecs_fps;
       break;
 
-
     case keys::projector:
       ofSetWindowPosition( ofGetWindowPositionX() == 0 ? ofGetScreenWidth() : 0, 0 );
       break;
 
-    case keys::fullscreen:
-      ofToggleFullscreen();
-      break;
+    //case keys::fullscreen:
+      //ofToggleFullscreen();
+      //break;
 
     case keys::tm_toggle:
       TIME_SAMPLE_SET_ENABLED( !TIME_SAMPLE_GET_ENABLED() );

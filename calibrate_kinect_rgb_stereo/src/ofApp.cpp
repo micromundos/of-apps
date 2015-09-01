@@ -15,14 +15,17 @@ void ofApp::setup()
     return;
   }
 
-  rgb_cam_name = settings["params"]["calib_kinect_rgb_stereo"]["rgb_cam_name"].asString(),
-  rgb_device_id = settings["params"]["calib_kinect_rgb_stereo"]["rgb_device_id"].asInt(),
+  rgb_cam_name = settings["params"]["calib_kinect_rgb_stereo"]["rgb_cam_name"].asString();
+  rgb_device_id = settings["params"]["calib_kinect_rgb_stereo"]["rgb_device_id"].asInt();
+  rgb_width = settings["params"]["calib_kinect_rgb_stereo"]["rgb_width"].asInt();
+  rgb_height = settings["params"]["calib_kinect_rgb_stereo"]["rgb_height"].asInt();
+  rgb_width_draw = rgb_width / 2;
+  rgb_height_draw = rgb_height / 2;
 
-  w = 640;
-  h = 480;
+  ofLog() << "rgb size " << rgb_width << " x " << rgb_height;
 
   rgb_cam.setDeviceID( rgb_device_id );
-  rgb_cam.initGrabber( w, h, true );
+  rgb_cam.initGrabber( rgb_width, rgb_height, true );
 
   kinect.setRegistration(true);
   // ir, rgb, texture
@@ -41,6 +44,12 @@ void ofApp::setup()
       rgb_cam_name, pix_rgb, 
       //load calibrated kinect intrinsics
       settings["params"]["calib_kinect_rgb_stereo"]["calib_kinect_path"].asString() );
+
+  //window setup
+  ofSetWindowShape( 
+      kinect.width + rgb_width_draw, 
+      rgb_height > kinect.height ? rgb_height : kinect.height );
+  ofSetWindowPosition( 0, 0 );
 }
 
 
@@ -77,10 +86,10 @@ void ofApp::draw()
   ofBackground(100);
   ofSetColor(255); 
 
-  kinect.draw( 0, 0, w, h );
-  //kinect.drawDepth( 0, h, w, h );
+  kinect.draw( 0, 0 );
+  //kinect.drawDepth( 0, h );
 
-  rgb_cam.draw( w, 0 );
+  rgb_cam.draw( kinect.width, 0, rgb_width_draw, rgb_height_draw );
 
   calibration.render();
 
@@ -96,9 +105,6 @@ void ofApp::keyPressed(int key)
   if ( key == ' ' ) 
   {
     calibration.toggle_capture(); 
-  }else if(key == 'b')
-  {
-    calibration.removeLast();
   }
   else if ( key == 'b' )
   {

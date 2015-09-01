@@ -10,22 +10,36 @@ void ofApp::setup()
 
   draw_rgb = false;
 
-  w = 640;
-  h = 480;
+  if ( !settings.open( "config/settings.json" ) ) 
+  {
+    ofLogFatalError() << "error opening settings.json";
+    ofExit();
+    return;
+  }
 
-  rgb_cam.setDeviceID( 1 );
-  rgb_cam.initGrabber( w, h, true );
+  rgb_device_id = settings["params"]["calib_kinect_rgb_stereo"]["rgb_device_id"].asInt();
+  rgb_width = settings["params"]["calib_kinect_rgb_stereo"]["rgb_width"].asInt();
+  rgb_height = settings["params"]["calib_kinect_rgb_stereo"]["rgb_height"].asInt();
+
+  rgb_cam.setDeviceID( rgb_device_id );
+  rgb_cam.initGrabber( rgb_width, rgb_height, true );
 
   kinect.setRegistration(true);
   // ir, rgb, texture
   kinect.init(false, true, true);
 	kinect.open();
 
-	aruco.setupXML( "calib/intrinsics_rgb.aruco.yml", ofGetWidth(), ofGetHeight(), "", 0.07  );
+
+  //window setup
+  ofSetWindowShape( rgb_width, rgb_height );
+  ofSetWindowPosition( 0, 0 );
+
+
+	aruco.setupXML( "calib/intrinsics_logitech920.aruco.yml", ofGetWidth(), ofGetHeight(), "", 0.07  );
 
   load_intrinsics( calib_kinect, int_k, "calib/intrinsics_kinect.aruco.yml" );
-  load_intrinsics( calib_rgb, int_rgb, "calib/intrinsics_rgb.aruco.yml" );
-  load_extrinsics("calib/extrinsics_rgb_to_kinect.yml"); //"extrinsics_kinect_to_rgb.yml"
+  load_intrinsics( calib_rgb, int_rgb, "calib/intrinsics_logitech920.aruco.yml" );
+  load_extrinsics("calib/extrinsics_logitech920_to_kinect.yml"); //"extrinsics_kinect_to_logitech920.yml" 
 }
 
 void ofApp::update()
@@ -55,7 +69,7 @@ void ofApp::draw()
   else 
   {
     //draw_kinect_undistorted( 0, 0 );
-    kinect.draw( 0, 0, w, h );
+    kinect.draw( 0, 0 );
   }
 
   aruco.draw2d();
@@ -73,10 +87,10 @@ void ofApp::draw()
     //ofMatrix4x4 mMV = get_marker_mv(m);
     //ofVec3f mT = mMV.getTranslation();
 
-    ofVec3f mT;
-    mT.x = m.Tvec.at<float>(0,0);
-    mT.y = m.Tvec.at<float>(1,0);
-    mT.z = m.Tvec.at<float>(2,0);
+    ofVec3f mTvec;
+    mTvec.x = m.Tvec.at<float>(0,0);
+    mTvec.y = m.Tvec.at<float>(1,0);
+    mTvec.z = m.Tvec.at<float>(2,0);
 
     //ofMatrix4x4 mk_MV = extrinsics.ofMV * mMV;
     //ofVec3f p3_k = mk_MV.getTranslation();
@@ -92,13 +106,17 @@ void ofApp::draw()
     p3_k.z = mk_T.at<float>(2,0);
 
     ofVec2f p2_k; 
-    project( calib_kinect.getDistortedIntrinsics(), p3_k, p2_k );
-    //project( calib_kinect.getUndistortedIntrinsics(), p3_k, p2_k );
+    project( 
+        calib_kinect.getDistortedIntrinsics(), 
+        //calib_kinect.getUndistortedIntrinsics(), 
+        p3_k, p2_k );
 
     // test projection back on rgb 
     ofVec2f p2_rgb; 
-    project( calib_rgb.getDistortedIntrinsics(), mT, p2_rgb );
-    //project( calib_rgb.getUndistortedIntrinsics(), mT, p2_rgb );
+    project( 
+        calib_rgb.getDistortedIntrinsics(), 
+        //calib_rgb.getUndistortedIntrinsics(), 
+        mTvec, p2_rgb );
 
 
     cv::Point2f ctr = m.getCenter();
@@ -107,7 +125,7 @@ void ofApp::draw()
       << "marker= " << i << "\n"
       << "Tvec= " << m.Tvec << "\n"
       << "Rvec= " << m.Rvec << "\n"
-      << "T= " << mT << "\n"
+      << "T= " << mTvec << "\n"
       //<< "MV= \n" << mMV << "\n"
       //<< "MV kinect= \n" << mk_MV << "\n"
       //<< "MV calib stereo= \n" << extrinsics.ofMV << "\n"
@@ -169,7 +187,7 @@ void ofApp::draw_epilines()
     cv::Vec3f& line = epilines[i];
     ofLine(
         ofVec2f( 0, -line[2]/line[1]),
-        ofVec2f( w, -(line[2]+line[0]*w)/line[1])
+        ofVec2f( kinect.width, -(line[2]+line[0]*kinect.width)/line[1])
         );
   }
   ofPopStyle();
@@ -255,10 +273,14 @@ void ofApp::load_extrinsics(string filename)
 
 
   vector<cv::Point2f> corners;
-  corners.push_back( cv::Point2f( 0,0 ) );
-  corners.push_back( cv::Point2f( 0,w ) );
-  corners.push_back( cv::Point2f( h,w ) );
-  corners.push_back( cv::Point2f( h,0 ) );
+  corners.push_back( 
+      cv::Point2f( 0,0 ) );
+  corners.push_back( 
+      cv::Point2f( 0, kinect.width ) );
+  corners.push_back( 
+      cv::Point2f( kinect.height, kinect.width ) );
+  corners.push_back( 
+      cv::Point2f( kinect.height, 0 ) );
   cv::computeCorrespondEpilines(
       cv::Mat(corners), 1,
       extrinsics.F,
