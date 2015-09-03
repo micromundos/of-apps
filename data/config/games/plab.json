@@ -15,17 +15,29 @@
       {
          "components" : [
             {
-               "id" : "knob"
-            },
-            {
                "data" : {
-                  "coef" : [ 20, 1, 100 ]
+                  "force" : [ 15, 0, 100 ],
+                  "rate" : [ 10, 0, 100 ]
                },
-               "id" : "time_bender"
+               "id" : "particle_emitter"
             }
          ],
          "id" : "1"
       },
+      /*{*/
+         /*"components" : [*/
+            /*{*/
+               /*"id" : "knob"*/
+            /*},*/
+            /*{*/
+               /*"data" : {*/
+                  /*"coef" : [ 20, 1, 100 ]*/
+               /*},*/
+               /*"id" : "time_bender"*/
+            /*}*/
+         /*],*/
+         /*"id" : "1"*/
+      /*},*/
       {
          "components" : [
             {

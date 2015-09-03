@@ -16,6 +16,7 @@ git@github.com:jefftimesten/ofxJSON.git
 git@github.com:bakercp/ofxPS3EyeGrabber.git
 git@github.com:astellato/ofxSyphon.git
 git@github.com:armadillu/ofxTimeMeasurements
+git@github.com:julapy/ofxQuadWarp.git
 )
 cd $addons_loc ;
 for i in "${addons[@]}"

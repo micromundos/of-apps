@@ -11,20 +11,20 @@
          ],
          "id" : "core"
       },
-      {
-         "components" : [
-            {
-               "data" : {
-                  "send" : true,
-                  "receive" : true,
-                  "dst" : "Main Camera",
-                  "src" : "Plab"
-               },
-               "id" : "syphon"
-            }
-         ],
-         "id" : "syphon"
-      },
+      /*{*/
+         /*"components" : [*/
+            /*{*/
+               /*"data" : {*/
+                  /*"send" : false,*/
+                  /*"receive" : false,*/
+                  /*"dst" : "Main Camera",*/
+                  /*"src" : "Plab"*/
+               /*},*/
+               /*"id" : "syphon"*/
+            /*}*/
+         /*],*/
+         /*"id" : "syphon"*/
+      /*},*/
       {
          "components" : [
             {
@@ -67,20 +67,23 @@
                },
                "id" : "tags_receiver"
             },
-            {
-               "id" : "tag_sender",
-               "data" : {
-                  "host":"127.0.0.1",
-                  "port": 9000
-               }
-            },
+            /*{*/
+               /*"id" : "tag_sender",*/
+               /*"data" : {*/
+                  /*"host":"127.0.0.1",*/
+                  /*"port": 9000*/
+               /*}*/
+            /*},*/
             {
                "data" : {
                   "calibration" : {
                      "depth" : "calib/intrinsics_kinect.aruco.yml",
-                     "rgb" : "calib/intrinsics_logitech920.aruco.yml",
-                     "stereo" : "calib/extrinsics_logitech920_to_kinect.yml"
+                     "rgb" : "calib/intrinsics_logitech920.aruco__1.4x__.yml",
+                     "stereo" : "calib/extrinsics_logitech920_to_kinect__1.4x__.yml"
                   },
+                  "tweak_load" : false,
+                  "tweak_save" : false,
+                  "tweak_render" : false,
                   "render" : true
                },
                "id" : "tags"
@@ -119,7 +122,7 @@
                   "render_normals" : false,
                   /*"render_normals_smoothed" : false,*/
                   /*"render_table_angles" : false,*/
-                  "render_surfaces" : true,
+                  "render_surfaces" : false,
                   "threshold_table_far" : [ 2000, -2000, 2000 ],
                   "threshold_table_near" : [ 5, -200, 200 ]
                },

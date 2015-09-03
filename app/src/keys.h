@@ -28,9 +28,9 @@ namespace keys
   const char cml_key_view_next = 'v';
 
   //time measurements
-  const char tm_toggle = '1'; //'Y';
-  const char tm_edit = '2'; //'T';
-  //const char tm_avg = '3'; //'A';
+  const char tm_toggle = '0'; //'Y';
+  const char tm_edit = '9'; //'T';
+  //const char tm_avg = '8'; //'A';
 
   void init()
   {
