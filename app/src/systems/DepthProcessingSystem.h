@@ -91,9 +91,9 @@ class DepthProcessingSystem : public ECSsystem
         //.init("glsl/plane_angles.frag", w, h )
         //.on( "update", this, &DepthProcessingSystem::update_table_angles );
 
-      surfaces(e) //segmentation
-        .init("glsl/segmentation.frag", w, h )
-        .on( "update", this, &DepthProcessingSystem::update_depth_segmentation );
+      surfaces(e)
+        .init("glsl/surfaces.frag", w, h )
+        .on( "update", this, &DepthProcessingSystem::update_surfaces );
 
       erode
         .add_backbuffer( "tex" )
@@ -214,7 +214,7 @@ class DepthProcessingSystem : public ECSsystem
         _height_map_surfaces = &(erode.get());
       }
 
-      surfaces(e) //segmentation
+      surfaces(e)
         .set( "height_map", *_height_map_surfaces )
         .update()
         .update_debug( depth_proc_data->render_surfaces );
@@ -398,7 +398,7 @@ class DepthProcessingSystem : public ECSsystem
       //shader.setUniform1i("kernel", depth_proc_data->normals_bilateral_kernel);
     //}; 
 
-    void update_depth_segmentation( ofShader& shader )
+    void update_surfaces( ofShader& shader )
     {
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get( *entity );
 
@@ -450,7 +450,7 @@ class DepthProcessingSystem : public ECSsystem
       bg_dif_expand.off( "update", this, &DepthProcessingSystem::update_bg_dif_expand );
       depth_3d(e).off( "update", this, &DepthProcessingSystem::update_depth_3d );
       height_map(e).off( "update", this, &DepthProcessingSystem::update_height_map );
-      surfaces(e).off( "update", this, &DepthProcessingSystem::update_depth_segmentation );
+      surfaces(e).off( "update", this, &DepthProcessingSystem::update_surfaces );
       //bilateral.off( "update", this, &DepthProcessingSystem::update_bilateral ); 
       //gaussian.off( "update", this, &DepthProcessingSystem::update_gaussian ); 
       //normals_bilateral.off( "update", this, &DepthProcessingSystem::update_normals_bilateral ); 

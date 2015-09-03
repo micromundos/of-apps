@@ -8,7 +8,8 @@ class SyphonComponent : public ECScomponent
 {
   public:
  
-    ofParameter<bool> render;
+    ofParameter<bool> send;
+    ofParameter<bool> receive;
     string src, dst;
 
     SyphonComponent(string _id) : ECScomponent(_id) {};
@@ -18,7 +19,8 @@ class SyphonComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
       src = d["src"].asString();
       dst = d["dst"].asString();
-      param(render, "render");
+      param(send, "send");
+      param(receive, "receive");
     };
 
 };

@@ -46,22 +46,27 @@ class SyphonSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      DepthComponent* depth_data = require_component<DepthComponent>("input");
+      SyphonComponent* syphon_data = syphon_m.get(e);
+      if ( ! syphon_data->send ) return;
+
+      DepthComponent* depth_data = component<DepthComponent>("input");
       if ( ! depth_data->dirty ) return;
-      TS_START("SyphonSystem"); 
-      DepthProcessingComponent* depth_proc_data = require_component<DepthProcessingComponent>("input");
+
+      TS_START("SyphonSystem send"); 
+      DepthProcessingComponent* depth_proc_data = component<DepthProcessingComponent>("input");
       server.publishTexture( &depth_proc_data->surfaces().get_debug().get() );
-      TS_STOP("SyphonSystem");
+      TS_STOP("SyphonSystem send");
     }; 
 
     virtual void renderEntity(Entity &e)
     {
       SyphonComponent* syphon_data = syphon_m.get(e);
-      if ( ! syphon_data->render ) return;
-      TS_START("SyphonSystem render"); 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      if ( ! syphon_data->receive ) return;
+
+      TS_START("SyphonSystem receive"); 
+      RenderComponent* render_data = component<RenderComponent>("output");
       client.draw( 0, 0, render_data->width, render_data->height );
-      TS_STOP("SyphonSystem render");
+      TS_STOP("SyphonSystem receive");
     };
 
   private:

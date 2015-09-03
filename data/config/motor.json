@@ -15,8 +15,9 @@
          "components" : [
             {
                "data" : {
+                  "send" : true,
+                  "receive" : true,
                   "dst" : "Main Camera",
-                  "render" : true,
                   "src" : "Plab"
                },
                "id" : "syphon"
