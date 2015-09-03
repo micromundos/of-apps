@@ -23,22 +23,9 @@ class TagSenderSystem : public ECSsystem
       tag_sender_m.init( *world );
     };
 
-    //virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::processEntities(bag);
-      //int len = bag.getCount();
-      //for ( int i = 0; i < len; i++ )
-        //processEntity( *bag.get(i) );
-    //};
-
-    //virtual void renderEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::renderEntities(bag);
-    //};
-  
     virtual void added(Entity &e)
     {
-      osc_sender.setup(tag_sender_m.get(e)->host,tag_sender_m.get(e)->port);
+      osc_sender.setup( tag_sender_m.get(e)->host, tag_sender_m.get(e)->port );
       ofAddListener( BloqEvents::added, this,   &TagSenderSystem::bloq_added );
       ofAddListener( BloqEvents::updated, this, &TagSenderSystem::bloq_updated );
       ofAddListener( BloqEvents::removed, this, &TagSenderSystem::bloq_removed );
@@ -46,13 +33,13 @@ class TagSenderSystem : public ECSsystem
 
     virtual void removed(Entity &e)
     {
+      ofRemoveListener( BloqEvents::added, this,   &TagSenderSystem::bloq_added );
+      ofRemoveListener( BloqEvents::updated, this, &TagSenderSystem::bloq_updated );
+      ofRemoveListener( BloqEvents::removed, this, &TagSenderSystem::bloq_removed );
     };
 
     virtual void processEntity(Entity &e) 
-    {
-      //ofLogNotice("TagSenderSystem") << "process entity " << e.getId();
-      //tag_sender_m.get(e)->data;
-    }; 
+    {}; 
 
     virtual void renderEntity(Entity &e)
     {};

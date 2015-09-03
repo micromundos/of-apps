@@ -25,6 +25,7 @@ ecs.add_system(new CamaraLucidaSystem("camara_lucida"));
 ecs.add_system(new KinectSystem("kinect"));
 ecs.add_system(new TagsReceiverSystem("tags_receiver"));
 ecs.add_system(new TagsSystem("tags"));
+ecs.add_system(new TagSenderSystem("tag_sender"));
 ecs.add_system(new TableCalibSystem("table_calib"));
 ecs.add_system(new DepthProcessingSystem("depth_processing"));
 ecs.add_system(new SyphonSystem("syphon"));
@@ -40,7 +41,6 @@ ecs.add_system(new ParticleAttractorSystem("particle_attractor"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new KnobSystem("knob"));
 ecs.add_system(new TimeBenderSystem("time_bender"));
-ecs.add_system(new TagSenderSystem("tag_sender"));
 //dont remove this line
 };
 
