@@ -13,6 +13,7 @@ class TagsComponent : public ECScomponent
 
     ofParameter<bool> tweak_load;
     ofParameter<bool> tweak_save;
+    ofParameter<bool> tweak_reset;
     ofParameter<bool> tweak_render;
 
     ofParameter<bool> render;
@@ -31,6 +32,7 @@ class TagsComponent : public ECScomponent
 
       param( tweak_load, "tweak_load" );
       param( tweak_save, "tweak_save" );
+      param( tweak_reset, "tweak_reset" );
       param( tweak_render, "tweak_render" );
 
       calib_rgb_file = d["calibration"]["rgb"].asString();

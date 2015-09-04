@@ -5,6 +5,7 @@ DepthProcessingSystem render=1|1
 TagsSystem=1|1
 DepthProcessingSystem=1|1
 ParticleFlowFieldSystem #gpu->cpu=1|1
+FlowFieldSystem render=1|1
 CamaraLucidaSystem=1|1
 update()=1|1
 FisicaSystem=1|1

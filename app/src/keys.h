@@ -11,6 +11,7 @@ namespace keys
   const char cml_gpu = 'g';
   const char cml_wireframe = 'w';
 
+  //TODO mover estas teclas al ctrl
   //cml tweaks
   const char cml_tweak_reset = 'q';
   const char cml_tweak_frustum = 'f';

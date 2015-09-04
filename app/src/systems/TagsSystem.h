@@ -42,6 +42,9 @@ class TagsSystem : public ECSsystem
 
       TagsComponent* tags_data = tags_m.get(e);
 
+      ofxCv::Calibration calib_rgb;
+      ofxCv::Calibration calib_depth;
+
       load_extrinsics( tags_data->calib_stereo_file, calib_stereo );
       load_intrinsics( tags_data->calib_rgb_file, calib_rgb );
       load_intrinsics( tags_data->calib_depth_file, calib_depth );
@@ -50,7 +53,8 @@ class TagsSystem : public ECSsystem
       rgb_width = rgb_size.width;
       rgb_height = rgb_size.height;
 
-      cv::Size depth_size = calib_depth.getDistortedIntrinsics().getImageSize();
+      depth_int = calib_depth.getDistortedIntrinsics();
+      cv::Size depth_size = depth_int.getImageSize();
       depth_width = depth_size.width;
       depth_height = depth_size.height;
 
@@ -74,6 +78,10 @@ class TagsSystem : public ECSsystem
       vector<Tag>& tags = tags_receiver_data->tags;
 
       //ofLogNotice("TagsSystem") << "tags " << tags.size();
+
+      //TODO update H only when changed
+      //trigger update event from ofxQuadWarp
+      tweak_H = warper.getMatrix();
 
       int len = tags.size();
       for ( int i = 0; i < len; i++ )
@@ -112,6 +120,7 @@ class TagsSystem : public ECSsystem
 
       if ( tags_data->tweak_render )
       {
+        ofPushStyle();
         ofSetColor(ofColor::magenta);
         warper.drawQuadOutline();
         ofSetColor(ofColor::yellow);
@@ -120,6 +129,7 @@ class TagsSystem : public ECSsystem
         warper.drawHighlightedCorner();
         ofSetColor(ofColor::red);
         warper.drawSelectedCorner();
+        ofPopStyle();
       }
 
       if ( !tags_data->render )
@@ -167,6 +177,7 @@ class TagsSystem : public ECSsystem
     {
       if (enabled) 
       {
+        cout << "\n" << endl;
         ofLogNotice("TagsSystem")
           << "load tweak from " << tweak_file;
         warper.load( tweak_file );
@@ -180,6 +191,14 @@ class TagsSystem : public ECSsystem
         ofLogNotice("TagsSystem")
           << "save tweak to " << tweak_file;
         warper.save( tweak_file );
+      }
+    };
+
+    void tweak_reset(bool& enabled)
+    {
+      if (enabled) 
+      {
+        warper.reset();
       }
     };
 
@@ -197,12 +216,12 @@ class TagsSystem : public ECSsystem
     ComponentMapper<TagsReceiverComponent> tags_receiver_m;
 
     Tag::Extrinsics calib_stereo;
-    ofxCv::Calibration calib_rgb;
-    ofxCv::Calibration calib_depth;
+    ofxCv::Intrinsics depth_int;
     int rgb_width, rgb_height;
     int depth_width, depth_height;
 
     ofxQuadWarp warper;
+    ofMatrix4x4 tweak_H;
     string tweak_file;
 
     ofVec2f up2;
@@ -217,6 +236,7 @@ class TagsSystem : public ECSsystem
 
       tags_data->tweak_load.removeListener( this, &TagsSystem::tweak_load );
       tags_data->tweak_save.removeListener( this, &TagsSystem::tweak_save );
+      tags_data->tweak_reset.removeListener( this, &TagsSystem::tweak_reset );
       //tags_data->tweak_render.removeListener( this, &TagsSystem::tweak_render );
     };
 
@@ -228,6 +248,7 @@ class TagsSystem : public ECSsystem
 
       tags_data->tweak_load.addListener( this, &TagsSystem::tweak_load );
       tags_data->tweak_save.addListener( this, &TagsSystem::tweak_save );
+      tags_data->tweak_reset.addListener( this, &TagsSystem::tweak_reset );
       //tags_data->tweak_render.addListener( this, &TagsSystem::tweak_render );
 
       RenderComponent* render_data = component<RenderComponent>("output");
@@ -373,14 +394,13 @@ class TagsSystem : public ECSsystem
     //normalized [0,1] loc
     void tag_loc_on_depth( const Tag& tag, ofVec2f& tloc )
     {
-      const ofxCv::Intrinsics& depth_int = calib_depth.getDistortedIntrinsics();
+      //const ofxCv::Intrinsics& depth_int = calib_depth.getDistortedIntrinsics();
 
       ofVec3f p3; 
       transform_to_depth( tag, p3 );
       project( depth_int, p3, tloc );  
 
-      ofMatrix4x4 H = warper.getMatrix();
-      tloc.set( H.preMult( ofVec3f( tloc.x, tloc.y, 0 ) ) );
+      tloc.set( tweak_H.preMult( ofVec3f( tloc.x, tloc.y, 0 ) ) );
 
       tloc.x /= depth_width;
       tloc.y /= depth_height;

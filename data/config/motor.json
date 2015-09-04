@@ -12,18 +12,18 @@
          "id" : "core"
       },
       /*{*/
-         /*"components" : [*/
-            /*{*/
-               /*"data" : {*/
-                  /*"send" : false,*/
-                  /*"receive" : false,*/
-                  /*"dst" : "Main Camera",*/
-                  /*"src" : "Plab"*/
-               /*},*/
-               /*"id" : "syphon"*/
-            /*}*/
-         /*],*/
-         /*"id" : "syphon"*/
+      /*"components" : [*/
+      /*{*/
+      /*"data" : {*/
+      /*"send" : false,*/
+      /*"receive" : false,*/
+      /*"dst" : "Main Camera",*/
+      /*"src" : "Plab"*/
+      /*},*/
+      /*"id" : "syphon"*/
+      /*}*/
+      /*],*/
+      /*"id" : "syphon"*/
       /*},*/
       {
          "components" : [
@@ -39,7 +39,7 @@
                   },
                   "enabled" : true,
                   "mesh_res" : 1,
-                  "render_background" : [ 0, 0, 1 ],
+                  "render_background" : [ 1, 0, 1 ],
                   "render_hue_tex" : false,
                   "tex_height" : 1152,
                   "tex_width" : 1536,
@@ -56,7 +56,7 @@
                "data" : {
                   /*"flip" : false,*/
                   /*"angle" : [ -2, -30, 30 ],*/
-                  "render" : true
+                  "render" : false
                },
                "id" : "depth"
             },
@@ -68,11 +68,11 @@
                "id" : "tags_receiver"
             },
             /*{*/
-               /*"id" : "tag_sender",*/
-               /*"data" : {*/
-                  /*"host":"127.0.0.1",*/
-                  /*"port": 9000*/
-               /*}*/
+            /*"id" : "tag_sender",*/
+            /*"data" : {*/
+            /*"host":"127.0.0.1",*/
+            /*"port": 9000*/
+            /*}*/
             /*},*/
             {
                "data" : {
@@ -81,10 +81,11 @@
                      "rgb" : "calib/intrinsics_logitech920.aruco__1.4x__.yml",
                      "stereo" : "calib/extrinsics_logitech920_to_kinect__1.4x__.yml"
                   },
+                  "render" : false,
                   "tweak_load" : false,
-                  "tweak_save" : false,
                   "tweak_render" : false,
-                  "render" : true
+                  "tweak_reset" : false,
+                  "tweak_save" : false
                },
                "id" : "tags"
             },
