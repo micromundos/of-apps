@@ -43,6 +43,9 @@
                   "render_hue_tex" : false,
                   "tex_height" : 1152,
                   "tex_width" : 1536,
+                  "tweak_load" : false,
+                  "tweak_reset" : false,
+                  "tweak_save" : false,
                   "xoff" : [ 8, -10, 10 ]
                },
                "id" : "camara_lucida"

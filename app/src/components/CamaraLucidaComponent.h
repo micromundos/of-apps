@@ -17,6 +17,10 @@ class CamaraLucidaComponent : public ECScomponent
     ofParameter<float> render_background;
     ofParameter<bool> render_hue_tex;
 
+    ofParameter<bool> tweak_reset;
+    ofParameter<bool> tweak_save;
+    ofParameter<bool> tweak_load;
+
     CamaraLucidaComponent(string _id) : ECScomponent(_id) 
     { 
       cml = NULL; 
@@ -35,6 +39,10 @@ class CamaraLucidaComponent : public ECScomponent
       param( xoff, "xoff" );
       param( render_background, "render_background" );
       param( render_hue_tex, "render_hue_tex" );
+
+      param( tweak_reset, "tweak_reset" );
+      param( tweak_save, "tweak_save" );
+      param( tweak_load, "tweak_load" );
 
       init_cml( 
         d.get( "tex_width", 1024 ).asInt(), 

@@ -36,12 +36,18 @@ void ofApp::setup()
 
   ofxGuiSetDefaultWidth( panel_width );
 
-  //gui.setup( params );
-  gui_motor.setup( params_motor );
+  //gui_motor_settings = "config/gui_motor.xml";
+  //gui_game_settings = "config/gui_game.xml";
+
+  gui_motor.setup( params_motor ); //, gui_motor_settings );
+  //gui_motor.loadFromFile( gui_motor_settings );
   gui_motor.setPosition( panel_width + padding*2, padding );
-  gui_game.setup( params_game );
+
+  gui_game.setup( params_game ); //, gui_game_settings );
+  //gui_game.loadFromFile( gui_game_settings );
   gui_game.setPosition( padding, padding );
 
+  //gui.setup( params );
   //gui_settings = "ctrl/gui.xml";
   //gui.setup( params, gui_settings );
   //gui.loadFromFile( gui_settings );
@@ -107,7 +113,10 @@ void ofApp::load_all_config()
 void ofApp::save_all_config()
 {
   save_config( motor, motor_path, params_motor );
-  save_config( game, game_path, params_motor );
+  save_config( game, game_path, params_game );
+
+  //gui_motor.saveToFile( gui_motor_settings );
+  //gui_game.saveToFile( gui_game_settings );
 };
 
 void ofApp::load_and_parse_all_config()
@@ -220,7 +229,7 @@ void ofApp::update_config( ofxJSONElement& config, ofParameterGroup& params )
 
 void ofApp::save_config( ofxJSONElement& config, string filename, ofParameterGroup& params )
 {
-  ofLog() << "*** save config ***";
+  ofLog() << "*** save config to " << filename << " ***";
   update_config( config, params );
   config.save( filename, true );
 };
@@ -328,7 +337,6 @@ void ofApp::keyReleased(int key)
   if ( key == 's' )
   {
     save_all_config();
-    //gui.saveToFile( gui_settings );
   }
 
 }
