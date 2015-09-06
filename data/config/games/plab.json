@@ -134,7 +134,8 @@
             {
                "data" : {
                   "render" : false,
-                  "force_mult" : [ 1, 0, 4 ]
+                  "force_min" : [ 0, 0, 10 ],
+                  "force_max" : [ 1, 0, 10 ]
                },
                "id" : "flow_field_render"
             }

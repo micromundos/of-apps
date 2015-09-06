@@ -7,7 +7,8 @@
 
 uniform sampler2DRect flowfield;
 uniform vec2 render_size;
-uniform float force_mult;
+uniform float force_min;
+uniform float force_max;
 
 void main( void ) 
 {
@@ -18,7 +19,9 @@ void main( void )
 
   if ( gl_VertexID % 2 != 0 )
   {
-    vert.xy += texel(flowfield).xy * force_mult; 
+    vec2 force = texel(flowfield).xy;
+    vert.x += lerp( force.x, force_min, force_max ); 
+    vert.y += lerp( force.y, force_min, force_max ); 
   }
 
   gl_Position = gl_ModelViewProjectionMatrix * vert;

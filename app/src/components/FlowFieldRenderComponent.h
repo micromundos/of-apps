@@ -9,7 +9,8 @@ class FlowFieldRenderComponent : public ECScomponent
   public:
 
     ofParameter<bool> render;
-    ofParameter<float> force_mult;
+    ofParameter<float> force_min;
+    ofParameter<float> force_max;
 
     FlowFieldRenderComponent(string _id) : ECScomponent(_id) {};
 
@@ -17,7 +18,8 @@ class FlowFieldRenderComponent : public ECScomponent
     {
       ECScomponent::init(e_id,d,p);
       param( render, "render" );
-      param( force_mult, "force_mult" );
+      param( force_min, "force_min" );
+      param( force_max, "force_max" );
     };
 
 };

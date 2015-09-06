@@ -98,7 +98,8 @@ class FlowFieldRenderSystem : public ECSsystem
       ofSetColor(255);
       shader.begin();
       shader.setUniformTexture( "flowfield", flowfield.get(), 0 );
-      shader.setUniform1f( "force_mult", ffr_data->force_mult );
+      shader.setUniform1f( "force_min", ffr_data->force_min );
+      shader.setUniform1f( "force_max", ffr_data->force_max );
       shader.setUniform2f( "size", w, h );
       shader.setUniform2f( "render_size", rw, rh );
       mesh.draw();
