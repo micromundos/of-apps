@@ -18,8 +18,7 @@ void main( void )
 
   if ( gl_VertexID % 2 != 0 )
   {
-    vec2 force = texel(flowfield).xy;
-    vert.xy += force * force_mult; 
+    vert.xy += texel(flowfield).xy * force_mult; 
   }
 
   gl_Position = gl_ModelViewProjectionMatrix * vert;
