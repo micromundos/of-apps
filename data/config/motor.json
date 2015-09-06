@@ -84,7 +84,7 @@
                      "rgb" : "calib/intrinsics_logitech920.aruco__1.4x__.yml",
                      "stereo" : "calib/extrinsics_logitech920_to_kinect__1.4x__.yml"
                   },
-                  "render" : true,
+                  "render" : false,
                   "tweak_load" : false,
                   "tweak_render" : false,
                   "tweak_reset" : false,
@@ -123,7 +123,7 @@
                   /*"bilateral_range" : [ 20, 0, 20 ],*/
                   "render_height_map" : false,
                   /*"render_smoothed" : false,*/
-                  "render_normals" : false,
+                  /*"render_normals" : false,*/
                   /*"render_normals_smoothed" : false,*/
                   /*"render_table_angles" : false,*/
                   "render_surfaces" : false,

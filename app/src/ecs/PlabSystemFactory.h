@@ -35,11 +35,11 @@ ecs.add_system(new FlowFieldAttractorsSystem("flow_field_attractors"));
 ecs.add_system(new FlowFieldSystem("flow_field"));
 ecs.add_system(new FlowfieldDebugSystem("flowfield_debug"));
 ecs.add_system(new FisicaSystem("fisica"));
+ecs.add_system(new KnobSystem("knob"));
 ecs.add_system(new ParticleSystem("particle"));
 ecs.add_system(new ParticleEmitterSystem("particle_emitter"));
 ecs.add_system(new ParticleAttractorSystem("particle_attractor"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
-ecs.add_system(new KnobSystem("knob"));
 ecs.add_system(new TimeBenderSystem("time_bender"));
 //dont remove this line
 };

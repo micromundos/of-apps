@@ -42,10 +42,12 @@
          "components" : [
             {
                "data" : {
-                  "force_mult" : [ 0.1000000014901161, -10, 10 ]
+                  "force" : [ 0.1, -10, 10 ],
+                  "radius" : [ 0.5, 0, 1 ]
                },
                "id" : "particle_attractor"
-            }
+            },
+            { "id" : "knob" }
          ],
          "id" : "2"
       },
@@ -53,10 +55,12 @@
          "components" : [
             {
                "data" : {
-                  "force_mult" : [ 0.1000000014901161, -10, 10 ]
+                  "force" : [ 0.1, -10, 10 ],
+                  "radius" : [ 0.5, 0, 1 ]
                },
                "id" : "particle_attractor"
-            }
+            },
+            { "id" : "knob" }
          ],
          "id" : "3"
       }

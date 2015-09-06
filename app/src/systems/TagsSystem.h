@@ -146,7 +146,7 @@ class TagsSystem : public ECSsystem
       // render bloqs loc/angle
       ofPushStyle();
       ofSetLineWidth( 6 ); 
-      ofSetColor(ofColor::orange);
+      ofSetColor( ofColor::magenta );
       ofVec2f loc;
 
       for (int i = 0; i < bloqs.size(); i++)

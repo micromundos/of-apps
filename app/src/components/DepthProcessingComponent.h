@@ -12,7 +12,7 @@ class DepthProcessingComponent : public ECScomponent
     gpgpu::Process _depth_3d;
     gpgpu::Process _surfaces;
     gpgpu::Process _height_map;
-    gpgpu::Process _normals;
+    //gpgpu::Process _normals;
     //gpgpu::Process _table_angles;
 
   public:
@@ -26,14 +26,14 @@ class DepthProcessingComponent : public ECScomponent
     gpgpu::Process& height_map()
     { return _height_map; };
 
-    gpgpu::Process& normals()
-    { return _normals; }; 
+    //gpgpu::Process& normals()
+    //{ return _normals; }; 
 
     //gpgpu::Process& table_angles()
     //{ return _table_angles; };
 
     ofParameter<bool> render_surfaces;
-    ofParameter<bool> render_normals;
+    //ofParameter<bool> render_normals;
     ofParameter<bool> render_height_map;
     ofParameter<bool> render_smoothed;
     //ofParameter<bool> render_normals_smoothed;
@@ -91,7 +91,7 @@ class DepthProcessingComponent : public ECScomponent
       //param(normals_bilateral_kernel, "normals_bilateral_kernel"); 
 
       param(render_surfaces, "render_surfaces");
-      param(render_normals, "render_normals");
+      //param(render_normals, "render_normals");
       param(render_height_map, "render_height_map");
       //param(render_smoothed, "render_smoothed"); 
       //param(render_normals_smoothed, "render_normals_smoothed"); 

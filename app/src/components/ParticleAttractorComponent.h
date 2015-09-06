@@ -8,14 +8,16 @@ class ParticleAttractorComponent : public ECScomponent
 {
   public:
 
-    ofParameter<float> force_mult;
+    ofParameter<float> force;
+    ofParameter<float> radius;
 
     ParticleAttractorComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )
     {
       ECScomponent::init(e_id,d,p);
-      param( force_mult, "force_mult" );
+      param( force, "force" );
+      param( radius, "radius" );
     };
 
 };
