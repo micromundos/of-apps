@@ -95,6 +95,7 @@ class FlowFieldRenderSystem : public ECSsystem
       int rh = render_data->height;
 
       ofPushStyle();
+      ofSetLineWidth( ffr_data->line_width ); 
       ofSetColor(255);
       shader.begin();
       shader.setUniformTexture( "flowfield", flowfield.get(), 0 );

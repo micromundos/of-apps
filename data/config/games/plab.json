@@ -134,6 +134,7 @@
             {
                "data" : {
                   "render" : false,
+                  "line_width" : [ 1.5, 0, 10 ],
                   "force_min" : [ 0, 0, 10 ],
                   "force_max" : [ 1, 0, 10 ]
                },
