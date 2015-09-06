@@ -133,9 +133,10 @@
             },
             {
                "data" : {
-                  "render" : false
+                  "render" : false,
+                  "force_mult" : [ 1, 0, 4 ]
                },
-               "id" : "flowfield_debug"
+               "id" : "flow_field_render"
             }
          ],
          "id" : "ff"

@@ -18,9 +18,9 @@
 #include "FlowFieldContainerSystem.h"
 #include "FlowFieldGradientSystem.h"
 #include "FlowFieldSystem.h"
-#include "FlowfieldDebugSystem.h"
 #include "ParticleAttractorSystem.h"
 #include "FlowFieldAttractorsSystem.h"
 //#include "SyphonSystem.h"
 #include "TagSenderSystem.h"
+#include "FlowFieldRenderSystem.h"
 //dont remove this line

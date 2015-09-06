@@ -33,7 +33,7 @@ ecs.add_system(new FlowFieldContainerSystem("flow_field_container"));
 ecs.add_system(new FlowFieldGradientSystem("flow_field_gradient"));
 ecs.add_system(new FlowFieldAttractorsSystem("flow_field_attractors"));
 ecs.add_system(new FlowFieldSystem("flow_field"));
-ecs.add_system(new FlowfieldDebugSystem("flowfield_debug"));
+ecs.add_system(new FlowFieldRenderSystem("flow_field_render"));
 ecs.add_system(new FisicaSystem("fisica"));
 ecs.add_system(new KnobSystem("knob"));
 ecs.add_system(new ParticleSystem("particle"));
