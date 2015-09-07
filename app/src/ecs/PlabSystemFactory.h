@@ -40,6 +40,7 @@ ecs.add_system(new ParticleEmitterSystem("particle_emitter"));
 ecs.add_system(new ParticleAttractorSystem("particle_attractor"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new TimeBenderSystem("time_bender"));
+ecs.add_system(new SyphonSystem("syphon"));
 //dont remove this line
 };
 

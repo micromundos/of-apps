@@ -22,4 +22,5 @@
 #include "FlowFieldAttractorsSystem.h"
 #include "TagSenderSystem.h"
 #include "FlowFieldRenderSystem.h"
+#include "SyphonSystem.h"
 //dont remove this line

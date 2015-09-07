@@ -11,20 +11,20 @@
          ],
          "id" : "core"
       },
-      /*{*/
-      /*"components" : [*/
-      /*{*/
-      /*"data" : {*/
-      /*"send" : false,*/
-      /*"receive" : false,*/
-      /*"dst" : "Main Camera",*/
-      /*"src" : "Plab"*/
-      /*},*/
-      /*"id" : "syphon"*/
-      /*}*/
-      /*],*/
-      /*"id" : "syphon"*/
-      /*},*/
+      {
+          "components" : [
+          {
+              "data" : {
+                  "send" : false,
+                  "receive" : false,
+                  "dst" : "Main Camera",
+                  "src" : "Plab"
+              },
+              "id" : "syphon"
+          }
+          ],
+          "id" : "syphon"
+      },
       {
          "components" : [
             {
@@ -70,13 +70,13 @@
                },
                "id" : "tags_receiver"
             },
-            /*{*/
-            /*"id" : "tag_sender",*/
-            /*"data" : {*/
-            /*"host":"127.0.0.1",*/
-            /*"port": 9000*/
-            /*}*/
-            /*},*/
+            {
+                "data" : {
+                    "host":"127.0.0.1",
+                    "port": 9000
+                },
+                "id" : "tag_sender"
+            },
             {
                "data" : {
                   "calibration" : {
