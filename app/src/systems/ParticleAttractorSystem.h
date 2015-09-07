@@ -46,6 +46,7 @@ class ParticleAttractorSystem : public ECSsystem
     {
       RenderComponent* render_data = component<RenderComponent>("output");
 
+      float r = radius_from_knob(e);
       float t = knob_m.get(e)->value;
       Bloq* bloq = bloq_m.get(e)->bloq;
       ofVec2f& dir = bloq->dir; 
@@ -54,11 +55,19 @@ class ParticleAttractorSystem : public ECSsystem
       loc.y *= render_data->height;
 
       ofPushStyle();
+      ofEnableAlphaBlending();
       ofSetLineWidth( 6 );  
-      ofSetColor( ofColor::gold.getLerped( ofColor::crimson, t ) );
-      ofCircle( loc, 30 );
+      ofSetColor( ofColor( ofColor::gold.getLerped( ofColor::crimson, t ), 100 ) );
+      ofCircle( loc, 20 );
       ofSetColor( ofColor::orange );
-      ofLine( loc, loc + dir * 30 );
+      ofLine( loc, loc + dir * 20 );
+      ofDisableAlphaBlending();
+      ofPopStyle();
+
+      ofPushStyle();
+      ofNoFill();
+      ofSetColor( ofColor::orange );
+      ofCircle( loc, r * render_data->height );
       ofPopStyle();
     };
 
@@ -75,10 +84,16 @@ class ParticleAttractorSystem : public ECSsystem
       static Attractor attr;
       attr.id = bloq->id;
       attr.loc.set( bloq->loc );
-      float t = knob_m.get(e)->value;
       attr.force = attr_data->force;
-      attr.radius = ofMap( t, 0., 1., 0.01, attr_data->radius );
+      attr.radius = radius_from_knob(e);
       return attr;
+    };
+
+    float radius_from_knob(Entity &e) 
+    {
+      float t = knob_m.get(e)->value;
+      float r = particle_attractor_m.get(e)->radius;
+      return ofMap(t, 0., 1., 0.01, r);
     };
 
 };

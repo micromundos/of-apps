@@ -37,6 +37,7 @@ void main()
   {
     vec2 dir = attractors_locs[i] - loc;
     float d = length(dir);
+    /*force += (dir/d) * lerp2d( d, 0., attractors_radius[i], attractors_force[i], 0. );*/
     force += (dir/d) * clamp( lerp2d( d, 0., attractors_radius[i], attractors_force[i], 0. ), EPSILON, FLT_MAX );
   }
   force /= attractors_size;
