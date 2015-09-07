@@ -17,6 +17,8 @@ class TagsComponent : public ECScomponent
     ofParameter<bool> tweak_render;
 
     ofParameter<bool> render;
+  
+    ofParameter<float> interpolation_easing;
 
     string calib_rgb_file;
     string calib_depth_file;
@@ -38,6 +40,7 @@ class TagsComponent : public ECScomponent
       calib_rgb_file = d["calibration"]["rgb"].asString();
       calib_depth_file = d["calibration"]["depth"].asString();
       calib_stereo_file = d["calibration"]["stereo"].asString();
+      interpolation_easing =  d["interpolation"]["easing"].asFloat();
     };
 
 };

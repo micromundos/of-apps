@@ -41,6 +41,8 @@ class TagsSystem : public ECSsystem
       entity = &e;
 
       TagsComponent* tags_data = tags_m.get(e);
+      
+      interpolation_easing = tags_data->interpolation_easing;
 
       ofxCv::Calibration calib_rgb;
       ofxCv::Calibration calib_depth;
@@ -95,7 +97,7 @@ class TagsSystem : public ECSsystem
         if ( bloq == NULL )
         {
           shared_ptr<Bloq> _bloq( new Bloq() );
-          update_bloq( _bloq.get(), tag ); 
+          update_bloq( _bloq.get(), tag,true );
           bloqs.push_back( _bloq );
           ofNotifyEvent( BloqEvents::added, *_bloq );
         }
@@ -227,7 +229,7 @@ class TagsSystem : public ECSsystem
     ofVec2f up2;
     ofVec3f up3;
 
-
+    float interpolation_easing;
     // warper tweak
 
     void tweak_dispose(Entity &e)
@@ -291,7 +293,7 @@ class TagsSystem : public ECSsystem
       return NULL;
     };
 
-    bool update_bloq( Bloq* bloq, const Tag& tag )
+    bool update_bloq( Bloq* bloq, const Tag& tag,bool is_new = false )
     {
       ofVec2f tloc, tdir;
 
@@ -331,7 +333,17 @@ class TagsSystem : public ECSsystem
       bloq->loc.set( tloc );
       bloq->dir.set( tdir );
       bloq->radians = radians;
-      bloq->id = tag.id; 
+      if(is_new)
+      {
+        bloq->loc_i.set(tloc);
+        bloq->dir_i.set(tdir);
+        bloq->radians_i = radians;
+      }else{
+        bloq->loc_i+=(tloc-bloq->loc_i)*interpolation_easing;
+        bloq->dir_i+=(tdir-bloq->dir_i)*interpolation_easing;
+        bloq->radians_i+=(boundBetween(radians,0,M_PI_2)-bloq->radians_i)*interpolation_easing;
+      }
+      bloq->id = tag.id;
 
       return true;
     };
@@ -354,6 +366,17 @@ class TagsSystem : public ECSsystem
         bloqs.erase( to_remove[i] );
 
     };
+  
+    //  util for angle jumping
+  
+    double boundBetween(double val, double lowerBound, double upperBound){
+      if(lowerBound > upperBound){std::swap(lowerBound, upperBound);}
+      val-=lowerBound; //adjust to 0
+      double rangeSize = upperBound - lowerBound;
+      if(rangeSize == 0){return upperBound;} //avoid dividing by 0
+      return val - (rangeSize * std::floor(val/rangeSize)) + lowerBound;
+    }
+
 
 
     //3d

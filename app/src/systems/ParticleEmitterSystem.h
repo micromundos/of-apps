@@ -60,8 +60,8 @@ class ParticleEmitterSystem : public ECSsystem
       RenderComponent* render_data = component<RenderComponent>("output");
 
       Bloq* bloq = bloq_m.get(e)->bloq;
-      ofVec2f& dir = bloq->dir; 
-      ofVec2f loc( bloq->loc ); 
+      ofVec2f& dir = bloq->dir_i;
+      ofVec2f loc( bloq->loc_i);
       loc.x *= render_data->width;
       loc.y *= render_data->height;
 

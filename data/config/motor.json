@@ -88,7 +88,10 @@
                   "tweak_load" : false,
                   "tweak_render" : false,
                   "tweak_reset" : false,
-                  "tweak_save" : false
+                  "tweak_save" : false,
+                  "interpolation":{
+                     "easing":0.2
+                  }
                },
                "id" : "tags"
             },
