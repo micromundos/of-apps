@@ -49,8 +49,8 @@ class ParticleAttractorSystem : public ECSsystem
       float r = radius_from_knob(e);
       float t = knob_m.get(e)->value;
       Bloq* bloq = bloq_m.get(e)->bloq;
-      ofVec2f& dir = bloq->dir; 
-      ofVec2f loc( bloq->loc ); 
+      ofVec2f& dir = bloq->dir_i; 
+      ofVec2f loc( bloq->loc_i ); 
       loc.x *= render_data->width;
       loc.y *= render_data->height;
 

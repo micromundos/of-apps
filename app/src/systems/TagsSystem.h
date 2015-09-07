@@ -42,8 +42,6 @@ class TagsSystem : public ECSsystem
 
       TagsComponent* tags_data = tags_m.get(e);
       
-      interpolation_easing = tags_data->interpolation_easing;
-
       ofxCv::Calibration calib_rgb;
       ofxCv::Calibration calib_depth;
 
@@ -97,12 +95,12 @@ class TagsSystem : public ECSsystem
         if ( bloq == NULL )
         {
           shared_ptr<Bloq> _bloq( new Bloq() );
-          update_bloq( _bloq.get(), tag,true );
+          update_bloq( e, _bloq.get(), tag,true );
           bloqs.push_back( _bloq );
           ofNotifyEvent( BloqEvents::added, *_bloq );
         }
 
-        else if ( update_bloq( bloq, tag ) )
+        else if ( update_bloq( e, bloq, tag ) )
         {
           ofNotifyEvent( BloqEvents::updated, *bloq );
         }
@@ -229,7 +227,6 @@ class TagsSystem : public ECSsystem
     ofVec2f up2;
     ofVec3f up3;
 
-    float interpolation_easing;
     // warper tweak
 
     void tweak_dispose(Entity &e)
@@ -293,7 +290,7 @@ class TagsSystem : public ECSsystem
       return NULL;
     };
 
-    bool update_bloq( Bloq* bloq, const Tag& tag,bool is_new = false )
+    bool update_bloq( Entity &e, Bloq* bloq, const Tag& tag, bool is_new = false )
     {
       ofVec2f tloc, tdir;
 
@@ -333,17 +330,24 @@ class TagsSystem : public ECSsystem
       bloq->loc.set( tloc );
       bloq->dir.set( tdir );
       bloq->radians = radians;
-      if(is_new)
+      bloq->id = tag.id;
+
+      // interpolation
+
+      TagsComponent* tags_data = tags_m.get(e);
+      if ( is_new )
       {
         bloq->loc_i.set(tloc);
         bloq->dir_i.set(tdir);
         bloq->radians_i = radians;
-      }else{
-        bloq->loc_i+=(tloc-bloq->loc_i)*interpolation_easing;
-        bloq->dir_i+=(tdir-bloq->dir_i)*interpolation_easing;
-        bloq->radians_i+=(boundBetween(radians,0,M_PI_2)-bloq->radians_i)*interpolation_easing;
       }
-      bloq->id = tag.id;
+
+      else
+      {
+        bloq->loc_i += (tloc - bloq->loc_i) * tags_data->interpolation_easing_loc;
+        bloq->dir_i += (tdir - bloq->dir_i) * tags_data->interpolation_easing_dir;
+        bloq->radians_i = ofLerpRadians(bloq->radians_i, radians, tags_data->interpolation_easing_radians );
+      }
 
       return true;
     };
@@ -367,17 +371,6 @@ class TagsSystem : public ECSsystem
 
     };
   
-    //  util for angle jumping
-  
-    double boundBetween(double val, double lowerBound, double upperBound){
-      if(lowerBound > upperBound){std::swap(lowerBound, upperBound);}
-      val-=lowerBound; //adjust to 0
-      double rangeSize = upperBound - lowerBound;
-      if(rangeSize == 0){return upperBound;} //avoid dividing by 0
-      return val - (rangeSize * std::floor(val/rangeSize)) + lowerBound;
-    }
-
-
 
     //3d
 

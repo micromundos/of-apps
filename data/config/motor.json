@@ -84,14 +84,14 @@
                      "rgb" : "calib/intrinsics_logitech920.aruco__1.4x__.yml",
                      "stereo" : "calib/extrinsics_logitech920_to_kinect__1.4x__.yml"
                   },
+                  "interpolation_easing_dir" : [ 0.2000000029802322, 0, 1 ],
+                  "interpolation_easing_loc" : [ 0.2000000029802322, 0, 1 ],
+                  "interpolation_easing_radians" : [ 0.04948453605175018, 0, 1 ],
                   "render" : false,
                   "tweak_load" : false,
                   "tweak_render" : false,
                   "tweak_reset" : false,
-                  "tweak_save" : false,
-                  "interpolation":{
-                     "easing":0.2
-                  }
+                  "tweak_save" : false
                },
                "id" : "tags"
             },
