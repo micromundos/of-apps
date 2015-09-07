@@ -39,7 +39,6 @@ else if (id == "flow_field_gradient") return new FlowFieldGradientComponent(id);
 else if (id == "flow_field") return new FlowFieldComponent(id);
 else if (id == "particle_attractor") return new ParticleAttractorComponent(id);
 else if (id == "flow_field_attractors") return new FlowFieldAttractorsComponent(id);
-else if (id == "syphon") return new SyphonComponent(id);
 else if (id == "tag_sender") return new TagSenderComponent(id);
 else if (id == "flow_field_render") return new FlowFieldRenderComponent(id);
 //dont remove this line

@@ -25,7 +25,6 @@
 #include "FlowFieldComponent.h"
 #include "ParticleAttractorComponent.h"
 #include "FlowFieldAttractorsComponent.h"
-#include "SyphonComponent.h"
 #include "TagSenderComponent.h"
 #include "FlowFieldRenderComponent.h"
 //dont remove this line

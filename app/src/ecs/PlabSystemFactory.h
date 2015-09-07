@@ -28,7 +28,6 @@ ecs.add_system(new TagsSystem("tags"));
 ecs.add_system(new TagSenderSystem("tag_sender"));
 ecs.add_system(new TableCalibSystem("table_calib"));
 ecs.add_system(new DepthProcessingSystem("depth_processing"));
-//ecs.add_system(new SyphonSystem("syphon"));
 ecs.add_system(new FlowFieldContainerSystem("flow_field_container"));
 ecs.add_system(new FlowFieldGradientSystem("flow_field_gradient"));
 ecs.add_system(new FlowFieldAttractorsSystem("flow_field_attractors"));
