@@ -39,7 +39,7 @@
                   },
                   "enabled" : true,
                   "mesh_res" : 1,
-                  "render_background" : [ 1, 0, 1 ],
+                  "render_background" : [ 0.2, 0, 1 ],
                   "render_hue_tex" : false,
                   "tex_height" : 1152,
                   "tex_width" : 1536,
