@@ -12,18 +12,18 @@
          "id" : "core"
       },
       {
-          "components" : [
-          {
-              "data" : {
-                  "send" : false,
-                  "receive" : false,
+         "components" : [
+            {
+               "data" : {
                   "dst" : "Main Camera",
+                  "receive" : false,
+                  "send" : false,
                   "src" : "Plab"
-              },
-              "id" : "syphon"
-          }
-          ],
-          "id" : "syphon"
+               },
+               "id" : "syphon"
+            }
+         ],
+         "id" : "syphon"
       },
       {
          "components" : [
@@ -71,11 +71,11 @@
                "id" : "tags_receiver"
             },
             {
-                "data" : {
-                    "host":"127.0.0.1",
-                    "port": 9000
-                },
-                "id" : "tag_sender"
+               "data" : {
+                  "host" : "127.0.0.1",
+                  "port" : 9000
+               },
+               "id" : "tag_sender"
             },
             {
                "data" : {

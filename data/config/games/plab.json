@@ -42,8 +42,8 @@
          "components" : [
             {
                "data" : {
-                  "force" : [ 0.8865976333618164, -10, 10 ],
-                  "radius" : [ 0.5, 0, 1 ]
+                  "force" : [ 1, -10, 10 ],
+                  "radius" : [ 0.2, 0, 1 ]
                },
                "id" : "particle_attractor"
             },
@@ -57,8 +57,8 @@
          "components" : [
             {
                "data" : {
-                  "force" : [ 1.175258636474609, -10, 10 ],
-                  "radius" : [ 0.5, 0, 1 ]
+                  "force" : [ 1, -10, 10 ],
+                  "radius" : [ 0.2, 0, 1 ]
                },
                "id" : "particle_attractor"
             },
@@ -81,7 +81,7 @@
                   "max_particles" : 5000,
                   "max_speed" : [ 3, 0, 10 ],
                   "radius" : 6,
-                  "render_size" : [ 4, 0, 20 ]
+                  "render_size" : [ 3, 0, 20 ]
                },
                "id" : "particle_system"
             },
