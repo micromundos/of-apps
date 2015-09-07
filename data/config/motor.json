@@ -56,7 +56,7 @@
                "data" : {
                   /*"flip" : false,*/
                   /*"angle" : [ -2, -30, 30 ],*/
-                  "render" : true
+                  "render" : false
                },
                "id" : "depth"
             },
@@ -78,8 +78,8 @@
                "data" : {
                   "calibration" : {
                      "depth" : "calib/intrinsics_kinect.aruco.yml",
-                     "rgb" : "calib/intrinsics_logitech920.aruco.yml",
-                     "stereo" : "calib/extrinsics_logitech920_to_kinect.yml"
+                     "rgb" : "calib/intrinsics_logitech920.aruco__1.4x__.yml",
+                     "stereo" : "calib/extrinsics_logitech920_to_kinect__1.4x__.yml"
                   },
                   "render" : true
                },
