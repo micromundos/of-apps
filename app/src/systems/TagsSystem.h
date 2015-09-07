@@ -6,6 +6,8 @@
 #include "events/BloqEvents.h"
 #include "bloqs/Bloq.h"
 #include "bloqs/Tag.h"
+#include "ofxQuadWarp.h"
+#include "keys.h"
 
 using namespace artemis;
 
@@ -40,6 +42,9 @@ class TagsSystem : public ECSsystem
 
       TagsComponent* tags_data = tags_m.get(e);
 
+      ofxCv::Calibration calib_rgb;
+      ofxCv::Calibration calib_depth;
+
       load_extrinsics( tags_data->calib_stereo_file, calib_stereo );
       load_intrinsics( tags_data->calib_rgb_file, calib_rgb );
       load_intrinsics( tags_data->calib_depth_file, calib_depth );
@@ -47,10 +52,18 @@ class TagsSystem : public ECSsystem
       cv::Size rgb_size = calib_rgb.getDistortedIntrinsics().getImageSize();
       rgb_width = rgb_size.width;
       rgb_height = rgb_size.height;
+
+      depth_int = calib_depth.getDistortedIntrinsics();
+      cv::Size depth_size = depth_int.getImageSize();
+      depth_width = depth_size.width;
+      depth_height = depth_size.height;
+
+      tweak_init(e);
     }; 
 
     virtual void removed(Entity &e) 
     {
+      tweak_dispose(e);
       entity = NULL;
     };
 
@@ -65,6 +78,10 @@ class TagsSystem : public ECSsystem
       vector<Tag>& tags = tags_receiver_data->tags;
 
       //ofLogNotice("TagsSystem") << "tags " << tags.size();
+
+      //TODO update H only when changed
+      //trigger update event from ofxQuadWarp
+      tweak_H = warper.getMatrix();
 
       int len = tags.size();
       for ( int i = 0; i < len; i++ )
@@ -101,21 +118,35 @@ class TagsSystem : public ECSsystem
       TagsComponent* tags_data = tags_m.get(e);
       TagsReceiverComponent* tags_receiver_data = tags_receiver_m.get(e);
 
+      if ( tags_data->tweak_render )
+      {
+        ofPushStyle();
+        ofSetColor(ofColor::magenta);
+        warper.drawQuadOutline();
+        ofSetColor(ofColor::yellow);
+        warper.drawCorners();
+        ofSetColor(ofColor::magenta);
+        warper.drawHighlightedCorner();
+        ofSetColor(ofColor::red);
+        warper.drawSelectedCorner();
+        ofPopStyle();
+      }
+
       if ( !tags_data->render )
         return;
 
       vector< shared_ptr<Bloq> >& bloqs = tags_data->bloqs;
       vector<Tag>& tags = tags_receiver_data->tags;
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      RenderComponent* render_data = component<RenderComponent>("output");
 
       int render_width = render_data->width;
       int render_height = render_data->height;
 
       // render bloqs loc/angle
       ofPushStyle();
-      ofSetLineWidth( 5 ); 
-      ofSetColor(ofColor::red);
+      ofSetLineWidth( 6 ); 
+      ofSetColor( ofColor::magenta );
       ofVec2f loc;
 
       for (int i = 0; i < bloqs.size(); i++)
@@ -127,19 +158,55 @@ class TagsSystem : public ECSsystem
         loc.x *= render_width;
         loc.y *= render_height;
 
-        ofLine( loc, loc + dir * 40 );
-        ofRect( loc, 8, 8 );
-        ofDrawBitmapString( id, loc ); 
+        ofLine( loc, loc + dir * 20 );
+        //ofRect( loc, 10, 10 );
+        ofCircle( loc, 10 );
+        //ofDrawBitmapString( id, loc ); 
       }
       ofPopStyle();
 
       // render tags 2d
-      ofPushStyle();
-      ofSetColor(ofColor::blue);
-      for (int i = 0; i < tags.size(); i++)
-        render_tag_2d( tags[i], render_width, render_height );
-      ofPopStyle();
+      //ofPushStyle();
+      //ofSetColor(ofColor::blue);
+      //for (int i = 0; i < tags.size(); i++)
+        //render_tag_2d( tags[i], render_width, render_height );
+      //ofPopStyle();
     };
+
+    void tweak_load(bool& enabled)
+    {
+      if (enabled) 
+      {
+        cout << "\n" << endl;
+        ofLogNotice("TagsSystem")
+          << "load tweak from " << tweak_file;
+        warper.load( tweak_file );
+      }
+    };
+
+    void tweak_save(bool& enabled)
+    {
+      if (enabled) 
+      {
+        ofLogNotice("TagsSystem")
+          << "save tweak to " << tweak_file;
+        warper.save( tweak_file );
+      }
+    };
+
+    void tweak_reset(bool& enabled)
+    {
+      if (enabled) 
+      {
+        warper.reset();
+      }
+    };
+
+    //void tweak_render(bool& enabled)
+    //{
+      //if (enabled) warper.show();
+      //else warper.hide();
+    //};
 
   private: 
 
@@ -149,13 +216,58 @@ class TagsSystem : public ECSsystem
     ComponentMapper<TagsReceiverComponent> tags_receiver_m;
 
     Tag::Extrinsics calib_stereo;
-    ofxCv::Calibration calib_rgb;
-    ofxCv::Calibration calib_depth;
+    ofxCv::Intrinsics depth_int;
     int rgb_width, rgb_height;
+    int depth_width, depth_height;
+
+    ofxQuadWarp warper;
+    ofMatrix4x4 tweak_H;
+    string tweak_file;
 
     ofVec2f up2;
     ofVec3f up3;
 
+
+    // warper tweak
+
+    void tweak_dispose(Entity &e)
+    {
+      TagsComponent* tags_data = tags_m.get(e);
+
+      tags_data->tweak_load.removeListener( this, &TagsSystem::tweak_load );
+      tags_data->tweak_save.removeListener( this, &TagsSystem::tweak_save );
+      tags_data->tweak_reset.removeListener( this, &TagsSystem::tweak_reset );
+      //tags_data->tweak_render.removeListener( this, &TagsSystem::tweak_render );
+    };
+
+    void tweak_init(Entity &e)
+    {
+      tweak_file = "calib/tag_tweak.xml";
+
+      TagsComponent* tags_data = tags_m.get(e);
+
+      tags_data->tweak_load.addListener( this, &TagsSystem::tweak_load );
+      tags_data->tweak_save.addListener( this, &TagsSystem::tweak_save );
+      tags_data->tweak_reset.addListener( this, &TagsSystem::tweak_reset );
+      //tags_data->tweak_render.addListener( this, &TagsSystem::tweak_render );
+
+      RenderComponent* render_data = component<RenderComponent>("output");
+
+      int x = ofGetWidth() * 0.5;
+      int y = ofGetHeight() * 0.5;
+      int w = 20;
+      int h = 20;
+
+      warper.setSourceRect(ofRectangle(0, 0, w, h));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
+      warper.setTopLeftCornerPosition(ofVec3f(x, y));             // this is position of the quad warp corners, centering the image on the screen.
+      warper.setTopRightCornerPosition(ofVec3f(x + w, y));        // this is position of the quad warp corners, centering the image on the screen.
+      warper.setBottomLeftCornerPosition(ofVec3f(x, y + h));      // this is position of the quad warp corners, centering the image on the screen.
+      warper.setBottomRightCornerPosition(ofVec3f(x + w, y + h)); // this is position of the quad warp corners, centering the image on the screen.
+      warper.setup();
+
+      bool b = true;
+      tweak_load(b);
+    };
 
     // tags
 
@@ -282,13 +394,16 @@ class TagsSystem : public ECSsystem
     //normalized [0,1] loc
     void tag_loc_on_depth( const Tag& tag, ofVec2f& tloc )
     {
-      const ofxCv::Intrinsics& depth_int = calib_depth.getDistortedIntrinsics();
-      cv::Size depth_size = depth_int.getImageSize();
+      //const ofxCv::Intrinsics& depth_int = calib_depth.getDistortedIntrinsics();
+
       ofVec3f p3; 
       transform_to_depth( tag, p3 );
-      project( depth_int, p3, tloc ); 
-      tloc.x /= depth_size.width;
-      tloc.y /= depth_size.height;
+      project( depth_int, p3, tloc );  
+
+      tloc.set( tweak_H.preMult( ofVec3f( tloc.x, tloc.y, 0 ) ) );
+
+      tloc.x /= depth_width;
+      tloc.y /= depth_height;
     }; 
 
     //normalized [0,1] loc

@@ -4,6 +4,16 @@
 
 #pragma include "../lib/math.glsl"
 
+/*
+ * DEPRECATED
+ * DEPRECATED
+ * DEPRECATED
+ *
+ * replaced by 
+ * FlowFieldRenderSystem
+ * glsl/flowfields/flowfield_render.vert
+ */
+
 uniform sampler2DRect data;
 uniform float multx;
 uniform float multy;

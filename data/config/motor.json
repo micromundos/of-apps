@@ -15,9 +15,9 @@
          "components" : [
             {
                "data" : {
-                  "send" : true,
-                  "receive" : true,
                   "dst" : "Main Camera",
+                  "receive" : true,
+                  "send" : true,
                   "src" : "Plab"
                },
                "id" : "syphon"
@@ -39,10 +39,13 @@
                   },
                   "enabled" : true,
                   "mesh_res" : 1,
-                  "render_background" : [ 0, 0, 1 ],
+                  "render_background" : [ 1, 0, 1 ],
                   "render_hue_tex" : false,
                   "tex_height" : 1152,
                   "tex_width" : 1536,
+                  "tweak_load" : false,
+                  "tweak_reset" : false,
+                  "tweak_save" : false,
                   "xoff" : [ 8, -10, 10 ]
                },
                "id" : "camara_lucida"
@@ -68,11 +71,11 @@
                "id" : "tags_receiver"
             },
             {
-               "id" : "tag_sender",
                "data" : {
-                  "host":"127.0.0.1",
-                  "port": 9000
-               }
+                  "host" : "127.0.0.1",
+                  "port" : 9000
+               },
+               "id" : "tag_sender"
             },
             {
                "data" : {
@@ -81,7 +84,11 @@
                      "rgb" : "calib/intrinsics_logitech920.aruco__1.4x__.yml",
                      "stereo" : "calib/extrinsics_logitech920_to_kinect__1.4x__.yml"
                   },
-                  "render" : true
+                  "render" : false,
+                  "tweak_load" : false,
+                  "tweak_render" : false,
+                  "tweak_reset" : false,
+                  "tweak_save" : false
                },
                "id" : "tags"
             },
@@ -116,7 +123,7 @@
                   /*"bilateral_range" : [ 20, 0, 20 ],*/
                   "render_height_map" : false,
                   /*"render_smoothed" : false,*/
-                  "render_normals" : false,
+                  /*"render_normals" : false,*/
                   /*"render_normals_smoothed" : false,*/
                   /*"render_table_angles" : false,*/
                   "render_surfaces" : true,

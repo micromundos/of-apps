@@ -79,8 +79,8 @@ class DepthProcessingSystem : public ECSsystem
         .init("glsl/height_map.frag", w, h )
         .on( "update", this, &DepthProcessingSystem::update_height_map );
 
-      normals(e)
-        .init("glsl/normals.frag", w, h );
+      //normals(e)
+        //.init("glsl/normals.frag", w, h );
 
       //normals_bilateral
         //.init("glsl/cv/bilateral.frag", w, h )
@@ -149,10 +149,10 @@ class DepthProcessingSystem : public ECSsystem
         .update()
         .update_debug( depth_proc_data->render_height_map );
 
-      normals(e)
-        .set( "mesh3d", depth_3d(e).get() )
-        .update()
-        .update_debug( depth_proc_data->render_normals );
+      //normals(e)
+        //.set( "mesh3d", depth_3d(e).get() )
+        //.update()
+        //.update_debug( depth_proc_data->render_normals );
 
 
       // process surfaces = clean height map
@@ -248,8 +248,8 @@ class DepthProcessingSystem : public ECSsystem
       if (depth_proc_data->render_height_map)
         height_map(e).render_debug(0,0,rw,rh);
 
-      if (depth_proc_data->render_normals)
-        normals(e).render_debug(0,0,rw,rh);
+      //if (depth_proc_data->render_normals)
+        //normals(e).render_debug(0,0,rw,rh);
 
       //if (depth_proc_data->render_table_angles)
         //table_angles(e).render_debug(0,0,rw,rh);
@@ -475,10 +475,10 @@ class DepthProcessingSystem : public ECSsystem
       return depth_processing_m.get(e)->height_map();
     };
 
-    gpgpu::Process& normals(Entity &e)
-    {
-      return depth_processing_m.get(e)->normals();
-    }; 
+    //gpgpu::Process& normals(Entity &e)
+    //{
+      //return depth_processing_m.get(e)->normals();
+    //}; 
 
     //gpgpu::Process& table_angles(Entity &e)
     //{

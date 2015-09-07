@@ -104,6 +104,12 @@ class BloqMakerSystem : public ECSsystem
     {
       string bloq_id = bloq.id;
 
+      if ( bloq_maker.has_entity( bloq_id ) )
+      {
+        ofLogWarning("BloqMakerSystem") << "make_entity by id/tag " << bloq_id << ": entity already exists";
+        return;
+      }
+
       artemis::Entity* e = bloq_maker.make_entity( bloq_id );
 
       if ( e == NULL ) return;

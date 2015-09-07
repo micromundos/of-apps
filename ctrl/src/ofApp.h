@@ -32,6 +32,7 @@ class ofApp : public ofBaseApp{
 
     //ofxPanel gui;
     ofxPanel gui_motor, gui_game;
+    //string gui_motor_settings, gui_game_settings;
 
     //string gui_settings;
     ofxOscSender sender;

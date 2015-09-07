@@ -53,6 +53,8 @@ class TableCalibSystem : public ECSsystem
       ofAddListener( cml_data->cml->render_3d, this, &TableCalibSystem::render_3d );
       //ofAddListener( ofEvents().mousePressed, this, &TableCalibSystem::mousePressed );
       //midx = 0;
+
+      initial_load(e);
     }; 
 
     virtual void removed(Entity &e) 
@@ -405,6 +407,13 @@ class TableCalibSystem : public ECSsystem
         depth_data->width, depth_data->height,
         render_data->width, render_data->height 
       );
+    };
+
+    bool initial_load(Entity &e)
+    {
+      cout << "\n" << endl;
+      ofLogNotice("TableCalibSystem") << "initial load";
+      return load_background(e) && load_table_plane(e);
     };
 
     bool load(Entity &e)

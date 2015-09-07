@@ -43,10 +43,8 @@ class FlowfieldDebugSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      depth_data = require_component<DepthComponent>("input");
-      render_data = require_component<RenderComponent>("output");
-
-      inited = true;
+      depth_data = component<DepthComponent>("input");
+      render_data = component<RenderComponent>("output");
 
       FlowFieldComponent* ff_data = ff_m.get(e);
       gpgpu::Process& flowfield = ff_data->flowfield();
@@ -62,6 +60,17 @@ class FlowfieldDebugSystem : public ECSsystem
           mesh.addColor(ofColor(255,0,0));
         }
       }
+
+      //ofFbo::Settings s;
+      //s.internalformat = GL_RGBA;
+      //s.width = render_data->width;
+      //s.height = render_data->height;
+      //fbo.allocate( s );
+      //fbo.begin();
+      //ofClear(0,255);
+      //fbo.end();
+
+      inited = true;
     }; 
 
     virtual void processEntity(Entity &e) 
@@ -88,6 +97,8 @@ class FlowfieldDebugSystem : public ECSsystem
         (float)rh / h 
       );
 
+      //fbo.bind();
+
       ofPushStyle();
       ofSetColor(255);
       ofSetLineWidth(1.0);
@@ -101,6 +112,10 @@ class FlowfieldDebugSystem : public ECSsystem
       mesh.draw();
       shader.end();
       ofPopStyle();
+
+      //fbo.unbind();
+
+      //fbo.draw(0,0);
     };
 
   private:
@@ -111,8 +126,10 @@ class FlowfieldDebugSystem : public ECSsystem
     ComponentMapper<FlowfieldDebugComponent> ffd_m;
     ComponentMapper<FlowFieldComponent> ff_m;
 
-    ofVboMesh    mesh;
-    ofShader  shader;
+    ofVboMesh mesh;
+    ofShader shader;
+    //ofFbo fbo;
+
     int       dot_step;
     bool      inited;
 

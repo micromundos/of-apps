@@ -6,6 +6,9 @@
 #include "bloqs/Attractor.h"
 #include "events/AttractorEvents.h"
 
+#define ATTRS_LEN 10
+#define ATTRS_LOCS_LEN ATTRS_LEN*2
+
 using namespace artemis;
 
 class FlowFieldAttractorsSystem : public ECSsystem 
@@ -107,36 +110,42 @@ class FlowFieldAttractorsSystem : public ECSsystem
     ComponentMapper<FlowFieldComponent> ff_m; 
 
 
+    //XXX WARNING keep in sync with ATTRS_LEN in fragment shader
+    float attractors_locs[ATTRS_LOCS_LEN];
+    float attractors_force[ATTRS_LEN];
+    float attractors_radius[ATTRS_LEN];
+
+
     void update_flowfield_attractors( ofShader& shader )
-    {
-      //XXX WARNING keep in sync with 
-      //uniform vec2 attractors 
-      //in fragment shader
-      int max_entities = 10; 
-      int max_attrs = max_entities * 2; //attractors = 10 vecs2
+    { 
+      for ( int i = 0; i < ATTRS_LOCS_LEN; i++ )
+      {
+        attractors_locs[i] = 0.0;
+      }
 
-      float attr_locs[max_attrs];
-      for ( int i = 0; i < max_attrs; i++ )
-        attr_locs[i] = 0.0;
-
-      float force_mult[max_entities];
-      for ( int i = 0; i < max_entities; i++ )
-        force_mult[i] = 0.0;
+      for ( int i = 0; i < ATTRS_LEN; i++ )
+      {
+        attractors_force[i] = 0.0;
+        attractors_radius[i] = 0.0;
+      }
 
       int i = 0;
       for ( map<string,Attractor>::iterator it = attractors.begin(); it != attractors.end(); it++ )
       {
         string id = it->first;
         Attractor& attr = it->second;
-        attr_locs[ i + 0 ] = attr.loc.x;
-        attr_locs[ i + 1 ] = attr.loc.y;
-        force_mult[ i ] = attr.force_mult;
+        int ii = i*2; //attr loc
+        attractors_locs[ ii ] = attr.loc.x;
+        attractors_locs[ ii + 1 ] = attr.loc.y;
+        attractors_force[ i ] = attr.force;
+        attractors_radius[ i ] = attr.radius;
         i++;
-      } 
+      }  
 
       shader.setUniform1i( "attractors_size", attractors.size() );
-      shader.setUniform2fv( "attractors_locs", attr_locs, max_entities );
-      shader.setUniform1fv( "attractors_force_mult", force_mult, max_entities );
+      shader.setUniform2fv( "attractors_locs", attractors_locs, ATTRS_LEN );
+      shader.setUniform1fv( "attractors_force", attractors_force, ATTRS_LEN );
+      shader.setUniform1fv( "attractors_radius", attractors_radius, ATTRS_LEN );
     };
 
     void attractor_updated( Attractor& attr )

@@ -12,9 +12,12 @@
 #pragma include "../lib/math.glsl"
 #pragma include "../lib/gpgpu.glsl"
 
+#define ATTRS_LEN 10
+
 uniform int attractors_size;
-uniform vec2 attractors_locs[10];
-uniform float attractors_force_mult[10];
+uniform vec2 attractors_locs[ATTRS_LEN];
+uniform float attractors_force[ATTRS_LEN];
+uniform float attractors_radius[ATTRS_LEN];
 
 uniform sampler2DRect debug_input;
 
@@ -29,13 +32,12 @@ void main()
 
   vec2 loc = gl_FragCoord.xy / size;
   vec2 force = vec2(0.,0.);
-  vec2 dir;
-  float d;
+
   for ( int i = 0; i < attractors_size; i++ )
   {
-    dir = attractors_locs[i] - loc;
-    d = clamp( length(dir), EPSILON, FLT_MAX );
-    force += dir * 1/d * attractors_force_mult[i];
+    vec2 dir = attractors_locs[i] - loc;
+    float d = length(dir);
+    force += (dir/d) * clamp( lerp2d( d, 0., attractors_radius[i], attractors_force[i], 0. ), EPSILON, FLT_MAX );
   }
   force /= attractors_size;
 

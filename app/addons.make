@@ -2,7 +2,6 @@ ofxKinect
 ofxOpenCv
 ofxCv
 ofxAruco
-ofxPS3EyeGrabber
 ofxGPGPU
 ofxGeom
 ofxECS
@@ -11,5 +10,7 @@ ofxOsc
 ofxPlab
 ofxKeyValueOSC
 ofxTimeMeasurements
-addons
 ofxCamaraLucida
+ofxSyphon
+ofxQuadWarp
+addons

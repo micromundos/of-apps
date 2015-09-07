@@ -15,24 +15,40 @@
       {
          "components" : [
             {
-               "id" : "knob"
-            },
-            {
                "data" : {
-                  "coef" : [ 20, 1, 100 ]
+                  "force" : [ 15, 0, 100 ],
+                  "rate" : [ 10, 0, 100 ]
                },
-               "id" : "time_bender"
+               "id" : "particle_emitter"
             }
          ],
          "id" : "1"
       },
+      /*{*/
+      /*"components" : [*/
+      /*{*/
+      /*"id" : "knob"*/
+      /*},*/
+      /*{*/
+      /*"data" : {*/
+      /*"coef" : [ 20, 1, 100 ]*/
+      /*},*/
+      /*"id" : "time_bender"*/
+      /*}*/
+      /*],*/
+      /*"id" : "1"*/
+      /*},*/
       {
          "components" : [
             {
                "data" : {
-                  "force_mult" : [ 0.1000000014901161, -10, 10 ]
+                  "force" : [ 0.8865976333618164, -10, 10 ],
+                  "radius" : [ 0.5, 0, 1 ]
                },
                "id" : "particle_attractor"
+            },
+            {
+               "id" : "knob"
             }
          ],
          "id" : "2"
@@ -41,9 +57,13 @@
          "components" : [
             {
                "data" : {
-                  "force_mult" : [ 0.1000000014901161, -10, 10 ]
+                  "force" : [ 1.175258636474609, -10, 10 ],
+                  "radius" : [ 0.5, 0, 1 ]
                },
                "id" : "particle_attractor"
+            },
+            {
+               "id" : "knob"
             }
          ],
          "id" : "3"
@@ -82,7 +102,7 @@
                   "bilateral_kernel" : [ 1, 0, 10 ],
                   "bilateral_range" : [ 20, 0, 20 ],
                   "edge_detection_threshold" : [ 100, 0, 300 ],
-                  "gaussian_kernel" : [ 1, 0, 10 ],
+                  "gaussian_kernel" : [ 1.670103073120117, 0, 10 ],
                   "gaussian_sigma" : [ 5, 0, 20 ],
                   "render" : false,
                   "render_edges" : false
@@ -111,15 +131,18 @@
                   "scale" : 0.3,
                   "weight_attractors" : [ 1, 0, 1 ],
                   "weight_container" : [ 1, 0, 1 ],
-                  "weight_gradient" : [ 1, 0, 1 ]
+                  "weight_gradient" : [ 0.2185567021369934, 0, 1 ]
                },
                "id" : "flow_field"
             },
             {
                "data" : {
-                  "render" : false
+                  "force_max" : [ 1.505154609680176, 0, 10 ],
+                  "force_min" : [ 0, 0, 10 ],
+                  "line_width" : [ 1.5, 0, 10 ],
+                  "render" : true
                },
-               "id" : "flowfield_debug"
+               "id" : "flow_field_render"
             }
          ],
          "id" : "ff"

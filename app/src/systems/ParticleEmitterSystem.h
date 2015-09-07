@@ -56,7 +56,23 @@ class ParticleEmitterSystem : public ECSsystem
     };
 
     virtual void renderEntity(Entity &e)
-    {};
+    {
+      RenderComponent* render_data = component<RenderComponent>("output");
+
+      Bloq* bloq = bloq_m.get(e)->bloq;
+      ofVec2f& dir = bloq->dir; 
+      ofVec2f loc( bloq->loc ); 
+      loc.x *= render_data->width;
+      loc.y *= render_data->height;
+
+      ofPushStyle();
+      ofSetLineWidth( 6 ); 
+      ofSetColor( ofColor::lightCoral );
+      ofCircle( loc, 10 );
+      ofSetColor( ofColor::indianRed );
+      ofLine( loc, loc + dir * 20 );
+      ofPopStyle();
+    };
 
   private:
 

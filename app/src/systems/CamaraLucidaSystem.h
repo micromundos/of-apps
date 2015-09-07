@@ -40,6 +40,11 @@ class CamaraLucidaSystem : public ECSsystem
         ofRemoveListener(ofEvents().keyPressed, this, &CamaraLucidaSystem::keyPressed);
         ofRemoveListener(ofEvents().keyReleased, this, &CamaraLucidaSystem::keyReleased);
       }
+
+      cml_data->tweak_load.removeListener( this, &CamaraLucidaSystem::tweak_load );
+      cml_data->tweak_save.removeListener( this, &CamaraLucidaSystem::tweak_save );
+      cml_data->tweak_reset.removeListener( this, &CamaraLucidaSystem::tweak_reset );
+
       cml_data = NULL;
       render_data = NULL;
       inited = false; 
@@ -167,21 +172,6 @@ class CamaraLucidaSystem : public ECSsystem
       cml::CamaraLucida* cml = cml_data->cml;
       cml::OpticalDevice* proj = cml->projector();
 
-      if ( args.key == keys::cml_tweak_save )
-      {
-        tweak_save();
-      }
-
-      if ( args.key == keys::cml_tweak_load )
-      {
-        tweak_load();
-      }
-
-      if ( args.key == keys::cml_tweak_reset )
-      { 
-        tweak_reset();
-      }
-
       if ( pressed[keys::cml_tweak_frustum] 
         && (args.key == OF_KEY_UP 
         || args.key == OF_KEY_DOWN) )
@@ -268,6 +258,10 @@ class CamaraLucidaSystem : public ECSsystem
 
     void tweak_init()
     {
+      cml_data->tweak_load.addListener( this, &CamaraLucidaSystem::tweak_load );
+      cml_data->tweak_save.addListener( this, &CamaraLucidaSystem::tweak_save );
+      cml_data->tweak_reset.addListener( this, &CamaraLucidaSystem::tweak_reset );
+
       cml::OpticalDevice* proj = cml_data->cml->projector();
 
       tweak_ini_frustum = proj->gl_frustum();
@@ -283,11 +277,14 @@ class CamaraLucidaSystem : public ECSsystem
 
       tweak_file = "calib/cml_tweak.yml";
 
-      tweak_load();
+      bool b = true;
+      tweak_load(b);
     };
 
-    void tweak_reset()
+    void tweak_reset(bool& enabled)
     {
+      if (!enabled) return;
+
       cml::OpticalDevice* proj = cml_data->cml->projector();
       cml::OpticalDevice::Frustum& f = proj->gl_frustum();
 
@@ -303,8 +300,10 @@ class CamaraLucidaSystem : public ECSsystem
       proj->left( tweak_ini_left );
     };
 
-    void tweak_save()
+    void tweak_save(bool& enabled)
     {
+      if (!enabled) return;
+
       ofLogNotice("CamaraLucidaSystem")
         << "save tweak to " << tweak_file;
 
@@ -339,8 +338,10 @@ class CamaraLucidaSystem : public ECSsystem
       fs << "proj_left_z" << proj->left().z;
     };
 
-    bool tweak_load()
+    void tweak_load(bool& enabled)
     {
+      if (!enabled) return;
+
       ofLogNotice("CamaraLucidaSystem")
         << "load tweak from " << tweak_file;
 
