@@ -110,6 +110,8 @@ void ofApp::init_time_measurements()
 
   //customize color
   //TIME_SAMPLE_GET_INSTANCE()->setHighlightColor(ofColor::yellow);
+
+  TIME_SAMPLE_SET_ENABLED( false );
 }
 
 
