@@ -54,18 +54,12 @@ class ParticleEmitterSystem : public ECSsystem
     
     virtual void added(Entity &e)
     {
+      ParticleEmitterComponent* emitter_data = emitter_m.get(e);
+
       draw_scale = 0.0;
       draw_vel_scale = 0.0;
       draw_scale_d = 1.0;
-      
-      if(!draw_inited){
-        ParticleEmitterComponent* emitter_data = emitter_m.get(e);
 
-        draw_inited = true;
-        draw_circle.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,circle_color,circle_color,false);
-        draw_direction.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color,direction_color,-20,20,false);
-        draw_direction_2.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,-10,10,false);
-      }
       
     };
 
@@ -114,19 +108,25 @@ class ParticleEmitterSystem : public ECSsystem
       ofPushMatrix();
       ofTranslate(loc.x,loc.y);
       ofScale(draw_scale,draw_scale);
-      draw_circle.draw();
       ofRotate(ofRadToDeg(-bloq->radians_i)-90);
-      draw_direction.draw();
+      draw_circle.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,circle_color,circle_color,10,355,true);
       ofPushStyle();
       ofNoFill();
       ofSetColor(direction_color);
       float _line_rad = (2.0*emitter_data->draw_radius)+(emitter_data->draw_weight*3.0);
       ofEllipse(0,0,_line_rad,_line_rad);
       ofPopStyle();
-      draw_direction_2.draw();
-      ofColor _color = ofColor(233,242,249,(ofGetFrameNum()*.02)*255.0);
-      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,-10,10,true);
       
+      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,10,20,true);
+      
+      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,336,346
+                              ,true);
+      
+      ofColor _color = ofColor(233,242,249,(ofGetFrameNum()*.03)*255.0);
+      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,10,20,true);
+    
+      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,336,346
+                              ,true);
       ofPopMatrix();
  
     };
@@ -143,7 +143,7 @@ class ParticleEmitterSystem : public ECSsystem
     float emit_remainder;
   
     PDraw  draw_circle;
-    PDraw  draw_direction,draw_direction_2,draw_direction_3;
+    PDraw  draw_direction,draw_direction_3;
     ofColor circle_color;
     ofColor direction_color;
     ofColor direction_color_l;

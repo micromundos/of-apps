@@ -131,9 +131,10 @@ class TagsSystem : public ECSsystem
         warper.drawSelectedCorner();
         ofPopStyle();
       }
-
+            
       if ( !tags_data->render )
         return;
+      
 
       vector< shared_ptr<Bloq> >& bloqs = tags_data->bloqs;
       vector<Tag>& tags = tags_receiver_data->tags;

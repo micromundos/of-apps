@@ -10,6 +10,7 @@ class ParticleAttractorComponent : public ECScomponent
 
     ofParameter<float> force;
     ofParameter<float> radius;
+    ofParameter<float>  draw_weight;
 
     ParticleAttractorComponent(string _id) : ECScomponent(_id) {};
 
@@ -18,6 +19,7 @@ class ParticleAttractorComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
       param( force, "force" );
       param( radius, "radius" );
+      param( draw_weight, "draw_weight");
     };
 
 };
