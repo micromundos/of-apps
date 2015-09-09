@@ -33,7 +33,7 @@ class ParticleEmitterSystem : public ECSsystem
       emit_remainder = 0.0f;
       //  draw
       
-      circle_color = ofColor(58,137,201);
+      circle_color = ofColor(0,71,89);
       direction_color = ofColor(156,196,228);
       direction_color_l = ofColor(233,242,249);
       
@@ -43,6 +43,7 @@ class ParticleEmitterSystem : public ECSsystem
       draw_vel_scale = 0.0;
       draw_resolution = 40;
       draw_inited = false;
+      
       
       
     };
@@ -99,12 +100,13 @@ class ParticleEmitterSystem : public ECSsystem
       RenderComponent* render_data = component<RenderComponent>("output");
       ParticleEmitterComponent* emitter_data = emitter_m.get(e);
 
+      
       Bloq* bloq = bloq_m.get(e)->bloq;
       ofVec2f& dir = bloq->dir_i;
       ofVec2f loc( bloq->loc_i);
       loc.x *= render_data->width;
       loc.y *= render_data->height;
-      
+
       ofPushMatrix();
       ofTranslate(loc.x,loc.y);
       ofScale(draw_scale,draw_scale);
@@ -128,7 +130,7 @@ class ParticleEmitterSystem : public ECSsystem
       draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,336,346
                               ,true);
       ofPopMatrix();
- 
+      
     };
 
   private:
@@ -138,6 +140,7 @@ class ParticleEmitterSystem : public ECSsystem
 
     ComponentMapper<ParticleEmitterComponent> emitter_m;
     ComponentMapper<BloqComponent> bloq_m;
+  
 
     float initial_fps_fisica;
     float emit_remainder;

@@ -33,6 +33,7 @@ class DepthProcessingComponent : public ECScomponent
     //{ return _table_angles; };
 
     ofParameter<bool> render_surfaces;
+    ofParameter<bool> update_surfaces_debug;
     //ofParameter<bool> render_normals;
     ofParameter<bool> render_height_map;
     ofParameter<bool> render_smoothed;
@@ -91,6 +92,7 @@ class DepthProcessingComponent : public ECScomponent
       //param(normals_bilateral_kernel, "normals_bilateral_kernel"); 
 
       param(render_surfaces, "render_surfaces");
+      param(update_surfaces_debug,"update_surfaces_debug");
       //param(render_normals, "render_normals");
       param(render_height_map, "render_height_map");
       //param(render_smoothed, "render_smoothed"); 

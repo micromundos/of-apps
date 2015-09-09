@@ -152,6 +152,18 @@
             }
          ],
          "id" : "ff"
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                 "render":true,
+                  "margin" : [ 0.0, 0.0, 1.0 ]
+               },
+               "id" : "render_surfaces"
+            }
+         ],
+         "id" : "render_game"
       }
    ]
 }

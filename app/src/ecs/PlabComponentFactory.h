@@ -42,6 +42,7 @@ else if (id == "flow_field_attractors") return new FlowFieldAttractorsComponent(
 else if (id == "tag_sender") return new TagSenderComponent(id);
 else if (id == "flow_field_render") return new FlowFieldRenderComponent(id);
 else if (id == "syphon") return new SyphonComponent(id);
+else if (id == "render_surfaces") return new RenderSurfacesComponent(id);
 //dont remove this line
 
 return NULL;

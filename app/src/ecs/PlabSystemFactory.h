@@ -41,6 +41,7 @@ ecs.add_system(new ParticleAttractorSystem("particle_attractor"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new TimeBenderSystem("time_bender"));
 ecs.add_system(new SyphonSystem("syphon"));
+ecs.add_system(new RenderSurfacesSystem("render_surfaces"));
 //dont remove this line
 };
 

@@ -22,8 +22,11 @@ class ParticleSystem : public ECSsystem
     {
       ps_m.init( *world ); 
       fisica = require_system<FisicaSystem>();
-      entity = NULL; 
-    };  
+      entity = NULL;
+      par_texture.setUseTexture(true);
+      par_texture.loadImage("assets/par2.png");
+
+    };
 
     virtual void removed(Entity &e) 
     { 
@@ -103,14 +106,32 @@ class ParticleSystem : public ECSsystem
 
       ofVec2f loc;
       ofFloatColor col;
-      for ( int i = 0; i < n; i++ ) 
+      ofEnableBlendMode(OF_BLENDMODE_ADD);
+
+      for ( int i = 0; i < n; i++ )
       {
+        loc.set( posbuf[i].x, posbuf[i].y );
+        loc*=fisica->scale();
+        ofColor _col = ofColor(0,80,80);
+        ofColor _color2 = _col.getLerped(ofColor(0,255,255),ofNoise(posbuf[i].x,posbuf[i].y,ofGetFrameNum()*.05));
+     //   ofSetColor(colbuf[i].r,colbuf[i].g,colbuf[i].b,255.0);
+        ofPushMatrix();
+        ofTranslate(loc.x,loc.y);
+        ofScale(ps_data->render_size ,ps_data->render_size );
+        ofPushStyle();
+        ofSetColor(_color2);
+        par_texture.draw(-par_texture.getWidth()/2,-par_texture.getHeight()/2);
+        ofPopStyle();
+        ofPopMatrix();
+        /*
         loc.set( posbuf[i].x, posbuf[i].y );
         col.set( colbuf[i].r / 255.0, colbuf[i].g / 255.0, colbuf[i].b / 255.0 );
         mesh.addVertex( loc );
-        mesh.addColor( col );
+        mesh.addColor( col );*/
       }
+      ofDisableBlendMode();
 
+      /*
       ofPushStyle();
       ofSetColor(255);
       ofSetLineWidth(0.1);
@@ -119,7 +140,9 @@ class ParticleSystem : public ECSsystem
       ofScale( fisica->scale(), fisica->scale() );
       mesh.draw();
       ofPopMatrix();
-      ofPopStyle();
+      ofPopStyle();*/
+      
+      
       
       
       
@@ -158,11 +181,11 @@ class ParticleSystem : public ECSsystem
   private:
 
     ComponentMapper<ParticleSystemComponent> ps_m;
-
+  
     Entity* entity;
     b2ParticleSystem* b2particles;
     FisicaSystem* fisica;
-
+    ofImage   par_texture;
     ofVboMesh mesh;
 
     ofColor ofcolor;

@@ -23,4 +23,5 @@
 #include "TagSenderSystem.h"
 #include "FlowFieldRenderSystem.h"
 #include "SyphonSystem.h"
+#include "RenderSurfacesSystem.h"
 //dont remove this line

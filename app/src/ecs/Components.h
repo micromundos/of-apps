@@ -28,4 +28,5 @@
 #include "TagSenderComponent.h"
 #include "FlowFieldRenderComponent.h"
 #include "SyphonComponent.h"
+#include "RenderSurfacesComponent.h"
 //dont remove this line

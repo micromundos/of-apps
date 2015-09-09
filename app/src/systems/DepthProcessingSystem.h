@@ -213,11 +213,12 @@ class DepthProcessingSystem : public ECSsystem
           .update( close_iter );
         _height_map_surfaces = &(erode.get());
       }
-
+      
+      
       surfaces(e)
         .set( "height_map", *_height_map_surfaces )
         .update()
-        .update_debug( depth_proc_data->render_surfaces );
+        .update_debug( depth_proc_data->render_surfaces || depth_proc_data->update_surfaces_debug );
 
       // update render data
 

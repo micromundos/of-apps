@@ -130,6 +130,7 @@
                   /*"render_normals_smoothed" : false,*/
                   /*"render_table_angles" : false,*/
                   "render_surfaces" : false,
+                  "update_surfaces_debug" : true,
                   "threshold_table_far" : [ 2000, -2000, 2000 ],
                   "threshold_table_near" : [ 5, -200, 200 ]
                },

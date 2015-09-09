@@ -29,7 +29,7 @@ class ParticleAttractorSystem : public ECSsystem
       knob_m.init( *world );
       
       draw_color = ofColor(242,108,79);
-      draw_color_2 = ofColor(37,190,170);
+      draw_color_2 = ofColor(255,100,0);
       area_scale_vel = 1.0;
       q_counter=0;
       draw_scale = 0.0;
@@ -96,8 +96,9 @@ class ParticleAttractorSystem : public ECSsystem
       
       float _lerp_color = ofMap(attr_data->force,-10.0,10.0,0.0,1.0);
       ofColor _color = draw_color_2.getLerped(draw_color, _lerp_color);
+      _color.a = 150;
       
-      
+
       ofPushMatrix();
       ofTranslate(loc.x,loc.y);
       
@@ -109,6 +110,7 @@ class ParticleAttractorSystem : public ECSsystem
       }
       area_circle.circle(knob_r, knob_r+attr_data->draw_weight, 10, _color, _color,0,360,true);
       ofPopMatrix();
+      
 
     };
 
