@@ -43,7 +43,7 @@
             {
                "data" : {
                   "force" : [ 1, -10, 10 ],
-                  "radius" : [ 0.2000000029802322, 0, 1 ]
+                  "radius" : [ 0.2, 0, 1 ]
                },
                "id" : "particle_attractor"
             },
@@ -57,7 +57,7 @@
          "components" : [
             {
                "data" : {
-                  "force" : [ 1, -10, 10 ],
+                  "force" : [ -1, -10, 10 ],
                   "radius" : [ 0.2, 0, 1 ]
                },
                "id" : "particle_attractor"
