@@ -1,0 +1,154 @@
+{
+   "bloqs" : [
+      {
+         "components" : [
+            {
+               "data" : {
+                  "draw_radius" : [ 80, 50, 200 ],
+                  "draw_weight" : [ 24.46598052978516, 2, 50 ],
+                  "force" : [ 15, 0, 100 ],
+                  "rate" : [ 10, 0, 100 ]
+               },
+               "id" : "particle_emitter"
+            }
+         ],
+         "id" : "0"
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                  "force" : [ 15, 0, 100 ],
+                  "rate" : [ 10, 0, 100 ]
+               },
+               "id" : "particle_emitter"
+            }
+         ],
+         "id" : "1"
+      },
+      /*{*/
+      /*"components" : [*/
+      /*{*/
+      /*"id" : "knob"*/
+      /*},*/
+      /*{*/
+      /*"data" : {*/
+      /*"coef" : [ 20, 1, 100 ]*/
+      /*},*/
+      /*"id" : "time_bender"*/
+      /*}*/
+      /*],*/
+      /*"id" : "1"*/
+      /*},*/
+      {
+         "components" : [
+            {
+               "data" : {
+                  "force" : [ 1, -10, 10 ],
+                  "radius" : [ 0.2000000029802322, 0, 1 ]
+               },
+               "id" : "particle_attractor"
+            },
+            {
+               "id" : "knob"
+            }
+         ],
+         "id" : "6"
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                  "force" : [ 1, -10, 10 ],
+                  "radius" : [ 0.2000000029802322, 0, 1 ]
+               },
+               "id" : "particle_attractor"
+            },
+            {
+               "id" : "knob"
+            }
+         ],
+         "id" : "3"
+      }
+   ],
+   "game" : [
+      {
+         "components" : [
+            {
+               "id" : "fisica"
+            },
+            {
+               "data" : {
+                  "lifetime" : [ 15, 0, 50 ],
+                  "max_particles" : 5000,
+                  "max_speed" : [ 3, 0, 10 ],
+                  "radius" : 6,
+                  "render_size" : [ 3, 0, 20 ]
+               },
+               "id" : "particle_system"
+            },
+            {
+               "data" : {
+                  "maxforce" : [ 10, 0, 20 ]
+               },
+               "id" : "particle_flow_field"
+            }
+         ],
+         "id" : "particles"
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                  "bilateral_domain" : [ 100, 0, 100 ],
+                  "bilateral_kernel" : [ 1, 0, 10 ],
+                  "bilateral_range" : [ 20, 0, 20 ],
+                  "edge_detection_threshold" : [ 100, 0, 300 ],
+                  "gaussian_kernel" : [ 1.670103073120117, 0, 10 ],
+                  "gaussian_sigma" : [ 5, 0, 20 ],
+                  "render" : false,
+                  "render_edges" : false
+               },
+               "id" : "flow_field_container"
+            },
+            {
+               "data" : {
+                  "gaussian_kernel" : [ 1, 0, 10 ],
+                  "gaussian_sigma" : [ 0.2000000029802322, 0, 10 ],
+                  "max_force" : [ 2, 0, 30 ],
+                  "render" : false
+               },
+               "id" : "flow_field_gradient"
+            },
+            {
+               "data" : {
+                  "render" : false,
+                  "scale" : 0.1
+               },
+               "id" : "flow_field_attractors"
+            },
+            {
+               "data" : {
+                  "render" : false,
+                  "scale" : 0.3,
+                  "weight_attractors" : [ 1, 0, 1 ],
+                  "weight_container" : [ 1, 0, 1 ],
+                  "weight_gradient" : [ 0.2185567021369934, 0, 1 ]
+               },
+               "id" : "flow_field"
+            },
+            {
+               "data" : {
+                  "force_max" : [ 1.505154609680176, 0, 10 ],
+                  "force_min" : [ 0, 0, 10 ],
+                  "line_width" : [ 1.5, 0, 10 ],
+                  "render" : true
+               },
+               "id" : "flow_field_render"
+            }
+         ],
+         "id" : "ff"
+      }
+   ]
+}
+

@@ -120,6 +120,10 @@ class ParticleSystem : public ECSsystem
       mesh.draw();
       ofPopMatrix();
       ofPopStyle();
+      
+      
+      
+      
     };
 
     int32 make_particle( float _locx, float _locy, float _velx, float _vely )

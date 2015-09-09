@@ -3,7 +3,7 @@
         "port": 6667,
         "motor_path": "config/motor.json",
         /*"game_path": "config/games/autitos.json"*/
-        "game_path": "config/games/plab.json"
+        "game_path": "config/games/plab_pospro.json"
     },
     "ctrl": {
         "host": "localhost",
