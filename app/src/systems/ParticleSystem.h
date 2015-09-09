@@ -21,7 +21,7 @@ class ParticleSystem : public ECSsystem
     virtual void initialize() 
     {
       ps_m.init( *world ); 
-      fisica = require_system<FisicaSystem>();
+      fisica = system<FisicaSystem>();
       entity = NULL; 
     };  
 
@@ -71,6 +71,8 @@ class ParticleSystem : public ECSsystem
 
     virtual void processEntity(Entity &e)
     {
+      TS_START("ParticleSystem"); 
+
       ParticleSystemComponent* ps_data = ps_m.get(e);
 
       //limit particles speed
@@ -89,6 +91,8 @@ class ParticleSystem : public ECSsystem
         vel *= len > max_speed ? max_speed : len;
         //cout << i << ": vel len " << len << ", max " << max_speed << endl;
       }
+
+      TS_STOP("ParticleSystem"); 
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -98,15 +102,15 @@ class ParticleSystem : public ECSsystem
       mesh.clear();
 
       int32 n = b2particles->GetParticleCount();
-      b2Vec2 *posbuf = b2particles->GetPositionBuffer();
-      b2ParticleColor *colbuf = b2particles->GetColorBuffer();
+      b2Vec2 *locs = b2particles->GetPositionBuffer();
+      b2ParticleColor *cols = b2particles->GetColorBuffer();
 
       ofVec2f loc;
       ofFloatColor col;
       for ( int i = 0; i < n; i++ ) 
       {
-        loc.set( posbuf[i].x, posbuf[i].y );
-        col.set( colbuf[i].r / 255.0, colbuf[i].g / 255.0, colbuf[i].b / 255.0 );
+        loc.set( locs[i].x, locs[i].y );
+        col.set( cols[i].r / 255.0, cols[i].g / 255.0, cols[i].b / 255.0 );
         mesh.addVertex( loc );
         mesh.addColor( col );
       }

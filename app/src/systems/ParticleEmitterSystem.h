@@ -23,18 +23,14 @@ class ParticleEmitterSystem : public ECSsystem
       emitter_m.init( *world );
       bloq_m.init( *world );
 
-      fisica = require_system<FisicaSystem>();
-      ps = require_system<ParticleSystem>();
+      FisicaSystem* fisica = system<FisicaSystem>();
 
       initial_fps_fisica = fisica->fps();
       emit_remainder = 0.0f;
     };
 
-    // entity: bloq
     virtual void processEntity(Entity &e) 
     { 
-      //ofLogNotice("ParticleEmitterSystem") << "process entity " << e.getId();
-
       Bloq* bloq = bloq_m.get(e)->bloq;
 
       ParticleEmitterComponent* emitter_data = emitter_m.get(e);
@@ -76,9 +72,6 @@ class ParticleEmitterSystem : public ECSsystem
 
   private:
 
-    FisicaSystem* fisica;
-    ParticleSystem* ps;
-
     ComponentMapper<ParticleEmitterComponent> emitter_m;
     ComponentMapper<BloqComponent> bloq_m;
 
@@ -87,6 +80,8 @@ class ParticleEmitterSystem : public ECSsystem
 
     void emit( Bloq* bloq, ParticleEmitterComponent* emitter_data, RenderComponent* render_data )
     {
+      ParticleSystem* ps = system<ParticleSystem>();
+
       //ofxBox2dParticleSystem* ofps = ps->of_particles();
       b2ParticleSystem* b2ps = ps->b2_particles();
 

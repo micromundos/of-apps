@@ -56,7 +56,7 @@ class ParticleAttractorSystem : public ECSsystem
 
       ofPushStyle();
       ofEnableAlphaBlending();
-      ofSetLineWidth( 6 );  
+      ofSetLineWidth( 6 );
       ofSetColor( ofColor( ofColor::gold.getLerped( ofColor::crimson, t ), 100 ) );
       ofCircle( loc, 20 );
       ofSetColor( ofColor::orange );

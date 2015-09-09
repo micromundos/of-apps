@@ -36,7 +36,7 @@
       /*"id" : "time_bender"*/
       /*}*/
       /*],*/
-      /*"id" : "1"*/
+      /*"id" : "0"*/
       /*},*/
       {
          "components" : [
@@ -58,7 +58,7 @@
             {
                "data" : {
                   "force" : [ 1, -10, 10 ],
-                  "radius" : [ 0.2000000029802322, 0, 1 ]
+                  "radius" : [ 0.2, 0, 1 ]
                },
                "id" : "particle_attractor"
             },
@@ -67,6 +67,19 @@
             }
          ],
          "id" : "3"
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                  "vol_view_mult" : [ 4, 0, 10 ],
+                  "radius" : [ 0.1, 0, 1 ],
+                  "render" : true
+               },
+               "id" : "particle_volume_sensor"
+            }
+         ],
+         "id" : "4"
       }
    ],
    "game" : [
@@ -137,7 +150,7 @@
             },
             {
                "data" : {
-                  "force_max" : [ 1.505154609680176, 0, 10 ],
+                  "force_max" : [ 2, 0, 10 ],
                   "force_min" : [ 0, 0, 10 ],
                   "line_width" : [ 1.5, 0, 10 ],
                   "render" : true

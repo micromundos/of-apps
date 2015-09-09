@@ -28,7 +28,6 @@ else if (id == "particle_system") return new ParticleSystemComponent(id);
 else if (id == "particle_emitter") return new ParticleEmitterComponent(id);
 else if (id == "particle_flow_field") return new ParticleFlowFieldComponent(id);
 else if (id == "fisica") return new FisicaComponent(id);
-else if (id == "time_bender") return new TimeBenderComponent(id);
 else if (id == "knob") return new KnobComponent(id);
 else if (id == "table_calib") return new TableCalibComponent(id);
 else if (id == "depth_processing") return new DepthProcessingComponent(id);
@@ -42,6 +41,7 @@ else if (id == "flow_field_attractors") return new FlowFieldAttractorsComponent(
 else if (id == "tag_sender") return new TagSenderComponent(id);
 else if (id == "flow_field_render") return new FlowFieldRenderComponent(id);
 else if (id == "syphon") return new SyphonComponent(id);
+else if (id == "particle_volume_sensor") return new ParticleVolumeSensorComponent(id);
 //dont remove this line
 
 return NULL;
