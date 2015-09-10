@@ -17,8 +17,6 @@ class ParticleEmitterSystem : public ECSsystem
     {
       addComponentType<ParticleEmitterComponent>();
       addComponentType<BloqComponent>();
-
-      
     };
 
     virtual void initialize() 
@@ -26,16 +24,14 @@ class ParticleEmitterSystem : public ECSsystem
       emitter_m.init( *world );
       bloq_m.init( *world );
 
-      fisica = require_system<FisicaSystem>();
-      ps = require_system<ParticleSystem>();
+      FisicaSystem* fisica = system<FisicaSystem>();
 
       initial_fps_fisica = fisica->fps();
       emit_remainder = 0.0f;
-      //  draw
-      
-      circle_color = ofColor(0,71,89);
-      direction_color = ofColor(156,196,228);
-      direction_color_l = ofColor(233,242,249);
+
+      circle_color = ofColor::turquoise;
+      direction_color = ofColor::mediumTurquoise;
+      direction_color_l = ofColor::powderBlue;
       
       ofEnableSmoothing();
       ofSetCircleResolution(128);
@@ -43,9 +39,6 @@ class ParticleEmitterSystem : public ECSsystem
       draw_vel_scale = 0.0;
       draw_resolution = 40;
       draw_inited = false;
-      
-      
-      
     };
   
     virtual void removed(Entity &e)
@@ -60,15 +53,10 @@ class ParticleEmitterSystem : public ECSsystem
       draw_scale = 0.0;
       draw_vel_scale = 0.0;
       draw_scale_d = 1.0;
-
-      
     };
 
-    // entity: bloq
     virtual void processEntity(Entity &e) 
     { 
-      //ofLogNotice("ParticleEmitterSystem") << "process entity " << e.getId();
-
       Bloq* bloq = bloq_m.get(e)->bloq;
 
       ParticleEmitterComponent* emitter_data = emitter_m.get(e);
@@ -121,22 +109,18 @@ class ParticleEmitterSystem : public ECSsystem
       
       draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,10,20,true);
       
-      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,336,346
-                              ,true);
+      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,336,346,true);
       
-      ofColor _color = ofColor(233,242,249,(ofGetFrameNum()*.03)*255.0);
+      ofColor _color = ofColor::darkTurquoise;
+      _color.a = (ofGetFrameNum()*.03)*255.0;
       draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,10,20,true);
     
-      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,336,346
-                              ,true);
+      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,336,346,true);
+
       ofPopMatrix();
-      
     };
 
   private:
-
-    FisicaSystem* fisica;
-    ParticleSystem* ps;
 
     ComponentMapper<ParticleEmitterComponent> emitter_m;
     ComponentMapper<BloqComponent> bloq_m;
@@ -159,6 +143,8 @@ class ParticleEmitterSystem : public ECSsystem
   
     void emit( Bloq* bloq, ParticleEmitterComponent* emitter_data, RenderComponent* render_data )
     {
+      ParticleSystem* ps = system<ParticleSystem>();
+
       //ofxBox2dParticleSystem* ofps = ps->of_particles();
       b2ParticleSystem* b2ps = ps->b2_particles();
 

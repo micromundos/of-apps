@@ -6,7 +6,6 @@
 #include "bloqs/Attractor.h"
 #include "events/AttractorEvents.h"
 #include "PDraw.h"
-#define TOTAL_LINES 4
 
 using namespace artemis;
 
@@ -33,6 +32,8 @@ class ParticleAttractorSystem : public ECSsystem
       area_scale_vel = 1.0;
       q_counter=0;
       draw_scale = 0.0;
+      total_lines = 3;
+      circle_res = 6;
       
     };
 
@@ -43,16 +44,19 @@ class ParticleAttractorSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
+      if ( !check_bloq(e) ) return;
+
       ofNotifyEvent( AttractorEvents::added, make_attractor(e) );
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
 
       draw_scale = 0.0;
       draw_vel_scale = 0.0;
-
     };
 
     virtual void processEntity(Entity &e) 
     {
+      if ( !check_bloq(e) ) return;
+
       ofNotifyEvent( AttractorEvents::updated, make_attractor(e) );
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
 
@@ -60,7 +64,6 @@ class ParticleAttractorSystem : public ECSsystem
       draw_vel_scale+=(1.0-draw_scale)*.060;
       draw_vel_scale*=.9;
       draw_scale+=draw_vel_scale;
-      
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -103,15 +106,28 @@ class ParticleAttractorSystem : public ECSsystem
       ofTranslate(loc.x,loc.y);
       
       
-      for(int i=0;i<TOTAL_LINES;i++){
-        float _delta = ofMap(i+area_scale_vel,0,TOTAL_LINES,0.0,1.0,true);
+      for(int i=0;i<total_lines;i++){
+        float _delta = ofMap(i+area_scale_vel,0,total_lines,0.0,1.0,true);
         float _s_scale = _delta;
-        area_circle.circle(_s_scale*knob_r, _s_scale*(knob_r+attr_data->draw_weight), 10, _color, _color,0,360,true);
+        area_circle.circle(_s_scale*knob_r, _s_scale*(knob_r+attr_data->draw_weight), circle_res, _color, _color,0,360,true);
       }
-      area_circle.circle(knob_r, knob_r+attr_data->draw_weight, 10, _color, _color,0,360,true);
+      area_circle.circle(knob_r, knob_r+attr_data->draw_weight, circle_res, _color, _color,0,360,true);
       ofPopMatrix();
       
-
+      //ofPushStyle();
+      //ofEnableAlphaBlending();
+      //ofSetLineWidth( 6 );
+      //ofSetColor( ofColor( ofColor::gold.getLerped( ofColor::crimson, t ), 100 ) );
+      //ofCircle( loc, 20 );
+      //ofSetColor( ofColor::orange );
+      //ofLine( loc, loc + dir * 20 );
+      //ofDisableAlphaBlending();
+      //ofPopStyle();
+      //ofPushStyle();
+      //ofNoFill();
+      //ofSetColor( ofColor::orange );
+      //ofCircle( loc, r * render_data->height );
+      //ofPopStyle();
     };
 
   private:
@@ -129,11 +145,13 @@ class ParticleAttractorSystem : public ECSsystem
     float area_scale_vel;
     float  draw_scale;
     float  draw_vel_scale;
+    int total_lines;
+    float circle_res;
   
     Attractor& make_attractor(Entity &e)
     {
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
-      Bloq* bloq = bloq_m.get(e)->bloq;
+      Bloq* bloq = bloq_m.get(e)->bloq; 
       static Attractor attr;
       attr.id = bloq->id;
       attr.loc.set( bloq->loc );
@@ -141,6 +159,18 @@ class ParticleAttractorSystem : public ECSsystem
       attr.radius = radius_from_knob(e);
       return attr;
     };
+
+    bool check_bloq(Entity &e)
+    {
+      if (bloq_m.get(e)->bloq == NULL)
+      {
+        ofLogError("ParticleAttractorSystem")
+          << "entity [" << e.getId() << "] "
+          << "bloq is NULL !@#$%ˆ&*";
+        return false;
+      }
+      return true;
+    }
 
     float radius_from_knob(Entity &e) 
     {

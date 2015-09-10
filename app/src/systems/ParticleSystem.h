@@ -21,11 +21,10 @@ class ParticleSystem : public ECSsystem
     virtual void initialize() 
     {
       ps_m.init( *world ); 
-      fisica = require_system<FisicaSystem>();
+      fisica = system<FisicaSystem>();
       entity = NULL;
       par_texture.setUseTexture(true);
       par_texture.loadImage("assets/par2.png");
-
     };
 
     virtual void removed(Entity &e) 
@@ -74,6 +73,8 @@ class ParticleSystem : public ECSsystem
 
     virtual void processEntity(Entity &e)
     {
+      TS_START("ParticleSystem"); 
+
       ParticleSystemComponent* ps_data = ps_m.get(e);
 
       //limit particles speed
@@ -92,6 +93,8 @@ class ParticleSystem : public ECSsystem
         vel *= len > max_speed ? max_speed : len;
         //cout << i << ": vel len " << len << ", max " << max_speed << endl;
       }
+
+      TS_STOP("ParticleSystem"); 
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -101,8 +104,8 @@ class ParticleSystem : public ECSsystem
       mesh.clear();
 
       int32 n = b2particles->GetParticleCount();
-      b2Vec2 *posbuf = b2particles->GetPositionBuffer();
-      b2ParticleColor *colbuf = b2particles->GetColorBuffer();
+      b2Vec2 *locs = b2particles->GetPositionBuffer();
+      //b2ParticleColor *cols = b2particles->GetColorBuffer();
 
       ofVec2f loc;
       ofFloatColor col;
@@ -110,11 +113,11 @@ class ParticleSystem : public ECSsystem
 
       for ( int i = 0; i < n; i++ )
       {
-        loc.set( posbuf[i].x, posbuf[i].y );
+        loc.set( locs[i].x, locs[i].y );
         loc*=fisica->scale();
-        ofColor _col = ofColor(0,80,80);
-        ofColor _color2 = _col.getLerped(ofColor(0,255,255),ofNoise(posbuf[i].x,posbuf[i].y,ofGetFrameNum()*.05));
-     //   ofSetColor(colbuf[i].r,colbuf[i].g,colbuf[i].b,255.0);
+        ofColor _col = ofColor(0,140,140);
+        ofColor _color2 = _col.getLerped(ofColor(0,255,255),ofNoise(locs[i].x,locs[i].y,ofGetFrameNum()*.05));
+        //ofSetColor(cols[i].r,cols[i].g,cols[i].b,255.0);
         ofPushMatrix();
         ofTranslate(loc.x,loc.y);
         ofScale(ps_data->render_size ,ps_data->render_size );
@@ -123,30 +126,24 @@ class ParticleSystem : public ECSsystem
         par_texture.draw(-par_texture.getWidth()/2,-par_texture.getHeight()/2);
         ofPopStyle();
         ofPopMatrix();
-        /*
-        loc.set( posbuf[i].x, posbuf[i].y );
-        col.set( colbuf[i].r / 255.0, colbuf[i].g / 255.0, colbuf[i].b / 255.0 );
-        mesh.addVertex( loc );
-        mesh.addColor( col );*/
+
+        //loc.set( locs[i].x, locs[i].y );
+        //col.set( cols[i].r / 255.0, cols[i].g / 255.0, cols[i].b / 255.0 );
+        //mesh.addVertex( loc );
+        //mesh.addColor( col );
       }
+
       ofDisableBlendMode();
 
-      /*
-      ofPushStyle();
-      ofSetColor(255);
-      ofSetLineWidth(0.1);
-      glPointSize( ps_data->render_size );
-      ofPushMatrix();
-      ofScale( fisica->scale(), fisica->scale() );
-      mesh.draw();
-      ofPopMatrix();
-      ofPopStyle();*/
-      
-      
-      
-      
-      
-      
+      //ofPushStyle();
+      //ofSetColor(255);
+      //ofSetLineWidth(0.1);
+      //glPointSize( ps_data->render_size );
+      //ofPushMatrix();
+      //ofScale( fisica->scale(), fisica->scale() );
+      //mesh.draw();
+      //ofPopMatrix();
+      //ofPopStyle();
     };
 
     int32 make_particle( float _locx, float _locy, float _velx, float _vely )
