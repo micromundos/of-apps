@@ -3,6 +3,7 @@
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
 #include "Components.h"
+#include "PDraw.h"
 
 using namespace artemis;
 
@@ -21,6 +22,9 @@ class ParticleVolumeSensorSystem : public ECSsystem
     {
       particle_volume_sensor_m.init( *world );
       bloq_m.init( *world );
+      
+      color_area = ofColor(236,255,137,200);
+      
     };
 
     virtual void removed(Entity &e) 
@@ -83,7 +87,7 @@ class ParticleVolumeSensorSystem : public ECSsystem
       loc.y *= render_data->height;
 
       float r = pvs_data->radius * render_data->height;
-
+      /*
       ofColor col( ofColor::orange );
       ofPushStyle();
       ofSetColor( col );
@@ -95,13 +99,42 @@ class ParticleVolumeSensorSystem : public ECSsystem
       ofSetColor( col );
       ofCircle( loc, r * pvs_data->volume_n_i );
       ofDisableAlphaBlending();
-      ofPopStyle();
+      ofPopStyle();*/
+      
+      ofPushMatrix();
+      ofTranslate(loc.x,loc.y);
+      ofSetColor(color_area);
+      ofFill();
+      ofCircle( 0.0,0.0, r);
+      float _radius = r * pvs_data->volume_n_i;
+      float _vol_radius = r+20;
+      
+      draw_volume.circle(_vol_radius,_vol_radius+50,40,ofColor(0,180),ofColor(0,180),0,360,true);
+      float _vol = pvs_data->volume_n_i*360.0;
+
+      draw_volume.circle(_vol_radius,_vol_radius+10,40,ofColor(255,0,0,180),ofColor(255,0,180),0,_vol,true);
+
+      
+      /*
+      draw_area.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,10,20,true);*/
+      
+
+      ofPopMatrix();
+      
+      
+      
     };
 
   private:
 
     ComponentMapper<ParticleVolumeSensorComponent> particle_volume_sensor_m;
     ComponentMapper<BloqComponent> bloq_m;
+  
+    PDraw  draw_volume;
+    ofColor color_area;
+  
+
+
 
 };
 

@@ -79,7 +79,8 @@
             {
                "data" : {
                   "radius" : [ 0.1000000014901161, 0, 1 ],
-                  "render" : true
+                  "render" : true,
+                  "draw_weight" : [ 10, 2, 50 ]
                },
                "id" : "particle_volume_sensor"
             }

@@ -15,6 +15,7 @@ class ParticleVolumeSensorComponent : public ECScomponent
 
     ofParameter<bool> render;
     ofParameter<float> radius;
+    ofParameter<float>  draw_weight;
 
     ParticleVolumeSensorComponent(string _id) : ECScomponent(_id) {};
 
@@ -23,6 +24,7 @@ class ParticleVolumeSensorComponent : public ECScomponent
       ECScomponent::init(e_id,d,p);
       param(render, "render");
       param(radius, "radius");
+      param(draw_weight,"draw_weight");
     };
 
 };
