@@ -105,23 +105,25 @@ class ParticleSystem : public ECSsystem
 
       int32 n = b2particles->GetParticleCount();
       b2Vec2 *locs = b2particles->GetPositionBuffer();
-      //b2ParticleColor *cols = b2particles->GetColorBuffer();
+      b2ParticleColor *cols = b2particles->GetColorBuffer();
 
       ofVec2f loc;
       ofFloatColor col;
      // ofEnableBlendMode(OF_BLENDMODE_ADD);
+      ofPushStyle();
       ofEnableAlphaBlending();
       for ( int i = 0; i < n; i++ )
       {
         loc.set( locs[i].x, locs[i].y );
         loc*=fisica->scale();
-        ofColor _col = ofColor(0,140,140);
-        ofColor _color2 = _col.getLerped(ofColor(0,255,255),ofNoise(locs[i].x,locs[i].y,ofGetFrameNum()*.05));
-        //ofSetColor(cols[i].r,cols[i].g,cols[i].b,255.0);
+        ofColor _col = ofColor(cols[i].r,cols[i].g,cols[i].b);
+        ofColor _color2 = _col.getLerped(ofColor(255,255,255),ofNoise(locs[i].x,locs[i].y,ofGetFrameNum()*.05));
+        ofSetColor(cols[i].r,cols[i].g,cols[i].b,255.0);
         ofPushMatrix();
         ofTranslate(loc.x,loc.y);
         ofScale(ps_data->render_size ,ps_data->render_size );
         ofPushStyle();
+      //  ofSetColor(cols[i].r,cols[i].g,cols[i].b,255.0);
         ofSetColor(_color2);
         par_texture.draw(-par_texture.getWidth()/2,-par_texture.getHeight()/2);
         ofPopStyle();
@@ -133,6 +135,7 @@ class ParticleSystem : public ECSsystem
         //mesh.addColor( col );
       }
       ofDisableAlphaBlending();
+      ofPopStyle();
       //ofDisableBlendMode();
 
       //ofPushStyle();
@@ -146,7 +149,7 @@ class ParticleSystem : public ECSsystem
       //ofPopStyle();
     };
 
-    int32 make_particle( float _locx, float _locy, float _velx, float _vely )
+    int32 make_particle( float _locx, float _locy, float _velx, float _vely ,ofColor _color )
     {
       if ( entity == NULL )
         return -1;
@@ -163,7 +166,9 @@ class ParticleSystem : public ECSsystem
       pd.flags = flags;
       pd.position.Set( locx, locy );
       pd.velocity.Set( velx, vely );
-      pd.color = b2color;
+      b2ParticleColor p_color;
+      p_color.Set(_color.r,_color.g,_color.b,255.0);
+      pd.color = p_color;
       if ( ps_data->lifetime > 0.0 )
         pd.lifetime = ps_data->lifetime; 
 

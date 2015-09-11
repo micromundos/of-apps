@@ -146,7 +146,10 @@ class ParticleEmitterSystem : public ECSsystem
       ofVec2f screen_loc( bloq->loc.x * render_data->width, bloq->loc.y * render_data->height );
 
       //int32 pidx = ofps->createParticle( screen_loc.x, screen_loc.y, 0, 0 );
-      int32 pidx = ps->make_particle( screen_loc.x, screen_loc.y, 0, 0 );
+      
+      
+      
+      int32 pidx = ps->make_particle( screen_loc.x, screen_loc.y, 0, 0 ,bloq->id == "1" ? ofColor(0,140,140) : ofColor(140,0,140));
 
       float force_m = emitter_data->force;
 
