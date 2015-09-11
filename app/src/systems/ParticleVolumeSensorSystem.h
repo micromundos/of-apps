@@ -23,7 +23,7 @@ class ParticleVolumeSensorSystem : public ECSsystem
       particle_volume_sensor_m.init( *world );
       bloq_m.init( *world );
       
-      color_area = ofColor(236,255,137,200);
+      color_area = ofColor(236,255,137,150);
       
     };
 
@@ -107,18 +107,12 @@ class ParticleVolumeSensorSystem : public ECSsystem
       ofFill();
       ofCircle( 0.0,0.0, r);
       float _radius = r * pvs_data->volume_n_i;
-      float _vol_radius = r+20;
+      float _vol_radius = r+10;
       
-      draw_volume.circle(_vol_radius,_vol_radius+50,40,ofColor(0,180),ofColor(0,180),0,360,true);
+      draw_volume.circle(_vol_radius,_vol_radius+pvs_data->draw_weight,40,ofColor(color_area,180),ofColor(color_area,180),0,360,true);
       float _vol = pvs_data->volume_n_i*360.0;
-
-      draw_volume.circle(_vol_radius,_vol_radius+10,40,ofColor(255,0,0,180),ofColor(255,0,180),0,_vol,true);
-
+      draw_volume.circle(_vol_radius,_vol_radius+pvs_data->draw_weight,40,ofColor(0,150,0,180),ofColor(0,150,0,180),0,_vol,true);
       
-      /*
-      draw_area.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,10,20,true);*/
-      
-
       ofPopMatrix();
       
       

@@ -98,11 +98,13 @@ class TagsSystem : public ECSsystem
           update_bloq( e, _bloq.get(), tag,true );
           bloqs.push_back( _bloq );
           ofNotifyEvent( BloqEvents::added, *_bloq );
+          
         }
 
         else if ( update_bloq( e, bloq, tag ) )
         {
-          ofNotifyEvent( BloqEvents::updated, *bloq );
+           ofNotifyEvent( BloqEvents::updated, *bloq );
+          
         }
       } 
 
@@ -330,9 +332,9 @@ class TagsSystem : public ECSsystem
       TagsComponent* tags_data = tags_m.get(e);
       if ( is_new )
       {
-        bloq->loc_i.set(tloc);
-        bloq->dir_i.set(tdir);
-        bloq->radians_i = radians;
+        bloq->loc_i.set(bloq->loc);
+        bloq->dir_i.set(bloq->dir);
+        bloq->radians_i = bloq->radians;
       }
 
       else
@@ -341,7 +343,9 @@ class TagsSystem : public ECSsystem
         bloq->dir_i += (tdir - bloq->dir_i) * tags_data->interpolation_easing_dir;
         bloq->radians_i = ofLerpRadians(bloq->radians_i, radians, tags_data->interpolation_easing_radians );
       }
-
+      
+      
+      
       return true;
     };
 

@@ -33,7 +33,7 @@ class ParticleAttractorSystem : public ECSsystem
       q_counter=0;
       draw_scale = 0.0;
       total_lines = 3;
-      circle_res = 6;
+      circle_res = 30;
       
     };
 
@@ -75,7 +75,7 @@ class ParticleAttractorSystem : public ECSsystem
       float t = knob_m.get(e)->value;
       Bloq* bloq = bloq_m.get(e)->bloq;
       ofVec2f& dir = bloq->dir_i; 
-      ofVec2f loc( bloq->loc_i ); 
+      ofVec2f loc( bloq->loc_i );
       loc.x *= render_data->width;
       loc.y *= render_data->height;
  
@@ -113,21 +113,21 @@ class ParticleAttractorSystem : public ECSsystem
       }
       area_circle.circle(knob_r, knob_r+attr_data->draw_weight, circle_res, _color, _color,0,360,true);
       ofPopMatrix();
-      
-      //ofPushStyle();
-      //ofEnableAlphaBlending();
-      //ofSetLineWidth( 6 );
-      //ofSetColor( ofColor( ofColor::gold.getLerped( ofColor::crimson, t ), 100 ) );
-      //ofCircle( loc, 20 );
-      //ofSetColor( ofColor::orange );
-      //ofLine( loc, loc + dir * 20 );
-      //ofDisableAlphaBlending();
-      //ofPopStyle();
-      //ofPushStyle();
-      //ofNoFill();
-      //ofSetColor( ofColor::orange );
-      //ofCircle( loc, r * render_data->height );
-      //ofPopStyle();
+      /*
+      ofPushStyle();
+      ofEnableAlphaBlending();
+      ofSetLineWidth( 6 );
+      ofSetColor( ofColor( ofColor::gold.getLerped( ofColor::crimson, t ), 100 ) );
+      ofCircle( loc, 20 );
+      ofSetColor( ofColor::orange );
+      ofLine( loc, loc + dir * 20 );
+      ofDisableAlphaBlending();
+      ofPopStyle();
+      ofPushStyle();
+      ofNoFill();
+      ofSetColor( ofColor::orange );
+      ofCircle( loc, r * render_data->height );
+      ofPopStyle();*/
     };
 
   private:
@@ -174,7 +174,9 @@ class ParticleAttractorSystem : public ECSsystem
 
     float radius_from_knob(Entity &e) 
     {
-      float t = knob_m.get(e)->value;
+     //float t = knob_m.get(e)->value;
+      Bloq* bloq = bloq_m.get(e)->bloq;
+      float t = bloq->radians_i/TWO_PI;
       float r = particle_attractor_m.get(e)->radius;
       return ofMap(t, 0., 1., 0.01, r);
     };

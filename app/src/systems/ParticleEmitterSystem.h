@@ -37,7 +37,7 @@ class ParticleEmitterSystem : public ECSsystem
       ofSetCircleResolution(128);
       draw_scale = draw_scale_d = 0.0;
       draw_vel_scale = 0.0;
-      draw_resolution = 40;
+      draw_resolution = 3;
       draw_inited = false;
     };
   
@@ -88,8 +88,8 @@ class ParticleEmitterSystem : public ECSsystem
       RenderComponent* render_data = component<RenderComponent>("output");
       ParticleEmitterComponent* emitter_data = emitter_m.get(e);
 
-      
       Bloq* bloq = bloq_m.get(e)->bloq;
+        
       ofVec2f& dir = bloq->dir_i;
       ofVec2f loc( bloq->loc_i);
       loc.x *= render_data->width;
@@ -99,23 +99,14 @@ class ParticleEmitterSystem : public ECSsystem
       ofTranslate(loc.x,loc.y);
       ofScale(draw_scale,draw_scale);
       ofRotate(ofRadToDeg(-bloq->radians_i)-90);
-      draw_circle.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,circle_color,circle_color,10,355,true);
-      ofPushStyle();
-      ofNoFill();
-      ofSetColor(direction_color);
-      float _line_rad = (2.0*emitter_data->draw_radius)+(emitter_data->draw_weight*3.0);
-      ofEllipse(0,0,_line_rad,_line_rad);
-      ofPopStyle();
-      
-      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,10,20,true);
-      
-      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,direction_color_l,direction_color_l,336,346,true);
+      draw_circle.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,circle_color,circle_color,0,360,true);
       
       ofColor _color = ofColor::darkTurquoise;
-      _color.a = (ofGetFrameNum()*.03)*255.0;
-      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,10,20,true);
-    
-      draw_direction_3.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,_color,_color,336,346,true);
+      _color.a = .2+abs(sin(ofGetFrameNum()*.05))*255.0;
+      
+      float _new_radius =emitter_data->draw_radius+(emitter_data->draw_weight*2.0);
+      draw_circle.circle(_new_radius,_new_radius+emitter_data->draw_weight,draw_resolution,_color,_color,0,360,true);
+      
 
       ofPopMatrix();
     };
