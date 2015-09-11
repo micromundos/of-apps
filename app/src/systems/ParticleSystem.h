@@ -109,8 +109,8 @@ class ParticleSystem : public ECSsystem
 
       ofVec2f loc;
       ofFloatColor col;
-      ofEnableBlendMode(OF_BLENDMODE_ADD);
-
+     // ofEnableBlendMode(OF_BLENDMODE_ADD);
+      ofEnableAlphaBlending();
       for ( int i = 0; i < n; i++ )
       {
         loc.set( locs[i].x, locs[i].y );
@@ -132,8 +132,8 @@ class ParticleSystem : public ECSsystem
         //mesh.addVertex( loc );
         //mesh.addColor( col );
       }
-
-      ofDisableBlendMode();
+      ofDisableAlphaBlending();
+      //ofDisableBlendMode();
 
       //ofPushStyle();
       //ofSetColor(255);

@@ -60,13 +60,13 @@ class RenderSurfacesSystem : public ECSsystem
       DepthProcessingComponent* surfaces_data = component<DepthProcessingComponent>("input");
       RenderComponent* render_data = component<RenderComponent>("output");
       RenderSurfacesComponent* render_surfaces_data = render_surfaces_m.get(e);
-      
+      ofEnableAlphaBlending();
       if(!surfaces_data)return;
-      
       shader_surfaces.begin();
       shader_surfaces.setUniform1f("margin", render_surfaces_data->alpha_margin);
       surfaces_data->surfaces().get().draw(0,0,render_data->width,render_data->height);
       shader_surfaces.end();
+      ofDisableAlphaBlending();
     
     };
 

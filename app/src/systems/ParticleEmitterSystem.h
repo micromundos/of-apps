@@ -29,30 +29,29 @@ class ParticleEmitterSystem : public ECSsystem
       initial_fps_fisica = fisica->fps();
       emit_remainder = 0.0f;
 
-      circle_color = ofColor::turquoise;
-      direction_color = ofColor::mediumTurquoise;
-      direction_color_l = ofColor::powderBlue;
-      
-      ofEnableSmoothing();
-      ofSetCircleResolution(128);
-      draw_scale = draw_scale_d = 0.0;
-      draw_vel_scale = 0.0;
-      draw_resolution = 3;
-      draw_inited = false;
-    };
+        };
   
     virtual void removed(Entity &e)
     {
-      draw_scale_d = 0.0;
+      ParticleEmitterComponent* emitter_data = emitter_m.get(e);
+
+      emitter_data->draw_scale_d = 0.0;
     };
     
     virtual void added(Entity &e)
     {
       ParticleEmitterComponent* emitter_data = emitter_m.get(e);
+      
+      emitter_data->circle_color = ofColor::turquoise;
+      emitter_data->direction_color = ofColor::mediumTurquoise;
+      emitter_data->direction_color_l = ofColor::powderBlue;
+      emitter_data->draw_scale_d = 1.0;
+      emitter_data->draw_scale =0.0;
+      emitter_data->draw_vel_scale = 0.0;
+      emitter_data->draw_resolution = 3;
+      emitter_data->draw_inited = false;
 
-      draw_scale = 0.0;
-      draw_vel_scale = 0.0;
-      draw_scale_d = 1.0;
+
     };
 
     virtual void processEntity(Entity &e) 
@@ -77,11 +76,15 @@ class ParticleEmitterSystem : public ECSsystem
       }
       
       //  draw
-      draw_vel_scale+=(draw_scale_d-draw_scale)*.060;
-      draw_vel_scale*=.9;
-      draw_scale+=draw_vel_scale;
+      emitter_data->draw_vel_scale+=(emitter_data->draw_scale_d-emitter_data->draw_scale)*.060;
+      emitter_data->draw_vel_scale*=.9;
+      emitter_data->draw_scale+=emitter_data->draw_vel_scale;
       
     };
+  
+  
+  
+  
     virtual void renderEntity(Entity &e)
     {
       RenderComponent* render_data = component<RenderComponent>("output");
@@ -93,21 +96,23 @@ class ParticleEmitterSystem : public ECSsystem
       ofVec2f loc( bloq->loc_i);
       loc.x *= render_data->width;
       loc.y *= render_data->height;
+      ofPushStyle();
 
       ofPushMatrix();
       ofTranslate(loc.x,loc.y);
-      ofScale(draw_scale,draw_scale);
+      ofScale(emitter_data->draw_scale,emitter_data->draw_scale);
       ofRotate(ofRadToDeg(-bloq->radians_i)-90);
-      draw_circle.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,draw_resolution,circle_color,circle_color,0,360,true);
+      emitter_data->draw_circle.circle(emitter_data->draw_radius,emitter_data->draw_radius+emitter_data->draw_weight,emitter_data->draw_resolution,emitter_data->circle_color,emitter_data->circle_color,0,360,true);
       
       ofColor _color = ofColor::darkTurquoise;
       _color.a = .2+abs(sin(ofGetFrameNum()*.05))*255.0;
       
       float _new_radius =emitter_data->draw_radius+(emitter_data->draw_weight*2.0);
-      draw_circle.circle(_new_radius,_new_radius+emitter_data->draw_weight,draw_resolution,_color,_color,0,360,true);
+      emitter_data->draw_circle.circle(_new_radius,_new_radius+emitter_data->draw_weight,emitter_data->draw_resolution,_color,_color,0,360,true);
       
 
       ofPopMatrix();
+      ofPopStyle();
     };
 
   private:
@@ -118,7 +123,7 @@ class ParticleEmitterSystem : public ECSsystem
 
     float initial_fps_fisica;
     float emit_remainder;
-  
+  /*
     PDraw  draw_circle;
     PDraw  draw_direction,draw_direction_3;
     ofColor circle_color;
@@ -129,7 +134,7 @@ class ParticleEmitterSystem : public ECSsystem
     float  draw_vel_scale;
     float  draw_scale_d;
     bool   draw_inited;
-  
+  */
   
     void emit( Bloq* bloq, ParticleEmitterComponent* emitter_data, RenderComponent* render_data )
     {

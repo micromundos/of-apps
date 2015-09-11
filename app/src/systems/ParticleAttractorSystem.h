@@ -27,14 +27,6 @@ class ParticleAttractorSystem : public ECSsystem
       bloq_m.init( *world ); 
       knob_m.init( *world );
       
-      draw_color = ofColor(242,108,79);
-      draw_color_2 = ofColor(255,100,0);
-      area_scale_vel = 1.0;
-      q_counter=0;
-      draw_scale = 0.0;
-      total_lines = 3;
-      circle_res = 30;
-      
     };
 
     virtual void removed(Entity &e) 
@@ -49,8 +41,19 @@ class ParticleAttractorSystem : public ECSsystem
       ofNotifyEvent( AttractorEvents::added, make_attractor(e) );
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
 
-      draw_scale = 0.0;
-      draw_vel_scale = 0.0;
+      
+      
+      attr_data->draw_color = ofColor(242,108,79);
+      attr_data->draw_color_2 = ofColor(255,100,0);
+      attr_data->area_scale_vel = 1.0;
+      attr_data->q_counter=0;
+      attr_data->draw_scale = 0.0;
+      attr_data->total_lines = 3;
+      attr_data->circle_res = 30;
+
+      
+      attr_data->draw_scale = 0.0;
+      attr_data->draw_vel_scale = 0.0;
     };
 
     virtual void processEntity(Entity &e) 
@@ -61,9 +64,9 @@ class ParticleAttractorSystem : public ECSsystem
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
 
       //  draw
-      draw_vel_scale+=(1.0-draw_scale)*.060;
-      draw_vel_scale*=.9;
-      draw_scale+=draw_vel_scale;
+      attr_data->draw_vel_scale+=(1.0-attr_data->draw_scale)*.060;
+      attr_data->draw_vel_scale*=.9;
+      attr_data->draw_scale+=attr_data->draw_vel_scale;
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -82,23 +85,23 @@ class ParticleAttractorSystem : public ECSsystem
       float knob_r = r*render_data->height;
       
       float norm_scale = ofMap(knob_r,0.0,render_data->height,0.0,1.0);
-      float top_scale = norm_scale*draw_scale;
+      float top_scale = norm_scale*attr_data->draw_scale;
       
-      area_scale_vel-=(attr_data->force*.01);
+      attr_data->area_scale_vel-=(attr_data->force*.01);
       if(attr_data->force >= 0){
-        if(area_scale_vel <= 0.0)
+        if(attr_data->area_scale_vel <= 0.0)
         {
-          area_scale_vel = 1.0;
+          attr_data->area_scale_vel = 1.0;
         }
       }else{
-        if(area_scale_vel >= 1.0)
+        if(attr_data->area_scale_vel >= 1.0)
         {
-          area_scale_vel = 0.0;
+          attr_data->area_scale_vel = 0.0;
         }
       }
       
       float _lerp_color = ofMap(attr_data->force,-10.0,10.0,0.0,1.0);
-      ofColor _color = draw_color_2.getLerped(draw_color, _lerp_color);
+      ofColor _color = attr_data->draw_color_2.getLerped(attr_data->draw_color, _lerp_color);
       _color.a = 150;
       
 
@@ -106,12 +109,12 @@ class ParticleAttractorSystem : public ECSsystem
       ofTranslate(loc.x,loc.y);
       
       
-      for(int i=0;i<total_lines;i++){
-        float _delta = ofMap(i+area_scale_vel,0,total_lines,0.0,1.0,true);
+      for(int i=0;i<attr_data->total_lines;i++){
+        float _delta = ofMap(i+attr_data->area_scale_vel,0,attr_data->total_lines,0.0,1.0,true);
         float _s_scale = _delta;
-        area_circle.circle(_s_scale*knob_r, _s_scale*(knob_r+attr_data->draw_weight), circle_res, _color, _color,0,360,true);
+        attr_data->area_circle.circle(_s_scale*knob_r, _s_scale*(knob_r+attr_data->draw_weight), attr_data->circle_res, _color, _color,0,360,true);
       }
-      area_circle.circle(knob_r, knob_r+attr_data->draw_weight, circle_res, _color, _color,0,360,true);
+      attr_data->area_circle.circle(knob_r, knob_r+attr_data->draw_weight, attr_data->circle_res, _color, _color,0,360,true);
       ofPopMatrix();
       /*
       ofPushStyle();
@@ -137,17 +140,7 @@ class ParticleAttractorSystem : public ECSsystem
     ComponentMapper<KnobComponent> knob_m;
   
   
-    PDraw area_circle;
-    PDraw direction_circle;
-    ofColor draw_color;
-    ofColor draw_color_2;
-    int   q_counter;
-    float area_scale_vel;
-    float  draw_scale;
-    float  draw_vel_scale;
-    int total_lines;
-    float circle_res;
-  
+
     Attractor& make_attractor(Entity &e)
     {
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
@@ -174,9 +167,9 @@ class ParticleAttractorSystem : public ECSsystem
 
     float radius_from_knob(Entity &e) 
     {
-     //float t = knob_m.get(e)->value;
-      Bloq* bloq = bloq_m.get(e)->bloq;
-      float t = bloq->radians_i/TWO_PI;
+      float t = knob_m.get(e)->value;
+      //Bloq* bloq = bloq_m.get(e)->bloq;
+      //float t = bloq->radians_i/TWO_PI;
       float r = particle_attractor_m.get(e)->radius;
       return ofMap(t, 0., 1., 0.01, r);
     };

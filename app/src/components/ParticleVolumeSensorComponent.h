@@ -16,7 +16,10 @@ class ParticleVolumeSensorComponent : public ECScomponent
     ofParameter<bool> render;
     ofParameter<float> radius;
     ofParameter<float>  draw_weight;
-
+  
+    PDraw  draw_volume;
+    ofColor color_area;
+  
     ParticleVolumeSensorComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )

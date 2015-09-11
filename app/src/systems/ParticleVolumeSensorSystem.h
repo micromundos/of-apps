@@ -23,7 +23,7 @@ class ParticleVolumeSensorSystem : public ECSsystem
       particle_volume_sensor_m.init( *world );
       bloq_m.init( *world );
       
-      color_area = ofColor(236,255,137,150);
+     
       
     };
 
@@ -36,6 +36,7 @@ class ParticleVolumeSensorSystem : public ECSsystem
       pvs_data->volume = 0.0;
       pvs_data->volume_n = 0.0;
       pvs_data->volume_i = 0.0;
+      pvs_data->color_area = ofColor(236,255,137,150);
     }; 
 
     virtual void processEntity(Entity &e) 
@@ -103,15 +104,15 @@ class ParticleVolumeSensorSystem : public ECSsystem
       
       ofPushMatrix();
       ofTranslate(loc.x,loc.y);
-      ofSetColor(color_area);
+      ofSetColor(pvs_data->color_area);
       ofFill();
       ofCircle( 0.0,0.0, r);
       float _radius = r * pvs_data->volume_n_i;
       float _vol_radius = r+10;
       
-      draw_volume.circle(_vol_radius,_vol_radius+pvs_data->draw_weight,40,ofColor(color_area,180),ofColor(color_area,180),0,360,true);
+      pvs_data->draw_volume.circle(_vol_radius,_vol_radius+pvs_data->draw_weight,40,ofColor(pvs_data->color_area,180),ofColor(pvs_data->color_area,180),0,360,true);
       float _vol = pvs_data->volume_n_i*360.0;
-      draw_volume.circle(_vol_radius,_vol_radius+pvs_data->draw_weight,40,ofColor(0,150,0,180),ofColor(0,150,0,180),0,_vol,true);
+      pvs_data->draw_volume.circle(_vol_radius,_vol_radius+pvs_data->draw_weight,40,ofColor(0,150,0,180),ofColor(0,150,0,180),0,_vol,true);
       
       ofPopMatrix();
       
@@ -123,9 +124,7 @@ class ParticleVolumeSensorSystem : public ECSsystem
 
     ComponentMapper<ParticleVolumeSensorComponent> particle_volume_sensor_m;
     ComponentMapper<BloqComponent> bloq_m;
-  
-    PDraw  draw_volume;
-    ofColor color_area;
+
   
 
 
