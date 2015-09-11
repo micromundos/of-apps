@@ -82,7 +82,6 @@ class ParticleEmitterSystem : public ECSsystem
       draw_scale+=draw_vel_scale;
       
     };
-
     virtual void renderEntity(Entity &e)
     {
       RenderComponent* render_data = component<RenderComponent>("output");

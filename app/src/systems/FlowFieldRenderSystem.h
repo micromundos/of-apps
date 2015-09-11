@@ -54,8 +54,8 @@ class FlowFieldRenderSystem : public ECSsystem
 
       float step = 2;
 
-      ofColor tail( ofColor::teal );
-      ofColor head( ofColor::lightSeaGreen, 0 );
+      ofColor tail( ofColor::crimson );
+      ofColor head( ofColor::crimson, 0 );
 
       for ( int y = 0; y < h; y += step )
       {
