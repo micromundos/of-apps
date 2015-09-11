@@ -27,6 +27,8 @@ class ofApp : public ofBaseApp{
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
+    bool send_params;
+
     //ofParameterGroup params;
     ofParameterGroup params_motor, params_game;
 

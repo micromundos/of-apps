@@ -12,6 +12,8 @@ void ofApp::setup()
   ofSetFrameRate( 30 ); 
   ofSetVerticalSync(true); 
 
+  send_params = true;
+
   load_all_config();
 
   int app_port = settings["params"]["app"]["port"].asInt();
@@ -65,7 +67,7 @@ void ofApp::setup()
 void ofApp::update()
 {
   int now = ofGetSeconds();
-  if ( abs(now-prev) >= send_interval )
+  if ( send_params && abs(now-prev) >= send_interval )
   {
     params_sender.send();
     prev = now;
@@ -303,6 +305,7 @@ void ofApp::draw()
   //gui.draw();
   gui_motor.draw();
   gui_game.draw();
+  ofDrawBitmapStringHighlight( "send params " + ofToString(send_params) + " (press 'p')", ofGetWidth()-220, ofGetHeight()-14, ofColor::yellow, ofColor::black );
 }
 
 
@@ -337,6 +340,11 @@ void ofApp::keyReleased(int key)
   if ( key == 's' )
   {
     save_all_config();
+  }
+
+  else if ( key == 'p' )
+  {
+    send_params = !send_params;
   }
 
 }
