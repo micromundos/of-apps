@@ -21,7 +21,6 @@
 #include "FlowFieldAttractorsSystem.h"
 #include "TagSenderSystem.h"
 #include "FlowFieldRenderSystem.h"
-#include "SyphonSystem.h"
 #include "RenderSurfacesSystem.h"
 #include "ParticleVolumeSensorSystem.h"
 //dont remove this line
