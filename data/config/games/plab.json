@@ -120,7 +120,7 @@
                   "bilateral_domain" : [ 100, 0, 100 ],
                   "bilateral_kernel" : [ 1, 0, 10 ],
                   "bilateral_range" : [ 20, 0, 20 ],
-                  "edge_detection_threshold" : [ 100, 0, 300 ],
+                  "edge_detection_threshold" : [ 150, 0, 300 ],
                   "gaussian_kernel" : [ 1.670103073120117, 0, 10 ],
                   "gaussian_sigma" : [ 5, 0, 20 ],
                   "render" : false,
