@@ -40,7 +40,6 @@ ecs.add_system(new ParticleAttractorSystem("particle_attractor"));
 ecs.add_system(new ParticleFlowFieldSystem("particle_flow_field"));
 ecs.add_system(new ParticleVolumeSensorSystem("particle_volume_sensor"));
 ecs.add_system(new ParticleSystem("particle"));
-ecs.add_system(new SyphonSystem("syphon"));
 //dont remove this line
 };
 
