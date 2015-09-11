@@ -309,7 +309,7 @@ class TagsSystem : public ECSsystem
       //2d loc
       vector<ofVec2f> corners(4,ofVec2f());
       tag_corners_normalized( tag, corners );
-      tag_loc_normalized( corners, tloc );    
+      tag_loc_normalized( corners, tloc );
 
       //2d angle/dir
       //vector<ofVec2f> corners(4,ofVec2f());
@@ -317,13 +317,7 @@ class TagsSystem : public ECSsystem
       tag_dir_from_corners( corners, tdir );
       float radians = tag_angle_2d( tdir );
 
-      // >>> homography
-      tloc.x *= rgb_width;
-      tloc.y *= rgb_height;
-      tloc.set( tweak_H.preMult( ofVec3f( tloc.x, tloc.y, 0 ) ) );
-      tloc.x /= rgb_width;
-      tloc.y /= rgb_height;
-      // <<< homography
+      tag_loc_normalized_tweak_H( tloc ); 
 
       bloq->loc.set( tloc );
       bloq->dir.set( tdir );
@@ -419,6 +413,15 @@ class TagsSystem : public ECSsystem
       tloc.x /= depth_width;
       tloc.y /= depth_height;
     }; 
+
+    void tag_loc_normalized_tweak_H( ofVec2f& tloc )
+    {
+      tloc.x *= rgb_width;
+      tloc.y *= rgb_height;
+      tloc.set( tweak_H.preMult( ofVec3f( tloc.x, tloc.y, 0 ) ) );
+      tloc.x /= rgb_width;
+      tloc.y /= rgb_height;
+    };
 
     //normalized [0,1] loc
     void tag_loc_normalized( const vector<ofVec2f>& corners, ofVec2f& tloc )
@@ -550,21 +553,24 @@ class TagsSystem : public ECSsystem
 
       ofVec2f render_size( render_width, render_height );
 
+      for ( int i = 0; i < corners.size(); i++ )
+        tag_loc_normalized_tweak_H( corners[i] ); 
+
       ofVec2f p0,p1;
-      ofPoint ctr(0,0);
+      //ofPoint ctr(0,0);
       for ( int i = 0; i < corners.size(); i++ )
       {
         p0 = corners[i] * render_size;
         p1 = corners[ (i+1)%4 ] * render_size;
         ofLine( p0.x, p0.y, p1.x, p1.y );
-        ctr.x += p0.x;
-        ctr.y += p0.y;
+        //ctr.x += p0.x;
+        //ctr.y += p0.y;
       }
 
-      ctr.x /= 4.;
-      ctr.y /= 4.;
-      ctr *= render_size;
-      ofDrawBitmapString( tag.id, ctr );
+      //ctr.x /= 4.;
+      //ctr.y /= 4.;
+      //ctr *= render_size;
+      //ofDrawBitmapString( tag.id, ctr );
     }
 
 
