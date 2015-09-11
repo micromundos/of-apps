@@ -218,7 +218,7 @@ class DepthProcessingSystem : public ECSsystem
       surfaces(e)
         .set( "height_map", *_height_map_surfaces )
         .update()
-        .update_debug( depth_proc_data->render_surfaces || depth_proc_data->update_surfaces_debug );
+        .update_debug( depth_proc_data->render_surfaces );
 
       // update render data
 

@@ -45,10 +45,10 @@
       {
          "components" : [
             {
-               "data" : { 
+               "data" : {
                   "draw_weight" : [ 7, 2, 50 ],
                   "force" : [ 1, -10, 10 ],
-                  "radius" : [ 0.2, 0, 1 ]
+                  "radius" : [ 0.2000000029802322, 0, 1 ]
                },
                "id" : "particle_attractor"
             },
@@ -64,7 +64,7 @@
                "data" : {
                   "draw_weight" : [ 7, 2, 50 ],
                   "force" : [ -1, -10, 10 ],
-                  "radius" : [ 0.2, 0, 1 ]
+                  "radius" : [ 0.2000000029802322, 0, 1 ]
                },
                "id" : "particle_attractor"
             },
@@ -78,7 +78,7 @@
          "components" : [
             {
                "data" : {
-                  "radius" : [ 0.1, 0, 1 ],
+                  "radius" : [ 0.1000000014901161, 0, 1 ],
                   "render" : true
                },
                "id" : "particle_volume_sensor"
@@ -164,6 +164,18 @@
             }
          ],
          "id" : "ff"
+      },
+      {
+         "components" : [
+            {
+               "data" : {
+                 "render":true,
+                  "margin" : [ 0.0, 0.0, 1.0 ]
+               },
+               "id" : "render_surfaces"
+            }
+         ],
+         "id" : "render_game"
       }
    ]
 }
