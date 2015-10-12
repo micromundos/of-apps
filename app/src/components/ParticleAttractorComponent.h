@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include <Artemis/Artemis.h>
 #include "ofxECS.h"
+#include "bloqs/Attractor.h"
 
 class ParticleAttractorComponent : public ECScomponent 
 {
@@ -10,9 +11,10 @@ class ParticleAttractorComponent : public ECScomponent
 
     ofParameter<float> force;
     ofParameter<float> radius;
-    ofParameter<float>  draw_weight;
+    ofParameter<float> draw_weight;
 
-  
+    Attractor attr;
+
     PDraw area_circle;
     PDraw direction_circle;
     ofColor draw_color;
@@ -23,7 +25,7 @@ class ParticleAttractorComponent : public ECScomponent
     float  draw_vel_scale;
     int total_lines;
     float circle_res;
-  
+
     ParticleAttractorComponent(string _id) : ECScomponent(_id) {};
 
     virtual void init( string e_id, Json::Value d, ECSparams* p )
