@@ -13,7 +13,7 @@ class ParticleAttractorComponent : public ECScomponent
     ofParameter<float> radius;
     ofParameter<float> draw_weight;
 
-    Attractor attr;
+    Attractor attractor;
 
     PDraw area_circle;
     PDraw direction_circle;

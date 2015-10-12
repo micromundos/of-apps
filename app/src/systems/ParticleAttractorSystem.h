@@ -36,9 +36,10 @@ class ParticleAttractorSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      if ( !check_bloq(e) ) return;
-
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
+
+      if ( !update_attractor(e) )
+        return;
 
       attr_data->draw_color = ofColor(242,108,79);
       attr_data->draw_color_2 = ofColor(255,100,0);
@@ -50,20 +51,21 @@ class ParticleAttractorSystem : public ECSsystem
       attr_data->draw_scale = 0.0;
       attr_data->draw_vel_scale = 0.0;
 
-      ofNotifyEvent( AttractorEvents::added, update_attractor(e) );
+      ofNotifyEvent( AttractorEvents::added, attr_data->attractor );
     };
 
     virtual void processEntity(Entity &e) 
     {
-      if ( !check_bloq(e) ) return;
-
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
+
+      if ( !update_attractor(e) )
+        return;
 
       attr_data->draw_vel_scale += (1.0-attr_data->draw_scale)*.060;
       attr_data->draw_vel_scale *= .9;
       attr_data->draw_scale += attr_data->draw_vel_scale;
 
-      ofNotifyEvent( AttractorEvents::updated, update_attractor(e) );
+      ofNotifyEvent( AttractorEvents::updated, attr_data->attractor );
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -139,30 +141,37 @@ class ParticleAttractorSystem : public ECSsystem
     ComponentMapper<BloqComponent> bloq_m;  
     ComponentMapper<KnobComponent> knob_m;
 
-    Attractor& update_attractor(Entity &e)
+    bool update_attractor(Entity &e)
     {
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
-      Attractor& attr = attr_data->attr;
-      //static Attractor attr;
+      Attractor& attr = attr_data->attractor;
       Bloq* bloq = bloq_m.get(e)->bloq; 
+
+      if (bloq == NULL) 
+      {
+        ofLogError("ParticleAttractorSystem")
+          << "update_attractor: bloq is NULL";
+        return false;
+      }
+
       attr.id = bloq->id;
       attr.loc.set( bloq->loc );
       attr.force = attr_data->force;
       attr.radius = radius_from_knob(e);
-      return attr;
+      return true;
     };
 
-    bool check_bloq(Entity &e)
-    {
-      if (bloq_m.get(e)->bloq == NULL)
-      {
-        ofLogError("ParticleAttractorSystem")
-          << "entity [" << e.getId() << "] "
-          << "bloq is NULL !@#$%ˆ&*";
-        return false;
-      }
-      return true;
-    }
+    //Attractor& make_attractor(Entity &e)
+    //{
+      //ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
+      //Bloq* bloq = bloq_m.get(e)->bloq; 
+      //static Attractor attr;
+      //attr.id = bloq->id;
+      //attr.loc.set( bloq->loc );
+      //attr.force = attr_data->force;
+      //attr.radius = radius_from_knob(e);
+      //return attr;
+    //};
 
     float radius_from_knob(Entity &e) 
     {

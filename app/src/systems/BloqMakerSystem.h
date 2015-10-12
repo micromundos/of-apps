@@ -96,9 +96,7 @@ class BloqMakerSystem : public ECSsystem
         //<< "bloq_removed: " 
         //<< bloq_id;
       remove_entity( bloq_id );
-     
     };
- 
 
     void make_entity( Bloq& bloq )
     {
@@ -121,7 +119,6 @@ class BloqMakerSystem : public ECSsystem
       e->refresh();
 
       bloqs_by_id[ bloq_id ] = e->getId();
-      
     };  
 
     void remove_entity( string bloq_id )
@@ -149,7 +146,6 @@ class BloqMakerSystem : public ECSsystem
       BloqComponent* bloq_comp = (BloqComponent*)e.getComponent<BloqComponent>();
 
       bloq_comp->update( &bloq );
-    
     };
 
     bool has_entity( string bloq_id )
