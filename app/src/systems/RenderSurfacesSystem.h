@@ -19,24 +19,9 @@ class RenderSurfacesSystem : public ECSsystem
     virtual void initialize() 
     {
       render_surfaces_m.init( *world );
-      
       shader_surfaces.setupShaderFromFile(GL_FRAGMENT_SHADER, "glsl/surfaces_draw.frag");
       shader_surfaces.linkProgram();
-      
     };
-
-    //virtual void processEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::processEntities(bag);
-      //int len = bag.getCount();
-      //for ( int i = 0; i < len; i++ )
-        //processEntity( *bag.get(i) );
-    //};
-
-    //virtual void renderEntities( ImmutableBag<Entity*>& bag ) 
-    //{
-      //EntityProcessingSystem::renderEntities(bag);
-    //};
 
     virtual void removed(Entity &e) 
     {
@@ -48,11 +33,6 @@ class RenderSurfacesSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-
-      //      DepthComponent* depth_data = component<DepthComponent>("input");
-
-      //ofLogNotice("RenderSurfacesSystem") << "process entity " << e.getId();
-      //render_surfaces_m.get(e)->data;
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -60,7 +40,13 @@ class RenderSurfacesSystem : public ECSsystem
       DepthProcessingComponent* surfaces_data = component<DepthProcessingComponent>("input");
       RenderComponent* render_data = component<RenderComponent>("output");
       RenderSurfacesComponent* render_surfaces_data = render_surfaces_m.get(e);
-      if(!surfaces_data)return;
+
+      if ( ! render_surfaces_data->render )
+        return;
+
+      if ( ! surfaces_data ) 
+        return;
+
       shader_surfaces.begin();
       ofEnableAlphaBlending();
 
@@ -70,7 +56,6 @@ class RenderSurfacesSystem : public ECSsystem
       ofDisableAlphaBlending();
 
       shader_surfaces.end();
-    
     };
 
   private:

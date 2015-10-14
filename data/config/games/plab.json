@@ -169,11 +169,11 @@
       {
          "components" : [
             {
-               "data" : {
-                 "render":true,
-                  "margin" : [ 0.0, 0.0, 1.0 ]
-               },
-               "id" : "render_surfaces"
+                "data" : {
+                    "render" : true,
+                    "alpha_margin" : [ 0.0, 0.0, 1.0 ]
+                },
+                "id" : "render_surfaces"
             }
          ],
          "id" : "render_game"
