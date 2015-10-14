@@ -1,6 +1,8 @@
 { "params": {
     "app": {
         "port": 6667,
+        "width": 1280,
+        "height": 768,
         "motor_path": "config/motor.json",
         "game_path": "config/games/autitos.json"
         /*"game_path": "config/games/plab.json"*/
@@ -35,6 +37,6 @@
         "pattern_settings_path": "calib/kinect_projector_pattern.yml",
         "gui_settings_path": "calib/kinect_projector_gui.xml",
         "cam_name": "kinect_rgb",
-        "proj_name": "proj_lg"
+        "proj_name": "proj_aaxa"
     }
 }}
