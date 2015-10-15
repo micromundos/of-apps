@@ -7,9 +7,9 @@
 /*#define FLT_MAX  1.70141184e38*/
 /*#define FLT_MIN  1.17549435e-38*/
 
-float lerp( float n, float min, float max ) 
+float lerp( float start, float stop, float n ) 
 {
-  return (1.0 - n) * (max - min) + min;
+  return start + (stop - start) * n;
 }
 
 float lerp2d( float x, float x1, float x2, float y1, float y2 ) 

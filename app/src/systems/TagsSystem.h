@@ -41,7 +41,7 @@ class TagsSystem : public ECSsystem
       entity = &e;
 
       TagsComponent* tags_data = tags_m.get(e);
-
+      
       ofxCv::Calibration calib_rgb;
       ofxCv::Calibration calib_depth;
 
@@ -69,10 +69,10 @@ class TagsSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
+      TS_START("TagsSystem");
+
       TagsComponent* tags_data = tags_m.get(e);
       TagsReceiverComponent* tags_receiver_data = tags_receiver_m.get(e);
-
-      TS_START("TagsSystem");
 
       vector< shared_ptr<Bloq> >& bloqs = tags_data->bloqs;
       vector<Tag>& tags = tags_receiver_data->tags;
@@ -95,14 +95,16 @@ class TagsSystem : public ECSsystem
         if ( bloq == NULL )
         {
           shared_ptr<Bloq> _bloq( new Bloq() );
-          update_bloq( _bloq.get(), tag ); 
+          update_bloq( e, _bloq.get(), tag,true );
           bloqs.push_back( _bloq );
           ofNotifyEvent( BloqEvents::added, *_bloq );
+          
         }
 
-        else if ( update_bloq( bloq, tag ) )
+        else if ( update_bloq( e, bloq, tag ) )
         {
-          ofNotifyEvent( BloqEvents::updated, *bloq );
+           ofNotifyEvent( BloqEvents::updated, *bloq );
+          
         }
       } 
 
@@ -131,9 +133,10 @@ class TagsSystem : public ECSsystem
         warper.drawSelectedCorner();
         ofPopStyle();
       }
-
+            
       if ( !tags_data->render )
         return;
+      
 
       vector< shared_ptr<Bloq> >& bloqs = tags_data->bloqs;
       vector<Tag>& tags = tags_receiver_data->tags;
@@ -166,11 +169,11 @@ class TagsSystem : public ECSsystem
       ofPopStyle();
 
       // render tags 2d
-      //ofPushStyle();
-      //ofSetColor(ofColor::blue);
-      //for (int i = 0; i < tags.size(); i++)
-        //render_tag_2d( tags[i], render_width, render_height );
-      //ofPopStyle();
+      ofPushStyle();
+      ofSetColor(ofColor::blue);
+      for (int i = 0; i < tags.size(); i++)
+        render_tag_2d( tags[i], render_width, render_height );
+      ofPopStyle();
     };
 
     void tweak_load(bool& enabled)
@@ -198,7 +201,8 @@ class TagsSystem : public ECSsystem
     {
       if (enabled) 
       {
-        warper.reset();
+        warper_reset();
+        //warper.reset();
       }
     };
 
@@ -227,7 +231,6 @@ class TagsSystem : public ECSsystem
     ofVec2f up2;
     ofVec3f up3;
 
-
     // warper tweak
 
     void tweak_dispose(Entity &e)
@@ -251,22 +254,21 @@ class TagsSystem : public ECSsystem
       tags_data->tweak_reset.addListener( this, &TagsSystem::tweak_reset );
       //tags_data->tweak_render.addListener( this, &TagsSystem::tweak_render );
 
-      RenderComponent* render_data = component<RenderComponent>("output");
-
-      int x = ofGetWidth() * 0.5;
-      int y = ofGetHeight() * 0.5;
-      int w = 20;
-      int h = 20;
-
-      warper.setSourceRect(ofRectangle(0, 0, w, h));              // this is the source rectangle which is the size of the image and located at ( 0, 0 )
-      warper.setTopLeftCornerPosition(ofVec3f(x, y));             // this is position of the quad warp corners, centering the image on the screen.
-      warper.setTopRightCornerPosition(ofVec3f(x + w, y));        // this is position of the quad warp corners, centering the image on the screen.
-      warper.setBottomLeftCornerPosition(ofVec3f(x, y + h));      // this is position of the quad warp corners, centering the image on the screen.
-      warper.setBottomRightCornerPosition(ofVec3f(x + w, y + h)); // this is position of the quad warp corners, centering the image on the screen.
+      warper_reset();
       warper.setup();
-
       bool b = true;
       tweak_load(b);
+    };
+
+    void warper_reset()
+    {
+      RenderComponent* render_data = component<RenderComponent>("output");
+      int x = 0;
+      int y = 0;
+      int w = ofGetWidth() * 0.5;
+      int h = ofGetHeight() * 0.5;
+      warper.setSourceRect(ofRectangle(x,y,w,h));
+      warper.setTargetRect(ofRectangle(x,y,w,h)); 
     };
 
     // tags
@@ -291,48 +293,59 @@ class TagsSystem : public ECSsystem
       return NULL;
     };
 
-    bool update_bloq( Bloq* bloq, const Tag& tag )
+    bool update_bloq( Entity &e, Bloq* bloq, const Tag& tag, bool is_new = false )
     {
       ofVec2f tloc, tdir;
 
       //3d loc
-      tag_loc_on_depth( tag, tloc );
+      //tag_loc_on_depth( tag, tloc );
 
       //debug: project back on rgb
       //ofVec2f tloc_rgb;
       //project( calib_rgb.getDistortedIntrinsics(), tag.translation, tloc_rgb );
 
-      //2d loc
-      //vector<ofVec2f> corners(4,ofVec2f());
-      //tag_corners_normalized(tag, corners);
-      //tag_loc_normalized(corners, tloc); 
-
-      //if ( bloq->loc == tloc )
-        //return false;
-
-      //ofLog() << "update bloq " << tag.id;
-
       //3d angle/dir
       //ofVec3f axis;
       //float radians = tag_angle_axis(tag,axis);
-      //tag_dir_from_angle(radians, tdir);   
+      //tag_dir_from_angle(radians, tdir);
 
-      //2d angle/dir
+      //2d loc
       vector<ofVec2f> corners(4,ofVec2f());
       tag_corners_normalized( tag, corners );
+      tag_loc_normalized( corners, tloc );
+
+      //2d angle/dir
+      //vector<ofVec2f> corners(4,ofVec2f());
+      //tag_corners_normalized( tag, corners );
       tag_dir_from_corners( corners, tdir );
       float radians = tag_angle_2d( tdir );
 
-      //ofLogNotice("TagsSystem")
-          //<< " tag angle deg " 
-          //<< (radians*RAD_TO_DEG)
-          //<< ", dir " << tdir;
+      tag_loc_normalized_tweak_H( tloc ); 
 
       bloq->loc.set( tloc );
       bloq->dir.set( tdir );
       bloq->radians = radians;
-      bloq->id = tag.id; 
+      bloq->id = tag.id;
 
+      // interpolation
+
+      TagsComponent* tags_data = tags_m.get(e);
+      if ( is_new )
+      {
+        bloq->loc_i.set(bloq->loc);
+        bloq->dir_i.set(bloq->dir);
+        bloq->radians_i = bloq->radians;
+      }
+
+      else
+      {
+        bloq->loc_i += (tloc - bloq->loc_i) * tags_data->interpolation_easing_loc;
+        bloq->dir_i += (tdir - bloq->dir_i) * tags_data->interpolation_easing_dir;
+        bloq->radians_i = ofLerpRadians(bloq->radians_i, radians, tags_data->interpolation_easing_radians );
+      }
+      
+      
+      
       return true;
     };
 
@@ -354,7 +367,7 @@ class TagsSystem : public ECSsystem
         bloqs.erase( to_remove[i] );
 
     };
-
+  
 
     //3d
 
@@ -405,6 +418,15 @@ class TagsSystem : public ECSsystem
       tloc.x /= depth_width;
       tloc.y /= depth_height;
     }; 
+
+    void tag_loc_normalized_tweak_H( ofVec2f& tloc )
+    {
+      tloc.x *= rgb_width;
+      tloc.y *= rgb_height;
+      tloc.set( tweak_H.preMult( ofVec3f( tloc.x, tloc.y, 0 ) ) );
+      tloc.x /= rgb_width;
+      tloc.y /= rgb_height;
+    };
 
     //normalized [0,1] loc
     void tag_loc_normalized( const vector<ofVec2f>& corners, ofVec2f& tloc )
@@ -536,21 +558,24 @@ class TagsSystem : public ECSsystem
 
       ofVec2f render_size( render_width, render_height );
 
+      for ( int i = 0; i < corners.size(); i++ )
+        tag_loc_normalized_tweak_H( corners[i] ); 
+
       ofVec2f p0,p1;
-      ofPoint ctr(0,0);
+      //ofPoint ctr(0,0);
       for ( int i = 0; i < corners.size(); i++ )
       {
         p0 = corners[i] * render_size;
         p1 = corners[ (i+1)%4 ] * render_size;
         ofLine( p0.x, p0.y, p1.x, p1.y );
-        ctr.x += p0.x;
-        ctr.y += p0.y;
+        //ctr.x += p0.x;
+        //ctr.y += p0.y;
       }
 
-      ctr.x /= 4.;
-      ctr.y /= 4.;
-      ctr *= render_size;
-      ofDrawBitmapString( tag.id, ctr );
+      //ctr.x /= 4.;
+      //ctr.y /= 4.;
+      //ctr *= render_size;
+      //ofDrawBitmapString( tag.id, ctr );
     }
 
 

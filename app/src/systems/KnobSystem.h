@@ -34,7 +34,7 @@ class KnobSystem : public ECSsystem
       KnobComponent* knob_data = knob_m.get(e);
       Bloq* bloq = bloq_m.get(e)->bloq;
 
-      float ang = bloq->radians / TWO_PI;
+      float ang = bloq->radians_i / TWO_PI;
 
       //http://stackoverflow.com/questions/13097005/easing-functions-for-bell-curves
       knob_data->value = ((sin( TWO_PI * (ang - 0.25f)) + 1) * 0.5);

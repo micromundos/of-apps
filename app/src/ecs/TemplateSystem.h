@@ -35,16 +35,13 @@ class TemplateSystem : public ECSsystem
     //};
 
     virtual void removed(Entity &e) 
-    {
-    };
+    {};
 
     virtual void added(Entity &e) 
-    {
-    }; 
+    {}; 
 
     virtual void processEntity(Entity &e) 
     {
-      //ofLogNotice("TemplateSystem") << "process entity " << e.getId();
       //template_m.get(e)->data;
     }; 
 

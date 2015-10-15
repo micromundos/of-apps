@@ -17,6 +17,10 @@ class TagsComponent : public ECScomponent
     ofParameter<bool> tweak_render;
 
     ofParameter<bool> render;
+  
+    ofParameter<float> interpolation_easing_loc;
+    ofParameter<float> interpolation_easing_dir;
+    ofParameter<float> interpolation_easing_radians;
 
     string calib_rgb_file;
     string calib_depth_file;
@@ -34,6 +38,10 @@ class TagsComponent : public ECScomponent
       param( tweak_save, "tweak_save" );
       param( tweak_reset, "tweak_reset" );
       param( tweak_render, "tweak_render" );
+
+      param( interpolation_easing_loc, "interpolation_easing_loc" );
+      param( interpolation_easing_dir, "interpolation_easing_dir" );
+      param( interpolation_easing_radians, "interpolation_easing_radians" );
 
       calib_rgb_file = d["calibration"]["rgb"].asString();
       calib_depth_file = d["calibration"]["depth"].asString();

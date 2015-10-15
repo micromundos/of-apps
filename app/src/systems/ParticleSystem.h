@@ -21,9 +21,11 @@ class ParticleSystem : public ECSsystem
     virtual void initialize() 
     {
       ps_m.init( *world ); 
-      fisica = require_system<FisicaSystem>();
-      entity = NULL; 
-    };  
+      fisica = system<FisicaSystem>();
+      entity = NULL;
+      par_texture.setUseTexture(true);
+      par_texture.loadImage("assets/par2.png");
+    };
 
     virtual void removed(Entity &e) 
     { 
@@ -71,6 +73,8 @@ class ParticleSystem : public ECSsystem
 
     virtual void processEntity(Entity &e)
     {
+      TS_START("ParticleSystem"); 
+
       ParticleSystemComponent* ps_data = ps_m.get(e);
 
       //limit particles speed
@@ -89,6 +93,8 @@ class ParticleSystem : public ECSsystem
         vel *= len > max_speed ? max_speed : len;
         //cout << i << ": vel len " << len << ", max " << max_speed << endl;
       }
+
+      TS_STOP("ParticleSystem"); 
     }; 
 
     virtual void renderEntity(Entity &e)
@@ -98,31 +104,52 @@ class ParticleSystem : public ECSsystem
       mesh.clear();
 
       int32 n = b2particles->GetParticleCount();
-      b2Vec2 *posbuf = b2particles->GetPositionBuffer();
-      b2ParticleColor *colbuf = b2particles->GetColorBuffer();
+      b2Vec2 *locs = b2particles->GetPositionBuffer();
+      b2ParticleColor *cols = b2particles->GetColorBuffer();
 
       ofVec2f loc;
       ofFloatColor col;
-      for ( int i = 0; i < n; i++ ) 
-      {
-        loc.set( posbuf[i].x, posbuf[i].y );
-        col.set( colbuf[i].r / 255.0, colbuf[i].g / 255.0, colbuf[i].b / 255.0 );
-        mesh.addVertex( loc );
-        mesh.addColor( col );
-      }
-
+     // ofEnableBlendMode(OF_BLENDMODE_ADD);
       ofPushStyle();
-      ofSetColor(255);
-      ofSetLineWidth(0.1);
-      glPointSize( ps_data->render_size );
-      ofPushMatrix();
-      ofScale( fisica->scale(), fisica->scale() );
-      mesh.draw();
-      ofPopMatrix();
+      ofEnableAlphaBlending();
+      for ( int i = 0; i < n; i++ )
+      {
+        loc.set( locs[i].x, locs[i].y );
+        loc*=fisica->scale();
+        ofColor _col = ofColor(cols[i].r,cols[i].g,cols[i].b);
+        ofColor _color2 = _col.getLerped(ofColor(255,255,255),ofNoise(locs[i].x,locs[i].y,ofGetFrameNum()*.05));
+        ofSetColor(cols[i].r,cols[i].g,cols[i].b,255.0);
+        ofPushMatrix();
+        ofTranslate(loc.x,loc.y);
+        ofScale(ps_data->render_size ,ps_data->render_size );
+        ofPushStyle();
+      //  ofSetColor(cols[i].r,cols[i].g,cols[i].b,255.0);
+        ofSetColor(_color2);
+        par_texture.draw(-par_texture.getWidth()/2,-par_texture.getHeight()/2);
+        ofPopStyle();
+        ofPopMatrix();
+
+        //loc.set( locs[i].x, locs[i].y );
+        //col.set( cols[i].r / 255.0, cols[i].g / 255.0, cols[i].b / 255.0 );
+        //mesh.addVertex( loc );
+        //mesh.addColor( col );
+      }
+      ofDisableAlphaBlending();
       ofPopStyle();
+      //ofDisableBlendMode();
+
+      //ofPushStyle();
+      //ofSetColor(255);
+      //ofSetLineWidth(0.1);
+      //glPointSize( ps_data->render_size );
+      //ofPushMatrix();
+      //ofScale( fisica->scale(), fisica->scale() );
+      //mesh.draw();
+      //ofPopMatrix();
+      //ofPopStyle();
     };
 
-    int32 make_particle( float _locx, float _locy, float _velx, float _vely )
+    int32 make_particle( float _locx, float _locy, float _velx, float _vely ,ofColor _color )
     {
       if ( entity == NULL )
         return -1;
@@ -139,7 +166,9 @@ class ParticleSystem : public ECSsystem
       pd.flags = flags;
       pd.position.Set( locx, locy );
       pd.velocity.Set( velx, vely );
-      pd.color = b2color;
+      b2ParticleColor p_color;
+      p_color.Set(_color.r,_color.g,_color.b,255.0);
+      pd.color = p_color;
       if ( ps_data->lifetime > 0.0 )
         pd.lifetime = ps_data->lifetime; 
 
@@ -154,11 +183,11 @@ class ParticleSystem : public ECSsystem
   private:
 
     ComponentMapper<ParticleSystemComponent> ps_m;
-
+  
     Entity* entity;
     b2ParticleSystem* b2particles;
     FisicaSystem* fisica;
-
+    ofImage   par_texture;
     ofVboMesh mesh;
 
     ofColor ofcolor;

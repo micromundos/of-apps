@@ -13,7 +13,6 @@
 #include "ParticleSystemComponent.h"
 #include "ParticleFlowFieldComponent.h"
 #include "ParticleEmitterComponent.h"
-#include "TimeBenderComponent.h"
 #include "KnobComponent.h"
 #include "TableCalibComponent.h"
 #include "DepthProcessingComponent.h"
@@ -27,5 +26,6 @@
 #include "FlowFieldAttractorsComponent.h"
 #include "TagSenderComponent.h"
 #include "FlowFieldRenderComponent.h"
-#include "SyphonComponent.h"
+#include "RenderSurfacesComponent.h"
+#include "ParticleVolumeSensorComponent.h"
 //dont remove this line

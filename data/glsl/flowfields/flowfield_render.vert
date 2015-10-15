@@ -20,8 +20,8 @@ void main( void )
   if ( gl_VertexID % 2 != 0 )
   {
     vec2 force = texel(flowfield).xy;
-    vert.x += lerp( force.x, force_min, force_max ); 
-    vert.y += lerp( force.y, force_min, force_max ); 
+    vert.x += lerp2d( force.x, 0., 1., force_min, force_max ); 
+    vert.y += lerp2d( force.y, 0., 1., force_min, force_max ); 
   }
 
   gl_Position = gl_ModelViewProjectionMatrix * vert;

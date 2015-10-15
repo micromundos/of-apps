@@ -84,6 +84,9 @@
                      "rgb" : "calib/intrinsics_logitech920.aruco.yml",
                      "stereo" : "calib/extrinsics_logitech920_to_kinect.yml"
                   },
+                  "interpolation_easing_dir" : [ 0.2000000029802322, 0, 1 ],
+                  "interpolation_easing_loc" : [ 0.2000000029802322, 0, 1 ],
+                  "interpolation_easing_radians" : [ 0.04948453605175018, 0, 1 ],
                   "render" : false,
                   "tweak_load" : false,
                   "tweak_render" : false,
