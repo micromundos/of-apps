@@ -28,4 +28,5 @@
 #include "FlowFieldRenderComponent.h"
 #include "RenderSurfacesComponent.h"
 #include "ParticleVolumeSensorComponent.h"
+#include "SyphonComponent.h"
 //dont remove this line

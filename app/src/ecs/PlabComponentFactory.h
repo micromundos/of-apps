@@ -42,6 +42,7 @@ else if (id == "tag_sender") return new TagSenderComponent(id);
 else if (id == "flow_field_render") return new FlowFieldRenderComponent(id);
 else if (id == "render_surfaces") return new RenderSurfacesComponent(id);
 else if (id == "particle_volume_sensor") return new ParticleVolumeSensorComponent(id);
+else if (id == "syphon") return new SyphonComponent(id);
 //dont remove this line
 
 return NULL;
