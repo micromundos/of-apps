@@ -11,5 +11,6 @@ kinect rgb -> rgb camera -> projector -> tweaks -> table
 4) calib-proj.sh
 5) app -> data/calib/cml_tweak.yml
 6) app -> data/calib/tag_tweak.yml
+  keys: ofxQuadWarp 1,2,3,4 + left,right,up,down
 7) app -> data/calib/table_*.yml
 
