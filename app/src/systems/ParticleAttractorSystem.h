@@ -144,20 +144,25 @@ class ParticleAttractorSystem : public ECSsystem
     bool update_attractor(Entity &e)
     {
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
-      Attractor& attr = attr_data->attractor;
-      Bloq* bloq = bloq_m.get(e)->bloq; 
+      Attractor attr = attr_data->attractor; //copy
+      float attr_force = attr_data->force;
 
-      if (bloq == NULL) 
+      Bloq* bloq = bloq_m.get(e)->bloq; 
+      string id = bloq->id;
+
+      attr.id = id;
+      attr.loc.set( bloq->loc );
+      attr.force = attr_force;
+      attr.radius = radius_from_knob(e);
+
+      if (attr_data == NULL) 
       {
         ofLogError("ParticleAttractorSystem")
-          << "update_attractor: bloq is NULL";
+          << "update_attractor: attr_data is NULL";
         return false;
       }
 
-      attr.id = bloq->id;
-      attr.loc.set( bloq->loc );
-      attr.force = attr_data->force;
-      attr.radius = radius_from_knob(e);
+      attr_data->attractor = attr; //copy
       return true;
     };
 
