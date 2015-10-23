@@ -2,9 +2,15 @@
 calibration steps 
 =================
 
-kinect rgb -- rgb camera -- projector
+kinect rgb -> rgb camera -> projector -> tweaks -> table
 
 1) calib-kinect-rgb-mono
 2) calib-kinect-rgb-stereo
 3) calib-kinect-rgb-stereo-test (aruco)
+
 4) calib-proj.sh
+5) app -> data/calib/cml_tweak.yml
+6) app -> data/calib/tag_tweak.yml
+  keys: ofxQuadWarp 1,2,3,4 + left,right,up,down
+7) app -> data/calib/table_*.yml
+
