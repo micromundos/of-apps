@@ -145,8 +145,9 @@ class ParticleAttractorSystem : public ECSsystem
     {
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
       Bloq* bloq = bloq_m.get(e)->bloq; 
+      string id = bloq->id;
       static Attractor attr;
-      attr.id = bloq->id;
+      attr.id = id;
       attr.loc.set( bloq->loc );
       attr.force = attr_data->force;
       attr.radius = radius_from_knob(e);
