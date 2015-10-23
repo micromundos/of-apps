@@ -148,6 +148,14 @@ class ParticleAttractorSystem : public ECSsystem
       float attr_force = attr_data->force;
 
       Bloq* bloq = bloq_m.get(e)->bloq; 
+      if (bloq == NULL) 
+      {
+        ofLogError("ParticleAttractorSystem")
+          << "update_attractor: bloq is NULL";
+        return false;
+      }
+
+      ofLog() << "### "<< bloq->id;
       string id = bloq->id;
 
       attr.id = id;
