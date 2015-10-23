@@ -120,8 +120,8 @@
                   "bilateral_domain" : [ 100, 0, 100 ],
                   "bilateral_kernel" : [ 1, 0, 10 ],
                   "bilateral_range" : [ 20, 0, 20 ],
-                  "edge_detection_threshold" : [ 150, 0, 300 ],
-                  "gaussian_kernel" : [ 1.670103073120117, 0, 10 ],
+                  "edge_detection_threshold" : [ 175, 0, 300 ],
+                  "gaussian_kernel" : [ 0.9, 0, 10 ],
                   "gaussian_sigma" : [ 5, 0, 20 ],
                   "render" : false,
                   "render_edges" : false
@@ -169,11 +169,11 @@
       {
          "components" : [
             {
-               "data" : {
-                 "render":true,
-                  "margin" : [ 0.0, 0.0, 1.0 ]
-               },
-               "id" : "render_surfaces"
+                "data" : {
+                    "render" : true,
+                    "alpha_margin" : [ 0.0, 0.0, 1.0 ]
+                },
+                "id" : "render_surfaces"
             }
          ],
          "id" : "render_game"

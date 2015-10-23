@@ -69,9 +69,9 @@ class BloqMakerSystem : public ECSsystem
     {
       bloq_maker.init( world, ((ComponentFactory*)component_factory), config_data->config.game()["bloqs"], config_data->config.settings()["params"]["app"]["port"].asInt() );
 
-      ofAddListener( BloqEvents::added, this, &BloqMakerSystem::bloq_added );
-      ofAddListener( BloqEvents::updated, this, &BloqMakerSystem::bloq_updated );
-      ofAddListener( BloqEvents::removed, this, &BloqMakerSystem::bloq_removed );
+      ofAddListener( BloqEvents::added, this, &BloqMakerSystem::bloq_added, OF_EVENT_ORDER_APP );
+      ofAddListener( BloqEvents::updated, this, &BloqMakerSystem::bloq_updated, OF_EVENT_ORDER_APP );
+      ofAddListener( BloqEvents::removed, this, &BloqMakerSystem::bloq_removed, OF_EVENT_ORDER_APP );
 
     };
 

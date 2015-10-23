@@ -15,6 +15,12 @@ void ofApp::setup()
   init_time_measurements();
 
   config.init();
+
+  ofSetWindowShape(
+    config.settings()["params"]["app"]["width"].asInt(),
+    config.settings()["params"]["app"]["height"].asInt()
+  );
+
   ecs.init();
   ecs.fps(30.0);
   system_factory.add_systems( ecs );

@@ -34,8 +34,8 @@
                "data" : {
                   "calibration" : {
                      "kinect_intrinsics_file" : "calib/intrinsics_kinect.ofxcv.yml",
-                     "projector_intrinsics_file" : "calib/intrinsics_proj_lg.ofxcv.yml",
-                     "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_lg_to_kinect_rgb.yml"
+                     "projector_intrinsics_file" : "calib/intrinsics_proj_aaxa.ofxcv.yml",
+                     "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_aaxa_to_kinect_rgb.yml"
                   },
                   "enabled" : true,
                   "mesh_res" : 1,
@@ -81,8 +81,8 @@
                "data" : {
                   "calibration" : {
                      "depth" : "calib/intrinsics_kinect.aruco.yml",
-                     "rgb" : "calib/intrinsics_logitech920.aruco__1.4x__.yml",
-                     "stereo" : "calib/extrinsics_logitech920_to_kinect__1.4x__.yml"
+                     "rgb" : "calib/intrinsics_logitech920.aruco.yml",
+                     "stereo" : "calib/extrinsics_logitech920_to_kinect.yml"
                   },
                   "interpolation_easing_dir" : [ 0.2000000029802322, 0, 1 ],
                   "interpolation_easing_loc" : [ 0.2000000029802322, 0, 1 ],
@@ -131,8 +131,7 @@
                   /*"render_table_angles" : false,*/
                   "render_surfaces" : false,
                   "threshold_table_far" : [ 2000, -2000, 2000 ],
-                  "threshold_table_near" : [ 5, -200, 200 ],
-                  "update_surfaces_debug" : true
+                  "threshold_table_near" : [ 5, -200, 200 ]
                },
                /*"threshold_table_angle" : [ 360, 0, 360 ]*/
                "id" : "depth_processing"

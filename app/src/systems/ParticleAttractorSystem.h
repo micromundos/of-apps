@@ -155,13 +155,6 @@ class ParticleAttractorSystem : public ECSsystem
       attr.force = attr_force;
       attr.radius = radius_from_knob(e);
 
-      if (attr_data == NULL) 
-      {
-        ofLogError("ParticleAttractorSystem")
-          << "update_attractor: attr_data is NULL";
-        return false;
-      }
-
       attr_data->attractor = attr; //copy
       return true;
     };

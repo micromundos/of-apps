@@ -5,8 +5,9 @@
 int main()
 {
   //ofAppGlutWindow window;
-  //ofSetupOpenGL(&window,1024,768,OF_WINDOW);
-  ofSetupOpenGL( 1024, 768, 
+  //ofSetupOpenGL(&window,100,100,OF_WINDOW);
+  ofSetupOpenGL( 
+      100,100, //tmp
       //OF_WINDOW );
       OF_WINDOW_UNDECORATED );
   ofRunApp(new ofApp());

@@ -23,4 +23,5 @@
 #include "FlowFieldRenderSystem.h"
 #include "RenderSurfacesSystem.h"
 #include "ParticleVolumeSensorSystem.h"
+#include "SyphonSystem.h"
 //dont remove this line
