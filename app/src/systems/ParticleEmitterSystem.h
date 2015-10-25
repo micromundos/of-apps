@@ -28,7 +28,6 @@ class ParticleEmitterSystem : public ECSsystem
 
       initial_fps_fisica = fisica->fps();
       emit_remainder = 0.0f;
-
     };
   
     virtual void removed(Entity &e)
@@ -50,13 +49,11 @@ class ParticleEmitterSystem : public ECSsystem
       emitter_data->draw_vel_scale = 0.0;
       emitter_data->draw_resolution = 3;
       emitter_data->draw_inited = false;
-
-
     };
 
     virtual void processEntity(Entity &e) 
     { 
-      Bloq* bloq = bloq_m.get(e)->bloq;
+      Bloq* bloq = bloq_m.get(e)->bloq();
 
       ParticleEmitterComponent* emitter_data = emitter_m.get(e);
       RenderComponent* render_data = component<RenderComponent>("output");
@@ -90,7 +87,7 @@ class ParticleEmitterSystem : public ECSsystem
       RenderComponent* render_data = component<RenderComponent>("output");
       ParticleEmitterComponent* emitter_data = emitter_m.get(e);
 
-      Bloq* bloq = bloq_m.get(e)->bloq;
+      Bloq* bloq = bloq_m.get(e)->bloq();
         
       ofVec2f& dir = bloq->dir_i;
       ofVec2f loc( bloq->loc_i);

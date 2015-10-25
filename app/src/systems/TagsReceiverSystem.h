@@ -65,9 +65,11 @@ class TagsReceiverSystem : public ECSsystem
         tags.clear();
 
         int ntags = m.getArgAsInt32( 0 );
-        for ( int i = 0; i < ntags; i++ ){
-          Tag t =make_tag( i, m );
-          if(t.corners.at(0).x > 0.0 && t.corners.at(0).y > 0.0){
+        for ( int i = 0; i < ntags; i++ )
+        {
+          Tag t = make_tag( i, m );
+          if ( t.corners.at(0).x > 0.0 && t.corners.at(0).y > 0.0 )
+          {
             tags.push_back( t );
           }
         }
@@ -117,7 +119,6 @@ class TagsReceiverSystem : public ECSsystem
         m.getArgAsFloat( idx("translation_y",i) ),
         m.getArgAsFloat( idx("translation_z",i) )
       );
-      
 
       //ofLogNotice("TagsReceiverSystem") << "\t\t" << "make tag ( idx " << i << " ) " << tag.str(); 
 

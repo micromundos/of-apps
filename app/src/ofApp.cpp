@@ -26,17 +26,15 @@ void ofApp::setup()
   system_factory.add_systems( ecs );
   ecs.init_systems();
 
-  component_factory = new PlabComponentFactory();
-
   int app_port = config.settings()["params"]["app"]["port"].asInt();
 
-  motor.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.motor()["motor"], app_port );
+  motor.init( ecs.get_world(), ((ComponentFactory*)(&component_factory)), config.motor()["motor"], app_port );
   motor.make_all();
 
-  game.init( ecs.get_world(), ((ComponentFactory*)component_factory), config.game()["game"], app_port );
+  game.init( ecs.get_world(), ((ComponentFactory*)(&component_factory)), config.game()["game"], app_port );
   game.make_all();
 
-  cml_data = ecs.require_component<CamaraLucidaComponent>("output");
+  cml_data = ecs.component<CamaraLucidaComponent>("output");
   ofAddListener( cml_data->cml->render_texture, this, &ofApp::render_texture );
 }
 
@@ -52,9 +50,17 @@ void ofApp::draw()
 
   //pipe render to camara lucida
   if ( cml_data->enabled )
+  {
+    TS_START("App cml.render"); 
     cml_data->cml->render();
+    TS_STOP("App cml.render"); 
+  }
   else
+  {
+    TS_START("App ecs.render"); 
     ecs.render();
+    TS_STOP("App ecs.render"); 
+  }
 
   if ( render_ecs_fps )
     ofDrawBitmapString( "ecs fps " + ofToString(ecs.framerate(),2), ofGetWidth()-140, ofGetHeight()-10);
@@ -62,7 +68,9 @@ void ofApp::draw()
 
 void ofApp::render_texture(ofEventArgs &args)
 {
+  TS_START("App cml.render_texture -> ecs.render"); 
   ecs.render();
+  TS_STOP("App cml.render_texture -> ecs.render"); 
 }
 
 void ofApp::exit()

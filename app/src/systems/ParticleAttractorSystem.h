@@ -26,12 +26,11 @@ class ParticleAttractorSystem : public ECSsystem
       particle_attractor_m.init( *world );
       bloq_m.init( *world ); 
       knob_m.init( *world );
-      
     };
 
     virtual void removed(Entity &e) 
     { 
-      ofNotifyEvent( AttractorEvents::removed, bloq_m.get(e)->bloq->id );
+      ofNotifyEvent( AttractorEvents::removed, bloq_m.get(e)->bloq()->id );
     };
 
     virtual void added(Entity &e) 
@@ -75,7 +74,7 @@ class ParticleAttractorSystem : public ECSsystem
 
       float r = radius_from_knob(e);
       float t = knob_m.get(e)->value;
-      Bloq* bloq = bloq_m.get(e)->bloq;
+      Bloq* bloq = bloq_m.get(e)->bloq();
       ofVec2f& dir = bloq->dir_i; 
       ofVec2f loc( bloq->loc_i );
       loc.x *= render_data->width;
@@ -143,34 +142,23 @@ class ParticleAttractorSystem : public ECSsystem
 
     bool update_attractor(Entity &e)
     {
+      Bloq* bloq = bloq_m.get(e)->bloq();
+
       ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
-      Attractor attr = attr_data->attractor; //copy
-      float attr_force = attr_data->force;
+      Attractor& attr = attr_data->attractor; 
 
-      Bloq* bloq = bloq_m.get(e)->bloq; 
-      if (bloq == NULL) 
-      {
-        ofLogError("ParticleAttractorSystem")
-          << "update_attractor: bloq is NULL";
-        return false;
-      }
-
-      ofLog() << "### "<< bloq->id;
-      string id = bloq->id;
-
-      attr.id = id;
+      attr.id = bloq->id;
       attr.loc.set( bloq->loc );
-      attr.force = attr_force;
+      attr.force = attr_data->force;
       attr.radius = radius_from_knob(e);
 
-      attr_data->attractor = attr; //copy
       return true;
     };
 
     //Attractor& make_attractor(Entity &e)
     //{
       //ParticleAttractorComponent* attr_data = particle_attractor_m.get(e);
-      //Bloq* bloq = bloq_m.get(e)->bloq; 
+      //Bloq* bloq = bloq_m.get(e)->bloq(); 
       //static Attractor attr;
       //attr.id = bloq->id;
       //attr.loc.set( bloq->loc );

@@ -347,8 +347,6 @@ class TagsSystem : public ECSsystem
         bloq->radians_i = ofLerpRadians(bloq->radians_i, radians, tags_data->interpolation_easing_radians );
       }
       
-      
-      
       return true;
     };
 

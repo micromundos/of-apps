@@ -49,7 +49,7 @@ class ParticleVolumeSensorSystem : public ECSsystem
 
       pvs_data->volume = 0.0;
 
-      Bloq* bloq = bloq_m.get(e)->bloq;
+      Bloq* bloq = bloq_m.get(e)->bloq();
       ofVec2f _bloc( bloq->loc );
       _bloc.x *= render_data->width;
       _bloc.y *= render_data->height;
@@ -82,7 +82,7 @@ class ParticleVolumeSensorSystem : public ECSsystem
 
       RenderComponent* render_data = component<RenderComponent>("output");
 
-      Bloq* bloq = bloq_m.get(e)->bloq;
+      Bloq* bloq = bloq_m.get(e)->bloq();
       ofVec2f loc( bloq->loc_i ); 
       loc.x *= render_data->width;
       loc.y *= render_data->height;

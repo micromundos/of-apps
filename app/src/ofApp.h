@@ -35,7 +35,7 @@ class ofApp : public ofBaseApp
     ECS ecs;
     ECmaker motor, game;
     Config config;
-    PlabComponentFactory* component_factory;
+    PlabComponentFactory component_factory;
     PlabSystemFactory system_factory;
 
     CamaraLucidaComponent* cml_data;

@@ -32,7 +32,7 @@ class KnobSystem : public ECSsystem
     virtual void processEntity(Entity &e) 
     {
       KnobComponent* knob_data = knob_m.get(e);
-      Bloq* bloq = bloq_m.get(e)->bloq;
+      Bloq* bloq = bloq_m.get(e)->bloq();
 
       float ang = bloq->radians_i / TWO_PI;
 
