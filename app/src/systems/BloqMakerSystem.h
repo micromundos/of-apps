@@ -60,53 +60,25 @@ class BloqMakerSystem : public ECSsystem
     ECmaker bloq_maker;
     PlabComponentFactory* component_factory;
   
-
-    //{ bloq_id : entity_id }
-    map< string,int > bloqs_by_id;
-
-
     void init( ConfigComponent* config_data )
     {
-      bloq_maker.init( world, ((ComponentFactory*)component_factory), config_data->config.game()["bloqs"], config_data->config.settings()["params"]["app"]["port"].asInt() );
+      bloq_maker.init( world, 
+          ((ComponentFactory*)component_factory), 
+          config_data->config.game()["bloqs"], 
+          config_data->config.settings()["params"]["app"]["port"].asInt() );
 
-      ofAddListener( BloqEvents::added, this, &BloqMakerSystem::bloq_added, OF_EVENT_ORDER_APP );
-      ofAddListener( BloqEvents::updated, this, &BloqMakerSystem::bloq_updated, OF_EVENT_ORDER_APP );
-      ofAddListener( BloqEvents::removed, this, &BloqMakerSystem::bloq_removed, OF_EVENT_ORDER_APP );
-
+      ofAddListener( BloqEvents::added, this, &BloqMakerSystem::make_bloq_entity );
+      ofAddListener( BloqEvents::updated, this, &BloqMakerSystem::update_bloq_entity );
+      ofAddListener( BloqEvents::removed, this, &BloqMakerSystem::remove_bloq_entity );
     };
 
-
-    void bloq_added( Bloq& bloq )
-    {
-      //ofLogNotice("BloqMakerSystem") 
-        //<< "bloq_added: " 
-        //<< bloq.id;
-
-      make_entity( bloq );
-    };
-
-    void bloq_updated( Bloq& bloq )
-    {
-      update_entity( bloq );
-    };
-
-    void bloq_removed( string& bloq_id )
-    {
-      //ofLogNotice("BloqMakerSystem") 
-        //<< "bloq_removed: " 
-        //<< bloq_id;
-      remove_entity( bloq_id );
-     
-    };
- 
-
-    void make_entity( Bloq& bloq )
+    void make_bloq_entity( Bloq& bloq )
     {
       string bloq_id = bloq.id;
 
       if ( bloq_maker.has_entity( bloq_id ) )
       {
-        ofLogWarning("BloqMakerSystem") << "make_entity by id/tag " << bloq_id << ": entity already exists";
+        ofLogWarning("BloqMakerSystem") << "make_bloq_entity by id/tag " << bloq_id << ": entity already exists";
         return;
       }
 
@@ -116,45 +88,33 @@ class BloqMakerSystem : public ECSsystem
 
       //add default bloq component
       ECScomponent* bloq_comp = component_factory->make( "bloq" );
-      ((BloqComponent*)bloq_comp)->update( &bloq );
+      ((BloqComponent*)bloq_comp)->update( bloq );
       e->addComponent( bloq_comp );
       e->refresh();
-
-      bloqs_by_id[ bloq_id ] = e->getId();
-      
     };  
 
-    void remove_entity( string bloq_id )
+    void remove_bloq_entity( string& bloq_id )
     {
-      bloq_maker.remove_entity( bloq_id );
-
-      if ( ! has_entity( bloq_id ) )
-      {
-        ofLogWarning("BloqMakerSystem") << "remove_entity by bloq id " << bloq_id << ": entity not found"; 
+      if ( !bloq_maker.has_entity( bloq_id ) )
         return;
-      }
-
-      bloqs_by_id.erase(bloq_id);
+      bloq_maker.remove_entity( bloq_id );
     };
 
-    void update_entity( Bloq& bloq )
+    void update_bloq_entity( Bloq& bloq )
     {
       string bloq_id = bloq.id;
 
-      if ( ! has_entity( bloq_id ) )
+      artemis::Entity* e = bloq_maker.get_entity( bloq_id );
+
+      if ( e == NULL )
+      {
+        //ofLogWarning("BloqMakerSystem") << "update_bloq_entity by bloq id " << bloq_id << ": entity not found"; 
         return;
+      }
 
-      artemis::Entity& e = entities()->getEntity( bloqs_by_id[ bloq_id ] );
+      BloqComponent* bloq_comp = (BloqComponent*)(e->getComponent<BloqComponent>());
 
-      BloqComponent* bloq_comp = (BloqComponent*)e.getComponent<BloqComponent>();
-
-      bloq_comp->update( &bloq );
-    
-    };
-
-    bool has_entity( string bloq_id )
-    {
-      return bloqs_by_id.find( bloq_id ) != bloqs_by_id.end(); 
+      bloq_comp->update( bloq );
     };
 
 };

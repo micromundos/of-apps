@@ -4,7 +4,7 @@
 
 struct Attractor
 {
-  string id;
+  string id = "";
   ofVec2f loc;
   float force;
   float radius;

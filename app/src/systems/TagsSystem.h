@@ -1,3 +1,8 @@
+/*
+ * it takes tags and makes bloqs
+ * tag -> bloq converter
+ */
+
 #pragma once
 
 #include <Artemis/Artemis.h>
@@ -95,16 +100,14 @@ class TagsSystem : public ECSsystem
         if ( bloq == NULL )
         {
           shared_ptr<Bloq> _bloq( new Bloq() );
-          update_bloq( e, _bloq.get(), tag,true );
+          update_bloq( e, _bloq.get(), tag, true );
           bloqs.push_back( _bloq );
           ofNotifyEvent( BloqEvents::added, *_bloq );
-          
         }
 
         else if ( update_bloq( e, bloq, tag ) )
         {
            ofNotifyEvent( BloqEvents::updated, *bloq );
-          
         }
       } 
 
@@ -343,8 +346,6 @@ class TagsSystem : public ECSsystem
         bloq->dir_i += (tdir - bloq->dir_i) * tags_data->interpolation_easing_dir;
         bloq->radians_i = ofLerpRadians(bloq->radians_i, radians, tags_data->interpolation_easing_radians );
       }
-      
-      
       
       return true;
     };

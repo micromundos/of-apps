@@ -52,37 +52,44 @@ class TagSenderSystem : public ECSsystem
  
     void bloq_added( Bloq& bloq )
     {
-      send_osc(bloq,"/add");
+      send_osc( bloq, "/add" );
     };
     
     void bloq_updated( Bloq& bloq )
     {
-      send_osc(bloq,"/update");
+      send_osc( bloq, "/update" );
     };
     
     void bloq_removed( string& bloq_id )
     {
-      send_osc(bloq_id);
+      send_osc_remove( bloq_id );
     };
   
     //  osc
   
-    void send_osc(Bloq& bloq,string _address)
+    void send_osc( Bloq& bloq, string _address )
     {
       ofxOscMessage m;
-      m.setAddress(_address);
-      m.addStringArg(bloq.id);
-      m.addFloatArg(bloq.loc.x);
-      m.addFloatArg(bloq.loc.y);
-      m.addFloatArg(bloq.radians);
+      m.setAddress( _address );
+
+      m.addStringArg( bloq.id );
+      m.addFloatArg( bloq.loc.x );
+      m.addFloatArg( bloq.loc.y );
+      m.addFloatArg( bloq.radians );
+
+      //TODO interpolated
+      //m.addFloatArg( bloq.loc_i.x );
+      //m.addFloatArg( bloq.loc_i.y );
+      //m.addFloatArg( bloq.radians_i );
+
       osc_sender.sendMessage(m);
     };
     
-    void send_osc(string _id)
+    void send_osc_remove( string bloq_id )
     {
       ofxOscMessage m;
       m.setAddress("/remove");
-      m.addStringArg(_id);
+      m.addStringArg( bloq_id );
       osc_sender.sendMessage(m);
     };
 

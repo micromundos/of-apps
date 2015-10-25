@@ -7,20 +7,25 @@
 
 class BloqComponent : public ECScomponent
 {
+  private:
+    Bloq _bloq;
+
   public:
 
-    Bloq* bloq;
+    BloqComponent(string _id) : ECScomponent(_id) 
+    {};
 
-    BloqComponent(string _id) : ECScomponent(_id) {};
+    //~BloqComponent()
+    //{};
 
-    ~BloqComponent()
+    Bloq* bloq()
     {
-      this->bloq = NULL;
+      return &_bloq;
     };
 
-    void update( Bloq* bloq )
+    void update( Bloq& bloq )
     {
-      this->bloq = bloq;
+      this->_bloq = bloq; //copy
     };
 };
 
