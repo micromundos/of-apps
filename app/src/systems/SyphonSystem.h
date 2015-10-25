@@ -46,6 +46,8 @@ class SyphonSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
+      if ( !check_time(e) ) return;
+
       SyphonComponent* syphon_data = syphon_m.get(e);
       if ( ! syphon_data->send ) return;
 
@@ -76,6 +78,20 @@ class SyphonSystem : public ECSsystem
     ofxSyphonClient client;
 
     ComponentMapper<SyphonComponent> syphon_m;
+
+    bool check_time(Entity &e) 
+    {
+      SyphonComponent* syphon_data = syphon_m.get(e);
+      float micros_per_update = 1000000.0/syphon_data->fps;
+      unsigned long long now = ofGetElapsedTimeMicros();
+      unsigned long long dt = now - syphon_data->prev;
+
+      if ( dt < micros_per_update )
+        return false;
+
+      syphon_data->prev = now;
+      return true;
+    }
 
 };
 

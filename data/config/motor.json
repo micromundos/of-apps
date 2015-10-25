@@ -18,7 +18,8 @@
                   "dst" : "Main Camera",
                   "receive" : false,
                   "send" : false,
-                  "src" : "Plab"
+                  "src" : "Plab",
+                  "fps" : [ 10, 0, 30 ]
                },
                "id" : "syphon"
             }
