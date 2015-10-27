@@ -84,7 +84,7 @@ class CamaraLucidaSystem : public ECSsystem
 
     virtual void processEntity(Entity &e) 
     {
-      DepthComponent* depth_data = require_component<DepthComponent>("input");
+      DepthComponent* depth_data = component<DepthComponent>("input");
 
       cml_data->cml->depth_camera()->xoff = cml_data->xoff;
 
@@ -135,7 +135,7 @@ class CamaraLucidaSystem : public ECSsystem
     {
       if (cml_data == NULL) return;
 
-      DepthComponent* depth_data = require_component<DepthComponent>("input");
+      DepthComponent* depth_data = component<DepthComponent>("input");
 
       float far_clamp = cml_data->cml->depth_camera()->far_clamp;
       float epsilon = std::numeric_limits<float>::epsilon();

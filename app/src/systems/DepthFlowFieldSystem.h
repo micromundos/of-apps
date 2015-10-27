@@ -81,7 +81,7 @@ class DepthFlowFieldSystem : public ECSsystem
 
       TS_START("DepthFlowFieldSystem render");
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      RenderComponent* render_data = component<RenderComponent>("output");
 
       //entradas(e).get().draw(0,0,render_data->width, render_data->height );
 

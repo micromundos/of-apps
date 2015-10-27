@@ -20,7 +20,7 @@ class ParticleBlobsContainersSystem : public ECSsystem
     virtual void initialize() 
     {
       p_blob_container_m.init(*world);
-      fisica = require_system<FisicaSystem>();
+      fisica = system<FisicaSystem>();
       mesh.setMode(OF_PRIMITIVE_LINES);
     }; 
 
@@ -31,8 +31,8 @@ class ParticleBlobsContainersSystem : public ECSsystem
     {
       mesh.clear();
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
-      BlobsComponent* blobs_data = require_component<BlobsComponent>("input");
+      RenderComponent* render_data = component<RenderComponent>("output");
+      BlobsComponent* blobs_data = component<BlobsComponent>("input");
       vector<ofPolyline>& blobs = blobs_data->blobs;
 
       for ( int i = 0; i < blob_bodies.size(); i++ )

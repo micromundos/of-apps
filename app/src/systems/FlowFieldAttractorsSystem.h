@@ -56,7 +56,7 @@ class FlowFieldAttractorsSystem : public ECSsystem
       }
       inited = true;
 
-      depth_data = require_component<DepthComponent>("input");
+      depth_data = component<DepthComponent>("input");
 
       FlowFieldAttractorsComponent* ff_attr_data = ff_attractors_m.get(e);
 
@@ -90,7 +90,7 @@ class FlowFieldAttractorsSystem : public ECSsystem
 
       if ( ! ff_attr_data->render ) return;
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      RenderComponent* render_data = component<RenderComponent>("output");
 
       int rw = render_data->width;
       int rh = render_data->height;

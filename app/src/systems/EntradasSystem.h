@@ -114,7 +114,7 @@ class EntradasSystem : public ECSsystem
 
       TS_START("EntradasSystem render");
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      RenderComponent* render_data = component<RenderComponent>("output");
       int rw = render_data->width;
       int rh = render_data->height;
 

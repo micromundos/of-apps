@@ -24,8 +24,8 @@ class ParticleFlowFieldSystem : public ECSsystem
     virtual void initialize() 
     {
       particle_flowfield_m.init( *world );
-      ps = require_system<ParticleSystem>();
-      fisica = require_system<FisicaSystem>();
+      ps = system<ParticleSystem>();
+      fisica = system<FisicaSystem>();
       ff_data = NULL;
       render_data = NULL;
     };
@@ -38,8 +38,8 @@ class ParticleFlowFieldSystem : public ECSsystem
 
     virtual void added(Entity &e) 
     {
-      ff_data = require_component<FlowFieldComponent>("ff");
-      render_data = require_component<RenderComponent>("output");
+      ff_data = component<FlowFieldComponent>("ff");
+      render_data = component<RenderComponent>("output");
     };
 
     virtual void processEntity(Entity &e) 

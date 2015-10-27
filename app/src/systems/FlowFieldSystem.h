@@ -52,8 +52,8 @@ class FlowFieldSystem : public ECSsystem
       }
       entity = &e;
 
-      depth_data = require_component<DepthComponent>("input");
-      render_data = require_component<RenderComponent>("output");
+      depth_data = component<DepthComponent>("input");
+      render_data = component<RenderComponent>("output");
 
       float scale = ff_m.get(e)->scale;
       int w = depth_data->width * scale;
