@@ -41,7 +41,7 @@ class DepthProcessingSystem : public ECSsystem
       } 
       entity = &e;
 
-      cml_data = require_component<CamaraLucidaComponent>("output");
+      cml_data = component<CamaraLucidaComponent>("output");
 
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e);
       DepthComponent* depth_data = depth_m.get(e);
@@ -235,7 +235,7 @@ class DepthProcessingSystem : public ECSsystem
 
       DepthProcessingComponent* depth_proc_data = depth_processing_m.get(e);
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      RenderComponent* render_data = component<RenderComponent>("output");
       int rw = render_data->width;
       int rh = render_data->height;
 
