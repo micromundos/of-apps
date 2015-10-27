@@ -97,7 +97,7 @@ class Ps3EyeSystem : public ECSsystem
 
       TS_START("Ps3EyeSystem render");
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      RenderComponent* render_data = component<RenderComponent>("output");
 
       ofPushStyle();
       ofSetColor(255); 

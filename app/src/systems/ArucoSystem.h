@@ -137,7 +137,7 @@ class ArucoSystem : public ECSsystem
 
       if ( aruco_data->render )
       {
-        RenderComponent* render_data = require_component<RenderComponent>("output");
+        RenderComponent* render_data = component<RenderComponent>("output");
 
         //aruco.draw2d();
         //aruco.draw3d();

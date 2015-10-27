@@ -49,7 +49,7 @@ class TableCalibSystem : public ECSsystem
             depth_data->height )
         .on( "update", this, &TableCalibSystem::update_height_map );
 
-      cml_data = require_component<CamaraLucidaComponent>("output");
+      cml_data = component<CamaraLucidaComponent>("output");
       ofAddListener( cml_data->cml->render_3d, this, &TableCalibSystem::render_3d );
       //ofAddListener( ofEvents().mousePressed, this, &TableCalibSystem::mousePressed );
       //midx = 0;
@@ -257,7 +257,7 @@ class TableCalibSystem : public ECSsystem
 
     void find_triangles(Entity &e)
     {
-      CamaraLucidaSystem* cml_sys = require_system<CamaraLucidaSystem>();
+      CamaraLucidaSystem* cml_sys = system<CamaraLucidaSystem>();
 
       DepthComponent* depth_data = depth_m.get(e);
       TableCalibComponent* table_calib_data = table_calib_m.get(e);
@@ -401,8 +401,8 @@ class TableCalibSystem : public ECSsystem
 
     void update_coordmap()
     {
-      DepthComponent* depth_data = require_component<DepthComponent>("input");
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      DepthComponent* depth_data = component<DepthComponent>("input");
+      RenderComponent* render_data = component<RenderComponent>("output");
       depth2screen.set( 
         depth_data->width, depth_data->height,
         render_data->width, render_data->height 

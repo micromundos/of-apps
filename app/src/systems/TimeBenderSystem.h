@@ -24,7 +24,7 @@ class TimeBenderSystem : public ECSsystem
       bloq_m.init( *world );
       knob_m.init( *world );
 
-      fisica = require_system<FisicaSystem>();
+      fisica = system<FisicaSystem>();
       initial_fps_fisica = fisica->fps();
       //initial_fps_of = ofGetFrameRate();
     };

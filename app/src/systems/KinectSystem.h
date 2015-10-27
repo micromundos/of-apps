@@ -114,9 +114,9 @@ class KinectSystem : public ECSsystem
       DepthComponent* depth_data = depth_m.get(e);
       ofxKinect& kinect = depth_data->kinect;
 
-      CamaraLucidaComponent* cml_data = require_component<CamaraLucidaComponent>("output");
+      CamaraLucidaComponent* cml_data = component<CamaraLucidaComponent>("output");
 
-      RenderComponent* render_data = require_component<RenderComponent>("output");
+      RenderComponent* render_data = component<RenderComponent>("output");
       int w = render_data->width;
       int h = render_data->height;
 
