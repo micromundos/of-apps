@@ -36,7 +36,9 @@
                   "calibration" : {
                      "kinect_intrinsics_file" : "calib/intrinsics_kinect.ofxcv.yml",
                      "projector_intrinsics_file" : "calib/intrinsics_proj_aaxa.ofxcv.yml",
-                     "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_aaxa_to_kinect_rgb.yml"
+                     "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_aaxa_to_kinect_rgb.yml",
+                     "tweak_file" : "calib/cml_tweak.yml",
+                     "unity_calib_file" : "calib/unity_cml.yml"
                   },
                   "enabled" : true,
                   "mesh_res" : 1,
@@ -47,6 +49,7 @@
                   "tweak_load" : false,
                   "tweak_reset" : false,
                   "tweak_save" : false,
+                  "unity_calib_save" : false,
                   "xoff" : [ 8, -10, 10 ]
                },
                "id" : "camara_lucida"

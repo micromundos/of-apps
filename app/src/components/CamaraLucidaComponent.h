@@ -21,6 +21,10 @@ class CamaraLucidaComponent : public ECScomponent
     ofParameter<bool> tweak_save;
     ofParameter<bool> tweak_load;
 
+    ofParameter<bool> unity_calib_save;
+    string tweak_file;
+    string unity_calib_file;
+
     CamaraLucidaComponent(string _id) : ECScomponent(_id) 
     { 
       cml = NULL; 
@@ -40,9 +44,13 @@ class CamaraLucidaComponent : public ECScomponent
       param( render_background, "render_background" );
       param( render_hue_tex, "render_hue_tex" );
 
+      param( unity_calib_save, "unity_calib_save" );
       param( tweak_reset, "tweak_reset" );
       param( tweak_save, "tweak_save" );
       param( tweak_load, "tweak_load" );
+
+      tweak_file = d["calibration"]["tweak_file"].asString();
+      unity_calib_file = d["calibration"]["unity_calib_file"].asString();
 
       init_cml( 
         d.get( "tex_width", 1024 ).asInt(), 
