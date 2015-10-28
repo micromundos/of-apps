@@ -44,8 +44,7 @@ class TagsSystem : public ECSsystem
         return;
       }
       entity = &e;
-
-      TagsComponent* tags_data = tags_m.get(e);
+      tags_data = tags_m.get(e);
       
       ofxCv::Calibration calib_rgb;
       ofxCv::Calibration calib_depth;
@@ -70,13 +69,13 @@ class TagsSystem : public ECSsystem
     {
       tweak_dispose(e);
       entity = NULL;
+      tags_data = NULL;
     };
 
     virtual void processEntity(Entity &e) 
     {
       TS_START("TagsSystem");
 
-      TagsComponent* tags_data = tags_m.get(e);
       TagsReceiverComponent* tags_receiver_data = tags_receiver_m.get(e);
 
       vector< shared_ptr<Bloq> >& bloqs = tags_data->bloqs;
@@ -120,7 +119,6 @@ class TagsSystem : public ECSsystem
 
     virtual void renderEntity(Entity &e)
     {
-      TagsComponent* tags_data = tags_m.get(e);
       TagsReceiverComponent* tags_receiver_data = tags_receiver_m.get(e);
 
       if ( tags_data->tweak_render )
@@ -179,14 +177,67 @@ class TagsSystem : public ECSsystem
       ofPopStyle();
     };
 
+    void unity_calib_save(bool& enabled)
+    {
+      if (!enabled) return;
+
+      cout << "\n" << endl;
+      ofLogNotice("TagsSystem")
+        << "save unity calib to " 
+        << tags_data->unity_calib_file;
+
+      /*
+       * from ofxQuadWarp::getMatrix:
+       *
+       * we need to copy these values
+       * from the 3x3 2D openCV matrix which is row ordered
+       * 
+       * ie:   [0][1][2] x
+       *       [3][4][5] y
+       *       [6][7][8] w
+       *
+       * to openGL's 4x4 3D column ordered matrix
+       *        x  y  z  w   
+       * ie:   [0][3][ ][6]
+       *       [1][4][ ][7]
+       *       [ ][ ][ ][ ]
+       *       [2][5][ ][9]
+       *           
+       * ofMatrix4x4 matrixTemp;
+       * matrixTemp.getPtr()[0]  = mat[0];
+       * matrixTemp.getPtr()[4]  = mat[1];
+       * matrixTemp.getPtr()[12] = mat[2];
+       * matrixTemp.getPtr()[1]  = mat[3];
+       * matrixTemp.getPtr()[5]  = mat[4];
+       * matrixTemp.getPtr()[13] = mat[5];	
+       * matrixTemp.getPtr()[3]  = mat[6];
+       * matrixTemp.getPtr()[7]  = mat[7];
+       * matrixTemp.getPtr()[15] = mat[8];
+       */
+
+      cv::FileStorage fs( ofToDataPath(tags_data->unity_calib_file, false), cv::FileStorage::WRITE );  
+
+      float *H = tweak_H.getPtr();
+      fs << "tags_homography_matrix_0" << H[0];
+      fs << "tags_homography_matrix_1" << H[4];
+      fs << "tags_homography_matrix_2" << H[12];
+      fs << "tags_homography_matrix_3" << H[1];
+      fs << "tags_homography_matrix_4" << H[5];
+      fs << "tags_homography_matrix_5" << H[13];
+      fs << "tags_homography_matrix_6" << H[3];
+      fs << "tags_homography_matrix_7" << H[7];
+      fs << "tags_homography_matrix_8" << H[15];
+    };
+
     void tweak_load(bool& enabled)
     {
       if (enabled) 
       {
         cout << "\n" << endl;
         ofLogNotice("TagsSystem")
-          << "load tweak from " << tweak_file;
-        warper.load( tweak_file );
+          << "load tweak from " 
+          << tags_data->tweak_file;
+        warper.load( tags_data->tweak_file );
       }
     };
 
@@ -195,8 +246,9 @@ class TagsSystem : public ECSsystem
       if (enabled) 
       {
         ofLogNotice("TagsSystem")
-          << "save tweak to " << tweak_file;
-        warper.save( tweak_file );
+          << "save tweak to " 
+          << tags_data->tweak_file;
+        warper.save( tags_data->tweak_file );
       }
     };
 
@@ -218,6 +270,7 @@ class TagsSystem : public ECSsystem
   private: 
 
     Entity* entity;
+    TagsComponent* tags_data;
 
     ComponentMapper<TagsComponent> tags_m;
     ComponentMapper<TagsReceiverComponent> tags_receiver_m;
@@ -229,7 +282,6 @@ class TagsSystem : public ECSsystem
 
     ofxQuadWarp warper;
     ofMatrix4x4 tweak_H;
-    string tweak_file;
 
     ofVec2f up2;
     ofVec3f up3;
@@ -238,8 +290,7 @@ class TagsSystem : public ECSsystem
 
     void tweak_dispose(Entity &e)
     {
-      TagsComponent* tags_data = tags_m.get(e);
-
+      tags_data->unity_calib_save.removeListener( this, &TagsSystem::unity_calib_save );
       tags_data->tweak_load.removeListener( this, &TagsSystem::tweak_load );
       tags_data->tweak_save.removeListener( this, &TagsSystem::tweak_save );
       tags_data->tweak_reset.removeListener( this, &TagsSystem::tweak_reset );
@@ -248,10 +299,7 @@ class TagsSystem : public ECSsystem
 
     void tweak_init(Entity &e)
     {
-      tweak_file = "calib/tag_tweak.xml";
-
-      TagsComponent* tags_data = tags_m.get(e);
-
+      tags_data->unity_calib_save.addListener( this, &TagsSystem::unity_calib_save );
       tags_data->tweak_load.addListener( this, &TagsSystem::tweak_load );
       tags_data->tweak_save.addListener( this, &TagsSystem::tweak_save );
       tags_data->tweak_reset.addListener( this, &TagsSystem::tweak_reset );
@@ -332,7 +380,6 @@ class TagsSystem : public ECSsystem
 
       // interpolation
 
-      TagsComponent* tags_data = tags_m.get(e);
       if ( is_new )
       {
         bloq->loc_i.set(bloq->loc);
