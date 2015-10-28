@@ -39,9 +39,12 @@ class SyphonSystem : public ECSsystem
       inited = true;
 
       SyphonComponent* syphon_data = syphon_m.get(e);
-      server.setName( syphon_data->src );
-      client.setup();
-      client.set( syphon_data->dst, "Unity" );
+
+      syphon_data->server_surfaces.setName( syphon_data->sender_server_surfaces );
+      syphon_data->server_depth_map.setName( syphon_data->sender_server_depth_map );
+
+      syphon_data->client.setup();
+      syphon_data->client.set( syphon_data->receiver_server, syphon_data->receiver_app );
     }; 
 
     virtual void processEntity(Entity &e) 
@@ -55,8 +58,14 @@ class SyphonSystem : public ECSsystem
       if ( ! depth_data->dirty ) return;
 
       TS_START("SyphonSystem send"); 
+
       DepthProcessingComponent* depth_proc_data = component<DepthProcessingComponent>("input");
-      server.publishTexture( &depth_proc_data->surfaces().get_debug().get() );
+      CamaraLucidaComponent* cml_data = component<CamaraLucidaComponent>("output");
+
+      syphon_data->server_surfaces.publishTexture( &(depth_proc_data->surfaces().get_debug().get()) );
+
+      syphon_data->server_depth_map.publishTexture( &(cml_data->cml->depth_camera()->get_float_tex_ref()) );
+
       TS_STOP("SyphonSystem send");
     }; 
 
@@ -67,15 +76,13 @@ class SyphonSystem : public ECSsystem
 
       TS_START("SyphonSystem receive"); 
       RenderComponent* render_data = component<RenderComponent>("output");
-      client.draw( 0, 0, render_data->width, render_data->height );
+      syphon_data->client.draw( 0, 0, render_data->width, render_data->height );
       TS_STOP("SyphonSystem receive");
     };
 
   private:
 
-    bool inited;
-    ofxSyphonServer server;
-    ofxSyphonClient client;
+    bool inited; 
 
     ComponentMapper<SyphonComponent> syphon_m;
 

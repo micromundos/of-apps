@@ -15,10 +15,16 @@
          "components" : [
             {
                "data" : {
-                  "dst" : "Main Camera",
+                  "receiver" : {
+                    "server" : "Main Camera",
+                    "app" : "Unity"
+                  },
+                  "sender" : {
+                    "server_surfaces" : "micromundos_surfaces",
+                    "server_depth_map" : "micromundos_depth_map"
+                  },
                   "receive" : true,
-                  "send" : true,
-                  "src" : "Plab",
+                  "send" : true, 
                   "fps" : [ 10, 0, 30 ]
                },
                "id" : "syphon"
