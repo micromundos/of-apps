@@ -11,6 +11,7 @@ class TagsComponent : public ECScomponent
 
     vector< shared_ptr<Bloq> > bloqs;
 
+    ofParameter<bool> unity_calib_save;
     ofParameter<bool> tweak_load;
     ofParameter<bool> tweak_save;
     ofParameter<bool> tweak_reset;
@@ -25,6 +26,8 @@ class TagsComponent : public ECScomponent
     string calib_rgb_file;
     string calib_depth_file;
     string calib_stereo_file;
+    string tweak_file;
+    string unity_calib_file;
 
     TagsComponent(string _id) : ECScomponent(_id) {};
 
@@ -34,6 +37,7 @@ class TagsComponent : public ECScomponent
 
       param( render, "render" );
 
+      param( unity_calib_save, "unity_calib_save" );
       param( tweak_load, "tweak_load" );
       param( tweak_save, "tweak_save" );
       param( tweak_reset, "tweak_reset" );
@@ -46,6 +50,8 @@ class TagsComponent : public ECScomponent
       calib_rgb_file = d["calibration"]["rgb"].asString();
       calib_depth_file = d["calibration"]["depth"].asString();
       calib_stereo_file = d["calibration"]["stereo"].asString();
+      tweak_file = d["calibration"]["tweak_file"].asString();
+      unity_calib_file = d["calibration"]["unity_calib_file"].asString();
     };
 
 };
