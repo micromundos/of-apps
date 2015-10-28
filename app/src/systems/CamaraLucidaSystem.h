@@ -41,6 +41,7 @@ class CamaraLucidaSystem : public ECSsystem
         ofRemoveListener(ofEvents().keyReleased, this, &CamaraLucidaSystem::keyReleased);
       }
 
+      cml_data->unity_calib_save.removeListener( this, &CamaraLucidaSystem::unity_calib_save );
       cml_data->tweak_load.removeListener( this, &CamaraLucidaSystem::tweak_load );
       cml_data->tweak_save.removeListener( this, &CamaraLucidaSystem::tweak_save );
       cml_data->tweak_reset.removeListener( this, &CamaraLucidaSystem::tweak_reset );
@@ -248,16 +249,83 @@ class CamaraLucidaSystem : public ECSsystem
     ofVec3f tweak_ini_left;
     float tweak_T_off;
     float tweak_R_off;
-    float tweak_frustum_off;
-    string tweak_file;
+    float tweak_frustum_off; 
 
     bool pressed[512];
 
     ComponentMapper<CamaraLucidaComponent> camara_lucida_m;
     ComponentMapper<RenderComponent> render_m;
 
+    void unity_calib_save(bool& enabled)
+    {
+      if (!enabled) return;
+
+      ofLogNotice("CamaraLucidaSystem")
+        << "save unity calib to " << cml_data->unity_calib_file;
+
+      cml::OpticalDevice* proj = cml_data->cml->projector(); 
+
+      cv::FileStorage fs( ofToDataPath(cml_data->unity_calib_file, false), cv::FileStorage::WRITE );  
+
+      cml::DepthCamera* depth_cam = cml_data->cml->depth_camera();
+
+      save_optical_device( proj, "proj", fs );
+      save_optical_device( depth_cam, "depth_cam", fs ); 
+
+      fs << "depth_cam_xoff" << depth_cam->xoff;
+      fs << "depth_cam_far_clamp" << depth_cam->far_clamp;
+    };
+
+    void save_optical_device( cml::OpticalDevice* device, string name, cv::FileStorage& fs ) 
+    {
+      cml::OpticalDevice::Frustum& f = device->gl_frustum();
+      float* KK = device->gl_projection_matrix();
+      float* RT = device->gl_modelview_matrix();
+
+      fs << (name+"_width") << device->width;
+      fs << (name+"_height") << device->height;
+      fs << (name+"_near") << device->near;
+      fs << (name+"_far") << device->far;
+      fs << (name+"_cx") << device->cx;
+      fs << (name+"_cy") << device->cy;
+      fs << (name+"_fx") << device->fx;
+      fs << (name+"_fy") << device->fy;
+
+      fs << (name+"_frustum_left") << f.left;
+      fs << (name+"_frustum_right") << f.right;
+      fs << (name+"_frustum_bottom") << f.bottom;
+      fs << (name+"_frustum_top") << f.top;
+
+      fs << (name+"_loc_x") << device->loc().x;
+      fs << (name+"_loc_y") << device->loc().y;
+      fs << (name+"_loc_z") << device->loc().z;
+
+      fs << (name+"_fwd_x") << device->fwd().x;
+      fs << (name+"_fwd_y") << device->fwd().y;
+      fs << (name+"_fwd_z") << device->fwd().z;
+
+      fs << (name+"_up_x") << device->up().x;
+      fs << (name+"_up_y") << device->up().y;
+      fs << (name+"_up_z") << device->up().z;
+
+      fs << (name+"_trg_x") << device->trg().x;
+      fs << (name+"_trg_y") << device->trg().y;
+      fs << (name+"_trg_z") << device->trg().z;
+
+      fs << (name+"_left_x") << device->left().x;
+      fs << (name+"_left_y") << device->left().y;
+      fs << (name+"_left_z") << device->left().z;
+
+      for (int i = 0; i < 16; i++)
+        fs << (name+"_projection_matrix_"+ofToString(i)) << KK[i];
+
+      for (int i = 0; i < 16; i++)
+        fs << (name+"_modelview_matrix_"+ofToString(i)) << RT[i];
+    };
+
     void tweak_init()
     {
+      cml_data->unity_calib_save.addListener( this, &CamaraLucidaSystem::unity_calib_save );
       cml_data->tweak_load.addListener( this, &CamaraLucidaSystem::tweak_load );
       cml_data->tweak_save.addListener( this, &CamaraLucidaSystem::tweak_save );
       cml_data->tweak_reset.addListener( this, &CamaraLucidaSystem::tweak_reset );
@@ -275,8 +343,6 @@ class CamaraLucidaSystem : public ECSsystem
       tweak_R_off = 0.1;
       tweak_T_off = 0.0005;
 
-      tweak_file = "calib/cml_tweak.yml";
-
       bool b = true;
       tweak_load(b);
     };
@@ -286,12 +352,13 @@ class CamaraLucidaSystem : public ECSsystem
       if (!enabled) return;
 
       cml::OpticalDevice* proj = cml_data->cml->projector();
-      cml::OpticalDevice::Frustum& f = proj->gl_frustum();
 
-      f.left = tweak_ini_frustum.left;
-      f.right = tweak_ini_frustum.right;
-      f.bottom = tweak_ini_frustum.bottom;
-      f.top = tweak_ini_frustum.top;
+      proj->set_frustum(
+        tweak_ini_frustum.left,
+        tweak_ini_frustum.right,
+        tweak_ini_frustum.bottom,
+        tweak_ini_frustum.top
+      );
 
       proj->loc( tweak_ini_loc );
       proj->fwd( tweak_ini_fwd );
@@ -305,12 +372,12 @@ class CamaraLucidaSystem : public ECSsystem
       if (!enabled) return;
 
       ofLogNotice("CamaraLucidaSystem")
-        << "save tweak to " << tweak_file;
+        << "save tweak to " << cml_data->tweak_file;
 
       cml::OpticalDevice* proj = cml_data->cml->projector();
       cml::OpticalDevice::Frustum& f = proj->gl_frustum();
 
-      cv::FileStorage fs( ofToDataPath(tweak_file, false), cv::FileStorage::WRITE ); 
+      cv::FileStorage fs( ofToDataPath(cml_data->tweak_file, false), cv::FileStorage::WRITE ); 
 
       fs << "proj_frustum_left" << f.left;
       fs << "proj_frustum_right" << f.right;
@@ -343,23 +410,24 @@ class CamaraLucidaSystem : public ECSsystem
       if (!enabled) return;
 
       ofLogNotice("CamaraLucidaSystem")
-        << "load tweak from " << tweak_file;
+        << "load tweak from " << cml_data->tweak_file;
 
-      cv::FileStorage fs( ofToDataPath(tweak_file, false), cv::FileStorage::READ ); 
+      cv::FileStorage fs( ofToDataPath(cml_data->tweak_file, false), cv::FileStorage::READ ); 
 
       if ( !fs.isOpened() )
       {
-        ofLogError("CamaraLucidaSystem") << "failed to load projector tweak file " << tweak_file;
+        ofLogError("CamaraLucidaSystem") << "failed to load projector tweak file " << cml_data->tweak_file;
         return false;
       }
 
       cml::OpticalDevice* proj = cml_data->cml->projector();
-      cml::OpticalDevice::Frustum& f = proj->gl_frustum(); 
 
-      f.left = fs["proj_frustum_left"];
-      f.right = fs["proj_frustum_right"];
-      f.bottom = fs["proj_frustum_bottom"];
-      f.top = fs["proj_frustum_top"];
+      proj->set_frustum(
+        fs["proj_frustum_left"],
+        fs["proj_frustum_right"],
+        fs["proj_frustum_bottom"],
+        fs["proj_frustum_top"]
+      );
 
       ofVec3f ploc = ofVec3f( 
           fs["proj_loc_x"],
@@ -392,7 +460,7 @@ class CamaraLucidaSystem : public ECSsystem
       proj->left( pleft );
 
       ofLogNotice("CamaraLucidaSystem")
-        << "loaded projector tweak from " << tweak_file << "\n";
+        << "loaded projector tweak from " << cml_data->tweak_file << "\n";
 
       return true;
     };
@@ -400,21 +468,25 @@ class CamaraLucidaSystem : public ECSsystem
     void tweak_frustum_x( float sign )
     {
       cml::OpticalDevice* proj = cml_data->cml->projector();
-      cml::OpticalDevice::Frustum& f = proj->gl_frustum();
+      cml::OpticalDevice::Frustum f = proj->gl_frustum();
 
       float d = tweak_frustum_off * sign;
       f.left -= d;
       f.right += d;
+
+      proj->set_frustum( f.left, f.right, f.bottom, f.top );
     };
 
     void tweak_frustum_y( float sign )
     {
       cml::OpticalDevice* proj = cml_data->cml->projector();
-      cml::OpticalDevice::Frustum& f = proj->gl_frustum();
+      cml::OpticalDevice::Frustum f = proj->gl_frustum();
 
       float d = tweak_frustum_off * sign;
       f.bottom -= d;
       f.top += d;
+
+      proj->set_frustum( f.left, f.right, f.bottom, f.top );
     };
 
     void tweak_Rz( float sign )
