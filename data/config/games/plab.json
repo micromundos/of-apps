@@ -118,10 +118,10 @@
             {
                "data" : {
                   "bilateral_domain" : [ 100, 0, 100 ],
-                  "bilateral_kernel" : [ 1, 0, 10 ],
+                  "bilateral_kernel" : [ 8, 0, 10 ],
                   "bilateral_range" : [ 20, 0, 20 ],
                   "edge_detection_threshold" : [ 175, 0, 300 ],
-                  "gaussian_kernel" : [ 0.9, 0, 10 ],
+                  "gaussian_kernel" : [ 1.1, 0, 10 ],
                   "gaussian_sigma" : [ 5, 0, 20 ],
                   "render" : false,
                   "render_edges" : false
