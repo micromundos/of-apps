@@ -15,17 +15,17 @@
          "components" : [
             {
                "data" : {
+                  "fps" : [ 10, 0, 30 ],
+                  "receive" : false,
                   "receiver" : {
-                    "server" : "Main Camera",
-                    "app" : "Unity"
+                     "app" : "Unity",
+                     "server" : "Main Camera"
                   },
+                  "send" : true,
                   "sender" : {
-                    "server_surfaces" : "micromundos_surfaces",
-                    "server_depth_map" : "micromundos_depth_map"
-                  },
-                  "receive" : true,
-                  "send" : true, 
-                  "fps" : [ 10, 0, 30 ]
+                     "server_depth_map" : "micromundos_depth_map",
+                     "server_surfaces" : "micromundos_surfaces"
+                  }
                },
                "id" : "syphon"
             }
@@ -46,7 +46,7 @@
                      "tweak_file" : "calib/cml_tweak.yml",
                      "unity_calib_file" : "calib/unity_cml.yml"
                   },
-                  "enabled" : true,
+                  "enabled" : false,
                   "mesh_res" : 1,
                   "render_background" : [ 0.2, 0, 1 ],
                   "render_hue_tex" : false,
@@ -73,7 +73,7 @@
                },
                "id" : "depth"
             },
-            {
+            /*{
                "data" : {
                   "ip" : "127.0.0.1",
                   "port" : 7000
@@ -86,7 +86,7 @@
                   "port" : 9000
                },
                "id" : "tag_sender"
-            },
+            },*/
             {
                "data" : {
                   "calibration" : {
@@ -100,11 +100,11 @@
                   "interpolation_easing_loc" : [ 0.2000000029802322, 0, 1 ],
                   "interpolation_easing_radians" : [ 0.04948453605175018, 0, 1 ],
                   "render" : false,
-                  "unity_calib_save" : false,
                   "tweak_load" : false,
                   "tweak_render" : false,
                   "tweak_reset" : false,
-                  "tweak_save" : false
+                  "tweak_save" : false,
+                  "unity_calib_save" : false
                },
                "id" : "tags"
             },
