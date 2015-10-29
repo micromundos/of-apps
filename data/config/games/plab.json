@@ -48,7 +48,7 @@
                "data" : {
                   "draw_weight" : [ 7, 2, 50 ],
                   "force" : [ 1, -10, 10 ],
-                  "radius" : [ 0.2000000029802322, 0, 1 ]
+                  "radius" : [ 0.17, 0, 1 ]
                },
                "id" : "particle_attractor"
             },
@@ -64,7 +64,7 @@
                "data" : {
                   "draw_weight" : [ 7, 2, 50 ],
                   "force" : [ -1, -10, 10 ],
-                  "radius" : [ 0.2000000029802322, 0, 1 ]
+                  "radius" : [ 0.17, 0, 1 ]
                },
                "id" : "particle_attractor"
             },
