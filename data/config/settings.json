@@ -1,8 +1,8 @@
 { "params": {
     "app": {
         "port": 6667,
-        "width": 1280,
-        "height": 768,
+        "width": 800,
+        "height": 600,
         "motor_path": "config/motor.json",
         "game_path": "config/games/autitos.json"
         /*"game_path": "config/games/plab.json"*/
