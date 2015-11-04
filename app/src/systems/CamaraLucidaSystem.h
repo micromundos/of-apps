@@ -274,6 +274,9 @@ class CamaraLucidaSystem : public ECSsystem
 
       fs << "depth_cam_xoff" << depth_cam->xoff;
       fs << "depth_cam_far_clamp" << depth_cam->far_clamp;
+
+      fs << "tex_width" << cml_data->cml->tex_width();
+      fs << "tex_height" << cml_data->cml->tex_height();
     };
 
     void save_optical_device( cml::OpticalDevice* device, string name, cv::FileStorage& fs ) 
