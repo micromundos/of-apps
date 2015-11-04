@@ -64,7 +64,7 @@ class SyphonSystem : public ECSsystem
 
       syphon_data->server_surfaces.publishTexture( &(depth_proc_data->surfaces().get_debug().get()) );
 
-      syphon_data->server_depth_map.publishTexture( &(cml_data->cml->depth_camera()->get_float_tex_ref()) );
+      syphon_data->server_depth_map.publishTexture( &(cml_data->cml->depth_camera()->get_float_tex_n()) );
 
       TS_STOP("SyphonSystem send");
     }; 
