@@ -44,7 +44,7 @@ class ofApp : public ofBaseApp
     ofxToggle chessboard_projected;
     ofxButton calibrate_btn, save_calib_btn, save_images_btn, load_images_btn, reset_calib_btn, capture_btn;
 
-    string calibrate_osc_num, save_calib_osc_num, save_images_osc_num, load_images_osc_num, reset_calib_osc_num, capture_osc_num, chessboard_projected_osc_num; 
+    string calibrate_osc_addr, save_calib_osc_addr, save_images_osc_addr, load_images_osc_addr, reset_calib_osc_addr, capture_osc_addr, chessboard_projected_osc_addr, chessboard_brightness_osc_addr; 
 
     void update_osc();
     void log_osc_msg( ofxOscMessage& m );
