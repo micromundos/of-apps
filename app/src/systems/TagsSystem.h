@@ -229,10 +229,22 @@ class TagsSystem : public ECSsystem
       fs << "tags_homography_cv_matrix_7" << H[7];
       fs << "tags_homography_cv_matrix_8" << H[15];
 
-      for (int i = 0; i < 16; i++ )
-      {
-        fs << "tags_homography_gl_matrix_" << i << H[i];
-      }
+      fs << "tags_homography_gl_matrix_0" << H[0];
+      fs << "tags_homography_gl_matrix_1" << H[1];
+      fs << "tags_homography_gl_matrix_2" << H[2];
+      fs << "tags_homography_gl_matrix_3" << H[3];
+      fs << "tags_homography_gl_matrix_4" << H[4];
+      fs << "tags_homography_gl_matrix_5" << H[5];
+      fs << "tags_homography_gl_matrix_6" << H[6];
+      fs << "tags_homography_gl_matrix_7" << H[7];
+      fs << "tags_homography_gl_matrix_8" << H[8];
+      fs << "tags_homography_gl_matrix_9" << H[9];
+      fs << "tags_homography_gl_matrix_10" << H[10];
+      fs << "tags_homography_gl_matrix_11" << H[11];
+      fs << "tags_homography_gl_matrix_12" << H[12];
+      fs << "tags_homography_gl_matrix_13" << H[13];
+      fs << "tags_homography_gl_matrix_14" << H[14];
+      fs << "tags_homography_gl_matrix_15" << H[15];
     };
 
     void tweak_load(bool& enabled)
