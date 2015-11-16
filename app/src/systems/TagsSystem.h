@@ -218,15 +218,21 @@ class TagsSystem : public ECSsystem
       cv::FileStorage fs( ofToDataPath(tags_data->unity_calib_file, false), cv::FileStorage::WRITE );  
 
       float *H = tweak_H.getPtr();
-      fs << "tags_homography_matrix_0" << H[0];
-      fs << "tags_homography_matrix_1" << H[4];
-      fs << "tags_homography_matrix_2" << H[12];
-      fs << "tags_homography_matrix_3" << H[1];
-      fs << "tags_homography_matrix_4" << H[5];
-      fs << "tags_homography_matrix_5" << H[13];
-      fs << "tags_homography_matrix_6" << H[3];
-      fs << "tags_homography_matrix_7" << H[7];
-      fs << "tags_homography_matrix_8" << H[15];
+
+      fs << "tags_homography_cv_matrix_0" << H[0];
+      fs << "tags_homography_cv_matrix_1" << H[4];
+      fs << "tags_homography_cv_matrix_2" << H[12];
+      fs << "tags_homography_cv_matrix_3" << H[1];
+      fs << "tags_homography_cv_matrix_4" << H[5];
+      fs << "tags_homography_cv_matrix_5" << H[13];
+      fs << "tags_homography_cv_matrix_6" << H[3];
+      fs << "tags_homography_cv_matrix_7" << H[7];
+      fs << "tags_homography_cv_matrix_8" << H[15];
+
+      for (int i = 0; i < 16; i++ )
+      {
+        fs << "tags_homography_gl_matrix_" << i << H[i];
+      }
     };
 
     void tweak_load(bool& enabled)

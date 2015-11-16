@@ -54,13 +54,14 @@ void ofApp::setup()
       settings["params"]["calib_kinect_projector"]["chessboard_port"].asInt() );
 
 
-  capture_osc_num = "11";
-  calibrate_osc_num = "12"; 
-  save_calib_osc_num = "13";
-  save_images_osc_num = "14";
-  load_images_osc_num = "15";
-  chessboard_projected_osc_num = "16";
-  reset_calib_osc_num = "17";
+  capture_osc_addr = "/capture";
+  calibrate_osc_addr = "/calibrate"; 
+  save_calib_osc_addr = "/save_calib";
+  reset_calib_osc_addr = "/reset_calib";
+  save_images_osc_addr = "/save_images";
+  load_images_osc_addr = "/load_images";
+  chessboard_projected_osc_addr = "/chess_proj";
+  chessboard_brightness_osc_addr = "/chess_brightness";
 
   capture_btn.addListener(this,&ofApp::capture);
   calibrate_btn.addListener(this,&ofApp::calibrate);
@@ -75,14 +76,14 @@ void ofApp::setup()
   string gui_settings_file = settings["params"]["calib_kinect_projector"]["gui_settings_path"].asString();
 ;
 	gui.setup( "", gui_settings_file );
-  gui.add( chessboard_brightness.setup( "chessboard_brightness (osc_ any fader)", 127, 0, 255 ) );
-  gui.add( chessboard_projected.setup( "chessboard_projected (osc_"+chessboard_projected_osc_num+")", true ) );
-  gui.add( capture_btn.setup("capture (spacebar) (osc_"+capture_osc_num+")") );
-  gui.add( calibrate_btn.setup("calibrate (c) (osc_"+calibrate_osc_num+")") );
-  gui.add( save_calib_btn.setup("save calibration (s) (osc_"+save_calib_osc_num+")") );
-  gui.add( save_images_btn.setup("save images (i) (osc_"+save_images_osc_num+")") );
-  gui.add( load_images_btn.setup("load images (l) (osc_"+load_images_osc_num+")") );
-  gui.add( reset_calib_btn.setup("reset calibration (r) (osc_"+reset_calib_osc_num+")") );
+  gui.add( chessboard_brightness.setup( "chessboard_brightness osc: "+chessboard_brightness_osc_addr, 127, 0, 255 ) );
+  gui.add( chessboard_projected.setup( "chessboard_projected osc: "+chessboard_projected_osc_addr, true ) );
+  gui.add( capture_btn.setup("capture (spacebar) osc: "+capture_osc_addr) );
+  gui.add( calibrate_btn.setup("calibrate (c) osc: "+calibrate_osc_addr) );
+  gui.add( save_calib_btn.setup("save calibration (s) osc: "+save_calib_osc_addr) );
+  gui.add( save_images_btn.setup("save images (i) osc: "+save_images_osc_addr) );
+  gui.add( load_images_btn.setup("load images (l) osc: "+load_images_osc_addr) );
+  gui.add( reset_calib_btn.setup("reset calibration (r) osc: "+reset_calib_osc_addr) );
 
   gui.setPosition( 
     10, calibration.cam_size().height + 90
@@ -211,48 +212,49 @@ void ofApp::update_osc()
 
     log_osc_msg( m );
 
-    if ( ofIsStringInString( m.getAddress(), "/fader" ) )
+    string addr = m.getAddress();
+
+    if ( ofIsStringInString( addr, chessboard_brightness_osc_addr ) )
     {
       chessboard_brightness = m.getArgAsFloat(0) * 255;
     } 
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+capture_osc_num ) 
+    else if ( ofIsStringInString( addr, capture_osc_addr ) 
         && m.getArgAsFloat(0) == 1 )
     {
       capture();
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+calibrate_osc_num ) 
+    else if ( ofIsStringInString( addr, calibrate_osc_addr ) 
         && m.getArgAsFloat(0) == 1 )
     {
       calibrate();
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+save_calib_osc_num ) 
+    else if ( ofIsStringInString( addr, save_calib_osc_addr ) 
         && m.getArgAsFloat(0) == 1 )
     {
       save_calib();
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+save_images_osc_num ) 
+    else if ( ofIsStringInString( addr, save_images_osc_addr ) 
         && m.getArgAsFloat(0) == 1 )
     {
       save_images();
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+load_images_osc_num ) 
+    else if ( ofIsStringInString( addr, load_images_osc_addr ) 
         && m.getArgAsFloat(0) == 1 )
     {
       load_images();
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+chessboard_projected_osc_num )
-        && m.getArgAsFloat(0) == 1 )
+    else if ( ofIsStringInString( addr, chessboard_projected_osc_addr ) )
     {
-      chessboard_projected = !chessboard_projected;
+      chessboard_projected = m.getArgAsFloat(0) == 1;
     }
 
-    else if ( ofIsStringInString( m.getAddress(), "/trigger/"+reset_calib_osc_num ) 
+    else if ( ofIsStringInString( addr, reset_calib_osc_addr ) 
         && m.getArgAsFloat(0) == 1 )
     {
       reset_calib();
