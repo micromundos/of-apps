@@ -9,7 +9,7 @@
     },
     "ctrl": {
         "host": "localhost",
-        /*"host": "192.168.0.16", //gl*/
+        /*"host": "192.168.0.13", //gl*/
         "port": 6666,
         "send_interval": 3
     },
@@ -37,6 +37,6 @@
         "pattern_settings_path": "calib/kinect_projector_pattern.yml",
         "gui_settings_path": "calib/kinect_projector_gui.xml",
         "cam_name": "kinect_rgb",
-        "proj_name": "proj_aaxa"
+        "proj_name": "proj_lg"
     }
 }}
