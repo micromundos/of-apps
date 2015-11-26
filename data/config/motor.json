@@ -41,8 +41,8 @@
                "data" : {
                   "calibration" : {
                      "kinect_intrinsics_file" : "calib/intrinsics_kinect.ofxcv.yml",
-                     "projector_intrinsics_file" : "calib/intrinsics_proj_aaxa.ofxcv.yml",
-                     "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_aaxa_to_kinect_rgb.yml",
+                     "projector_intrinsics_file" : "calib/intrinsics_proj_lg.ofxcv.yml",
+                     "projector_kinect_extrinsics_file" : "calib/extrinsics_proj_lg_to_kinect_rgb.yml",
                      "tweak_file" : "calib/cml_tweak.yml",
                      "unity_calib_file" : "calib/unity_cml.yml"
                   },

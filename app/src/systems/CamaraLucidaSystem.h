@@ -344,7 +344,7 @@ class CamaraLucidaSystem : public ECSsystem
 
       tweak_frustum_off = 0.1;
       tweak_R_off = 0.1;
-      tweak_T_off = 0.0005;
+      tweak_T_off = 1.;
 
       bool b = true;
       tweak_load(b);
