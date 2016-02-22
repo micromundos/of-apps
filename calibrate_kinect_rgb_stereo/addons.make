@@ -5,4 +5,4 @@ addons
 ofxKinect
 ofxOpenCv
 ofxCv
-ofxPlab
+ofxMicromundos

@@ -7,7 +7,7 @@ ofxGeom
 ofxECS
 ofxJSON
 ofxOsc
-ofxPlab
+ofxMicromundos
 ofxKeyValueOSC
 ofxTimeMeasurements
 ofxCamaraLucida

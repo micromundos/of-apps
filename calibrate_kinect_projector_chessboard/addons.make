@@ -1,4 +1,4 @@
-ofxPlab
+ofxMicromundos
 ofxCamaraLucidaCalibration
 ofxCv
 ofxOpenCv

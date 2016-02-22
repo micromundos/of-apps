@@ -487,15 +487,15 @@
 			path = ../../../addons/ofxPCL/src;
 			sourceTree = "<group>";
 		};
-		124E46B71B01510100604A18 /* ofxPlab */ = {
+		124E46B71B01510100604A18 /* ofxMicromundos */ = {
 			isa = PBXGroup;
 			children = (
 				124E46B81B01510100604A18 /* libs */,
 				124E47341B01510200604A18 /* readme.md */,
 				124E47351B01510200604A18 /* src */,
 			);
-			name = ofxPlab;
-			path = ../../../addons/ofxPlab;
+			name = ofxMicromundos;
+			path = ../../../addons/ofxMicromundos;
 			sourceTree = "<group>";
 		};
 		124E46B81B01510100604A18 /* libs */ = {
@@ -1032,7 +1032,7 @@
 		BB4B014C10F69532006C3DED /* addons */ = {
 			isa = PBXGroup;
 			children = (
-				124E46B71B01510100604A18 /* ofxPlab */,
+				124E46B71B01510100604A18 /* ofxMicromundos */,
 				12A8D1CA1A2E50DD00E425AA /* ofxGeom */,
 				12363E461A239B01003CA788 /* ofxPCL */,
 				9683228C705CA3FF4F2EA945 /* ofxKinect */,
