@@ -4,4 +4,4 @@ ofxOpenCv
 ofxAruco
 ofxCv
 ofxJSON
-ofxPlab
+ofxMicromundos

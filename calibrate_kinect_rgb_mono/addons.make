@@ -1,4 +1,4 @@
-ofxPlab
+ofxMicromundos
 ofxOpenCv
 ofxCv
 ofxKinect
